@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563EB;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="108" fill="url(#grad)"/>
+  <g fill="white">
+    <!-- Book icon -->
+    <path d="M128 96c0-17.7 14.3-32 32-32h192c17.7 0 32 14.3 32 32v320c0 17.7-14.3 32-32 32H160c-17.7 0-32-14.3-32-32V96z" opacity="0.9"/>
+    <path d="M160 128h160v32H160zM160 192h160v16H160zM160 240h120v16H160zM160 288h140v16H160z" fill="#3B82F6"/>
+    <!-- Headphone accent -->
+    <circle cx="380" cy="380" r="80" fill="white" opacity="0.95"/>
+    <path d="M340 360c0-22.1 17.9-40 40-40s40 17.9 40 40v40c0 11-9 20-20 20h-8c-6.6 0-12-5.4-12-12v-36c0-6.6 5.4-12 12-12h8M340 360v40c0 11 9 20 20 20h8c6.6 0 12-5.4 12-12v-36c0-6.6-5.4-12-12-12h-8" stroke="#3B82F6" stroke-width="8" fill="none"/>
+  </g>
+</svg>
