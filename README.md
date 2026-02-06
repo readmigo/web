@@ -1,5 +1,7 @@
 # Readmigo Web
 
+[![CI](https://github.com/readmigo/web/actions/workflows/ci.yml/badge.svg)](https://github.com/readmigo/web/actions/workflows/ci.yml)
+
 Web application for Readmigo - AI-powered English reading companion.
 
 ## Tech Stack
