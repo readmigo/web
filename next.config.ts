@@ -1,100 +1,11 @@
 import type { NextConfig } from "next";
-import withPWAInit from "next-pwa";
+import withSerwistInit from "@serwist/next";
+import { withSentryConfig } from "@sentry/nextjs";
 
-const withPWA = withPWAInit({
-  dest: "public",
-  register: true,
-  skipWaiting: true,
+const withSerwist = withSerwistInit({
+  swSrc: "src/app/sw.ts",
+  swDest: "public/sw.js",
   disable: process.env.NODE_ENV === "development",
-  runtimeCaching: [
-    // Cache API responses
-    {
-      urlPattern: /^https:\/\/api\.readmigo\.app\/.*$/i,
-      handler: "NetworkFirst",
-      options: {
-        cacheName: "api-cache",
-        expiration: {
-          maxEntries: 100,
-          maxAgeSeconds: 60 * 60 * 24, // 24 hours
-        },
-        networkTimeoutSeconds: 10,
-      },
-    },
-    // Cache audio files for offline playback
-    {
-      urlPattern: /\.(?:mp3|wav|ogg|m4a)$/i,
-      handler: "CacheFirst",
-      options: {
-        cacheName: "audio-cache",
-        expiration: {
-          maxEntries: 50,
-          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
-        },
-        rangeRequests: true, // Important for audio streaming
-      },
-    },
-    // Cache images
-    {
-      urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|avif)$/i,
-      handler: "CacheFirst",
-      options: {
-        cacheName: "image-cache",
-        expiration: {
-          maxEntries: 100,
-          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
-        },
-      },
-    },
-    // Cache EPUB files for offline reading
-    {
-      urlPattern: /\.epub$/i,
-      handler: "CacheFirst",
-      options: {
-        cacheName: "epub-cache",
-        expiration: {
-          maxEntries: 20,
-          maxAgeSeconds: 60 * 60 * 24 * 90, // 90 days
-        },
-      },
-    },
-    // Cache fonts
-    {
-      urlPattern: /\.(?:woff|woff2|ttf|otf|eot)$/i,
-      handler: "CacheFirst",
-      options: {
-        cacheName: "font-cache",
-        expiration: {
-          maxEntries: 20,
-          maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
-        },
-      },
-    },
-    // Cache static assets
-    {
-      urlPattern: /\.(?:js|css)$/i,
-      handler: "StaleWhileRevalidate",
-      options: {
-        cacheName: "static-cache",
-        expiration: {
-          maxEntries: 100,
-          maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
-        },
-      },
-    },
-    // Cache page navigations
-    {
-      urlPattern: /^https:\/\/.*\.readmigo\.app\/.*$/i,
-      handler: "NetworkFirst",
-      options: {
-        cacheName: "page-cache",
-        expiration: {
-          maxEntries: 50,
-          maxAgeSeconds: 60 * 60 * 24, // 24 hours
-        },
-        networkTimeoutSeconds: 10,
-      },
-    },
-  ],
 });
 
 const nextConfig: NextConfig = {
@@ -160,7 +71,7 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: "/workbox-:hash.js",
+        source: "/serwist-:hash.js",
         headers: [
           {
             key: "Cache-Control",
@@ -198,4 +109,9 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withPWA(nextConfig);
+export default withSentryConfig(withSerwist(nextConfig), {
+  silent: true,
+  widenClientFileUpload: true,
+  disableLogger: true,
+  sourcemaps: { disable: true },
+});

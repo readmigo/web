@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
+import { rateLimit } from '@/lib/rate-limit';
 
 const API_BASE_URL = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
+
+// Rate limiter configurations (module-level, shared across requests)
+const GENERAL_LIMIT = 100;
+const GENERAL_WINDOW_MS = 60_000;
+const AUTH_LIMIT = 10;
+const AUTH_WINDOW_MS = 60_000;
 
 /**
  * Server-side API proxy that forwards requests to the backend.
@@ -12,6 +19,31 @@ async function proxyRequest(req: NextRequest) {
   // Extract the path segments after /api/proxy/
   const url = new URL(req.url);
   const proxyPath = url.pathname.replace(/^\/api\/proxy/, '');
+
+  // --- Rate limiting ---
+  const forwarded = req.headers.get('x-forwarded-for');
+  const ip = forwarded?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || '127.0.0.1';
+
+  const isAuthRoute = proxyPath.includes('auth/login') || proxyPath.includes('auth/register');
+  const rateLimitKey = isAuthRoute ? `auth:${ip}` : `general:${ip}`;
+  const limit = isAuthRoute ? AUTH_LIMIT : GENERAL_LIMIT;
+  const windowMs = isAuthRoute ? AUTH_WINDOW_MS : GENERAL_WINDOW_MS;
+
+  const rateLimitResult = rateLimit(rateLimitKey, limit, windowMs);
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(rateLimitResult.retryAfter),
+          'X-RateLimit-Limit': String(rateLimitResult.limit),
+          'X-RateLimit-Remaining': '0',
+        },
+      }
+    );
+  }
   const targetUrl = `${API_BASE_URL}${proxyPath}${url.search}`;
 
   // Read the JWT from the NextAuth session cookie (server-side only)
@@ -63,6 +95,10 @@ async function proxyRequest(req: NextRequest) {
     if (contentType) {
       proxyResponse.headers.set('Content-Type', contentType);
     }
+
+    // Attach rate limit info headers
+    proxyResponse.headers.set('X-RateLimit-Limit', String(rateLimitResult.limit));
+    proxyResponse.headers.set('X-RateLimit-Remaining', String(rateLimitResult.remaining));
 
     return proxyResponse;
   } catch (error) {
