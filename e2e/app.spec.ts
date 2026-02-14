@@ -27,18 +27,24 @@ test.describe('Header navigation', () => {
     await page.goto('/');
   });
 
-  test('should show correct nav links', async ({ page }) => {
+  test('should show correct nav links (iOS-aligned 4 tabs)', async ({ page }) => {
     const nav = page.locator('header nav');
-    await expect(nav.getByText('探索')).toBeVisible();
+    await expect(nav.getByText('书城')).toBeVisible();
     await expect(nav.getByText('书架')).toBeVisible();
-    await expect(nav.getByText('词汇')).toBeVisible();
     await expect(nav.getByText('有声书')).toBeVisible();
+    await expect(nav.getByText('我的')).toBeVisible();
   });
 
-  test('should not show "首页" or "登录" in nav', async ({ page }) => {
+  test('should show brand logo with ReadMigo text', async ({ page }) => {
+    const header = page.locator('header');
+    await expect(header.getByText('ReadMigo')).toBeVisible();
+    await expect(header.locator('img[alt="ReadMigo"]')).toBeVisible();
+  });
+
+  test('should not show "首页" or "词汇" in nav', async ({ page }) => {
     const header = page.locator('header');
     await expect(header.getByText('首页')).not.toBeVisible();
-    await expect(header.getByText('登录')).not.toBeVisible();
+    await expect(header.getByText('词汇')).not.toBeVisible();
   });
 });
 
@@ -204,18 +210,19 @@ test.describe('Mobile navigation', () => {
     await page.goto('/');
   });
 
-  test('should show bottom nav on mobile', async ({ page }) => {
+  test('should show bottom nav with iOS-aligned 4 tabs', async ({ page }) => {
     const mobileNav = page.locator('nav.fixed.bottom-0');
     await expect(mobileNav).toBeVisible();
-    await expect(mobileNav.getByText('探索')).toBeVisible();
+    await expect(mobileNav.getByText('书城')).toBeVisible();
     await expect(mobileNav.getByText('书架')).toBeVisible();
-    await expect(mobileNav.getByText('词汇')).toBeVisible();
     await expect(mobileNav.getByText('有声书')).toBeVisible();
+    await expect(mobileNav.getByText('我的')).toBeVisible();
   });
 
-  test('should not show "首页" in mobile nav', async ({ page }) => {
+  test('should not show "首页" or "词汇" in mobile nav', async ({ page }) => {
     const mobileNav = page.locator('nav.fixed.bottom-0');
     await expect(mobileNav.getByText('首页')).not.toBeVisible();
+    await expect(mobileNav.getByText('词汇')).not.toBeVisible();
   });
 });
 

@@ -2,58 +2,68 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 224 71.4% 4.1%;
-    --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
+    /* Design System: design-system.md */
+    --background: 228 60% 98%;       /* #F7F8FD */
+    --foreground: 238 24% 23%;       /* #2D2E4A */
+    --card: 0 0% 100%;               /* #FFFFFF */
+    --card-foreground: 238 24% 23%;  /* #2D2E4A */
     --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
-    --primary: 262.1 83.3% 57.8%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220.9 39.3% 11%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 262.1 83.3% 57.8%;
+    --popover-foreground: 238 24% 23%;
+    --primary: 232 86% 72%;          /* #7C8DF5 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 230 55% 96%;        /* #EEF0FA */
+    --secondary-foreground: 238 24% 23%;
+    --muted: 230 55% 96%;            /* #EEF0FA */
+    --muted-foreground: 235 20% 52%; /* #6B6F9C */
+    --accent: 230 55% 96%;
+    --accent-foreground: 238 24% 23%;
+    --destructive: 0 100% 71%;       /* #FF6B6B */
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 90%;            /* #E4E4E7 */
+    --input: 240 6% 90%;
+    --ring: 232 86% 72%;             /* #7C8DF5 */
     --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    /* Brand gradient: #8BB9FF → #B9B3F5 → #F6B6E8 */
+    --brand-gradient: linear-gradient(135deg, #8BB9FF 0%, #B9B3F5 50%, #F6B6E8 100%);
+    --brand-blue: #8BB9FF;
+    --brand-purple: #B9B3F5;
+    --brand-pink: #F6B6E8;
+    --chart-1: 145 50% 63%;          /* #6ED6A8 Success */
+    --chart-2: 215 100% 77%;         /* #8BB9FF Brand Blue */
+    --chart-3: 247 80% 83%;          /* #B9B3F5 Brand Purple */
+    --chart-4: 36 100% 71%;          /* #FFD36A Gold */
+    --chart-5: 315 77% 84%;          /* #F6B6E8 Brand Pink */
   }
 
   .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 263.4 70% 50.4%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 20% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 263.4 70% 50.4%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --background: 0 0% 0%;           /* System black for OLED */
+    --foreground: 240 11% 97%;       /* #F5F5F7 */
+    --card: 240 6% 10%;              /* #18181B */
+    --card-foreground: 240 11% 97%;
+    --popover: 240 6% 10%;
+    --popover-foreground: 240 11% 97%;
+    --primary: 232 100% 77%;         /* #8B9BFF */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 6% 15%;         /* #27272A */
+    --secondary-foreground: 240 11% 97%;
+    --muted: 240 6% 15%;
+    --muted-foreground: 240 3% 64%;  /* #A1A1A6 */
+    --accent: 240 6% 15%;
+    --accent-foreground: 240 11% 97%;
+    --destructive: 0 100% 68%;       /* #FF5E5E */
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 24%;            /* #3F3F46 */
+    --input: 240 6% 24%;
+    --ring: 232 100% 77%;
+    --brand-gradient: linear-gradient(135deg, #7AABFF 0%, #A8A2E6 50%, #E5A5D7 100%);
+    --brand-blue: #7AABFF;
+    --brand-purple: #A8A2E6;
+    --brand-pink: #E5A5D7;
+    --chart-1: 145 70% 56%;
+    --chart-2: 215 100% 73%;
+    --chart-3: 247 60% 77%;
+    --chart-4: 36 100% 65%;
+    --chart-5: 315 67% 78%;
   }
 }
 
@@ -90,6 +100,7 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-inter), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 

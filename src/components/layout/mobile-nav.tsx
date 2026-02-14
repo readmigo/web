@@ -5,27 +5,30 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import {
   BookOpen,
-  GraduationCap,
+  Store,
   Headphones,
-  Compass,
+  UserCircle,
 } from 'lucide-react';
 
+// iOS tab structure: 书城, 书架, 有声书, 我的
 const navigation = [
-  { name: '探索', href: '/explore', icon: Compass },
+  { name: '书城', href: '/explore', icon: Store },
   { name: '书架', href: '/library', icon: BookOpen },
-  { name: '词汇', href: '/vocabulary', icon: GraduationCap },
   { name: '有声书', href: '/audiobooks', icon: Headphones },
+  { name: '我的', href: '/me', icon: UserCircle },
 ];
 
 export function MobileNav() {
   const pathname = usePathname();
 
+  const isActive = (href: string) =>
+    pathname === href || (href === '/explore' && pathname === '/');
+
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 md:hidden">
       <div className="flex h-16 items-center justify-around">
         {navigation.map((item) => {
-          const isActive = pathname === item.href ||
-            pathname.startsWith(item.href);
+          const active = isActive(item.href);
 
           return (
             <Link
@@ -33,19 +36,19 @@ export function MobileNav() {
               href={item.href}
               className={cn(
                 'flex flex-1 flex-col items-center justify-center gap-1 py-2 text-xs transition-colors',
-                isActive
+                active
                   ? 'text-primary'
                   : 'text-muted-foreground hover:text-foreground'
               )}
             >
-              <item.icon className={cn('h-5 w-5', isActive && 'text-primary')} />
-              <span className={cn(isActive && 'font-medium')}>{item.name}</span>
+              <item.icon className={cn('h-5 w-5', active && 'text-primary')} />
+              <span className={cn(active && 'font-medium')}>{item.name}</span>
             </Link>
           );
         })}
       </div>
       {/* Safe area for iOS devices */}
-      <div className="h-safe-area-inset-bottom bg-background" />
+      <div className="h-safe-area-inset-bottom bg-card" />
     </nav>
   );
 }

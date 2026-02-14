@@ -8,6 +8,7 @@ const publicPaths = [
   '/author/',
   '/category/',
   '/book-list/',
+  '/me',
   '/login',
   '/register',
   '/forgot-password',
