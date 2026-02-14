@@ -12,8 +12,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { WordPopover } from './word-popover';
 import { api } from '@/lib/api/index';
 
+interface ArticleData {
+  title: string;
+  category: string;
+  content?: string;
+  summary?: string;
+  license?: string;
+  originalUrl?: string;
+  source?: { name?: string };
+}
+
 interface ArticleResponse {
-  data: Record<string, unknown>;
+  data: ArticleData;
 }
 
 interface ArticleReaderProps {
@@ -102,7 +112,7 @@ export function ArticleReader({ articleId }: ArticleReaderProps) {
     const url = window.location.href;
     if (navigator.share) {
       await navigator.share({
-        title: article?.data?.title as string | undefined,
+        title: article?.data?.title,
         url,
       });
     } else {
