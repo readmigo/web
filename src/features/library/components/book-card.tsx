@@ -2,10 +2,12 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { Heart } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
+import { useFavoriteBookIds, useToggleFavorite } from '../hooks/use-favorites';
 import type { Book, UserBook } from '../types';
 
 interface BookCardProps {
@@ -32,6 +34,17 @@ const difficultyColors = [
 ];
 
 export function BookCard({ book, userBook, className }: BookCardProps) {
+  const { favoriteIds, isAuthenticated } = useFavoriteBookIds();
+  const { toggleFavorite } = useToggleFavorite();
+  const isFavorited = favoriteIds.has(book.id);
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isAuthenticated) return;
+    toggleFavorite(book.id, isFavorited);
+  };
+
   return (
     <Link href={`/book/${book.id}`}>
       <Card
@@ -65,6 +78,30 @@ export function BookCard({ book, userBook, className }: BookCardProps) {
             >
               {difficultyLabels[book.difficulty]}
             </Badge>
+
+            {/* Favorite button */}
+            {isAuthenticated && (
+              <button
+                type="button"
+                onClick={handleFavoriteClick}
+                className={cn(
+                  'absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/30 backdrop-blur-sm transition-all hover:bg-black/50',
+                  'opacity-0 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100',
+                  // Always visible on touch devices and when favorited
+                  isFavorited && 'opacity-100'
+                )}
+                aria-label={isFavorited ? '取消收藏' : '收藏'}
+              >
+                <Heart
+                  className={cn(
+                    'h-4 w-4 transition-colors',
+                    isFavorited
+                      ? 'fill-red-500 text-red-500'
+                      : 'text-white'
+                  )}
+                />
+              </button>
+            )}
           </div>
 
           {/* Info */}

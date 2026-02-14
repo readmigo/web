@@ -61,3 +61,39 @@ export interface Category {
 export type SortOption = 'recent' | 'title' | 'author' | 'progress';
 export type FilterOption = 'all' | 'reading' | 'finished' | 'want-to-read';
 export type ViewMode = 'grid' | 'list';
+
+export type BookListType =
+  | 'RANKING'
+  | 'EDITORS_PICK'
+  | 'COLLECTION'
+  | 'UNIVERSITY'
+  | 'CELEBRITY'
+  | 'ANNUAL_BEST'
+  | 'AI_RECOMMENDED'
+  | 'PERSONALIZED'
+  | 'AI_FEATURED';
+
+export interface BookListBook {
+  id: string;
+  title: string;
+  author: string;
+  coverUrl?: string;
+  difficulty?: number;
+}
+
+export interface BookList {
+  id: string;
+  title: string;
+  nameEn?: string;
+  subtitle?: string;
+  description?: string;
+  coverUrl?: string;
+  type: BookListType;
+  displayStyle?: string;
+  bookCount: number;
+  sortOrder?: number;
+  isActive?: boolean;
+  books?: BookListBook[];
+  createdAt?: string;
+  updatedAt?: string;
+}

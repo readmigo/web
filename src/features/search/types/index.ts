@@ -42,3 +42,8 @@ export interface SearchSuggestion {
   text: string;
   type: 'author' | 'book' | 'quote';
 }
+
+export interface PopularSearch {
+  term: string;
+  count: number;
+}

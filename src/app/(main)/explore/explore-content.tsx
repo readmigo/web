@@ -10,7 +10,13 @@ import { useInfiniteBooks } from '@/features/library/hooks/use-infinite-books';
 import { useCategories } from '@/features/library/hooks/use-categories';
 import { Search, RefreshCw, Loader2 } from 'lucide-react';
 import { useSearch } from '@/features/search/hooks/use-search';
+import { useSearchSuggestions } from '@/features/search/hooks/use-search-suggestions';
+import { usePopularSearches, useTrendingSearches } from '@/features/search/hooks/use-popular-searches';
+import { useSearchHistory } from '@/features/search/hooks/use-search-history';
 import { SearchResultsDropdown } from '@/features/search/components/search-results-dropdown';
+import { useBookLists } from '@/features/library/hooks/use-book-lists';
+import { HeroBanner } from '@/features/library/components/hero-banner';
+import { BookListSection, BookListSectionSkeleton } from '@/features/library/components/book-list-section';
 
 const difficulties = [
   { label: '全部难度', value: 0 },
@@ -52,6 +58,25 @@ export function ExploreContent() {
     data: searchResults,
     isLoading: isSearchLoading,
   } = useSearch(debouncedDropdownQuery);
+
+  // Autocomplete suggestions
+  const {
+    data: suggestions,
+    isLoading: isSuggestionsLoading,
+  } = useSearchSuggestions(debouncedDropdownQuery);
+
+  // Popular & trending searches
+  const { data: popularSearches } = usePopularSearches();
+  const { data: trendingSearches } = useTrendingSearches();
+
+  // Search history
+  const { history: searchHistory, addSearch, removeSearch, clearHistory } = useSearchHistory();
+
+  // Book lists for hero banner and sections
+  const { data: bookListsData, isLoading: bookListsLoading } = useBookLists();
+  const featuredBookLists = (bookListsData || []).filter(
+    (list) => list.isActive !== false && (list.books?.length ?? 0) > 0
+  );
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -132,6 +157,9 @@ export function ExploreContent() {
 
   return (
     <div className="space-y-6">
+      {/* Hero Banner */}
+      <HeroBanner bookLists={featuredBookLists} isLoading={bookListsLoading} />
+
       {/* Search */}
       <div className="relative max-w-xl" ref={searchContainerRef}>
         <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
@@ -140,25 +168,38 @@ export function ExploreContent() {
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
-            if (e.target.value.length >= 2) {
-              setShowDropdown(true);
-            } else {
-              setShowDropdown(false);
-            }
+            setShowDropdown(true);
           }}
           onFocus={() => {
-            if (searchQuery.length >= 2) {
-              setShowDropdown(true);
-            }
+            setShowDropdown(true);
           }}
           className="pl-10 h-12 text-lg"
         />
-        {showDropdown && debouncedDropdownQuery.length >= 2 && (
+        {showDropdown && (
           <SearchResultsDropdown
             data={searchResults}
             isLoading={isSearchLoading}
             query={debouncedDropdownQuery}
-            onSelect={() => setShowDropdown(false)}
+            onSelect={() => {
+              // Record the search when user selects a result
+              if (debouncedDropdownQuery.trim().length >= 2) {
+                addSearch(debouncedDropdownQuery.trim());
+              }
+              setShowDropdown(false);
+            }}
+            onSelectQuery={(term) => {
+              setSearchQuery(term);
+              setDebouncedDropdownQuery(term);
+              setDebouncedSearch(term);
+              addSearch(term);
+            }}
+            suggestions={suggestions}
+            suggestionsLoading={isSuggestionsLoading}
+            searchHistory={searchHistory}
+            onRemoveHistory={removeSearch}
+            onClearHistory={clearHistory}
+            popularSearches={popularSearches}
+            trendingSearches={trendingSearches}
           />
         )}
       </div>
@@ -207,6 +248,23 @@ export function ExploreContent() {
           </Button>
         ))}
       </div>
+
+      {/* Book List Sections */}
+      {bookListsLoading ? (
+        <div className="space-y-8">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <BookListSectionSkeleton key={i} />
+          ))}
+        </div>
+      ) : (
+        featuredBookLists.length > 0 && (
+          <div className="space-y-8">
+            {featuredBookLists.slice(0, 4).map((list) => (
+              <BookListSection key={list.id} bookList={list} />
+            ))}
+          </div>
+        )
+      )}
 
       {/* Results count */}
       <p className="text-sm text-muted-foreground">
