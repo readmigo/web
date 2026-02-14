@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -36,244 +36,6 @@ import type {
   CivilizationMap,
 } from '@/features/author';
 
-// Mock data for development
-const mockAuthor: AuthorDetail = {
-  id: '1',
-  name: 'Mark Twain',
-  nameZh: '马克·吐温',
-  aliases: ['Samuel Langhorne Clemens'],
-  avatarUrl: '',
-  bio: 'Samuel Langhorne Clemens, known by his pen name Mark Twain, was an American writer, humorist, entrepreneur, publisher, and lecturer. He was lauded as the "greatest humorist the United States has produced," and William Faulkner called him "the father of American literature."',
-  bioZh:
-    '塞缪尔·朗霍恩·克莱门斯，笔名马克·吐温，是美国作家、幽默大师、企业家、出版商和演说家。他被誉为"美国最伟大的幽默作家"，威廉·福克纳称他为"美国文学之父"。',
-  era: '1835-1910',
-  nationality: 'United States',
-  birthPlace: 'Florida, Missouri',
-  writingStyle: 'Satirical, Humorous, Colloquial',
-  famousWorks: [
-    'Adventures of Huckleberry Finn',
-    'The Adventures of Tom Sawyer',
-    'A Connecticut Yankee in King Arthur\'s Court',
-    'The Prince and the Pauper',
-  ],
-  literaryPeriod: 'American Realism',
-  wikipediaUrl: 'https://en.wikipedia.org/wiki/Mark_Twain',
-  wikidataId: 'Q7245',
-  bookCount: 12,
-  quoteCount: 45,
-  followerCount: 1234,
-  isActive: true,
-  isFollowing: false,
-  books: [
-    {
-      id: '1',
-      title: 'Adventures of Huckleberry Finn',
-      titleZh: '哈克贝利·费恩历险记',
-      coverUrl: '',
-      difficulty: 3,
-      publishYear: 1884,
-    },
-    {
-      id: '2',
-      title: 'The Adventures of Tom Sawyer',
-      titleZh: '汤姆·索亚历险记',
-      coverUrl: '',
-      difficulty: 2,
-      publishYear: 1876,
-    },
-    {
-      id: '3',
-      title: 'A Connecticut Yankee in King Arthur\'s Court',
-      titleZh: '亚瑟王朝廷里的康州美国人',
-      coverUrl: '',
-      difficulty: 4,
-      publishYear: 1889,
-    },
-  ],
-  quotes: [
-    {
-      id: '1',
-      text: 'The secret of getting ahead is getting started.',
-      textZh: '成功的秘诀在于开始行动。',
-      source: 'Personal correspondence',
-      likeCount: 234,
-      isLiked: false,
-    },
-    {
-      id: '2',
-      text: 'Whenever you find yourself on the side of the majority, it is time to pause and reflect.',
-      textZh: '每当你发现自己站在多数人一边时，就是该停下来反思的时候了。',
-      source: 'Notebook',
-      likeCount: 189,
-      isLiked: true,
-    },
-    {
-      id: '3',
-      text: 'The man who does not read has no advantage over the man who cannot read.',
-      textZh: '不读书的人与不识字的人没有区别。',
-      likeCount: 456,
-      isLiked: false,
-    },
-  ],
-  timeline: [
-    {
-      id: '1',
-      year: 1835,
-      title: 'Born in Florida, Missouri',
-      titleZh: '出生于密苏里州佛罗里达',
-      category: 'BIRTH',
-    },
-    {
-      id: '2',
-      year: 1857,
-      title: 'Became a riverboat pilot on the Mississippi River',
-      titleZh: '成为密西西比河上的船舵手',
-      category: 'MAJOR_EVENT',
-    },
-    {
-      id: '3',
-      year: 1876,
-      title: 'Published "The Adventures of Tom Sawyer"',
-      titleZh: '出版《汤姆·索亚历险记》',
-      category: 'WORK',
-    },
-    {
-      id: '4',
-      year: 1884,
-      title: 'Published "Adventures of Huckleberry Finn"',
-      titleZh: '出版《哈克贝利·费恩历险记》',
-      category: 'WORK',
-    },
-    {
-      id: '5',
-      year: 1910,
-      title: 'Died in Redding, Connecticut',
-      titleZh: '逝世于康涅狄格州雷丁',
-      category: 'DEATH',
-    },
-  ],
-  civilizationMap: {
-    literaryMovement: 'American Realism',
-    historicalPeriod: 'Gilded Age (1870-1900)',
-    primaryGenres: ['Novel', 'Satire', 'Travel Writing', 'Short Story'],
-    themes: ['Social Criticism', 'American Identity', 'Racism', 'Childhood', 'Mississippi River'],
-    influences: {
-      predecessors: [
-        {
-          id: 'dickens',
-          name: 'Charles Dickens',
-          nameZh: '查尔斯·狄更斯',
-          era: '1812-1870',
-          nationality: 'United Kingdom',
-          relationship: 'Stylistic influence on humor and social commentary',
-        },
-        {
-          id: 'cervantes',
-          name: 'Miguel de Cervantes',
-          nameZh: '塞万提斯',
-          era: '1547-1616',
-          nationality: 'Spain',
-          relationship: 'Inspiration for picaresque narrative style',
-        },
-      ],
-      successors: [
-        {
-          id: 'hemingway',
-          name: 'Ernest Hemingway',
-          nameZh: '欧内斯特·海明威',
-          era: '1899-1961',
-          nationality: 'United States',
-          relationship: 'Called Huckleberry Finn the origin of American literature',
-        },
-        {
-          id: 'faulkner',
-          name: 'William Faulkner',
-          nameZh: '威廉·福克纳',
-          era: '1897-1962',
-          nationality: 'United States',
-          relationship: 'Influenced Southern Gothic style',
-        },
-        {
-          id: 'steinbeck',
-          name: 'John Steinbeck',
-          nameZh: '约翰·斯坦贝克',
-          era: '1902-1968',
-          nationality: 'United States',
-          relationship: 'Social realism and common man themes',
-        },
-      ],
-      contemporaries: [
-        {
-          id: 'james',
-          name: 'Henry James',
-          nameZh: '亨利·詹姆斯',
-          era: '1843-1916',
-          nationality: 'United States',
-        },
-        {
-          id: 'melville',
-          name: 'Herman Melville',
-          nameZh: '赫尔曼·梅尔维尔',
-          era: '1819-1891',
-          nationality: 'United States',
-        },
-        {
-          id: 'alcott',
-          name: 'Louisa May Alcott',
-          nameZh: '路易莎·梅·奥尔科特',
-          era: '1832-1888',
-          nationality: 'United States',
-        },
-      ],
-    },
-    domains: [
-      {
-        domain: 'Literature',
-        significance: 'major',
-        contributions: [
-          'Pioneered use of vernacular American English in literature',
-          'Created the American novel as distinct from European tradition',
-          'Masterful use of satire and social criticism',
-        ],
-      },
-      {
-        domain: 'Journalism',
-        significance: 'moderate',
-        contributions: [
-          'Innovative travel writing style',
-          'Influential newspaper columnist',
-        ],
-      },
-    ],
-    historicalContext: [
-      {
-        year: 1861,
-        title: 'American Civil War begins',
-        titleZh: '美国内战爆发',
-        category: 'war',
-      },
-      {
-        year: 1865,
-        title: 'Slavery abolished (13th Amendment)',
-        titleZh: '废除奴隶制（第十三修正案）',
-        category: 'political',
-      },
-      {
-        year: 1876,
-        title: 'Telephone invented by Alexander Graham Bell',
-        titleZh: '亚历山大·贝尔发明电话',
-        category: 'scientific',
-      },
-      {
-        year: 1893,
-        title: 'World\'s Columbian Exposition in Chicago',
-        titleZh: '芝加哥世界博览会',
-        category: 'cultural',
-      },
-    ],
-  },
-};
-
 const timelineCategoryLabels: Record<TimelineCategory, string> = {
   BIRTH: '出生',
   EDUCATION: '教育',
@@ -297,26 +59,33 @@ interface AuthorDetailContentProps {
 }
 
 export function AuthorDetailContent({ authorId }: AuthorDetailContentProps) {
-  // TODO: Enable API when backend is ready
-  // const { data: author, isLoading, error } = useAuthor(authorId);
-  const author = mockAuthor;
-  const isLoading = false;
+  const { data: author, isLoading, error } = useAuthor(authorId);
+  const followMutation = useFollowAuthor();
 
-  const [isFollowing, setIsFollowing] = useState(author?.isFollowing || false);
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  useEffect(() => {
+    if (author?.isFollowing !== undefined) {
+      setIsFollowing(author.isFollowing);
+    }
+  }, [author?.isFollowing]);
 
   const handleFollow = () => {
-    setIsFollowing(!isFollowing);
-    // TODO: Call API
+    const newFollowState = !isFollowing;
+    setIsFollowing(newFollowState);
+    followMutation.mutate({ authorId, follow: newFollowState });
   };
 
   if (isLoading) {
     return <AuthorDetailSkeleton />;
   }
 
-  if (!author) {
+  if (error || !author) {
     return (
       <div className="container py-12 text-center">
-        <p className="text-muted-foreground">Author not found</p>
+        <p className="text-muted-foreground">
+          {error ? '加载作者详情失败，请稍后重试' : '未找到该作者'}
+        </p>
       </div>
     );
   }

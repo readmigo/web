@@ -1,24 +1,16 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { BookGrid } from '@/features/library/components/book-grid';
-import { useBooks } from '@/features/library/hooks/use-books';
-import { Search, RefreshCw } from 'lucide-react';
-
-const categories = [
-  { label: '全部', value: '' },
-  { label: '小说', value: 'fiction' },
-  { label: '经典文学', value: 'classics' },
-  { label: '科幻', value: 'science-fiction' },
-  { label: '历史', value: 'history' },
-  { label: '哲学', value: 'philosophy' },
-  { label: '传记', value: 'biography' },
-  { label: '科学', value: 'science' },
-];
+import { useInfiniteBooks } from '@/features/library/hooks/use-infinite-books';
+import { useCategories } from '@/features/library/hooks/use-categories';
+import { Search, RefreshCw, Loader2 } from 'lucide-react';
+import { useSearch } from '@/features/search/hooks/use-search';
+import { SearchResultsDropdown } from '@/features/search/components/search-results-dropdown';
 
 const difficulties = [
   { label: '全部难度', value: 0 },
@@ -34,8 +26,12 @@ export function ExploreContent() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState(0);
   const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [debouncedDropdownQuery, setDebouncedDropdownQuery] = useState('');
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Debounce search query
+  // Debounce search query for book grid filtering
   useMemo(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
@@ -43,15 +39,81 @@ export function ExploreContent() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  const { data, isLoading, error, refetch } = useBooks({
+  // Debounce search query for unified search dropdown
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedDropdownQuery(searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Unified search hook
+  const {
+    data: searchResults,
+    isLoading: isSearchLoading,
+  } = useSearch(debouncedDropdownQuery);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Fetch categories from API
+  const { data: categoriesData, isLoading: categoriesLoading } = useCategories();
+
+  // Infinite scroll books query
+  const {
+    data,
+    isLoading,
+    error,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteBooks({
     category: selectedCategory || undefined,
     difficulty: selectedDifficulty || undefined,
     search: debouncedSearch || undefined,
-    limit: 50,
   });
 
-  const books = data?.data || [];
-  const total = data?.total || 0;
+  // Flatten all pages into a single books array
+  const books = data?.pages.flatMap((page) => page.data) || [];
+  const total = data?.pages[0]?.total || 0;
+
+  // Intersection Observer for infinite scroll
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+      if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
+    [fetchNextPage, hasNextPage, isFetchingNextPage]
+  );
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(handleObserver, {
+      rootMargin: '200px',
+    });
+
+    observer.observe(sentinel);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [handleObserver]);
 
   if (error) {
     return (
@@ -71,28 +133,65 @@ export function ExploreContent() {
   return (
     <div className="space-y-6">
       {/* Search */}
-      <div className="relative max-w-xl">
+      <div className="relative max-w-xl" ref={searchContainerRef}>
         <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
         <Input
           placeholder="搜索书名或作者..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            if (e.target.value.length >= 2) {
+              setShowDropdown(true);
+            } else {
+              setShowDropdown(false);
+            }
+          }}
+          onFocus={() => {
+            if (searchQuery.length >= 2) {
+              setShowDropdown(true);
+            }
+          }}
           className="pl-10 h-12 text-lg"
         />
+        {showDropdown && debouncedDropdownQuery.length >= 2 && (
+          <SearchResultsDropdown
+            data={searchResults}
+            isLoading={isSearchLoading}
+            query={debouncedDropdownQuery}
+            onSelect={() => setShowDropdown(false)}
+          />
+        )}
       </div>
 
       {/* Categories */}
       <div className="flex flex-wrap gap-2">
-        {categories.map((category) => (
-          <Badge
-            key={category.value}
-            variant={selectedCategory === category.value ? 'default' : 'outline'}
-            className="cursor-pointer px-3 py-1"
-            onClick={() => setSelectedCategory(category.value)}
-          >
-            {category.label}
-          </Badge>
-        ))}
+        {categoriesLoading ? (
+          <>
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Skeleton key={i} className="h-7 w-16 rounded-full" />
+            ))}
+          </>
+        ) : (
+          <>
+            <Badge
+              variant={selectedCategory === '' ? 'default' : 'outline'}
+              className="cursor-pointer px-3 py-1"
+              onClick={() => setSelectedCategory('')}
+            >
+              All
+            </Badge>
+            {categoriesData?.map((category) => (
+              <Badge
+                key={category.id}
+                variant={selectedCategory === category.id ? 'default' : 'outline'}
+                className="cursor-pointer px-3 py-1"
+                onClick={() => setSelectedCategory(category.id)}
+              >
+                {category.nameEn || category.name}
+              </Badge>
+            ))}
+          </>
+        )}
       </div>
 
       {/* Difficulty filter */}
@@ -126,7 +225,19 @@ export function ExploreContent() {
           ))}
         </div>
       ) : (
-        <BookGrid books={books} />
+        <>
+          <BookGrid books={books} />
+
+          {/* Sentinel for infinite scroll */}
+          <div ref={sentinelRef} className="flex justify-center py-8">
+            {isFetchingNextPage && (
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            )}
+            {!hasNextPage && books.length > 0 && (
+              <p className="text-sm text-muted-foreground">没有更多书籍了</p>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

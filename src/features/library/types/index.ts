@@ -49,6 +49,15 @@ export interface ReadingSession {
   wordsRead: number;
 }
 
+export interface Category {
+  id: string;
+  name: string;
+  nameEn: string;
+  slug: string;
+  bookCount: number;
+  children: Category[];
+}
+
 export type SortOption = 'recent' | 'title' | 'author' | 'progress';
 export type FilterOption = 'all' | 'reading' | 'finished' | 'want-to-read';
 export type ViewMode = 'grid' | 'list';
