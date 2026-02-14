@@ -8,7 +8,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { BookGrid } from '@/features/library/components/book-grid';
 import { useInfiniteBooks } from '@/features/library/hooks/use-infinite-books';
 import { useCategories } from '@/features/library/hooks/use-categories';
-import { Search, RefreshCw, Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { Search, RefreshCw, Loader2, ArrowRight } from 'lucide-react';
 import { useSearch } from '@/features/search/hooks/use-search';
 import { useSearchSuggestions } from '@/features/search/hooks/use-search-suggestions';
 import { usePopularSearches, useTrendingSearches } from '@/features/search/hooks/use-popular-searches';
@@ -234,6 +235,17 @@ export function ExploreContent() {
           </>
         )}
       </div>
+
+      {/* View all in category link */}
+      {selectedCategory && categoriesData && (
+        <Link
+          href={`/category/${selectedCategory}`}
+          className="inline-flex items-center text-sm text-primary hover:underline"
+        >
+          查看「{categoriesData.find((c) => c.id === selectedCategory)?.nameEn || categoriesData.find((c) => c.id === selectedCategory)?.name || '该分类'}」的全部书籍
+          <ArrowRight className="ml-1 h-4 w-4" />
+        </Link>
+      )}
 
       {/* Difficulty filter */}
       <div className="flex flex-wrap gap-2">

@@ -19,8 +19,13 @@ import {
   Headphones,
   Share2,
   User,
+  Play,
 } from 'lucide-react';
 import { useBookDetail } from '@/features/library/hooks/use-books';
+import { useAudiobookByBookId } from '@/features/audiobook/hooks/use-audiobooks';
+import { useReadingGuide, useBookContext } from '@/features/library/hooks/use-book-extras';
+import { ReadingGuideSection } from '@/features/library/components/reading-guide-section';
+import { BookContextSection } from '@/features/library/components/book-context-section';
 
 const difficultyLabels: Record<number, string> = {
   1: 'Beginner',
@@ -45,6 +50,9 @@ interface BookDetailContentProps {
 export function BookDetailContent({ bookId }: BookDetailContentProps) {
   const [isInLibrary, setIsInLibrary] = useState(false);
   const { data: book, isLoading, error } = useBookDetail(bookId);
+  const { data: audiobook } = useAudiobookByBookId(bookId);
+  const { data: readingGuide, isLoading: isGuideLoading } = useReadingGuide(bookId);
+  const { data: bookContext, isLoading: isContextLoading } = useBookContext(bookId);
 
   if (isLoading) {
     return <BookDetailSkeleton />;
@@ -71,6 +79,17 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
     }
     return count.toString();
   };
+
+  const formatDuration = (seconds: number) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    if (hours > 0) {
+      return minutes > 0 ? `${hours} 小时 ${minutes} 分钟` : `${hours} 小时`;
+    }
+    return `${minutes} 分钟`;
+  };
+
+  const hasAudiobook = book.hasAudiobook || !!audiobook;
 
   return (
     <div className="container py-6">
@@ -168,10 +187,6 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
                 </>
               )}
             </Button>
-            <Button size="lg" variant="outline">
-              <Headphones className="mr-2 h-4 w-4" />
-              有声书
-            </Button>
             <Button size="icon" variant="ghost">
               <Share2 className="h-4 w-4" />
             </Button>
@@ -194,6 +209,34 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
               </p>
             </CardContent>
           </Card>
+
+          {/* Reading Guide */}
+          {isGuideLoading && (
+            <Card>
+              <CardContent className="p-6">
+                <Skeleton className="mb-4 h-6 w-32" />
+                <div className="space-y-3">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          {readingGuide && <ReadingGuideSection guide={readingGuide} />}
+
+          {/* Book Context */}
+          {isContextLoading && (
+            <Card>
+              <CardContent className="p-6">
+                <Skeleton className="mb-4 h-6 w-32" />
+                <div className="space-y-3">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          {bookContext && <BookContextSection context={bookContext} />}
 
           {/* Chapters */}
           <Card>
@@ -234,6 +277,46 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
               </div>
             </CardContent>
           </Card>
+
+          {/* Audiobook */}
+          {hasAudiobook && (
+            <Link
+              href={
+                audiobook
+                  ? `/audiobooks?book=${book.id}&audiobook=${audiobook.id}`
+                  : `/audiobooks?book=${book.id}`
+              }
+              className="block"
+            >
+              <Card className="transition-colors hover:bg-muted/50">
+                <CardContent className="p-6">
+                  <div className="mb-3 flex items-center gap-2">
+                    <Headphones className="h-5 w-5 text-primary" />
+                    <h2 className="text-lg font-semibold">有声书</h2>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md">
+                      <Play className="ml-0.5 h-6 w-6" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium">立即收听</p>
+                      {audiobook?.narrator && (
+                        <p className="truncate text-sm text-muted-foreground">
+                          朗读: {audiobook.narrator}
+                        </p>
+                      )}
+                      {audiobook?.totalDuration && (
+                        <p className="text-sm text-muted-foreground">
+                          <Clock className="mr-1 inline h-3 w-3" />
+                          {formatDuration(audiobook.totalDuration)}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          )}
 
           {/* Book Info */}
           <Card>

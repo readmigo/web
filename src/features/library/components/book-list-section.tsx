@@ -4,10 +4,23 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { BookList } from '../types';
+import { RankedBookCard } from './ranked-book-card';
+import { HeroBookCard } from './hero-book-card';
+import type { BookList, BookListType } from '../types';
 
 interface BookListSectionProps {
   bookList: BookList;
+}
+
+const RANKED_TYPES: BookListType[] = ['RANKING'];
+const HERO_TYPES: BookListType[] = ['AI_FEATURED', 'AI_RECOMMENDED', 'EDITORS_PICK'];
+
+function isRankedType(type: BookListType): boolean {
+  return RANKED_TYPES.includes(type);
+}
+
+function isHeroType(type: BookListType): boolean {
+  return HERO_TYPES.includes(type);
 }
 
 export function BookListSection({ bookList }: BookListSectionProps) {
@@ -16,6 +29,10 @@ export function BookListSection({ bookList }: BookListSectionProps) {
   if (books.length === 0) {
     return null;
   }
+
+  const useRanked = isRankedType(bookList.type);
+  const useHero = isHeroType(bookList.type);
+  const showAiBadge = bookList.type === 'AI_FEATURED' || bookList.type === 'AI_RECOMMENDED';
 
   return (
     <div className="space-y-3">
@@ -38,44 +55,69 @@ export function BookListSection({ bookList }: BookListSectionProps) {
 
       {/* Horizontal Scrollable Books */}
       <div className="scrollbar-hide -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
-        {books.map((book) => (
-          <Link
-            key={book.id}
-            href={`/book/${book.id}`}
-            className="group flex-shrink-0"
-          >
-            <div className="w-[120px] space-y-2 sm:w-[140px]">
-              {/* Cover */}
-              <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-muted shadow-sm transition-shadow group-hover:shadow-md">
-                {book.coverUrl ? (
-                  <Image
-                    src={book.coverUrl}
-                    alt={book.title}
-                    fill
-                    className="object-cover transition-transform group-hover:scale-105"
-                    sizes="(max-width: 640px) 120px, 140px"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center">
-                    <span className="text-3xl text-muted-foreground/40">
-                      {book.title.charAt(0)}
-                    </span>
-                  </div>
-                )}
-              </div>
+        {books.map((book, index) => {
+          if (useRanked) {
+            return (
+              <RankedBookCard
+                key={book.id}
+                book={book}
+                rank={index + 1}
+                className="flex-shrink-0"
+              />
+            );
+          }
 
-              {/* Title & Author */}
-              <div>
-                <p className="line-clamp-2 text-sm font-medium leading-tight">
-                  {book.title}
-                </p>
-                <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
-                  {book.author}
-                </p>
+          if (useHero) {
+            return (
+              <HeroBookCard
+                key={book.id}
+                book={book}
+                showAiBadge={showAiBadge}
+                className="flex-shrink-0"
+              />
+            );
+          }
+
+          // Default: standard inline card (original style)
+          return (
+            <Link
+              key={book.id}
+              href={`/book/${book.id}`}
+              className="group flex-shrink-0"
+            >
+              <div className="w-[120px] space-y-2 sm:w-[140px]">
+                {/* Cover */}
+                <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-muted shadow-sm transition-shadow group-hover:shadow-md">
+                  {book.coverUrl ? (
+                    <Image
+                      src={book.coverUrl}
+                      alt={book.title}
+                      fill
+                      className="object-cover transition-transform group-hover:scale-105"
+                      sizes="(max-width: 640px) 120px, 140px"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center">
+                      <span className="text-3xl text-muted-foreground/40">
+                        {book.title.charAt(0)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Title & Author */}
+                <div>
+                  <p className="line-clamp-2 text-sm font-medium leading-tight">
+                    {book.title}
+                  </p>
+                  <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                    {book.author}
+                  </p>
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

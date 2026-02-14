@@ -20,6 +20,8 @@ export interface BookDetail extends Book {
   aiScore?: number;
   estimatedReadTime: number;
   tags: string[];
+  hasAudiobook?: boolean;
+  audiobookId?: string;
 }
 
 export interface Chapter {
@@ -56,6 +58,33 @@ export interface Category {
   slug: string;
   bookCount: number;
   children: Category[];
+}
+
+export interface ReadingGuide {
+  id: string;
+  bookId: string;
+  sourceType: 'AI_GENERATED' | 'MANUAL';
+  aiModel?: string;
+  generatedAt?: string;
+  readingWarnings?: string;
+  storyTimeline?: string;
+  quickStartGuide?: string;
+  locale?: string;
+}
+
+export interface BookContext {
+  id: string;
+  bookId: string;
+  sourceType: 'WIKIPEDIA' | 'STANDARD_EBOOKS' | 'OPEN_LIBRARY' | 'WIKIDATA' | 'MANUAL';
+  sourceUrl?: string;
+  summary?: string;
+  creationBackground?: string;
+  historicalContext?: string;
+  themes?: string;
+  literaryStyle?: string;
+  license?: string;
+  fetchedAt?: string;
+  locale?: string;
 }
 
 export type SortOption = 'recent' | 'title' | 'author' | 'progress';
