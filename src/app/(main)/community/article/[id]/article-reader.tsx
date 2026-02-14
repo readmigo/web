@@ -12,20 +12,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { WordPopover } from './word-popover';
 import { api } from '@/lib/api/index';
 
-interface ArticleData {
-  title: string;
-  category: string;
-  content?: string;
-  license?: string;
-  sourceUrl?: string;
-  source?: { name?: string };
-  difficulty?: string;
-  readingTime?: number;
-  publishedAt?: string;
-}
-
 interface ArticleResponse {
-  data: ArticleData;
+  data: Record<string, unknown>;
 }
 
 interface ArticleReaderProps {
