@@ -1,7 +1,7 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
 
 interface RequestOptions extends RequestInit {
-  params?: Record<string, string>;
+  params?: Record<string, string | number | undefined>;
   skipAuth?: boolean;
 }
 
@@ -91,7 +91,8 @@ class ApiClient {
     return {};
   }
 
-  private async request<T>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private async request<T = any>(
     endpoint: string,
     options: RequestOptions = {}
   ): Promise<T> {
@@ -99,10 +100,13 @@ class ApiClient {
 
     let url = `${this.baseUrl}${endpoint}`;
     if (params) {
-      // Filter out undefined/null values before creating URLSearchParams
-      const filteredParams = Object.fromEntries(
-        Object.entries(params).filter(([, v]) => v !== undefined && v !== null)
-      );
+      // Filter out undefined/null values and convert to strings for URLSearchParams
+      const filteredParams: Record<string, string> = {};
+      for (const [k, v] of Object.entries(params)) {
+        if (v !== undefined && v !== null) {
+          filteredParams[k] = String(v);
+        }
+      }
       if (Object.keys(filteredParams).length > 0) {
         const searchParams = new URLSearchParams(filteredParams);
         url += `?${searchParams.toString()}`;
@@ -166,11 +170,13 @@ class ApiClient {
     return response.json();
   }
 
-  async get<T>(endpoint: string, options?: RequestOptions): Promise<T> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async get<T = any>(endpoint: string, options?: RequestOptions): Promise<T> {
     return this.request<T>(endpoint, { ...options, method: 'GET' });
   }
 
-  async post<T>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async post<T = any>(
     endpoint: string,
     data?: unknown,
     options?: RequestOptions
@@ -182,7 +188,8 @@ class ApiClient {
     });
   }
 
-  async put<T>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async put<T = any>(
     endpoint: string,
     data?: unknown,
     options?: RequestOptions
@@ -194,7 +201,8 @@ class ApiClient {
     });
   }
 
-  async patch<T>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async patch<T = any>(
     endpoint: string,
     data?: unknown,
     options?: RequestOptions
@@ -206,7 +214,8 @@ class ApiClient {
     });
   }
 
-  async delete<T>(endpoint: string, options?: RequestOptions): Promise<T> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async delete<T = any>(endpoint: string, options?: RequestOptions): Promise<T> {
     return this.request<T>(endpoint, { ...options, method: 'DELETE' });
   }
 }

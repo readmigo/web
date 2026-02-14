@@ -61,7 +61,6 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@testing-library/react": "^16.0.0",
-    "@types/dompurify": "^3.2.0",
     "@types/minimatch": "^5.1.2",
     "@types/node": "^20",
     "@types/react": "^19",

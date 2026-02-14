@@ -8,6 +8,16 @@ import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { api } from '@/lib/api/index';
 
+interface WordDefinition {
+  pos: string;
+  meaning: string;
+}
+
+interface WordLookupResponse {
+  phonetic?: string;
+  definitions?: WordDefinition[];
+}
+
 interface WordPopoverProps {
   word: string;
   position: { x: number; y: number };
@@ -20,7 +30,7 @@ export function WordPopover({ word, position, onClose }: WordPopoverProps) {
   // 查询单词释义
   const { data, isLoading } = useQuery({
     queryKey: ['word-definition', word],
-    queryFn: () => api.get(`/community/vocabulary/lookup/${word}`),
+    queryFn: () => api.get<WordLookupResponse>(`/community/vocabulary/lookup/${word}`),
     enabled: !!word,
   });
 
@@ -92,9 +102,9 @@ export function WordPopover({ word, position, onClose }: WordPopoverProps) {
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-3/4" />
         </div>
-      ) : data?.definitions?.length > 0 ? (
+      ) : (data?.definitions?.length ?? 0) > 0 ? (
         <div className="space-y-2">
-          {data.definitions.slice(0, 3).map((def: any, i: number) => (
+          {data!.definitions!.slice(0, 3).map((def: WordDefinition, i: number) => (
             <div key={i} className="text-sm">
               <span className="text-muted-foreground">{def.pos}.</span>{' '}
               {def.meaning}
