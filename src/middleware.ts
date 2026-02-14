@@ -50,6 +50,11 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Rewrite root to /explore so the bookstore tab shows directly (no redirect)
+  if (pathname === '/') {
+    return NextResponse.rewrite(new URL('/explore', req.url));
+  }
+
   // Allow public paths without authentication
   if (isPublicPath(pathname)) {
     return NextResponse.next();
