@@ -12,6 +12,22 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { WordPopover } from './word-popover';
 import { api } from '@/lib/api/index';
 
+interface ArticleData {
+  title: string;
+  category: string;
+  content?: string;
+  license?: string;
+  sourceUrl?: string;
+  source?: { name?: string };
+  difficulty?: string;
+  readingTime?: number;
+  publishedAt?: string;
+}
+
+interface ArticleResponse {
+  data: ArticleData;
+}
+
 interface ArticleReaderProps {
   articleId: string;
 }
@@ -33,7 +49,7 @@ export function ArticleReader({ articleId }: ArticleReaderProps) {
   // Fetch article
   const { data: article, isLoading } = useQuery({
     queryKey: ['community-article', articleId],
-    queryFn: () => api.get(`/community/articles/${articleId}`),
+    queryFn: () => api.get<ArticleResponse>(`/community/articles/${articleId}`),
   });
 
   // Update reading progress
