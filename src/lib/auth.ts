@@ -87,7 +87,6 @@ if (process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET) {
   );
 }
 
-// Always include Credentials provider for development/testing
 providers.push(
   Credentials({
     name: 'credentials',
@@ -100,13 +99,33 @@ providers.push(
         return null;
       }
 
-      // For development, accept any email/password
-      // In production, this should call a backend login endpoint
-      return {
-        id: 'dev-user-1',
-        email: credentials.email as string,
-        name: 'Dev User',
-      };
+      try {
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: credentials.email,
+            password: credentials.password,
+          }),
+        });
+
+        if (!response.ok) {
+          return null;
+        }
+
+        const data: BackendAuthResponse = await response.json();
+
+        return {
+          id: data.user.id,
+          email: data.user.email,
+          name: data.user.nickname,
+          image: data.user.avatarUrl,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+        };
+      } catch {
+        return null;
+      }
     },
   })
 );
@@ -141,9 +160,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           }
         }
 
-        // For credentials provider (dev only)
         if (account.provider === 'credentials') {
           token.backendUserId = user.id;
+          const u = user as Record<string, unknown>;
+          token.accessToken = u.accessToken as string | undefined;
+          token.refreshToken = u.refreshToken as string | undefined;
         }
       }
 
