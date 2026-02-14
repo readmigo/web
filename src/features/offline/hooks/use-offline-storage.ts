@@ -170,18 +170,15 @@ export function useOfflineStorage() {
     }
   }, [refreshStorageInfo]);
 
-  // Clear localStorage data (except auth tokens)
+  // Clear localStorage data (auth tokens are in httpOnly cookies, not localStorage)
   const clearLocalStorage = useCallback(() => {
     if (typeof window === 'undefined') return;
 
-    const keysToPreserve = ['accessToken', 'refreshToken'];
     const keysToRemove: string[] = [];
 
     for (const key in localStorage) {
       if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
-        if (!keysToPreserve.includes(key)) {
-          keysToRemove.push(key);
-        }
+        keysToRemove.push(key);
       }
     }
 

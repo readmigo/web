@@ -1,4 +1,8 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
+/**
+ * API Client — all requests go through /api/proxy/ which reads the
+ * httpOnly JWT cookie server-side and attaches the Bearer token.
+ * No tokens are stored or accessible in client-side JavaScript.
+ */
 
 interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | undefined>;
@@ -16,79 +20,13 @@ export class ApiError extends Error {
   }
 }
 
-// Token storage for client-side
-let accessToken: string | null = null;
-let refreshToken: string | null = null;
-
-export function setTokens(access: string | null, refresh: string | null) {
-  accessToken = access;
-  refreshToken = refresh;
-  if (typeof window !== 'undefined') {
-    if (access) {
-      localStorage.setItem('accessToken', access);
-    } else {
-      localStorage.removeItem('accessToken');
-    }
-    if (refresh) {
-      localStorage.setItem('refreshToken', refresh);
-    } else {
-      localStorage.removeItem('refreshToken');
-    }
-  }
-}
-
-export function getTokens() {
-  if (typeof window !== 'undefined' && !accessToken) {
-    accessToken = localStorage.getItem('accessToken');
-    refreshToken = localStorage.getItem('refreshToken');
-  }
-  return { accessToken, refreshToken };
-}
-
-export function clearTokens() {
-  setTokens(null, null);
-}
-
 class ApiClient {
-  private baseUrl: string;
-  private isRefreshing = false;
-  private refreshPromise: Promise<boolean> | null = null;
+  private proxyBase: string;
 
-  constructor(baseUrl: string) {
-    this.baseUrl = baseUrl;
-  }
-
-  private async refreshAccessToken(): Promise<boolean> {
-    const { refreshToken: token } = getTokens();
-    if (!token) return false;
-
-    try {
-      const response = await fetch(`${this.baseUrl}/auth/refresh`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refreshToken: token }),
-      });
-
-      if (!response.ok) {
-        clearTokens();
-        return false;
-      }
-
-      const data = await response.json();
-      setTokens(data.accessToken, data.refreshToken);
-      return true;
-    } catch {
-      clearTokens();
-      return false;
-    }
-  }
-
-  private async getAuthHeaders(): Promise<HeadersInit> {
-    const { accessToken: token } = getTokens();
-    if (token) {
-      return { Authorization: `Bearer ${token}` };
-    }
-    return {};
+  constructor() {
+    // All requests go through the Next.js API proxy
+    // In the browser, use relative URL; on server-side (SSR), use full URL
+    this.proxyBase = '/api/proxy';
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -96,9 +34,9 @@ class ApiClient {
     endpoint: string,
     options: RequestOptions = {}
   ): Promise<T> {
-    const { params, skipAuth, ...fetchOptions } = options;
+    const { params, skipAuth: _skipAuth, ...fetchOptions } = options;
 
-    let url = `${this.baseUrl}${endpoint}`;
+    let url = `${this.proxyBase}${endpoint}`;
     if (params) {
       // Filter out undefined/null values and convert to strings for URLSearchParams
       const filteredParams: Record<string, string> = {};
@@ -113,53 +51,23 @@ class ApiClient {
       }
     }
 
-    const authHeaders = skipAuth ? {} : await this.getAuthHeaders();
-
+    // Cookies (including the NextAuth session cookie) are sent automatically
+    // The proxy route reads the JWT and attaches the Bearer token
     const response = await fetch(url, {
       ...fetchOptions,
       headers: {
         'Content-Type': 'application/json',
-        ...authHeaders,
         ...fetchOptions.headers,
       },
+      credentials: 'same-origin',
     });
 
-    // Handle 401 - try to refresh token
-    if (response.status === 401 && !skipAuth) {
-      if (!this.isRefreshing) {
-        this.isRefreshing = true;
-        this.refreshPromise = this.refreshAccessToken();
+    // Handle 401 — redirect to login
+    if (response.status === 401) {
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login';
       }
-
-      const refreshed = await this.refreshPromise;
-      this.isRefreshing = false;
-      this.refreshPromise = null;
-
-      if (refreshed) {
-        // Retry the request with new token
-        const newAuthHeaders = await this.getAuthHeaders();
-        const retryResponse = await fetch(url, {
-          ...fetchOptions,
-          headers: {
-            'Content-Type': 'application/json',
-            ...newAuthHeaders,
-            ...fetchOptions.headers,
-          },
-        });
-
-        if (!retryResponse.ok) {
-          const errorData = await retryResponse.json().catch(() => null);
-          throw new ApiError(retryResponse.status, retryResponse.statusText, errorData);
-        }
-
-        return retryResponse.json();
-      } else {
-        // Redirect to login if refresh failed
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
-        }
-        throw new ApiError(401, 'Unauthorized');
-      }
+      throw new ApiError(401, 'Unauthorized');
     }
 
     if (!response.ok) {
@@ -220,7 +128,7 @@ class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient(API_BASE_URL);
+export const apiClient = new ApiClient();
 
 /**
  * Update user activity (lastActiveAt)

@@ -8,8 +8,6 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/a
 // Extend the built-in types
 declare module 'next-auth' {
   interface Session {
-    accessToken?: string;
-    refreshToken?: string;
     user: {
       id: string;
       email?: string | null;
@@ -21,6 +19,7 @@ declare module 'next-auth' {
   interface JWT {
     accessToken?: string;
     refreshToken?: string;
+    accessTokenExpiresAt?: number;
     backendUserId?: string;
   }
 }
@@ -34,6 +33,34 @@ interface BackendAuthResponse {
     nickname?: string;
     avatarUrl?: string;
   };
+}
+
+// Access token lifetime margin (refresh 5 minutes before expiry)
+const TOKEN_REFRESH_MARGIN_MS = 5 * 60 * 1000;
+// Default access token lifetime assumption: 1 hour
+const DEFAULT_TOKEN_LIFETIME_MS = 60 * 60 * 1000;
+
+async function refreshBackendToken(refreshToken: string): Promise<{
+  accessToken: string;
+  refreshToken: string;
+} | null> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    if (!response.ok) {
+      console.error(`Token refresh failed: ${response.status}`);
+      return null;
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Token refresh error:', error);
+    return null;
+  }
 }
 
 async function authenticateWithBackend(
@@ -153,6 +180,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             if (backendAuth) {
               token.accessToken = backendAuth.accessToken;
               token.refreshToken = backendAuth.refreshToken;
+              token.accessTokenExpiresAt = Date.now() + DEFAULT_TOKEN_LIFETIME_MS;
               token.backendUserId = backendAuth.user.id;
               token.name = backendAuth.user.nickname || token.name;
               token.picture = backendAuth.user.avatarUrl || token.picture;
@@ -165,6 +193,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const u = user as Record<string, unknown>;
           token.accessToken = u.accessToken as string | undefined;
           token.refreshToken = u.refreshToken as string | undefined;
+          token.accessTokenExpiresAt = Date.now() + DEFAULT_TOKEN_LIFETIME_MS;
+        }
+
+        return token;
+      }
+
+      // On subsequent requests, check if the access token needs refreshing
+      const expiresAt = token.accessTokenExpiresAt as number | undefined;
+      if (
+        token.refreshToken &&
+        expiresAt &&
+        Date.now() + TOKEN_REFRESH_MARGIN_MS >= expiresAt
+      ) {
+        const refreshed = await refreshBackendToken(token.refreshToken as string);
+        if (refreshed) {
+          token.accessToken = refreshed.accessToken;
+          token.refreshToken = refreshed.refreshToken;
+          token.accessTokenExpiresAt = Date.now() + DEFAULT_TOKEN_LIFETIME_MS;
+        } else {
+          // Refresh failed — clear tokens so user gets logged out
+          token.accessToken = undefined;
+          token.refreshToken = undefined;
+          token.accessTokenExpiresAt = undefined;
         }
       }
 
@@ -174,9 +225,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user) {
         session.user.id = (token.backendUserId as string) || (token.sub as string);
       }
-      // Expose tokens to client (for API calls)
-      session.accessToken = token.accessToken as string | undefined;
-      session.refreshToken = token.refreshToken as string | undefined;
+      // Tokens are kept server-side only (in the JWT cookie managed by NextAuth).
+      // They are NOT exposed to the client session for security.
+      // The API proxy route (/api/proxy) reads the JWT to attach tokens.
       return session;
     },
   },

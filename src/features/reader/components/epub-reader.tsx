@@ -6,6 +6,7 @@ import type { TocItem, SelectedText, BilingualChapter } from '../types';
 import { apiClient } from '@/lib/api/client';
 import { useTranslate } from '../hooks/use-ai';
 import { normalizeParagraphText, hashText } from '../utils/translation-hash';
+import { sanitizeHtml } from '@/lib/sanitize';
 
 interface EpubReaderProps {
   bookId?: string;
@@ -165,7 +166,7 @@ export function EpubReader({
   const restoreParagraph = useCallback(
     (node: HTMLElement) => {
       if (node.dataset.originalHtml) {
-        node.innerHTML = node.dataset.originalHtml;
+        node.innerHTML = sanitizeHtml(node.dataset.originalHtml);
       }
       node.dataset.translated = 'false';
       applySwapAnimation(node);

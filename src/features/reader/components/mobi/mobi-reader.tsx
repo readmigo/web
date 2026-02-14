@@ -27,6 +27,7 @@ import {
   type ParsedMobiDocument,
   type ParsedMobiChapter,
 } from '../../utils/mobi-parser';
+import { sanitizeHtml } from '@/lib/sanitize';
 
 interface MobiReaderProps {
   url?: string;
@@ -389,7 +390,7 @@ export function MobiReader({
             </h2>
             <div
               className="mobi-content space-y-4 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: currentChapter.html }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(currentChapter.html) }}
               style={{
                 lineHeight: '1.8',
               }}
