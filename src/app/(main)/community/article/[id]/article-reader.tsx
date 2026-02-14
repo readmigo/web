@@ -102,7 +102,7 @@ export function ArticleReader({ articleId }: ArticleReaderProps) {
     const url = window.location.href;
     if (navigator.share) {
       await navigator.share({
-        title: article?.data?.title,
+        title: article?.data?.title as string | undefined,
         url,
       });
     } else {
