@@ -132,7 +132,6 @@ export function AiPanel({ onClose, bookId }: AiPanelProps) {
   const handleAddToVocabulary = () => {
     if (wordDefinition) {
       // TODO: Implement add to vocabulary via API
-      console.log('Add to vocabulary:', wordDefinition.word);
     }
   };
 

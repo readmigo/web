@@ -315,9 +315,8 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   }, []);
 
   const handleLocationChange = useCallback(
-    (cfi: string, percentage: number) => {
+    (_cfi: string, _percentage: number) => {
       // Location tracking is handled in the store
-      console.log('Location:', cfi, percentage);
     },
     []
   );
@@ -329,9 +328,8 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     [setSelectedText]
   );
 
-  const handleTocSelect = useCallback((href: string) => {
+  const handleTocSelect = useCallback((_href: string) => {
     // TODO: Navigate to href using rendition
-    console.log('Navigate to:', href);
   }, []);
 
   const handleTranslate = useCallback(() => {

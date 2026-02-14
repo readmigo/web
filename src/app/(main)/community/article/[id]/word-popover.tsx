@@ -73,7 +73,6 @@ export function WordPopover({ word, position, onClose }: WordPopoverProps) {
 
   const addToVocabulary = async () => {
     // TODO: Implement vocabulary saving feature
-    console.log('Adding word to vocabulary:', word);
   };
 
   return (

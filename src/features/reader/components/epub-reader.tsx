@@ -713,9 +713,8 @@ export function EpubReader({
         renditionRef.current.annotations.highlight(
           highlight.cfiRange,
           { id: highlight.id },
-          (e: any) => {
+          () => {
             // Handle click on highlight - could show detail panel
-            console.log('Highlight clicked:', highlight.id);
           },
           'highlight',
           { fill: colors[highlight.color] || colors.yellow }

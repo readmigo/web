@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { rateLimit } from '@/lib/rate-limit';
+import { validateProxyPath } from '@/lib/validation';
 
 const API_BASE_URL = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
 
@@ -20,11 +21,20 @@ async function proxyRequest(req: NextRequest) {
   const url = new URL(req.url);
   const proxyPath = url.pathname.replace(/^\/api\/proxy/, '');
 
+  // --- Path validation: block traversal attacks ---
+  const safePath = validateProxyPath(proxyPath);
+  if (safePath === null) {
+    return NextResponse.json(
+      { error: 'Invalid proxy path' },
+      { status: 400 }
+    );
+  }
+
   // --- Rate limiting ---
   const forwarded = req.headers.get('x-forwarded-for');
   const ip = forwarded?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || '127.0.0.1';
 
-  const isAuthRoute = proxyPath.includes('auth/login') || proxyPath.includes('auth/register');
+  const isAuthRoute = safePath.includes('auth/login') || safePath.includes('auth/register');
   const rateLimitKey = isAuthRoute ? `auth:${ip}` : `general:${ip}`;
   const limit = isAuthRoute ? AUTH_LIMIT : GENERAL_LIMIT;
   const windowMs = isAuthRoute ? AUTH_WINDOW_MS : GENERAL_WINDOW_MS;
@@ -44,7 +54,7 @@ async function proxyRequest(req: NextRequest) {
       }
     );
   }
-  const targetUrl = `${API_BASE_URL}${proxyPath}${url.search}`;
+  const targetUrl = `${API_BASE_URL}${safePath}${url.search}`;
 
   // Read the JWT from the NextAuth session cookie (server-side only)
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
