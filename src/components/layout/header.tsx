@@ -10,7 +10,6 @@ import {
   BookOpen,
   GraduationCap,
   Headphones,
-  Home,
   Search,
   User,
   Settings,
@@ -18,7 +17,6 @@ import {
 } from 'lucide-react';
 
 const navigation = [
-  { name: '首页', href: '/', icon: Home },
   { name: '探索', href: '/explore', icon: Compass },
   { name: '书架', href: '/library', icon: BookOpen },
   { name: '词汇', href: '/vocabulary', icon: GraduationCap },
@@ -94,11 +92,6 @@ export function Header() {
             {/* User */}
             <Button variant="ghost" size="icon">
               <User className="h-4 w-4" />
-            </Button>
-
-            {/* Login Button */}
-            <Button size="sm" className="hidden sm:inline-flex">
-              登录
             </Button>
           </div>
         </div>

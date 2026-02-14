@@ -7,12 +7,10 @@ import {
   BookOpen,
   GraduationCap,
   Headphones,
-  Home,
   Compass,
 } from 'lucide-react';
 
 const navigation = [
-  { name: '首页', href: '/', icon: Home },
   { name: '探索', href: '/explore', icon: Compass },
   { name: '书架', href: '/library', icon: BookOpen },
   { name: '词汇', href: '/vocabulary', icon: GraduationCap },
@@ -27,7 +25,7 @@ export function MobileNav() {
       <div className="flex h-16 items-center justify-around">
         {navigation.map((item) => {
           const isActive = pathname === item.href ||
-            (item.href !== '/' && pathname.startsWith(item.href));
+            pathname.startsWith(item.href);
 
           return (
             <Link
