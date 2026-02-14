@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import { PapersContent } from './papers-content';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: '论文库',
   description: '管理和阅读你的学术论文',
