@@ -189,7 +189,10 @@ export function ExploreContent() {
         </div>
       ) : (
       <>
-      {/* Ranking Book Lists (shown first, matching iOS) */}
+      {/* Hero Banner */}
+      <HeroBanner bookLists={featuredBookLists} isLoading={bookListsLoading} />
+
+      {/* Ranking Book Lists */}
       {bookListsLoading ? (
         <BookListSectionSkeleton />
       ) : (
@@ -201,9 +204,6 @@ export function ExploreContent() {
           </div>
         )
       )}
-
-      {/* Hero Banner */}
-      <HeroBanner bookLists={featuredBookLists} isLoading={bookListsLoading} />
 
       {/* Category menu - circular icons */}
       <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">

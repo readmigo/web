@@ -44,11 +44,11 @@ export function useBookDetail(bookId: string) {
   return useQuery({
     queryKey: ['book', bookId],
     queryFn: async () => {
-      const response = await apiClient.get<{ data: BookDetail }>(
+      const response = await apiClient.get<BookDetail>(
         `/books/${bookId}`,
-        { skipAuth: true } // Books API is public
+        { skipAuth: true }
       );
-      return response.data;
+      return response;
     },
     enabled: !!bookId,
     staleTime: 10 * 60 * 1000,
