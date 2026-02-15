@@ -293,11 +293,16 @@ export function SearchResultsDropdown({
   // ──────────────────────────────────────────
   // State C: Results loaded — authors, books, quotes
   // ──────────────────────────────────────────
-  const { authors, books, quotes } = data;
+  const authors = data.authors ?? { items: [], total: 0, hasMore: false };
+  const books = data.books ?? { items: [], total: 0, hasMore: false };
+  const quotes = data.quotes ?? { items: [], total: 0, hasMore: false };
+  const authorItems = authors.items ?? [];
+  const bookItems = books.items ?? [];
+  const quoteItems = quotes.items ?? [];
   const hasResults =
-    authors.items.length > 0 ||
-    books.items.length > 0 ||
-    quotes.items.length > 0;
+    authorItems.length > 0 ||
+    bookItems.length > 0 ||
+    quoteItems.length > 0;
 
   // Empty state
   if (!hasResults) {
@@ -317,13 +322,13 @@ export function SearchResultsDropdown({
     <DropdownWrapper>
       <div className="p-2">
         {/* Authors section */}
-        {authors.items.length > 0 && (
+        {authorItems.length > 0 && (
           <div>
             <SectionHeader
               icon={<User className="h-3 w-3" />}
               label={`作者 (${authors.total})`}
             />
-            {authors.items.map((author) => (
+            {authorItems.map((author) => (
               <button
                 key={author.id}
                 className="flex w-full items-center gap-3 rounded-md px-2 py-2 text-left transition-colors hover:bg-accent"
@@ -359,14 +364,14 @@ export function SearchResultsDropdown({
         )}
 
         {/* Books section */}
-        {books.items.length > 0 && (
+        {bookItems.length > 0 && (
           <div>
-            {authors.items.length > 0 && <SectionDivider />}
+            {authorItems.length > 0 && <SectionDivider />}
             <SectionHeader
               icon={<BookOpen className="h-3 w-3" />}
               label={`书籍 (${books.total})`}
             />
-            {books.items.map((book) => (
+            {bookItems.map((book) => (
               <button
                 key={book.id}
                 className="flex w-full items-center gap-3 rounded-md px-2 py-2 text-left transition-colors hover:bg-accent"
@@ -395,16 +400,16 @@ export function SearchResultsDropdown({
         )}
 
         {/* Quotes section */}
-        {quotes.items.length > 0 && (
+        {quoteItems.length > 0 && (
           <div>
-            {(authors.items.length > 0 || books.items.length > 0) && (
+            {(authorItems.length > 0 || bookItems.length > 0) && (
               <SectionDivider />
             )}
             <SectionHeader
               icon={<Quote className="h-3 w-3" />}
               label={`名言 (${quotes.total})`}
             />
-            {quotes.items.map((quote) => (
+            {quoteItems.map((quote) => (
               <button
                 key={quote.id}
                 className="flex w-full items-start gap-3 rounded-md px-2 py-2 text-left transition-colors hover:bg-accent"
