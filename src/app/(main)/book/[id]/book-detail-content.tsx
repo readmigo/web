@@ -314,7 +314,7 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
                     {index + 1}.
                   </span>
                   <span className="flex-1 truncate text-sm">{chapter.title}</span>
-                  {chapter.wordCount > 0 && (
+                  {chapter.wordCount != null && chapter.wordCount > 0 && (
                     <span className="flex-shrink-0 text-xs text-muted-foreground">
                       {formatWordCount(chapter.wordCount)}
                     </span>
