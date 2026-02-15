@@ -194,19 +194,6 @@ export function ExploreContent() {
       {/* Hero Banner */}
       <HeroBanner bookLists={featuredBookLists} isLoading={bookListsLoading} />
 
-      {/* Ranking Book Lists */}
-      {bookListsLoading ? (
-        <BookListSectionSkeleton />
-      ) : (
-        rankingBookLists.length > 0 && (
-          <div className="space-y-8">
-            {rankingBookLists.map((list) => (
-              <BookListSection key={list.id} bookList={list} />
-            ))}
-          </div>
-        )
-      )}
-
       {/* Category menu - circular icons */}
       <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
         {categoriesLoading ? (
@@ -274,6 +261,19 @@ export function ExploreContent() {
           </>
         )}
       </div>
+
+      {/* Ranking Book Lists */}
+      {bookListsLoading ? (
+        <BookListSectionSkeleton />
+      ) : (
+        rankingBookLists.length > 0 && (
+          <div className="space-y-8">
+            {rankingBookLists.map((list) => (
+              <BookListSection key={list.id} bookList={list} />
+            ))}
+          </div>
+        )
+      )}
 
       {/* Book List Sections */}
       {bookListsLoading ? (
