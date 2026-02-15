@@ -7,6 +7,8 @@
 interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | undefined>;
   skipAuth?: boolean;
+  /** When true, 401 responses throw ApiError instead of redirecting to /login */
+  noRedirectOn401?: boolean;
 }
 
 export class ApiError extends Error {
@@ -34,7 +36,7 @@ class ApiClient {
     endpoint: string,
     options: RequestOptions = {}
   ): Promise<T> {
-    const { params, skipAuth: _skipAuth, ...fetchOptions } = options;
+    const { params, skipAuth: _skipAuth, noRedirectOn401, ...fetchOptions } = options;
 
     let url = `${this.proxyBase}${endpoint}`;
     if (params) {
@@ -62,9 +64,9 @@ class ApiClient {
       credentials: 'same-origin',
     });
 
-    // Handle 401 — redirect to login
+    // Handle 401 — redirect to login (unless caller opted out)
     if (response.status === 401) {
-      if (typeof window !== 'undefined') {
+      if (!noRedirectOn401 && typeof window !== 'undefined') {
         window.location.href = '/login';
       }
       throw new ApiError(401, 'Unauthorized');
@@ -136,7 +138,7 @@ export const apiClient = new ApiClient();
  */
 export async function updateActivity(): Promise<void> {
   try {
-    await apiClient.post('/users/me/activity');
+    await apiClient.post('/users/me/activity', undefined, { noRedirectOn401: true });
   } catch (error) {
     // Silent fail - activity updates should not disrupt user experience
     console.debug('Failed to update activity:', error);
