@@ -4,13 +4,29 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
 import { RankedBookCard } from './ranked-book-card';
 import { HeroBookCard } from './hero-book-card';
 import { useBookListDetail } from '../hooks/use-book-lists';
 import type { BookList, BookListType } from '../types';
 
+/** iOS-matching background gradients for each ranking section */
+const SECTION_GRADIENTS = [
+  'linear-gradient(to bottom, rgba(249,115,22,0.08), transparent)', // 0: orange (高分经典)
+  'linear-gradient(to bottom, rgba(59,130,246,0.06), transparent)',  // 1: blue (入门推荐)
+  'linear-gradient(to right, rgba(168,85,247,0.08), rgba(99,102,241,0.06))', // 2: purple→indigo (科幻经典)
+  'linear-gradient(to bottom, rgba(180,83,9,0.08), transparent)',   // 3: brown (冒险故事)
+  'linear-gradient(to right, rgba(236,72,153,0.06), rgba(52,211,153,0.06), rgba(34,211,238,0.06))', // 4: pink→mint→cyan (儿童文学)
+  'linear-gradient(to bottom, rgba(107,114,128,0.06), transparent)', // 5: gray (哲学思想)
+  'linear-gradient(135deg, rgba(217,226,237,0.6), rgba(224,232,242,0.4))', // 6: blue-gray (侦探推理)
+  'linear-gradient(to bottom, rgba(168,85,247,0.06), rgba(234,179,8,0.04))', // 7: purple→yellow (莎士比亚)
+  'linear-gradient(to top, rgba(180,83,9,0.06), transparent)',      // 8: brown (鸿篇巨制)
+  'linear-gradient(to bottom, rgba(34,197,94,0.06), transparent)',  // 9: green (英语学习必读)
+];
+
 interface BookListSectionProps {
   bookList: BookList;
+  styleIndex?: number;
 }
 
 const RANKED_TYPES: BookListType[] = ['RANKING'];
@@ -24,7 +40,7 @@ function isHeroType(type: BookListType): boolean {
   return HERO_TYPES.includes(type);
 }
 
-export function BookListSection({ bookList }: BookListSectionProps) {
+export function BookListSection({ bookList, styleIndex }: BookListSectionProps) {
   // Fetch books from detail API if not already populated
   const { data: detailData, isLoading: detailLoading } = useBookListDetail(
     bookList.books && bookList.books.length > 0 ? '' : bookList.id
@@ -44,8 +60,13 @@ export function BookListSection({ bookList }: BookListSectionProps) {
   const useHero = isHeroType(bookList.type);
   const showAiBadge = bookList.type === 'AI_FEATURED' || bookList.type === 'AI_RECOMMENDED';
 
+  const gradient = styleIndex != null ? SECTION_GRADIENTS[styleIndex % SECTION_GRADIENTS.length] : undefined;
+
   return (
-    <div className="space-y-3">
+    <div
+      className={cn('space-y-3', gradient && 'rounded-xl px-4 py-4')}
+      style={gradient ? { background: gradient } : undefined}
+    >
       {/* Section Header */}
       <div className="flex items-center justify-between">
         <div>

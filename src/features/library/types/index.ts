@@ -33,6 +33,7 @@ export interface Chapter {
   title: string;
   href: string;
   order: number;
+  wordCount?: number;
 }
 
 export interface UserBook {

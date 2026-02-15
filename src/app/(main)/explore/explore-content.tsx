@@ -267,9 +267,11 @@ export function ExploreContent() {
         <BookListSectionSkeleton />
       ) : (
         rankingBookLists.length > 0 && (
-          <div className="space-y-8">
-            {rankingBookLists.map((list) => (
-              <BookListSection key={list.id} bookList={list} />
+          <div className="divide-y">
+            {rankingBookLists.map((list, index) => (
+              <div key={list.id} className={index > 0 ? 'pt-6' : ''}>
+                <BookListSection bookList={list} styleIndex={index} />
+              </div>
             ))}
           </div>
         )

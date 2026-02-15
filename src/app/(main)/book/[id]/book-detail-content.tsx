@@ -17,6 +17,7 @@ import {
   Headphones,
   Share2,
   Play,
+  FileText,
 } from 'lucide-react';
 import { useBookDetail } from '@/features/library/hooks/use-books';
 import { useFavoriteBookIds, useToggleFavorite } from '@/features/library/hooks/use-favorites';
@@ -25,6 +26,21 @@ import { useReadingGuide, useBookContext } from '@/features/library/hooks/use-bo
 import { ReadingGuideSection } from '@/features/library/components/reading-guide-section';
 import { BookContextSection } from '@/features/library/components/book-context-section';
 import { formatDuration } from '@/features/audiobook/stores/audio-player-store';
+
+function formatWordCount(count: number): string {
+  if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
+  if (count >= 1000) return `${(count / 1000).toFixed(count >= 10000 ? 0 : 1)}K`;
+  return `${count}`;
+}
+
+function getAuthorColor(name: string): string {
+  const colors = ['#EF4444', '#F97316', '#EAB308', '#22C55E', '#14B8A6', '#3B82F6', '#A855F7', '#EC4899'];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return colors[Math.abs(hash) % colors.length];
+}
 
 interface BookDetailContentProps {
   bookId: string;
@@ -122,47 +138,55 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
             )}
           </div>
 
-          {/* Title & Author */}
+          {/* Title & Author & Word Count */}
           <h1 className="mt-4 text-center text-2xl font-bold">{book.title}</h1>
           <p className="mt-1 text-center text-muted-foreground">{book.author}</p>
+          {book.wordCount > 0 && (
+            <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+              <FileText className="h-3.5 w-3.5" />
+              {formatWordCount(book.wordCount)} words
+            </p>
+          )}
         </div>
       </div>
 
       {/* Content */}
       <div className="mx-auto max-w-2xl space-y-6 px-4">
-        {/* Action Buttons Row */}
-        <div className="flex items-center gap-3">
-          <Button className="flex-1" size="lg" asChild>
+        {/* Action Buttons */}
+        <div className="space-y-3">
+          <Button className="w-full h-12 rounded-xl" size="lg" asChild>
             <Link
               href={`/read/${book.id}`}
               className="inline-flex items-center justify-center gap-2"
               style={{ backgroundImage: 'var(--brand-gradient)' }}
             >
-              <BookOpen className="h-4 w-4" />
+              <BookOpen className="h-5 w-5" />
               开始阅读
             </Link>
           </Button>
-          <Button
-            size="lg"
-            variant={isFavorited ? 'secondary' : 'outline'}
-            onClick={handleToggleFavorite}
-            className="flex-1"
-          >
-            {isFavorited ? (
-              <>
-                <Check className="mr-1.5 h-4 w-4" />
-                已在书架
-              </>
-            ) : (
-              <>
-                <Plus className="mr-1.5 h-4 w-4" />
-                加入书架
-              </>
-            )}
-          </Button>
-          <Button size="icon" variant="outline" onClick={handleShare}>
-            <Share2 className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button
+              size="lg"
+              variant={isFavorited ? 'secondary' : 'outline'}
+              onClick={handleToggleFavorite}
+              className="flex-1 h-11 rounded-xl"
+            >
+              {isFavorited ? (
+                <>
+                  <Check className="mr-1.5 h-4 w-4" />
+                  已在书架
+                </>
+              ) : (
+                <>
+                  <Plus className="mr-1.5 h-4 w-4" />
+                  加入书架
+                </>
+              )}
+            </Button>
+            <Button size="icon" variant="outline" onClick={handleShare} className="h-11 w-11 rounded-xl">
+              <Share2 className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
         {/* Audiobook Section */}
@@ -203,17 +227,25 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
 
         {/* Author Section */}
         {book.authorId && (
-          <div className="rounded-xl bg-card p-4 shadow-sm">
-            <h2 className="text-lg font-semibold">作者</h2>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold">作者</h2>
             <Link
               href={`/author/${book.authorId}`}
-              className="mt-1 inline-flex items-center text-primary hover:underline"
+              className="flex items-center gap-3 rounded-xl bg-secondary/50 p-4 transition-colors hover:bg-secondary"
             >
-              {book.author}
-              {book.authorZh && (
-                <span className="ml-1 text-muted-foreground">({book.authorZh})</span>
-              )}
-              <ChevronRight className="ml-0.5 h-4 w-4" />
+              <div
+                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold text-white"
+                style={{ backgroundColor: getAuthorColor(book.author) }}
+              >
+                {book.author.charAt(0).toUpperCase()}
+              </div>
+              <span className="flex-1 truncate font-medium">
+                {book.author}
+                {book.authorZh && (
+                  <span className="ml-1 text-muted-foreground">({book.authorZh})</span>
+                )}
+              </span>
+              <ChevronRight className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
             </Link>
           </div>
         )}
@@ -271,15 +303,22 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
             <h2 className="text-lg font-semibold">
               目录 ({book.chapters.length} 章)
             </h2>
-            <div className="mt-2 space-y-1">
-              {chaptersToShow.map((chapter) => (
+            <div className="mt-2 divide-y">
+              {chaptersToShow.map((chapter, index) => (
                 <Link
                   key={chapter.id}
                   href={`/read/${book.id}?chapter=${chapter.id}`}
-                  className="flex items-center justify-between rounded-lg px-2 py-3 transition-colors hover:bg-muted"
+                  className="flex items-center gap-3 py-3 transition-colors hover:bg-muted rounded-lg px-2"
                 >
-                  <span className="text-sm">{chapter.title}</span>
-                  <ChevronRight className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                  <span className="w-7 flex-shrink-0 text-sm text-muted-foreground text-right">
+                    {index + 1}.
+                  </span>
+                  <span className="flex-1 truncate text-sm">{chapter.title}</span>
+                  {chapter.wordCount > 0 && (
+                    <span className="flex-shrink-0 text-xs text-muted-foreground">
+                      {formatWordCount(chapter.wordCount)}
+                    </span>
+                  )}
                 </Link>
               ))}
               {book.chapters.length > 10 && (
