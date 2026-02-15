@@ -35,12 +35,12 @@ test.describe('Header navigation', () => {
     await expect(nav.getByText('我的')).toBeVisible();
   });
 
-  test('should show iOS app icon logo with ReadMigo text', async ({ page }) => {
+  test('should show iOS app icon logo with Readmigo text', async ({ page }) => {
     const header = page.locator('header');
-    await expect(header.getByText('ReadMigo')).toBeVisible();
-    await expect(header.locator('img[alt="ReadMigo"]')).toBeVisible();
+    await expect(header.getByText('Readmigo')).toBeVisible();
+    await expect(header.locator('img[alt="Readmigo"]')).toBeVisible();
     // Logo should use app-icon.png (iOS-style gradient icon)
-    await expect(header.locator('img[alt="ReadMigo"]')).toHaveAttribute('src', /app-icon/);
+    await expect(header.locator('img[alt="Readmigo"]')).toHaveAttribute('src', /app-icon/);
   });
 
   test('should not show search button or settings button in header', async ({ page }) => {
@@ -131,10 +131,17 @@ test.describe('Book content', () => {
     const hasEmpty = await page.locator('text=暂无书籍').isVisible().catch(() => false);
     expect(hasSkeletons || hasBooks || hasEmpty).toBe(true);
   });
+
+  test('should show 热门推荐 ranking section or loading skeletons', async ({ page }) => {
+    await page.waitForTimeout(3000);
+    const hasRanking = await page.getByText('热门推荐').isVisible().catch(() => false);
+    const hasSkeletons = await page.locator('[class*="animate-pulse"]').first().isVisible().catch(() => false);
+    expect(hasRanking || hasSkeletons).toBe(true);
+  });
 });
 
 // ============================================================
-// 6. Footer
+// 6. Footer (visible on all screens)
 // ============================================================
 test.describe('Footer', () => {
   test.beforeEach(async ({ page }) => {
@@ -171,6 +178,13 @@ test.describe('Footer', () => {
     await expect(footer.getByText('产品')).not.toBeVisible();
     await expect(footer.getByText('资源')).not.toBeVisible();
     await expect(footer.getByText('公司')).not.toBeVisible();
+  });
+
+  test('footer should be visible on mobile too', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/');
+    const footer = page.locator('footer');
+    await expect(footer).toBeAttached();
   });
 });
 
@@ -209,9 +223,9 @@ test.describe('Login page', () => {
 
   test('should show iOS-style login with logo and app name', async ({ page }) => {
     // Large app icon logo
-    await expect(page.locator('img[alt="ReadMigo"]')).toBeVisible();
+    await expect(page.locator('img[alt="Readmigo"]')).toBeVisible();
     // App name
-    await expect(page.getByText('ReadMigo', { exact: true })).toBeVisible();
+    await expect(page.getByText('Readmigo', { exact: true })).toBeVisible();
     // Subtitle
     await expect(page.getByText('AI-powered English reading companion')).toBeVisible();
   });

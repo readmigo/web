@@ -2,12 +2,12 @@ import Image from 'next/image';
 
 export function Footer() {
   return (
-    <footer className="hidden border-t md:block">
+    <footer className="border-t">
       <div className="container flex h-12 items-center justify-between text-xs text-muted-foreground">
         <div className="flex items-center gap-2">
           <Image
-            src="/icons/icon.svg"
-            alt="ReadMigo"
+            src="/icons/app-icon.png"
+            alt="Readmigo"
             width={16}
             height={16}
             className="rounded-sm"

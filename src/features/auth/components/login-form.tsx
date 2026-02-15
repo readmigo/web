@@ -64,7 +64,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
           <div className="flex justify-center mb-4">
             <Image
               src="/icons/app-icon.png"
-              alt="ReadMigo"
+              alt="Readmigo"
               width={80}
               height={80}
               className="rounded-2xl shadow-lg"
@@ -153,14 +153,14 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
       <div className="flex flex-col items-center gap-4">
         <Image
           src="/icons/app-icon.png"
-          alt="ReadMigo"
+          alt="Readmigo"
           width={120}
           height={120}
           className="rounded-3xl shadow-2xl"
           priority
         />
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-white">ReadMigo</h1>
+          <h1 className="text-4xl font-bold text-white">Readmigo</h1>
           <p className="mt-2 text-white/70">AI-powered English reading companion</p>
         </div>
       </div>

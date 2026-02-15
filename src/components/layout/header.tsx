@@ -32,7 +32,7 @@ export function Header() {
         <Link href="/" className="mr-6 flex items-center gap-2.5">
           <Image
             src="/icons/app-icon.png"
-            alt="ReadMigo"
+            alt="Readmigo"
             width={32}
             height={32}
             className="rounded-lg"
@@ -41,7 +41,7 @@ export function Header() {
             className="text-lg font-bold bg-clip-text text-transparent"
             style={{ backgroundImage: 'var(--brand-gradient)' }}
           >
-            ReadMigo
+            Readmigo
           </span>
         </Link>
 
