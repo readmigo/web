@@ -27,3 +27,13 @@ export const difficultyColors = [
   'bg-orange-500',
   'bg-red-500',
 ];
+
+/** Dot colors for inline difficulty indicator (matching iOS colored circle style) */
+export const difficultyDotColors = [
+  '',
+  'bg-green-500',
+  'bg-blue-500',
+  'bg-yellow-500',
+  'bg-orange-500',
+  'bg-red-500',
+];

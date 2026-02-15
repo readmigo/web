@@ -2,11 +2,10 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, Star } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Heart, Star, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFavoriteBookIds, useToggleFavorite } from '../hooks/use-favorites';
-import { getDifficultyLevel, difficultyLabels, difficultyColors } from '../utils/difficulty';
+import { getDifficultyLevel, difficultyLabels, difficultyDotColors } from '../utils/difficulty';
 import type { Book } from '../types';
 
 interface BookRowProps {
@@ -81,7 +80,8 @@ export function BookRow({ book, className }: BookRowProps) {
         {/* Metadata row: word count · rating · difficulty (matching iOS) */}
         <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
           {book.wordCount > 0 && (
-            <span className="text-[11px] text-muted-foreground">
+            <span className="inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
+              <FileText className="h-3 w-3" />
               {formatWordCount(book.wordCount)}
             </span>
           )}
@@ -92,14 +92,10 @@ export function BookRow({ book, className }: BookRowProps) {
             </span>
           )}
           {diffLevel && diffLevel >= 1 && diffLevel <= 5 && (
-            <Badge
-              className={cn(
-                'px-1.5 py-0 text-[10px] text-white',
-                difficultyColors[diffLevel]
-              )}
-            >
+            <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+              <span className={cn('h-1.5 w-1.5 rounded-full', difficultyDotColors[diffLevel])} />
               {difficultyLabels[diffLevel]}
-            </Badge>
+            </span>
           )}
         </div>
       </div>
