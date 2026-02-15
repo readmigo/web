@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -10,6 +11,7 @@ import {
   Clock,
   Plus,
   Check,
+  ChevronLeft,
   ChevronRight,
   ChevronDown,
   Headphones,
@@ -29,6 +31,7 @@ interface BookDetailContentProps {
 }
 
 export function BookDetailContent({ bookId }: BookDetailContentProps) {
+  const router = useRouter();
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [showAllChapters, setShowAllChapters] = useState(false);
 
@@ -91,6 +94,15 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
           className="absolute inset-0 opacity-10"
           style={{ backgroundImage: 'var(--brand-gradient)' }}
         />
+        {/* Back button */}
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="relative mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-background/60 backdrop-blur transition-colors hover:bg-background/80"
+          aria-label="返回"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
         <div className="relative mx-auto flex max-w-2xl flex-col items-center">
           {/* Book Cover */}
           <div className="relative aspect-[2/3] h-[200px] overflow-hidden rounded-xl shadow-lg">
@@ -301,7 +313,10 @@ function BookDetailSkeleton() {
   return (
     <div className="pb-12">
       {/* Header skeleton */}
-      <div className="flex flex-col items-center px-4 pb-8 pt-6">
+      <div className="px-4 pt-6">
+        <Skeleton className="h-9 w-9 rounded-full" />
+      </div>
+      <div className="flex flex-col items-center px-4 pb-8">
         <Skeleton className="aspect-[2/3] h-[200px] rounded-xl" />
         <Skeleton className="mt-4 h-7 w-48" />
         <Skeleton className="mt-2 h-5 w-32" />

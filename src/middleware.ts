@@ -8,6 +8,7 @@ const publicPaths = [
   '/author/',
   '/category/',
   '/book-list/',
+  '/audiobooks',
   '/me',
   '/login',
   '/register',
