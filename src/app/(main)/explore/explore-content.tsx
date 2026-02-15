@@ -64,9 +64,12 @@ export function ExploreContent() {
 
   // Book lists for hero banner and sections
   const { data: bookListsData, isLoading: bookListsLoading } = useBookLists();
-  const featuredBookLists = (bookListsData || []).filter(
+  const activeBookLists = (bookListsData || []).filter(
     (list) => list.isActive !== false && (list.books?.length ?? 0) > 0
   );
+  // Ranking lists shown first at the top, then other featured lists
+  const rankingBookLists = activeBookLists.filter((list) => list.type === 'RANKING');
+  const featuredBookLists = activeBookLists.filter((list) => list.type !== 'RANKING');
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -186,6 +189,15 @@ export function ExploreContent() {
         </div>
       ) : (
       <>
+      {/* Ranking Book Lists — shown first like iOS bookstore tab */}
+      {!bookListsLoading && rankingBookLists.length > 0 && (
+        <div className="space-y-8">
+          {rankingBookLists.map((list) => (
+            <BookListSection key={list.id} bookList={list} />
+          ))}
+        </div>
+      )}
+
       {/* Hero Banner */}
       <HeroBanner bookLists={featuredBookLists} isLoading={bookListsLoading} />
 

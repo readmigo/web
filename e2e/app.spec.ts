@@ -35,10 +35,19 @@ test.describe('Header navigation', () => {
     await expect(nav.getByText('我的')).toBeVisible();
   });
 
-  test('should show brand logo with ReadMigo text', async ({ page }) => {
+  test('should show iOS app icon logo with ReadMigo text', async ({ page }) => {
     const header = page.locator('header');
     await expect(header.getByText('ReadMigo')).toBeVisible();
     await expect(header.locator('img[alt="ReadMigo"]')).toBeVisible();
+    // Logo should use app-icon.png (iOS-style gradient icon)
+    await expect(header.locator('img[alt="ReadMigo"]')).toHaveAttribute('src', /app-icon/);
+  });
+
+  test('should not show search button or settings button in header', async ({ page }) => {
+    const header = page.locator('header');
+    // No search button or settings in the header right side
+    await expect(header.getByText('搜索...')).not.toBeVisible();
+    await expect(header.locator('a[href="/settings"]')).not.toBeAttached();
   });
 
   test('should not show "首页" or "词汇" in nav', async ({ page }) => {
@@ -67,8 +76,6 @@ test.describe('Search bar', () => {
     await searchInput.click();
     // Dropdown should appear (may show history/popular or be empty)
     await page.waitForTimeout(500);
-    // The dropdown container should exist in the DOM
-    const dropdown = page.locator('[class*="absolute"][class*="z-50"]').first();
     // Dropdown may or may not show depending on API data; just verify no crash
     expect(true).toBe(true);
   });
@@ -92,11 +99,8 @@ test.describe('Category filter', () => {
   });
 
   test('should show "All" category badge or loading skeletons', async ({ page }) => {
-    // Wait for categories to load (either from API or skeleton)
     await page.waitForTimeout(2000);
-    // Badge renders as a <div>, not a <button>
     const allBadge = page.getByText('All', { exact: true });
-    // Skeleton component uses animate-pulse class, not "skeleton"
     const skeletons = page.locator('[class*="animate-pulse"]').first();
     const hasBadge = await allBadge.isVisible().catch(() => false);
     const hasSkeleton = await skeletons.isVisible().catch(() => false);
@@ -130,7 +134,7 @@ test.describe('Book content', () => {
 });
 
 // ============================================================
-// 7. Footer
+// 6. Footer
 // ============================================================
 test.describe('Footer', () => {
   test.beforeEach(async ({ page }) => {
@@ -171,7 +175,7 @@ test.describe('Footer', () => {
 });
 
 // ============================================================
-// 8. Mobile navigation
+// 7. Mobile navigation
 // ============================================================
 test.describe('Mobile navigation', () => {
   test.beforeEach(async ({ page }) => {
@@ -196,18 +200,55 @@ test.describe('Mobile navigation', () => {
 });
 
 // ============================================================
+// 8. Login page — iOS-style design
+// ============================================================
+test.describe('Login page', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/login');
+  });
+
+  test('should show iOS-style login with logo and app name', async ({ page }) => {
+    // Large app icon logo
+    await expect(page.locator('img[alt="ReadMigo"]')).toBeVisible();
+    // App name
+    await expect(page.getByText('ReadMigo', { exact: true })).toBeVisible();
+    // Subtitle
+    await expect(page.getByText('AI-powered English reading companion')).toBeVisible();
+  });
+
+  test('should show Apple, Google, and Email sign-in buttons', async ({ page }) => {
+    await expect(page.getByText('Sign in with Apple')).toBeVisible();
+    await expect(page.getByText('Sign in with Google')).toBeVisible();
+    await expect(page.getByText('Sign in with Email')).toBeVisible();
+  });
+
+  test('should show Browse as Guest link', async ({ page }) => {
+    await expect(page.getByText('Browse as Guest')).toBeVisible();
+  });
+
+  test('should have gradient background', async ({ page }) => {
+    // The auth layout has gradient background (from-blue-500 via-purple-500 to-pink-500)
+    const bgElement = page.locator('div.bg-gradient-to-br').first();
+    await expect(bgElement).toBeVisible();
+  });
+
+  test('should show terms and privacy links in footer', async ({ page }) => {
+    await expect(page.getByText('服务条款')).toBeVisible();
+    await expect(page.getByText('隐私政策')).toBeVisible();
+  });
+});
+
+// ============================================================
 // 9. Error boundary (404)
 // ============================================================
 test.describe('Error pages', () => {
   test('non-public route without auth should redirect to login', async ({ page }) => {
-    // Non-public routes redirect to /login via middleware
     await page.goto('/this-page-does-not-exist');
     await page.waitForURL('**/login**', { timeout: 10000 });
     expect(page.url()).toContain('/login');
   });
 
   test('non-existent public sub-path should show 404', async ({ page }) => {
-    // Public path that doesn't match any route triggers not-found page
     await page.goto('/explore/nonexistent-path-12345');
     await expect(page.getByRole('heading', { name: '页面不存在' })).toBeVisible({ timeout: 10000 });
   });
