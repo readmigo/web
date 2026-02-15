@@ -1,0 +1,31 @@
+name: E2E Production
+
+on:
+  schedule:
+    - cron: '0 8 * * *' # Daily at 8:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-prod
+  cancel-in-progress: true
+
+jobs:
+  e2e-prod:
+    name: E2E against Production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --no-frozen-lockfile
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test --config=playwright.prod.config.ts
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-prod-report
+          path: playwright-report
+          retention-days: 7

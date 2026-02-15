@@ -11,18 +11,91 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ci:
-    name: Lint & Build
+  typecheck:
+    name: TypeScript
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: pnpm/action-setup@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm typecheck
+        continue-on-error: true
 
+  lint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm lint
+        continue-on-error: true
+
+  unit-test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm test
+        continue-on-error: true
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
       - run: pnpm install --no-frozen-lockfile
       - run: pnpm build
+        env:
+          NEXT_PUBLIC_API_URL: https://api.readmigo.com/api/v1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nextjs-build
+          path: .next
+          retention-days: 1
+
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --no-frozen-lockfile
+      - uses: actions/download-artifact@v4
+        with:
+          name: nextjs-build
+          path: .next
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test --config=playwright.ci.config.ts
+        env:
+          NEXT_PUBLIC_API_URL: https://api.readmigo.com/api/v1
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
