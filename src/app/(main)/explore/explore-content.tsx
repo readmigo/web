@@ -128,21 +128,6 @@ export function ExploreContent() {
     };
   }, [handleObserver]);
 
-  if (error) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20">
-        <p className="text-lg text-destructive">加载失败</p>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {error instanceof Error ? error.message : '请稍后重试'}
-        </p>
-        <Button className="mt-4" variant="outline" onClick={() => refetch()}>
-          <RefreshCw className="mr-2 h-4 w-4" />
-          重试
-        </Button>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6">
       {/* Search */}
@@ -188,6 +173,19 @@ export function ExploreContent() {
         )}
       </div>
 
+      {error ? (
+        <div className="flex flex-col items-center justify-center py-20">
+          <p className="text-lg text-destructive">加载失败</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {error instanceof Error ? error.message : '请稍后重试'}
+          </p>
+          <Button className="mt-4" variant="outline" onClick={() => refetch()}>
+            <RefreshCw className="mr-2 h-4 w-4" />
+            重试
+          </Button>
+        </div>
+      ) : (
+      <>
       {/* Hero Banner */}
       <HeroBanner bookLists={featuredBookLists} isLoading={bookListsLoading} />
 
@@ -335,6 +333,8 @@ export function ExploreContent() {
             )}
           </div>
         </>
+      )}
+      </>
       )}
     </div>
   );
