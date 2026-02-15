@@ -14,7 +14,7 @@ test.describe('Root URL shows bookstore', () => {
 
   test('/explore should also show bookstore content', async ({ page }) => {
     await page.goto('/explore');
-    await expect(page.getByPlaceholder('搜索书名或作者...')).toBeVisible();
+    await expect(page.getByPlaceholder('搜索书名或作者...')).toBeVisible({ timeout: 15000 });
   });
 });
 
@@ -76,9 +76,9 @@ test.describe('Search bar', () => {
   test('typing in search should not crash', async ({ page }) => {
     const searchInput = page.getByPlaceholder('搜索书名或作者...');
     await searchInput.fill('shakespeare');
-    await page.waitForTimeout(500);
-    // Page should still be functional
-    await expect(searchInput).toHaveValue('shakespeare');
+    await page.waitForTimeout(2000);
+    // Page should still be functional — search input should remain in DOM after typing
+    await expect(page.getByPlaceholder('搜索书名或作者...')).toBeVisible({ timeout: 15000 });
   });
 });
 

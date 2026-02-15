@@ -100,7 +100,7 @@ export function ExploreContent() {
   });
 
   // Flatten all pages into a single books array
-  const books = data?.pages.flatMap((page) => page.data) || [];
+  const books = data?.pages.flatMap((page) => page.data ?? []) || [];
 
   // Intersection Observer for infinite scroll
   const handleObserver = useCallback(

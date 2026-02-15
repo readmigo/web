@@ -35,7 +35,8 @@ interface AgoraPost {
 }
 
 interface AgoraPostsResponse {
-  data: AgoraPost[];
+  data?: AgoraPost[];
+  items?: AgoraPost[];
   total: number;
   page: number;
 }
@@ -60,13 +61,17 @@ export function CommunityContent() {
   } = useInfiniteQuery({
     queryKey: ['agora-posts'],
     queryFn: async ({ pageParam = 1 }) => {
-      return apiClient.get<AgoraPostsResponse>('/agora/posts', {
+      const response = await apiClient.get<AgoraPostsResponse>('/agora/posts', {
         params: { page: String(pageParam), limit: String(PAGE_SIZE) },
       });
+      return {
+        ...response,
+        data: response.items ?? response.data ?? [],
+      };
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
-      const loadedCount = allPages.reduce((sum, page) => sum + page.data.length, 0);
+      const loadedCount = allPages.reduce((sum, page) => sum + (page.data?.length ?? 0), 0);
       if (loadedCount >= lastPage.total) {
         return undefined;
       }
@@ -96,7 +101,7 @@ export function CommunityContent() {
           ...old,
           pages: old.pages.map((page: AgoraPostsResponse) => ({
             ...page,
-            data: page.data.map((post: AgoraPost) =>
+            data: (page.data ?? []).map((post: AgoraPost) =>
               post.id === postId
                 ? {
                     ...post,
@@ -148,7 +153,7 @@ export function CommunityContent() {
   }, [handleObserver]);
 
   // Flatten all pages
-  const posts = data?.pages.flatMap((page) => page.data) || [];
+  const posts = data?.pages.flatMap((page) => page.data ?? []) || [];
 
   // ---- Loading State ----
   if (isLoading) {

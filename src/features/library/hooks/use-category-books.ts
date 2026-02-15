@@ -5,7 +5,8 @@ import { apiClient } from '@/lib/api/client';
 import type { Book } from '../types';
 
 interface CategoryBooksResponse {
-  data: Book[];
+  data?: Book[];
+  items?: Book[];
   total: number;
   page: number;
 }
@@ -28,11 +29,14 @@ export function useCategoryBooks(categoryId: string, limit?: number) {
           skipAuth: true,
         }
       );
-      return response;
+      return {
+        ...response,
+        data: response.items ?? response.data ?? [],
+      };
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
-      const loadedCount = allPages.reduce((sum, page) => sum + page.data.length, 0);
+      const loadedCount = allPages.reduce((sum, page) => sum + (page.data?.length ?? 0), 0);
       if (loadedCount >= lastPage.total) {
         return undefined;
       }

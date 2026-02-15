@@ -11,7 +11,14 @@ interface InfiniteBooksParams {
   limit?: number;
 }
 
-interface BooksResponse {
+interface BooksApiResponse {
+  items?: Book[];
+  data?: Book[];
+  total: number;
+  page: number;
+}
+
+interface BooksPage {
   data: Book[];
   total: number;
   page: number;
@@ -32,15 +39,19 @@ export function useInfiniteBooks(params?: InfiniteBooksParams) {
       queryParams.page = String(pageParam);
       queryParams.limit = String(limit);
 
-      const response = await apiClient.get<BooksResponse>('/books', {
+      const response = await apiClient.get<BooksApiResponse>('/books', {
         params: queryParams,
         skipAuth: true,
       });
-      return response;
+      return {
+        data: response.items ?? response.data ?? [],
+        total: response.total ?? 0,
+        page: response.page ?? pageParam,
+      } as BooksPage;
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
-      const loadedCount = allPages.reduce((sum, page) => sum + page.data.length, 0);
+      const loadedCount = allPages.reduce((sum, page) => sum + (page.data?.length ?? 0), 0);
       if (loadedCount >= lastPage.total) {
         return undefined;
       }

@@ -46,7 +46,7 @@ export function CategoryContent({ categoryId }: CategoryContentProps) {
     isFetchingNextPage,
   } = useCategoryBooks(categoryId);
 
-  const books = data?.pages.flatMap((page) => page.data) || [];
+  const books = data?.pages.flatMap((page) => page.data ?? []) || [];
   const total = data?.pages[0]?.total || 0;
 
   // Intersection Observer for infinite scroll

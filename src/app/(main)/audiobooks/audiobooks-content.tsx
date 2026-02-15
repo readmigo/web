@@ -219,7 +219,7 @@ function AudiobookGrid({
     [hasNextPage, isFetchingNextPage, fetchNextPage]
   );
 
-  const audiobooks = data?.pages.flatMap((page) => page.data) ?? [];
+  const audiobooks = data?.pages.flatMap((page) => page.data ?? []) ?? [];
 
   if (isLoading) {
     return (
