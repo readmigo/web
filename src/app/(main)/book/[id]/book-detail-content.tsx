@@ -94,16 +94,16 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
           className="absolute inset-0 opacity-10"
           style={{ backgroundImage: 'var(--brand-gradient)' }}
         />
-        {/* Back button */}
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="relative mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-background/60 backdrop-blur transition-colors hover:bg-background/80"
-          aria-label="返回"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
         <div className="relative mx-auto flex max-w-2xl flex-col items-center">
+          {/* Back button */}
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="mb-2 flex h-9 w-9 items-center justify-center self-start rounded-full bg-background/60 backdrop-blur transition-colors hover:bg-background/80"
+            aria-label="返回"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
           {/* Book Cover */}
           <div className="relative aspect-[2/3] h-[200px] overflow-hidden rounded-xl shadow-lg">
             {book.coverUrl ? (

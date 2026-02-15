@@ -11,11 +11,25 @@ interface InfiniteBooksParams {
   limit?: number;
 }
 
+interface DiscoverBookItem {
+  book: Book;
+  scores?: {
+    final: number;
+    quality: number;
+    popularity: number;
+    freshness: number;
+  };
+  source?: string;
+}
+
 interface BooksApiResponse {
+  books?: DiscoverBookItem[];
   items?: Book[];
   data?: Book[];
   total: number;
   page: number;
+  pageSize?: number;
+  hasMore?: boolean;
 }
 
 interface BooksPage {
@@ -37,14 +51,18 @@ export function useInfiniteBooks(params?: InfiniteBooksParams) {
       if (params?.difficulty) queryParams.difficulty = String(params.difficulty);
       if (params?.search) queryParams.search = params.search;
       queryParams.page = String(pageParam);
-      queryParams.limit = String(limit);
+      queryParams.pageSize = String(limit);
 
-      const response = await apiClient.get<BooksApiResponse>('/books', {
+      const response = await apiClient.get<BooksApiResponse>('/recommendation/discover', {
         params: queryParams,
         skipAuth: true,
       });
+      // /recommendation/discover returns { books: [{ book, scores, source }] }
+      const books = response.books
+        ? response.books.map((item) => item.book)
+        : response.items ?? response.data ?? [];
       return {
-        data: response.items ?? response.data ?? [],
+        data: books,
         total: response.total ?? 0,
         page: response.page ?? pageParam,
       } as BooksPage;
