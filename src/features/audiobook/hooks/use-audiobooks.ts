@@ -64,7 +64,7 @@ export function useRecentlyListened(limit = 10) {
     queryFn: async () => {
       const response = await apiClient.get<{ data: AudiobookWithProgress[] }>(
         '/audiobooks/recently-listened',
-        { params: { limit: String(limit) } }
+        { params: { limit: String(limit) }, noRedirectOn401: true }
       );
       return response.data || [];
     },
@@ -97,7 +97,8 @@ export function useAudiobookWithProgress(audiobookId: string | undefined) {
     queryFn: async () => {
       if (!audiobookId) return null;
       const response = await apiClient.get<{ data: AudiobookWithProgress }>(
-        `/audiobooks/${audiobookId}/with-progress`
+        `/audiobooks/${audiobookId}/with-progress`,
+        { noRedirectOn401: true }
       );
       return response.data;
     },
@@ -137,7 +138,8 @@ export function useAudiobookProgress(audiobookId: string | undefined) {
       if (!audiobookId) return null;
       try {
         const response = await apiClient.get<{ data: AudiobookProgress }>(
-          `/audiobooks/${audiobookId}/progress`
+          `/audiobooks/${audiobookId}/progress`,
+          { noRedirectOn401: true }
         );
         return response.data;
       } catch {

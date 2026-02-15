@@ -63,6 +63,7 @@ export function CommunityContent() {
     queryFn: async ({ pageParam = 1 }) => {
       const response = await apiClient.get<AgoraPostsResponse>('/agora/posts', {
         params: { page: String(pageParam), limit: String(PAGE_SIZE) },
+        noRedirectOn401: true,
       });
       return {
         ...response,

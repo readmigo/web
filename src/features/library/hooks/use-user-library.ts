@@ -9,7 +9,8 @@ export function useUserLibrary() {
     queryKey: ['userLibrary'],
     queryFn: async () => {
       const response = await apiClient.get<{ data: UserBook[] }>(
-        '/reading/library'
+        '/reading/library',
+        { noRedirectOn401: true }
       );
       return response.data;
     },
@@ -90,7 +91,8 @@ export function useContinueReading() {
     queryKey: ['continueReading'],
     queryFn: async () => {
       const response = await apiClient.get<{ data: UserBook }>(
-        '/reading/current'
+        '/reading/current',
+        { noRedirectOn401: true }
       );
       return response.data ? [response.data] : [];
     },
@@ -122,7 +124,7 @@ export function useReadingStats() {
           totalWordsRead: number;
           currentStreak: number;
         };
-      }>('/reading/stats');
+      }>('/reading/stats', { noRedirectOn401: true });
       return response.data;
     },
   });
