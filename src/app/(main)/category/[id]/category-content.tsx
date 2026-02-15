@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { BookGrid } from '@/features/library/components/book-grid';
+import { BookRow } from '@/features/library/components/book-row';
 import { useCategoryBooks } from '@/features/library/hooks/use-category-books';
 import { useCategories } from '@/features/library/hooks/use-categories';
 import type { Category } from '@/features/library/types';
@@ -146,14 +146,18 @@ export function CategoryContent({ categoryId }: CategoryContentProps) {
         </div>
       )}
 
-      {/* Books grid */}
+      {/* Books list */}
       {isLoading ? (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="space-y-2">
-              <Skeleton className="aspect-[2/3] w-full rounded-lg" />
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-3 w-1/2" />
+        <div className="space-y-0">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="flex items-start gap-3 border-b py-3">
+              <Skeleton className="h-[105px] w-[70px] flex-shrink-0 rounded-lg" />
+              <div className="flex flex-1 flex-col gap-2 py-0.5">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-1/3" />
+                <Skeleton className="h-3 w-full" />
+                <Skeleton className="h-4 w-20" />
+              </div>
             </div>
           ))}
         </div>
@@ -171,7 +175,11 @@ export function CategoryContent({ categoryId }: CategoryContentProps) {
         </div>
       ) : (
         <>
-          <BookGrid books={books} />
+          <div>
+            {books.map((book) => (
+              <BookRow key={book.id} book={book} />
+            ))}
+          </div>
 
           {/* Sentinel for infinite scroll */}
           <div ref={sentinelRef} className="flex justify-center py-8">

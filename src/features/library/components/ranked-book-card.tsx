@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, Crown } from 'lucide-react';
+import { Heart, Crown, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFavoriteBookIds, useToggleFavorite } from '../hooks/use-favorites';
 import type { Book, BookListBook } from '../types';
@@ -57,11 +57,11 @@ export function RankedBookCard({ book, rank, className }: RankedBookCardProps) {
 
   return (
     <Link href={`/book/${book.id}`} className={cn('group block', className)}>
-      <div className="w-[90px] space-y-2">
+      <div className="w-[100px] space-y-2">
         {/* Cover with rank badge */}
         <div
           className={cn(
-            'relative h-[135px] w-[90px] overflow-hidden rounded-lg bg-muted transition-shadow',
+            'relative h-[150px] w-[100px] overflow-hidden rounded-lg bg-muted transition-shadow',
             rankStyle.glow
           )}
         >
@@ -71,7 +71,7 @@ export function RankedBookCard({ book, rank, className }: RankedBookCardProps) {
               alt={book.title}
               fill
               className="object-cover transition-transform group-hover:scale-105"
-              sizes="90px"
+              sizes="100px"
             />
           ) : (
             <div className="flex h-full items-center justify-center">
@@ -116,14 +116,20 @@ export function RankedBookCard({ book, rank, className }: RankedBookCardProps) {
           )}
         </div>
 
-        {/* Title & Author */}
+        {/* Title & Author & Rating */}
         <div>
-          <p className="line-clamp-2 text-xs font-medium leading-tight">
+          <p className="line-clamp-1 text-xs font-medium leading-tight">
             {book.title}
           </p>
           <p className="mt-0.5 line-clamp-1 text-[11px] text-muted-foreground">
             {book.author}
           </p>
+          {(('goodreadsRating' in book && book.goodreadsRating) || ('doubanRating' in book && book.doubanRating)) && (
+            <p className="mt-0.5 inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
+              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+              {(('goodreadsRating' in book ? book.goodreadsRating : undefined) || ('doubanRating' in book ? book.doubanRating : undefined))?.toFixed(1)}
+            </p>
+          )}
         </div>
       </div>
     </Link>

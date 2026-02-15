@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart } from 'lucide-react';
+import { Heart, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { useFavoriteBookIds, useToggleFavorite } from '../hooks/use-favorites';
@@ -103,6 +103,12 @@ export function CompactBookCard({ book, rank, className }: CompactBookCardProps)
           {'wordCount' in book && book.wordCount && book.wordCount > 0 && (
             <span className="text-[11px] text-muted-foreground">
               {formatWordCount(book.wordCount)}
+            </span>
+          )}
+          {(('goodreadsRating' in book && book.goodreadsRating) || ('doubanRating' in book && book.doubanRating)) && (
+            <span className="inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
+              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+              {(('goodreadsRating' in book ? book.goodreadsRating : undefined) || ('doubanRating' in book ? book.doubanRating : undefined))?.toFixed(1)}
             </span>
           )}
           {book.difficulty && (

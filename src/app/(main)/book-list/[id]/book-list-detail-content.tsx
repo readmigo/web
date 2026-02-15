@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { RefreshCw, ArrowLeft } from 'lucide-react';
@@ -41,21 +40,6 @@ const typeLabels: Record<string, string> = {
   AI_FEATURED: 'AI Featured',
 };
 
-const difficultyLabels: Record<number, string> = {
-  1: 'Beginner',
-  2: 'Elementary',
-  3: 'Intermediate',
-  4: 'Advanced',
-  5: 'Expert',
-};
-
-const difficultyColors: Record<number, string> = {
-  1: 'bg-green-500',
-  2: 'bg-blue-500',
-  3: 'bg-yellow-500',
-  4: 'bg-orange-500',
-  5: 'bg-red-500',
-};
 
 interface BookListDetailContentProps {
   listId: string;
@@ -130,51 +114,39 @@ export function BookListDetailContent({ listId }: BookListDetailContentProps) {
             <p className="text-lg text-muted-foreground">No books in this list yet</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
             {books.map((book) => (
-              <Link key={book.id} href={`/book/${book.id}`}>
-                <Card className="group overflow-hidden transition-all hover:shadow-lg">
-                  <CardContent className="flex gap-4 p-4">
-                    {/* Cover */}
-                    <div className="relative aspect-[2/3] w-20 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
-                      {book.coverUrl ? (
-                        <Image
-                          src={book.coverUrl}
-                          alt={book.title}
-                          fill
-                          className="object-cover transition-transform group-hover:scale-105"
-                          sizes="80px"
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center">
-                          <span className="text-xl text-muted-foreground/40">
-                            {book.title.charAt(0)}
-                          </span>
-                        </div>
-                      )}
-                    </div>
+              <Link key={book.id} href={`/book/${book.id}`} className="group">
+                <div className="space-y-2">
+                  {/* Cover */}
+                  <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-muted">
+                    {book.coverUrl ? (
+                      <Image
+                        src={book.coverUrl}
+                        alt={book.title}
+                        fill
+                        className="object-cover transition-transform group-hover:scale-105"
+                        sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, 25vw"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center">
+                        <span className="text-2xl text-muted-foreground/40">
+                          {book.title.charAt(0)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
 
-                    {/* Info */}
-                    <div className="flex min-w-0 flex-1 flex-col justify-center">
-                      <h3 className="line-clamp-2 font-medium leading-tight">
-                        {book.title}
-                      </h3>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {book.author}
-                      </p>
-                      {book.difficulty && (
-                        <Badge
-                          className={cn(
-                            'mt-2 w-fit text-white',
-                            difficultyColors[book.difficulty]
-                          )}
-                        >
-                          {difficultyLabels[book.difficulty]}
-                        </Badge>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
+                  {/* Title & Author */}
+                  <div>
+                    <p className="line-clamp-1 text-sm font-medium leading-tight">
+                      {book.title}
+                    </p>
+                    <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                      {book.author}
+                    </p>
+                  </div>
+                </div>
               </Link>
             ))}
           </div>
@@ -192,15 +164,12 @@ function BookListDetailSkeleton() {
 
       {/* Books grid skeleton */}
       <div className="container py-8">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="flex gap-4 rounded-xl border p-4">
-              <Skeleton className="aspect-[2/3] w-20 rounded-lg" />
-              <div className="flex flex-1 flex-col justify-center space-y-2">
-                <Skeleton className="h-5 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
-                <Skeleton className="h-5 w-20" />
-              </div>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="space-y-2">
+              <Skeleton className="aspect-[2/3] w-full rounded-lg" />
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-3 w-1/2" />
             </div>
           ))}
         </div>

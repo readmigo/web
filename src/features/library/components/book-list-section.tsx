@@ -88,27 +88,27 @@ export function BookListSection({ bookList }: BookListSectionProps) {
             );
           }
 
-          // Default: standard inline card (original style)
+          // Default: standard inline card (iOS StandardBookCard 100x150)
           return (
             <Link
               key={book.id}
               href={`/book/${book.id}`}
               className="group flex-shrink-0"
             >
-              <div className="w-[120px] space-y-2 sm:w-[140px]">
+              <div className="w-[100px] space-y-2">
                 {/* Cover */}
-                <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-muted shadow-sm transition-shadow group-hover:shadow-md">
+                <div className="relative h-[150px] w-[100px] overflow-hidden rounded-lg bg-muted shadow-sm transition-shadow group-hover:shadow-md">
                   {book.coverUrl ? (
                     <Image
                       src={book.coverUrl}
                       alt={book.title}
                       fill
                       className="object-cover transition-transform group-hover:scale-105"
-                      sizes="(max-width: 640px) 120px, 140px"
+                      sizes="100px"
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center">
-                      <span className="text-3xl text-muted-foreground/40">
+                      <span className="text-2xl text-muted-foreground/40">
                         {book.title.charAt(0)}
                       </span>
                     </div>
@@ -142,8 +142,8 @@ export function BookListSectionSkeleton() {
       </div>
       <div className="flex gap-4 overflow-hidden">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="w-[120px] flex-shrink-0 space-y-2 sm:w-[140px]">
-            <Skeleton className="aspect-[2/3] w-full rounded-lg" />
+          <div key={i} className="w-[100px] flex-shrink-0 space-y-2">
+            <Skeleton className="h-[150px] w-[100px] rounded-lg" />
             <Skeleton className="h-4 w-3/4" />
             <Skeleton className="h-3 w-1/2" />
           </div>

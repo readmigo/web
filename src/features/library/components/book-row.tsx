@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart } from 'lucide-react';
+import { Heart, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { useFavoriteBookIds, useToggleFavorite } from '../hooks/use-favorites';
@@ -91,6 +91,17 @@ export function BookRow({ book, className }: BookRowProps) {
         )}
         {/* Metadata row */}
         <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+          {book.wordCount > 0 && (
+            <span className="text-[11px] text-muted-foreground">
+              {formatWordCount(book.wordCount)}
+            </span>
+          )}
+          {(book.goodreadsRating || book.doubanRating) && (
+            <span className="inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
+              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+              {(book.goodreadsRating || book.doubanRating)?.toFixed(1)}
+            </span>
+          )}
           {book.difficulty && (
             <Badge
               className={cn(
@@ -100,11 +111,6 @@ export function BookRow({ book, className }: BookRowProps) {
             >
               {difficultyLabels[book.difficulty]}
             </Badge>
-          )}
-          {book.wordCount > 0 && (
-            <span className="text-[11px] text-muted-foreground">
-              {formatWordCount(book.wordCount)}
-            </span>
           )}
         </div>
       </div>

@@ -12,6 +12,8 @@ export interface Book {
   wordCount: number;
   publishYear?: number;
   source: 'gutenberg' | 'standard-ebooks' | 'user-upload';
+  goodreadsRating?: number;
+  doubanRating?: number;
 }
 
 export interface BookDetail extends Book {
