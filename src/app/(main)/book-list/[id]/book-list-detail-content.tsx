@@ -106,7 +106,7 @@ export function BookListDetailContent({ listId }: BookListDetailContentProps) {
               <Badge className="mb-3 border-white/30 bg-white/20 text-white backdrop-blur-sm">
                 {typeLabels[bookList.type] || bookList.type}
               </Badge>
-              <h1 className="text-3xl font-bold md:text-4xl">{bookList.title}</h1>
+              <h1 className="text-3xl font-bold md:text-4xl">{bookList.name}</h1>
               {bookList.subtitle && (
                 <p className="mt-2 text-lg text-white/80">{bookList.subtitle}</p>
               )}

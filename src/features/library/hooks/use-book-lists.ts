@@ -5,21 +5,18 @@ import { apiClient } from '@/lib/api/client';
 import type { BookList } from '../types';
 
 interface BookListsResponse {
-  data: BookList[];
-}
-
-interface BookListDetailResponse {
-  data: BookList;
+  items: BookList[];
 }
 
 export function useBookLists() {
   return useQuery({
-    queryKey: ['book-lists'],
+    queryKey: ['booklists'],
     queryFn: async () => {
-      const response = await apiClient.get<BookListsResponse>('/book-lists', {
+      const response = await apiClient.get<BookListsResponse>('/booklists', {
+        params: { page: '1', limit: '20' },
         skipAuth: true,
       });
-      return response.data;
+      return response.items;
     },
     staleTime: 5 * 60 * 1000,
   });
@@ -27,13 +24,13 @@ export function useBookLists() {
 
 export function useBookListDetail(id: string) {
   return useQuery({
-    queryKey: ['book-list', id],
+    queryKey: ['booklist', id],
     queryFn: async () => {
-      const response = await apiClient.get<BookListDetailResponse>(
-        `/book-lists/${id}`,
+      const response = await apiClient.get<BookList>(
+        `/booklists/${id}`,
         { skipAuth: true }
       );
-      return response.data;
+      return response;
     },
     enabled: !!id,
     staleTime: 10 * 60 * 1000,

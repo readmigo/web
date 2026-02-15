@@ -132,9 +132,9 @@ test.describe('Book content', () => {
     expect(hasSkeletons || hasBooks || hasEmpty).toBe(true);
   });
 
-  test('should show 热门推荐 ranking section or loading skeletons', async ({ page }) => {
+  test('should show 高分经典 ranking section or loading skeletons', async ({ page }) => {
     await page.waitForTimeout(3000);
-    const hasRanking = await page.getByText('热门推荐').isVisible().catch(() => false);
+    const hasRanking = await page.getByText('高分经典').isVisible().catch(() => false);
     const hasSkeletons = await page.locator('[class*="animate-pulse"]').first().isVisible().catch(() => false);
     expect(hasRanking || hasSkeletons).toBe(true);
   });

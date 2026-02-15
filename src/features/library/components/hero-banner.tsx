@@ -125,7 +125,7 @@ function HeroBannerSlide({ bookList }: { bookList: BookList }) {
             {typeLabels[bookList.type] || bookList.type}
           </span>
           <h2 className="mt-2 text-2xl font-bold md:text-3xl">
-            {bookList.title}
+            {bookList.name}
           </h2>
           {bookList.subtitle && (
             <p className="mt-1 text-sm text-white/80 md:text-base">

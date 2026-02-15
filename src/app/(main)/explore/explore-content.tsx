@@ -13,15 +13,10 @@ import { useSearchSuggestions } from '@/features/search/hooks/use-search-suggest
 import { usePopularSearches, useTrendingSearches } from '@/features/search/hooks/use-popular-searches';
 import { useSearchHistory } from '@/features/search/hooks/use-search-history';
 import { SearchResultsDropdown } from '@/features/search/components/search-results-dropdown';
-import { useQuery } from '@tanstack/react-query';
-import { apiClient } from '@/lib/api/client';
 import { useBookLists } from '@/features/library/hooks/use-book-lists';
 import { HeroBanner } from '@/features/library/components/hero-banner';
 import { BookListSection, BookListSectionSkeleton } from '@/features/library/components/book-list-section';
-import { RankedBookCard } from '@/features/library/components/ranked-book-card';
 import { cn } from '@/lib/utils';
-import { BarChart3 } from 'lucide-react';
-import type { Book } from '@/features/library/types';
 
 export function ExploreContent() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -70,7 +65,7 @@ export function ExploreContent() {
   // Book lists for hero banner and sections
   const { data: bookListsData, isLoading: bookListsLoading } = useBookLists();
   const activeBookLists = (bookListsData || []).filter(
-    (list) => list.isActive !== false && (list.books?.length ?? 0) > 0
+    (list) => list.bookCount > 0
   );
   // Ranking lists shown first at the top, then other featured lists
   const rankingBookLists = activeBookLists.filter((list) => list.type === 'RANKING');
@@ -194,16 +189,17 @@ export function ExploreContent() {
         </div>
       ) : (
       <>
-      {/* Ranking Section — iOS-style ranked book list */}
-      <RankingSection />
-
-      {/* Ranking Book Lists from API (if available) */}
-      {!bookListsLoading && rankingBookLists.length > 0 && (
-        <div className="space-y-8">
-          {rankingBookLists.map((list) => (
-            <BookListSection key={list.id} bookList={list} />
-          ))}
-        </div>
+      {/* Ranking Book Lists (shown first, matching iOS) */}
+      {bookListsLoading ? (
+        <BookListSectionSkeleton />
+      ) : (
+        rankingBookLists.length > 0 && (
+          <div className="space-y-8">
+            {rankingBookLists.map((list) => (
+              <BookListSection key={list.id} bookList={list} />
+            ))}
+          </div>
+        )
       )}
 
       {/* Hero Banner */}
@@ -299,7 +295,7 @@ export function ExploreContent() {
       ) : (
         featuredBookLists.length > 0 && (
           <div className="space-y-8">
-            {featuredBookLists.slice(0, 4).map((list) => (
+            {featuredBookLists.map((list) => (
               <BookListSection key={list.id} bookList={list} />
             ))}
           </div>
@@ -360,64 +356,3 @@ export function ExploreContent() {
   );
 }
 
-// ============ Ranking Section ============
-
-interface BooksApiResponse {
-  items?: Book[];
-  data?: Book[];
-  total: number;
-}
-
-function RankingSection() {
-  const { data: rankedBooks, isLoading } = useQuery({
-    queryKey: ['books', 'ranking'],
-    queryFn: async () => {
-      const response = await apiClient.get<BooksApiResponse>('/books', {
-        params: { page: '1', limit: '8' },
-        skipAuth: true,
-      });
-      return response.items ?? response.data ?? [];
-    },
-    staleTime: 10 * 60 * 1000,
-  });
-
-  if (isLoading) {
-    return (
-      <div className="space-y-3">
-        <Skeleton className="h-6 w-32" />
-        <div className="flex gap-4 overflow-hidden">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="w-[90px] flex-shrink-0 space-y-2">
-              <Skeleton className="h-[135px] w-[90px] rounded-lg" />
-              <Skeleton className="h-3 w-16" />
-              <Skeleton className="h-3 w-12" />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (!rankedBooks || rankedBooks.length === 0) {
-    return null;
-  }
-
-  return (
-    <div className="space-y-3">
-      <div className="flex items-center gap-2">
-        <BarChart3 className="h-5 w-5 text-primary" />
-        <h3 className="text-lg font-semibold">热门推荐</h3>
-      </div>
-      <div className="scrollbar-hide -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
-        {rankedBooks.map((book, index) => (
-          <RankedBookCard
-            key={book.id}
-            book={book}
-            rank={index + 1}
-            className="flex-shrink-0"
-          />
-        ))}
-      </div>
-    </div>
-  );
-}

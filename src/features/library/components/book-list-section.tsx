@@ -6,6 +6,7 @@ import { ChevronRight } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { RankedBookCard } from './ranked-book-card';
 import { HeroBookCard } from './hero-book-card';
+import { useBookListDetail } from '../hooks/use-book-lists';
 import type { BookList, BookListType } from '../types';
 
 interface BookListSectionProps {
@@ -24,7 +25,16 @@ function isHeroType(type: BookListType): boolean {
 }
 
 export function BookListSection({ bookList }: BookListSectionProps) {
-  const books = bookList.books?.slice(0, 8) || [];
+  // Fetch books from detail API if not already populated
+  const { data: detailData, isLoading: detailLoading } = useBookListDetail(
+    bookList.books && bookList.books.length > 0 ? '' : bookList.id
+  );
+
+  const books = (bookList.books || detailData?.books || []).slice(0, 8);
+
+  if (detailLoading && !bookList.books) {
+    return <BookListSectionSkeleton />;
+  }
 
   if (books.length === 0) {
     return null;
@@ -39,7 +49,7 @@ export function BookListSection({ bookList }: BookListSectionProps) {
       {/* Section Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">{bookList.title}</h3>
+          <h3 className="text-lg font-semibold">{bookList.name}</h3>
           {bookList.subtitle && (
             <p className="text-sm text-muted-foreground">{bookList.subtitle}</p>
           )}

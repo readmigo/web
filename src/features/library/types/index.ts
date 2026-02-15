@@ -106,13 +106,23 @@ export interface BookListBook {
   id: string;
   title: string;
   author: string;
+  authorId?: string;
+  description?: string;
   coverUrl?: string;
+  coverThumbUrl?: string;
+  difficultyScore?: number;
+  wordCount?: number;
+  genres?: string[];
+  doubanRating?: number;
+  goodreadsRating?: number;
+  rank?: number;
+  customDescription?: string;
   difficulty?: number;
 }
 
 export interface BookList {
   id: string;
-  title: string;
+  name: string;
   nameEn?: string;
   subtitle?: string;
   description?: string;
@@ -122,6 +132,10 @@ export interface BookList {
   bookCount: number;
   sortOrder?: number;
   isActive?: boolean;
+  showRank?: boolean;
+  showDescription?: boolean;
+  maxDisplayCount?: number;
+  isAiGenerated?: boolean;
   books?: BookListBook[];
   createdAt?: string;
   updatedAt?: string;
