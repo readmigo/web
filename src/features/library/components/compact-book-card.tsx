@@ -100,7 +100,7 @@ export function CompactBookCard({ book, rank, className }: CompactBookCardProps)
 
         {/* Metadata row */}
         <div className="flex flex-wrap items-center gap-1.5">
-          {'wordCount' in book && book.wordCount > 0 && (
+          {'wordCount' in book && book.wordCount && book.wordCount > 0 && (
             <span className="text-[11px] text-muted-foreground">
               {formatWordCount(book.wordCount)}
             </span>
