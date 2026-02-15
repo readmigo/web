@@ -105,58 +105,27 @@ test.describe('Category filter', () => {
 });
 
 // ============================================================
-// 5. Explore page — Difficulty filter
+// 5. Explore page — Book content
 // ============================================================
-test.describe('Difficulty filter', () => {
+test.describe('Book content', () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 720 });
     await page.goto('/');
   });
 
-  test('should show all difficulty levels', async ({ page }) => {
-    await expect(page.getByRole('button', { name: '全部难度' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Beginner' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Elementary' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Intermediate' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Advanced' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Expert' })).toBeVisible();
-  });
-
-  test('clicking a difficulty should highlight it', async ({ page }) => {
-    const beginnerBtn = page.getByRole('button', { name: 'Beginner' });
-    await beginnerBtn.click();
-    // After click, the button should have different styling (secondary variant)
-    await expect(beginnerBtn).toBeVisible();
-  });
-});
-
-// ============================================================
-// 6. Explore page — Book results
-// ============================================================
-test.describe('Book results', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 720 });
-    await page.goto('/');
-  });
-
-  test('should show results count, loading state, or error state', async ({ page }) => {
-    // Wait for initial load
+  test('should show "全部书籍" divider or loading skeletons', async ({ page }) => {
     await page.waitForTimeout(3000);
-    // Should show either "搜索中..." or "找到 X 本书籍" or "加载失败" (API error)
-    const resultsText = page.locator('text=找到')
-      .or(page.locator('text=搜索中'))
-      .or(page.locator('text=加载失败'));
-    await expect(resultsText.first()).toBeVisible({ timeout: 10000 });
+    const hasDivider = await page.getByText('全部书籍').isVisible().catch(() => false);
+    const hasSkeletons = await page.locator('[class*="animate-pulse"]').first().isVisible().catch(() => false);
+    expect(hasDivider || hasSkeletons).toBe(true);
   });
 
-  test('should show book grid, loading skeletons, or error state', async ({ page }) => {
-    // Either skeleton placeholders, actual book cards, or error state should be visible
+  test('should show book list, loading skeletons, or empty state', async ({ page }) => {
     await page.waitForTimeout(2000);
-    // Skeleton uses animate-pulse class
     const hasSkeletons = await page.locator('[class*="animate-pulse"]').first().isVisible().catch(() => false);
     const hasBooks = await page.locator('a[href^="/book/"]').first().isVisible().catch(() => false);
-    const hasError = await page.locator('text=加载失败').isVisible().catch(() => false);
-    expect(hasSkeletons || hasBooks || hasError).toBe(true);
+    const hasEmpty = await page.locator('text=暂无书籍').isVisible().catch(() => false);
+    expect(hasSkeletons || hasBooks || hasEmpty).toBe(true);
   });
 });
 
