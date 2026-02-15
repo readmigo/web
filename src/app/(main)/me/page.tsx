@@ -6,5 +6,9 @@ export const metadata = {
 };
 
 export default function MePage() {
-  return <MeContent />;
+  return (
+    <div className="container py-6">
+      <MeContent />
+    </div>
+  );
 }

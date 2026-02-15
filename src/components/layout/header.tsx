@@ -9,6 +9,7 @@ import {
   Store,
   Headphones,
   UserCircle,
+  Download,
 } from 'lucide-react';
 
 // iOS tab structure: 书城, 书城, 有声书, 我的
@@ -63,6 +64,19 @@ export function Header() {
             </Link>
           ))}
         </nav>
+
+        {/* Download App Button */}
+        <div className="ml-auto">
+          <a
+            href="https://readmigo.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
+          >
+            <Download className="h-4 w-4" />
+            <span className="hidden sm:inline">下载 App</span>
+          </a>
+        </div>
       </div>
     </header>
   );
