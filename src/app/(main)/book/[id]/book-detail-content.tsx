@@ -1,58 +1,43 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   BookOpen,
   Clock,
-  FileText,
   Plus,
   Check,
   ChevronRight,
-  Star,
+  ChevronDown,
   Headphones,
   Share2,
-  User,
   Play,
 } from 'lucide-react';
 import { useBookDetail } from '@/features/library/hooks/use-books';
+import { useFavoriteBookIds, useToggleFavorite } from '@/features/library/hooks/use-favorites';
 import { useAudiobookByBookId } from '@/features/audiobook/hooks/use-audiobooks';
 import { useReadingGuide, useBookContext } from '@/features/library/hooks/use-book-extras';
 import { ReadingGuideSection } from '@/features/library/components/reading-guide-section';
 import { BookContextSection } from '@/features/library/components/book-context-section';
-
-const difficultyLabels: Record<number, string> = {
-  1: 'Beginner',
-  2: 'Elementary',
-  3: 'Intermediate',
-  4: 'Advanced',
-  5: 'Expert',
-};
-
-const difficultyColors: Record<number, string> = {
-  1: 'bg-green-500',
-  2: 'bg-blue-500',
-  3: 'bg-yellow-500',
-  4: 'bg-orange-500',
-  5: 'bg-red-500',
-};
+import { formatDuration } from '@/features/audiobook/stores/audio-player-store';
 
 interface BookDetailContentProps {
   bookId: string;
 }
 
 export function BookDetailContent({ bookId }: BookDetailContentProps) {
-  const [isInLibrary, setIsInLibrary] = useState(false);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [showAllChapters, setShowAllChapters] = useState(false);
+
   const { data: book, isLoading, error } = useBookDetail(bookId);
   const { data: audiobook } = useAudiobookByBookId(bookId);
   const { data: readingGuide, isLoading: isGuideLoading } = useReadingGuide(bookId);
   const { data: bookContext, isLoading: isContextLoading } = useBookContext(bookId);
+  const { favoriteIds, isAuthenticated } = useFavoriteBookIds();
+  const { toggleFavorite } = useToggleFavorite();
 
   if (isLoading) {
     return <BookDetailSkeleton />;
@@ -68,281 +53,245 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
     );
   }
 
-  const formatReadTime = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    return hours > 0 ? `${hours} 小时` : `${minutes} 分钟`;
-  };
-
-  const formatWordCount = (count: number) => {
-    if (count >= 1000) {
-      return `${(count / 1000).toFixed(0)}k`;
-    }
-    return count.toString();
-  };
-
-  const formatDuration = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    if (hours > 0) {
-      return minutes > 0 ? `${hours} 小时 ${minutes} 分钟` : `${hours} 小时`;
-    }
-    return `${minutes} 分钟`;
-  };
-
+  const isFavorited = favoriteIds.has(book.id);
   const hasAudiobook = book.hasAudiobook || !!audiobook;
+  const chaptersToShow = showAllChapters ? book.chapters : book.chapters.slice(0, 10);
+
+  const handleToggleFavorite = () => {
+    if (!isAuthenticated) return;
+    toggleFavorite(book.id, isFavorited);
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: book.title,
+          text: `${book.title} - ${book.author}`,
+          url: window.location.href,
+        });
+      } catch {
+        // User cancelled or share failed
+      }
+    } else {
+      await navigator.clipboard.writeText(window.location.href);
+    }
+  };
 
   return (
-    <div className="container py-6">
-      {/* Book Header */}
-      <div className="flex flex-col gap-8 md:flex-row">
-        {/* Cover */}
-        <div className="flex-shrink-0">
-          <div className="relative aspect-[2/3] w-48 overflow-hidden rounded-lg bg-muted shadow-lg md:w-64">
-            <div className="flex h-full items-center justify-center">
-              <span className="text-6xl">📚</span>
-            </div>
-            <Badge
-              className={`absolute left-2 top-2 ${difficultyColors[book.difficulty]}`}
-            >
-              {difficultyLabels[book.difficulty]}
-            </Badge>
-          </div>
-        </div>
-
-        {/* Info */}
-        <div className="flex-1 space-y-4">
-          <div>
-            <h1 className="text-3xl font-bold">{book.title}</h1>
-            {book.authorId ? (
-              <Link
-                href={`/author/${book.authorId}`}
-                className="mt-1 inline-flex items-center gap-1 text-lg text-muted-foreground transition-colors hover:text-primary"
-              >
-                <User className="h-4 w-4" />
-                <span>{book.author}</span>
-                {book.authorZh && (
-                  <span className="text-base">({book.authorZh})</span>
-                )}
-              </Link>
+    <div className="pb-12">
+      {/* Header Section - Gradient Background */}
+      <div
+        className="relative w-full px-4 pb-8 pt-6"
+        style={{
+          background: 'linear-gradient(to bottom, color-mix(in srgb, var(--brand-gradient-start, #8BB9FF) 10%, transparent), transparent)',
+        }}
+      >
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{ backgroundImage: 'var(--brand-gradient)' }}
+        />
+        <div className="relative mx-auto flex max-w-2xl flex-col items-center">
+          {/* Book Cover */}
+          <div className="relative aspect-[2/3] h-[200px] overflow-hidden rounded-xl shadow-lg">
+            {book.coverUrl ? (
+              <Image
+                src={book.coverUrl}
+                alt={book.title}
+                fill
+                className="object-cover"
+                sizes="140px"
+                priority
+              />
             ) : (
-              <p className="mt-1 text-lg text-muted-foreground">{book.author}</p>
-            )}
-          </div>
-
-          {/* Stats */}
-          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <FileText className="h-4 w-4" />
-              <span>{formatWordCount(book.wordCount)} 词</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Clock className="h-4 w-4" />
-              <span>约 {formatReadTime(book.estimatedReadTime)}</span>
-            </div>
-            {book.publishYear && (
-              <div className="flex items-center gap-1">
-                <BookOpen className="h-4 w-4" />
-                <span>{book.publishYear}年</span>
-              </div>
-            )}
-            {book.aiScore && (
-              <div className="flex items-center gap-1">
-                <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                <span>{book.aiScore}</span>
+              <div className="flex h-full w-full items-center justify-center bg-muted">
+                <BookOpen className="h-12 w-12 text-muted-foreground" />
               </div>
             )}
           </div>
 
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2">
-            {book.tags.map((tag) => (
-              <Badge key={tag} variant="secondary">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-
-          {/* Actions */}
-          <div className="flex flex-wrap gap-3 pt-2">
-            <Button size="lg" asChild>
-              <Link href={`/read/${book.id}`}>
-                <BookOpen className="mr-2 h-4 w-4" />
-                开始阅读
-              </Link>
-            </Button>
-            <Button
-              size="lg"
-              variant={isInLibrary ? 'secondary' : 'outline'}
-              onClick={() => setIsInLibrary(!isInLibrary)}
-            >
-              {isInLibrary ? (
-                <>
-                  <Check className="mr-2 h-4 w-4" />
-                  已加入书架
-                </>
-              ) : (
-                <>
-                  <Plus className="mr-2 h-4 w-4" />
-                  加入书架
-                </>
-              )}
-            </Button>
-            <Button size="icon" variant="ghost">
-              <Share2 className="h-4 w-4" />
-            </Button>
-          </div>
+          {/* Title & Author */}
+          <h1 className="mt-4 text-center text-2xl font-bold">{book.title}</h1>
+          <p className="mt-1 text-center text-muted-foreground">{book.author}</p>
         </div>
       </div>
 
-      <Separator className="my-8" />
-
-      {/* Content Grid */}
-      <div className="grid gap-8 lg:grid-cols-3">
-        {/* Main Content */}
-        <div className="space-y-6 lg:col-span-2">
-          {/* Description */}
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="mb-4 text-lg font-semibold">简介</h2>
-              <p className="leading-relaxed text-muted-foreground">
-                {book.description}
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Reading Guide */}
-          {isGuideLoading && (
-            <Card>
-              <CardContent className="p-6">
-                <Skeleton className="mb-4 h-6 w-32" />
-                <div className="space-y-3">
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-3/4" />
-                </div>
-              </CardContent>
-            </Card>
-          )}
-          {readingGuide && <ReadingGuideSection guide={readingGuide} />}
-
-          {/* Book Context */}
-          {isContextLoading && (
-            <Card>
-              <CardContent className="p-6">
-                <Skeleton className="mb-4 h-6 w-32" />
-                <div className="space-y-3">
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-3/4" />
-                </div>
-              </CardContent>
-            </Card>
-          )}
-          {bookContext && <BookContextSection context={bookContext} />}
-
-          {/* Chapters */}
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="mb-4 text-lg font-semibold">
-                目录 ({book.chapters.length} 章)
-              </h2>
-              <div className="space-y-2">
-                {book.chapters.slice(0, 10).map((chapter) => (
-                  <Link
-                    key={chapter.id}
-                    href={`/read/${book.id}?chapter=${chapter.id}`}
-                    className="flex items-center justify-between rounded-lg p-3 transition-colors hover:bg-muted"
-                  >
-                    <span className="text-sm">{chapter.title}</span>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                  </Link>
-                ))}
-                {book.chapters.length > 10 && (
-                  <Button variant="ghost" className="w-full">
-                    查看全部 {book.chapters.length} 章
-                  </Button>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Reading Progress */}
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="mb-4 text-lg font-semibold">阅读进度</h2>
-              <div className="space-y-3">
-                <Progress value={0} className="h-2" />
-                <p className="text-sm text-muted-foreground">尚未开始阅读</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Audiobook */}
-          {hasAudiobook && (
+      {/* Content */}
+      <div className="mx-auto max-w-2xl space-y-6 px-4">
+        {/* Action Buttons Row */}
+        <div className="flex items-center gap-3">
+          <Button className="flex-1" size="lg" asChild>
             <Link
-              href={
-                audiobook
-                  ? `/audiobooks?book=${book.id}&audiobook=${audiobook.id}`
-                  : `/audiobooks?book=${book.id}`
-              }
-              className="block"
+              href={`/read/${book.id}`}
+              className="inline-flex items-center justify-center gap-2"
+              style={{ backgroundImage: 'var(--brand-gradient)' }}
             >
-              <Card className="transition-colors hover:bg-muted/50">
-                <CardContent className="p-6">
-                  <div className="mb-3 flex items-center gap-2">
-                    <Headphones className="h-5 w-5 text-primary" />
-                    <h2 className="text-lg font-semibold">有声书</h2>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md">
-                      <Play className="ml-0.5 h-6 w-6" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="font-medium">立即收听</p>
-                      {audiobook?.narrator && (
-                        <p className="truncate text-sm text-muted-foreground">
-                          朗读: {audiobook.narrator}
-                        </p>
-                      )}
-                      {audiobook?.totalDuration && (
-                        <p className="text-sm text-muted-foreground">
-                          <Clock className="mr-1 inline h-3 w-3" />
-                          {formatDuration(audiobook.totalDuration)}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <BookOpen className="h-4 w-4" />
+              开始阅读
             </Link>
-          )}
-
-          {/* Book Info */}
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="mb-4 text-lg font-semibold">书籍信息</h2>
-              <dl className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <dt className="text-muted-foreground">语言</dt>
-                  <dd>English</dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-muted-foreground">分类</dt>
-                  <dd>{book.category}</dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-muted-foreground">来源</dt>
-                  <dd className="capitalize">{book.source.replace('-', ' ')}</dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-muted-foreground">难度</dt>
-                  <dd>{difficultyLabels[book.difficulty]}</dd>
-                </div>
-              </dl>
-            </CardContent>
-          </Card>
+          </Button>
+          <Button
+            size="lg"
+            variant={isFavorited ? 'secondary' : 'outline'}
+            onClick={handleToggleFavorite}
+            className="flex-1"
+          >
+            {isFavorited ? (
+              <>
+                <Check className="mr-1.5 h-4 w-4" />
+                已在书架
+              </>
+            ) : (
+              <>
+                <Plus className="mr-1.5 h-4 w-4" />
+                加入书架
+              </>
+            )}
+          </Button>
+          <Button size="icon" variant="outline" onClick={handleShare}>
+            <Share2 className="h-4 w-4" />
+          </Button>
         </div>
+
+        {/* Audiobook Section */}
+        {hasAudiobook && (
+          <Link
+            href={
+              audiobook
+                ? `/audiobooks?book=${book.id}&audiobook=${audiobook.id}`
+                : `/audiobooks?book=${book.id}`
+            }
+            className="block"
+          >
+            <div className="flex items-center gap-4 rounded-xl bg-card p-4 shadow-sm transition-colors hover:bg-muted/50">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md">
+                <Play className="ml-0.5 h-5 w-5" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <Headphones className="h-4 w-4 text-primary" />
+                  <span className="font-medium">有声版</span>
+                </div>
+                <div className="mt-0.5 flex items-center gap-3 text-sm text-muted-foreground">
+                  {audiobook?.narrator && (
+                    <span className="truncate">朗读: {audiobook.narrator}</span>
+                  )}
+                  {audiobook?.totalDuration && (
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      {formatDuration(audiobook.totalDuration)}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <ChevronRight className="h-5 w-5 flex-shrink-0 text-muted-foreground" />
+            </div>
+          </Link>
+        )}
+
+        {/* Author Section */}
+        {book.authorId && (
+          <div className="rounded-xl bg-card p-4 shadow-sm">
+            <h2 className="text-lg font-semibold">作者</h2>
+            <Link
+              href={`/author/${book.authorId}`}
+              className="mt-1 inline-flex items-center text-primary hover:underline"
+            >
+              {book.author}
+              {book.authorZh && (
+                <span className="ml-1 text-muted-foreground">({book.authorZh})</span>
+              )}
+              <ChevronRight className="ml-0.5 h-4 w-4" />
+            </Link>
+          </div>
+        )}
+
+        {/* Description Section */}
+        <div className="rounded-xl bg-card p-4 shadow-sm">
+          <h2 className="text-lg font-semibold">简介</h2>
+          <div className="relative mt-2">
+            <p
+              className={`leading-relaxed text-muted-foreground ${
+                !isDescriptionExpanded ? 'line-clamp-4' : ''
+              }`}
+            >
+              {book.description}
+            </p>
+            {book.description && book.description.length > 200 && (
+              <button
+                type="button"
+                onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                className="mt-1 text-sm font-medium text-primary"
+              >
+                {isDescriptionExpanded ? '收起' : '展开全文'}
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Reading Guide Section */}
+        {isGuideLoading && (
+          <div className="rounded-xl bg-card p-4 shadow-sm">
+            <Skeleton className="mb-4 h-6 w-32" />
+            <div className="space-y-3">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+            </div>
+          </div>
+        )}
+        {readingGuide && <ReadingGuideSection guide={readingGuide} />}
+
+        {/* Book Context Section */}
+        {isContextLoading && (
+          <div className="rounded-xl bg-card p-4 shadow-sm">
+            <Skeleton className="mb-4 h-6 w-32" />
+            <div className="space-y-3">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+            </div>
+          </div>
+        )}
+        {bookContext && <BookContextSection context={bookContext} />}
+
+        {/* Chapters Section */}
+        {book.chapters.length > 0 && (
+          <div className="rounded-xl bg-card p-4 shadow-sm">
+            <h2 className="text-lg font-semibold">
+              目录 ({book.chapters.length} 章)
+            </h2>
+            <div className="mt-2 space-y-1">
+              {chaptersToShow.map((chapter) => (
+                <Link
+                  key={chapter.id}
+                  href={`/read/${book.id}?chapter=${chapter.id}`}
+                  className="flex items-center justify-between rounded-lg px-2 py-3 transition-colors hover:bg-muted"
+                >
+                  <span className="text-sm">{chapter.title}</span>
+                  <ChevronRight className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                </Link>
+              ))}
+              {book.chapters.length > 10 && (
+                <button
+                  type="button"
+                  onClick={() => setShowAllChapters(!showAllChapters)}
+                  className="flex w-full items-center justify-center gap-1 rounded-lg py-3 text-sm font-medium text-primary transition-colors hover:bg-muted"
+                >
+                  {showAllChapters ? (
+                    <>
+                      收起
+                      <ChevronDown className="h-4 w-4 rotate-180" />
+                    </>
+                  ) : (
+                    <>
+                      查看全部 {book.chapters.length} 章
+                      <ChevronDown className="h-4 w-4" />
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -350,27 +299,22 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
 
 function BookDetailSkeleton() {
   return (
-    <div className="container py-6">
-      <div className="flex flex-col gap-8 md:flex-row">
-        <Skeleton className="aspect-[2/3] w-48 rounded-lg md:w-64" />
-        <div className="flex-1 space-y-4">
-          <Skeleton className="h-9 w-64" />
-          <Skeleton className="h-5 w-40" />
-          <div className="flex gap-4">
-            <Skeleton className="h-4 w-20" />
-            <Skeleton className="h-4 w-20" />
-            <Skeleton className="h-4 w-20" />
-          </div>
-          <div className="flex gap-2">
-            <Skeleton className="h-6 w-16" />
-            <Skeleton className="h-6 w-16" />
-            <Skeleton className="h-6 w-16" />
-          </div>
-          <div className="flex gap-3 pt-2">
-            <Skeleton className="h-11 w-32" />
-            <Skeleton className="h-11 w-32" />
-          </div>
+    <div className="pb-12">
+      {/* Header skeleton */}
+      <div className="flex flex-col items-center px-4 pb-8 pt-6">
+        <Skeleton className="aspect-[2/3] h-[200px] rounded-xl" />
+        <Skeleton className="mt-4 h-7 w-48" />
+        <Skeleton className="mt-2 h-5 w-32" />
+      </div>
+      {/* Content skeleton */}
+      <div className="mx-auto max-w-2xl space-y-6 px-4">
+        <div className="flex gap-3">
+          <Skeleton className="h-11 flex-1" />
+          <Skeleton className="h-11 flex-1" />
+          <Skeleton className="h-11 w-11" />
         </div>
+        <Skeleton className="h-24 w-full rounded-xl" />
+        <Skeleton className="h-40 w-full rounded-xl" />
       </div>
     </div>
   );
