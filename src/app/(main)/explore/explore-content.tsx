@@ -3,13 +3,11 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { BookGrid } from '@/features/library/components/book-grid';
+import { BookRow } from '@/features/library/components/book-row';
 import { useInfiniteBooks } from '@/features/library/hooks/use-infinite-books';
 import { useCategories } from '@/features/library/hooks/use-categories';
-import Link from 'next/link';
-import { Search, RefreshCw, Loader2, ArrowRight } from 'lucide-react';
+import { Search, RefreshCw, Loader2, BookOpen } from 'lucide-react';
 import { useSearch } from '@/features/search/hooks/use-search';
 import { useSearchSuggestions } from '@/features/search/hooks/use-search-suggestions';
 import { usePopularSearches, useTrendingSearches } from '@/features/search/hooks/use-popular-searches';
@@ -18,27 +16,18 @@ import { SearchResultsDropdown } from '@/features/search/components/search-resul
 import { useBookLists } from '@/features/library/hooks/use-book-lists';
 import { HeroBanner } from '@/features/library/components/hero-banner';
 import { BookListSection, BookListSectionSkeleton } from '@/features/library/components/book-list-section';
-
-const difficulties = [
-  { label: '全部难度', value: 0 },
-  { label: 'Beginner', value: 1 },
-  { label: 'Elementary', value: 2 },
-  { label: 'Intermediate', value: 3 },
-  { label: 'Advanced', value: 4 },
-  { label: 'Expert', value: 5 },
-];
+import { cn } from '@/lib/utils';
 
 export function ExploreContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedDifficulty, setSelectedDifficulty] = useState(0);
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [debouncedDropdownQuery, setDebouncedDropdownQuery] = useState('');
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Debounce search query for book grid filtering
+  // Debounce search query for book list filtering
   useMemo(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
@@ -107,13 +96,11 @@ export function ExploreContent() {
     isFetchingNextPage,
   } = useInfiniteBooks({
     category: selectedCategory || undefined,
-    difficulty: selectedDifficulty || undefined,
     search: debouncedSearch || undefined,
   });
 
   // Flatten all pages into a single books array
   const books = data?.pages.flatMap((page) => page.data) || [];
-  const total = data?.pages[0]?.total || 0;
 
   // Intersection Observer for infinite scroll
   const handleObserver = useCallback(
@@ -158,11 +145,8 @@ export function ExploreContent() {
 
   return (
     <div className="space-y-6">
-      {/* Hero Banner */}
-      <HeroBanner bookLists={featuredBookLists} isLoading={bookListsLoading} />
-
       {/* Search */}
-      <div className="relative max-w-xl" ref={searchContainerRef}>
+      <div className="relative" ref={searchContainerRef}>
         <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
         <Input
           placeholder="搜索书名或作者..."
@@ -174,7 +158,7 @@ export function ExploreContent() {
           onFocus={() => {
             setShowDropdown(true);
           }}
-          className="pl-10 h-12 text-lg"
+          className="bg-secondary rounded-xl h-11 pl-10 border-0 focus:ring-2 focus:ring-primary"
         />
         {showDropdown && (
           <SearchResultsDropdown
@@ -182,7 +166,6 @@ export function ExploreContent() {
             isLoading={isSearchLoading}
             query={debouncedDropdownQuery}
             onSelect={() => {
-              // Record the search when user selects a result
               if (debouncedDropdownQuery.trim().length >= 2) {
                 addSearch(debouncedDropdownQuery.trim());
               }
@@ -205,60 +188,87 @@ export function ExploreContent() {
         )}
       </div>
 
-      {/* Categories */}
-      <div className="flex flex-wrap gap-2">
+      {/* Hero Banner */}
+      <HeroBanner bookLists={featuredBookLists} isLoading={bookListsLoading} />
+
+      {/* Category menu - circular icons */}
+      <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
         {categoriesLoading ? (
           <>
-            {Array.from({ length: 8 }).map((_, i) => (
-              <Skeleton key={i} className="h-7 w-16 rounded-full" />
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="flex flex-col items-center gap-1.5 min-w-[56px]">
+                <Skeleton className="h-11 w-11 rounded-full" />
+                <Skeleton className="h-3 w-10" />
+              </div>
             ))}
           </>
         ) : (
           <>
-            <Badge
-              variant={selectedCategory === '' ? 'default' : 'outline'}
-              className="cursor-pointer px-3 py-1"
+            <button
+              type="button"
+              className="flex flex-col items-center gap-1.5 min-w-[56px]"
               onClick={() => setSelectedCategory('')}
             >
-              All
-            </Badge>
+              <div
+                className={cn(
+                  'h-11 w-11 rounded-full flex items-center justify-center transition-colors',
+                  selectedCategory === ''
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-primary/10'
+                )}
+              >
+                <BookOpen
+                  className={cn(
+                    'h-5 w-5',
+                    selectedCategory === '' ? 'text-primary-foreground' : 'text-primary'
+                  )}
+                />
+              </div>
+              <span
+                className={cn(
+                  'text-xs whitespace-nowrap',
+                  selectedCategory === '' && 'font-semibold'
+                )}
+              >
+                All
+              </span>
+            </button>
             {categoriesData?.map((category) => (
-              <Badge
+              <button
                 key={category.id}
-                variant={selectedCategory === category.id ? 'default' : 'outline'}
-                className="cursor-pointer px-3 py-1"
+                type="button"
+                className="flex flex-col items-center gap-1.5 min-w-[56px]"
                 onClick={() => setSelectedCategory(category.id)}
               >
-                {category.nameEn || category.name}
-              </Badge>
+                <div
+                  className={cn(
+                    'h-11 w-11 rounded-full flex items-center justify-center transition-colors',
+                    selectedCategory === category.id
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-primary/10'
+                  )}
+                >
+                  <BookOpen
+                    className={cn(
+                      'h-5 w-5',
+                      selectedCategory === category.id
+                        ? 'text-primary-foreground'
+                        : 'text-primary'
+                    )}
+                  />
+                </div>
+                <span
+                  className={cn(
+                    'text-xs whitespace-nowrap',
+                    selectedCategory === category.id && 'font-semibold'
+                  )}
+                >
+                  {category.nameEn || category.name}
+                </span>
+              </button>
             ))}
           </>
         )}
-      </div>
-
-      {/* View all in category link */}
-      {selectedCategory && categoriesData && (
-        <Link
-          href={`/category/${selectedCategory}`}
-          className="inline-flex items-center text-sm text-primary hover:underline"
-        >
-          查看「{categoriesData.find((c) => c.id === selectedCategory)?.nameEn || categoriesData.find((c) => c.id === selectedCategory)?.name || '该分类'}」的全部书籍
-          <ArrowRight className="ml-1 h-4 w-4" />
-        </Link>
-      )}
-
-      {/* Difficulty filter */}
-      <div className="flex flex-wrap gap-2">
-        {difficulties.map((diff) => (
-          <Button
-            key={diff.value}
-            variant={selectedDifficulty === diff.value ? 'secondary' : 'ghost'}
-            size="sm"
-            onClick={() => setSelectedDifficulty(diff.value)}
-          >
-            {diff.label}
-          </Button>
-        ))}
       </div>
 
       {/* Book List Sections */}
@@ -278,25 +288,42 @@ export function ExploreContent() {
         )
       )}
 
-      {/* Results count */}
-      <p className="text-sm text-muted-foreground">
-        {isLoading ? '搜索中...' : `找到 ${total} 本书籍`}
-      </p>
+      {/* "全部书籍" divider */}
+      <div className="flex items-center gap-3">
+        <div className="flex-1 border-t" />
+        <span className="text-sm text-muted-foreground">全部书籍</span>
+        <div className="flex-1 border-t" />
+      </div>
 
-      {/* Books grid */}
+      {/* Books list (vertical rows) */}
       {isLoading ? (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="space-y-2">
-              <Skeleton className="aspect-[2/3] w-full rounded-lg" />
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-3 w-1/2" />
+        <div className="space-y-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="flex items-start gap-3 py-3 border-b last:border-b-0">
+              <Skeleton className="h-[105px] w-[70px] flex-shrink-0 rounded-lg" />
+              <div className="flex flex-1 flex-col gap-2 py-0.5">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-1/3" />
+                <Skeleton className="h-3 w-full" />
+                <Skeleton className="h-4 w-20" />
+              </div>
             </div>
           ))}
         </div>
+      ) : books.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-12">
+          <p className="text-lg text-muted-foreground">暂无书籍</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            去探索发现更多好书吧
+          </p>
+        </div>
       ) : (
         <>
-          <BookGrid books={books} />
+          <div>
+            {books.map((book) => (
+              <BookRow key={book.id} book={book} />
+            ))}
+          </div>
 
           {/* Sentinel for infinite scroll */}
           <div ref={sentinelRef} className="flex justify-center py-8">

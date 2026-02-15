@@ -11,6 +11,8 @@ export interface Author {
   era?: string;
   nationality?: string;
   birthPlace?: string;
+  birthYear?: number;
+  deathYear?: number;
   writingStyle?: string;
   famousWorks: string[];
   literaryPeriod?: string;

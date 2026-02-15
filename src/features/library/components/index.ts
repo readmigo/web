@@ -1,4 +1,5 @@
 export * from './book-card';
+export * from './book-row';
 export * from './ranked-book-card';
 export * from './hero-book-card';
 export * from './compact-book-card';
