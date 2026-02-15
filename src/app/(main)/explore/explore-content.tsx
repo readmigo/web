@@ -69,8 +69,9 @@ export function ExploreContent() {
   const activeBookLists = (bookListsData || []).filter(
     (list) => list.bookCount > 0
   );
-  // Ranking lists shown first at the top, then other featured lists
-  const rankingBookLists = activeBookLists.filter((list) => list.type === 'RANKING');
+  // All book lists shown together with iOS-style backgrounds (by index)
+  const allBookLists = activeBookLists;
+  // Keep hero banner lists separate (for HeroBanner component)
   const featuredBookLists = activeBookLists.filter((list) => list.type !== 'RANKING');
 
   // Close dropdown on click outside
@@ -262,33 +263,20 @@ export function ExploreContent() {
         )}
       </div>
 
-      {/* Ranking Book Lists */}
-      {bookListsLoading ? (
-        <BookListSectionSkeleton />
-      ) : (
-        rankingBookLists.length > 0 && (
-          <div className="divide-y">
-            {rankingBookLists.map((list, index) => (
-              <div key={list.id} className={index > 0 ? 'pt-6' : ''}>
-                <BookListSection bookList={list} styleIndex={index} />
-              </div>
-            ))}
-          </div>
-        )
-      )}
-
-      {/* Book List Sections */}
+      {/* All Book Lists with iOS-style backgrounds */}
       {bookListsLoading ? (
         <div className="space-y-8">
-          {Array.from({ length: 2 }).map((_, i) => (
+          {Array.from({ length: 3 }).map((_, i) => (
             <BookListSectionSkeleton key={i} />
           ))}
         </div>
       ) : (
-        featuredBookLists.length > 0 && (
-          <div className="space-y-8">
-            {featuredBookLists.map((list) => (
-              <BookListSection key={list.id} bookList={list} />
+        allBookLists.length > 0 && (
+          <div className="divide-y">
+            {allBookLists.map((list, index) => (
+              <div key={list.id} className={index > 0 ? 'pt-6' : ''}>
+                <BookListSection bookList={list} styleIndex={index} />
+              </div>
             ))}
           </div>
         )
