@@ -6,6 +6,7 @@ import { Heart, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { useFavoriteBookIds, useToggleFavorite } from '../hooks/use-favorites';
+import { getDifficultyLevel, difficultyLabels, difficultyColors } from '../utils/difficulty';
 import type { Book, BookListBook } from '../types';
 
 interface HeroBookCardProps {
@@ -14,27 +15,11 @@ interface HeroBookCardProps {
   className?: string;
 }
 
-const difficultyLabels = [
-  '',
-  'Beginner',
-  'Elementary',
-  'Intermediate',
-  'Advanced',
-  'Expert',
-];
-const difficultyColors = [
-  '',
-  'bg-green-500',
-  'bg-blue-500',
-  'bg-yellow-500',
-  'bg-orange-500',
-  'bg-red-500',
-];
-
 export function HeroBookCard({ book, showAiBadge, className }: HeroBookCardProps) {
   const { favoriteIds, isAuthenticated } = useFavoriteBookIds();
   const { toggleFavorite } = useToggleFavorite();
   const isFavorited = favoriteIds.has(book.id);
+  const diffLevel = book.difficulty || getDifficultyLevel('difficultyScore' in book ? book.difficultyScore : undefined);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -107,14 +92,14 @@ export function HeroBookCard({ book, showAiBadge, className }: HeroBookCardProps
         </div>
 
         {/* Difficulty badge */}
-        {book.difficulty && (
+        {diffLevel && diffLevel >= 1 && diffLevel <= 5 && (
           <Badge
             className={cn(
               'text-[10px] text-white',
-              difficultyColors[book.difficulty]
+              difficultyColors[diffLevel]
             )}
           >
-            {difficultyLabels[book.difficulty]}
+            {difficultyLabels[diffLevel]}
           </Badge>
         )}
       </div>

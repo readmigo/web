@@ -6,6 +6,7 @@ import { Heart, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { useFavoriteBookIds, useToggleFavorite } from '../hooks/use-favorites';
+import { getDifficultyLevel, difficultyLabels, difficultyColors } from '../utils/difficulty';
 import type { Book, BookListBook } from '../types';
 
 interface CompactBookCardProps {
@@ -14,34 +15,22 @@ interface CompactBookCardProps {
   className?: string;
 }
 
-const difficultyLabels = [
-  '',
-  'Beginner',
-  'Elementary',
-  'Intermediate',
-  'Advanced',
-  'Expert',
-];
-const difficultyColors = [
-  '',
-  'bg-green-500',
-  'bg-blue-500',
-  'bg-yellow-500',
-  'bg-orange-500',
-  'bg-red-500',
-];
-
 function formatWordCount(count: number): string {
-  if (count >= 1000) {
-    return `${(count / 1000).toFixed(count >= 10000 ? 0 : 1)}k words`;
+  if (count >= 1000000) {
+    return `${(count / 1000000).toFixed(1)}M`;
   }
-  return `${count} words`;
+  if (count >= 1000) {
+    return `${(count / 1000).toFixed(count >= 10000 ? 0 : 1)}K`;
+  }
+  return `${count}`;
 }
 
 export function CompactBookCard({ book, rank, className }: CompactBookCardProps) {
   const { favoriteIds, isAuthenticated } = useFavoriteBookIds();
   const { toggleFavorite } = useToggleFavorite();
   const isFavorited = favoriteIds.has(book.id);
+  const diffLevel = book.difficulty || getDifficultyLevel('difficultyScore' in book ? book.difficultyScore : undefined);
+  const rating = ('goodreadsRating' in book ? book.goodreadsRating : undefined) || ('doubanRating' in book ? book.doubanRating : undefined);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -105,20 +94,20 @@ export function CompactBookCard({ book, rank, className }: CompactBookCardProps)
               {formatWordCount(book.wordCount)}
             </span>
           )}
-          {(('goodreadsRating' in book && book.goodreadsRating) || ('doubanRating' in book && book.doubanRating)) && (
+          {rating && (
             <span className="inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
               <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-              {(('goodreadsRating' in book ? book.goodreadsRating : undefined) || ('doubanRating' in book ? book.doubanRating : undefined))?.toFixed(1)}
+              {rating.toFixed(1)}
             </span>
           )}
-          {book.difficulty && (
+          {diffLevel && diffLevel >= 1 && diffLevel <= 5 && (
             <Badge
               className={cn(
                 'px-1.5 py-0 text-[10px] text-white',
-                difficultyColors[book.difficulty]
+                difficultyColors[diffLevel]
               )}
             >
-              {difficultyLabels[book.difficulty]}
+              {difficultyLabels[diffLevel]}
             </Badge>
           )}
         </div>

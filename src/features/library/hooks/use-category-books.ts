@@ -5,6 +5,7 @@ import { apiClient } from '@/lib/api/client';
 import type { Book } from '../types';
 
 interface CategoryBooksResponse {
+  books?: Book[];
   data?: Book[];
   items?: Book[];
   total: number;
@@ -31,7 +32,7 @@ export function useCategoryBooks(categoryId: string, limit?: number) {
       );
       return {
         ...response,
-        data: response.items ?? response.data ?? [],
+        data: response.books ?? response.items ?? response.data ?? [],
       };
     },
     initialPageParam: 1,

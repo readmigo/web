@@ -47,6 +47,7 @@ export function RankedBookCard({ book, rank, className }: RankedBookCardProps) {
   const { toggleFavorite } = useToggleFavorite();
   const isFavorited = favoriteIds.has(book.id);
   const rankStyle = getRankStyle(rank);
+  const rating = ('goodreadsRating' in book ? book.goodreadsRating : undefined) || ('doubanRating' in book ? book.doubanRating : undefined);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -124,10 +125,10 @@ export function RankedBookCard({ book, rank, className }: RankedBookCardProps) {
           <p className="mt-0.5 line-clamp-1 text-[11px] text-muted-foreground">
             {book.author}
           </p>
-          {(('goodreadsRating' in book && book.goodreadsRating) || ('doubanRating' in book && book.doubanRating)) && (
+          {rating && (
             <p className="mt-0.5 inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
               <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-              {(('goodreadsRating' in book ? book.goodreadsRating : undefined) || ('doubanRating' in book ? book.doubanRating : undefined))?.toFixed(1)}
+              {rating.toFixed(1)}
             </p>
           )}
         </div>

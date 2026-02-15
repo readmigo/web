@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -19,6 +20,7 @@ import { BookListSection, BookListSectionSkeleton } from '@/features/library/com
 import { cn } from '@/lib/utils';
 
 export function ExploreContent() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -252,31 +254,19 @@ export function ExploreContent() {
                 key={category.id}
                 type="button"
                 className="flex flex-col items-center gap-1.5 min-w-[56px]"
-                onClick={() => setSelectedCategory(category.id)}
+                onClick={() => router.push(`/category/${category.id}`)}
               >
                 <div
                   className={cn(
                     'h-11 w-11 rounded-full flex items-center justify-center transition-colors',
-                    selectedCategory === category.id
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-primary/10'
+                    'bg-primary/10'
                   )}
                 >
                   <BookOpen
-                    className={cn(
-                      'h-5 w-5',
-                      selectedCategory === category.id
-                        ? 'text-primary-foreground'
-                        : 'text-primary'
-                    )}
+                    className="h-5 w-5 text-primary"
                   />
                 </div>
-                <span
-                  className={cn(
-                    'text-xs whitespace-nowrap',
-                    selectedCategory === category.id && 'font-semibold'
-                  )}
-                >
+                <span className="text-xs whitespace-nowrap">
                   {category.nameEn || category.name}
                 </span>
               </button>

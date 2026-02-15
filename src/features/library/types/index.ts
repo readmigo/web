@@ -7,13 +7,15 @@ export interface Book {
   coverUrl: string;
   description: string;
   language: string;
-  difficulty: 1 | 2 | 3 | 4 | 5;
+  difficulty?: number;
+  difficultyScore?: number;
   category: string;
   wordCount: number;
   publishYear?: number;
-  source: 'gutenberg' | 'standard-ebooks' | 'user-upload';
+  source?: string;
   goodreadsRating?: number;
   doubanRating?: number;
+  genres?: string[];
 }
 
 export interface BookDetail extends Book {
