@@ -432,11 +432,27 @@ export function EpubReader({
 
         // Fix: epubjs v0.3.93 measures textWidth() BEFORE adjustImages hook
         // constrains image max-width, causing inflated page count with wide images.
-        // After all content hooks fire, re-expand the view to recalculate pages.
+        // After all content hooks fire, reset iframe dimensions and re-expand.
         rendition.on('rendered', (_section: any, view: any) => {
-          if (view && typeof view.expand === 'function') {
-            setTimeout(() => view.expand(), 10);
-          }
+          setTimeout(() => {
+            try {
+              if (!view?.iframe?.contentDocument || !view.expand) return;
+              const iframeDoc = view.iframe.contentDocument;
+              // Reset html and iframe width to break circular measurement
+              iframeDoc.documentElement.style.width = '';
+              view.iframe.style.width = containerWidth + 'px';
+              if (view.element) view.element.style.width = containerWidth + 'px';
+              // Force synchronous layout
+              void iframeDoc.body.offsetWidth;
+              // Re-expand with correct measurement
+              view._needsReframe = true;
+              view._width = 0;
+              view._expanding = false;
+              view.expand();
+            } catch {
+              // Ignore errors during re-expand
+            }
+          }, 50);
         });
 
         rendition.hooks.content.register((contents: any) => {
