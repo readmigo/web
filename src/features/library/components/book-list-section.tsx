@@ -122,16 +122,16 @@ export function BookListSection({ bookList, styleIndex }: BookListSectionProps) 
               href={`/book/${book.id}`}
               className="group flex-shrink-0"
             >
-              <div className="w-[100px] space-y-2">
+              <div className="w-[140px] space-y-2">
                 {/* Cover */}
-                <div className="relative h-[150px] w-[100px] overflow-hidden rounded-lg bg-muted shadow-sm transition-shadow group-hover:shadow-md">
+                <div className="relative h-[210px] w-[140px] overflow-hidden rounded-lg bg-muted shadow-sm transition-shadow group-hover:shadow-md">
                   {book.coverUrl ? (
                     <Image
                       src={book.coverUrl}
                       alt={book.title}
                       fill
                       className="object-cover transition-transform group-hover:scale-105"
-                      sizes="100px"
+                      sizes="140px"
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center">
@@ -169,8 +169,8 @@ export function BookListSectionSkeleton() {
       </div>
       <div className="flex gap-4 overflow-hidden">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="w-[100px] flex-shrink-0 space-y-2">
-            <Skeleton className="h-[150px] w-[100px] rounded-lg" />
+          <div key={i} className="w-[140px] flex-shrink-0 space-y-2">
+            <Skeleton className="h-[210px] w-[140px] rounded-lg" />
             <Skeleton className="h-4 w-3/4" />
             <Skeleton className="h-3 w-1/2" />
           </div>

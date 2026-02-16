@@ -58,11 +58,11 @@ export function RankedBookCard({ book, rank, className }: RankedBookCardProps) {
 
   return (
     <Link href={`/book/${book.id}`} className={cn('group block', className)}>
-      <div className="w-[100px] space-y-2">
+      <div className="w-[140px] space-y-2">
         {/* Cover with rank badge */}
         <div
           className={cn(
-            'relative h-[150px] w-[100px] overflow-hidden rounded-lg bg-muted transition-shadow',
+            'relative h-[210px] w-[140px] overflow-hidden rounded-lg bg-muted transition-shadow',
             rankStyle.glow
           )}
         >
@@ -72,7 +72,7 @@ export function RankedBookCard({ book, rank, className }: RankedBookCardProps) {
               alt={book.title}
               fill
               className="object-cover transition-transform group-hover:scale-105"
-              sizes="100px"
+              sizes="140px"
             />
           ) : (
             <div className="flex h-full items-center justify-center">
