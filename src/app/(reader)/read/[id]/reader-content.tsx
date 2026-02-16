@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
-import { EpubReader } from '@/features/reader/components/epub-reader';
+import { EpubReader, type EpubReaderHandle } from '@/features/reader/components/epub-reader';
 import { ReaderToolbar } from '@/features/reader/components/reader-toolbar';
 import { ReaderSettingsPanel } from '@/features/reader/components/reader-settings-panel';
 import { TocPanel } from '@/features/reader/components/toc-panel';
@@ -22,24 +22,17 @@ import {
 } from '@/lib/hooks/use-keyboard-shortcuts';
 import type { SelectedText, TocItem } from '@/features/reader/types';
 
-// Mock TOC - will be replaced with actual TOC from EPUB
-const mockToc: TocItem[] = [
-  { id: '1', href: '#ch1', label: 'Chapter 1' },
-  { id: '2', href: '#ch2', label: 'Chapter 2' },
-  { id: '3', href: '#ch3', label: 'Chapter 3' },
-  { id: '4', href: '#ch4', label: 'Chapter 4' },
-  { id: '5', href: '#ch5', label: 'Chapter 5' },
-];
 
 interface ReaderContentProps {
   bookId: string;
 }
 
 export function ReaderContent({ bookId }: ReaderContentProps) {
-  const renditionRef = useRef<any>(null);
+  const epubReaderRef = useRef<EpubReaderHandle>(null);
   const [isReady, setIsReady] = useState(false);
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [showTTSPanel, setShowTTSPanel] = useState(false);
+  const [tocItems, setTocItems] = useState<TocItem[]>([]);
 
   // Initialize TTS
   const tts = useTTS();
@@ -72,32 +65,18 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
 
   // Navigation handlers
   const handlePrev = useCallback(() => {
-    renditionRef.current?.prev();
+    epubReaderRef.current?.goPrev();
   }, []);
 
   const handleNext = useCallback(() => {
-    renditionRef.current?.next();
+    epubReaderRef.current?.goNext();
   }, []);
 
   // TTS handlers
   const handleStartTTS = useCallback(() => {
-    // Get text from current page via rendition
-    if (renditionRef.current) {
-      try {
-        const contents = renditionRef.current.getContents();
-        if (contents && contents.length > 0) {
-          const doc = contents[0].document;
-          const text = doc.body?.innerText || '';
-          if (text.trim()) {
-            tts.speak(text);
-            setShowTTSPanel(true);
-          }
-        }
-      } catch (error) {
-        console.error('Error getting page text for TTS:', error);
-      }
-    }
-  }, [tts]);
+    // TODO: Get text from current page for TTS
+    setShowTTSPanel(true);
+  }, []);
 
   const handleToggleTTSPanel = useCallback(() => {
     setShowTTSPanel((prev) => !prev);
@@ -328,8 +307,8 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     [setSelectedText]
   );
 
-  const handleTocSelect = useCallback((_href: string) => {
-    // TODO: Navigate to href using rendition
+  const handleTocSelect = useCallback((href: string) => {
+    epubReaderRef.current?.goTo(href);
   }, []);
 
   const handleTranslate = useCallback(() => {
@@ -392,11 +371,13 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         theme={settings.theme}
       >
         <EpubReader
+          ref={epubReaderRef}
           bookId={bookId}
           url={epubUrl}
           onReady={handleReaderReady}
           onLocationChange={handleLocationChange}
           onTextSelect={handleTextSelect}
+          onTocLoaded={setTocItems}
         />
       </FocusMode>
     );
@@ -417,11 +398,13 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       {/* Reader */}
       <div className="relative flex-1">
         <EpubReader
+          ref={epubReaderRef}
           bookId={bookId}
           url={epubUrl}
           onReady={handleReaderReady}
           onLocationChange={handleLocationChange}
           onTextSelect={handleTextSelect}
+          onTocLoaded={setTocItems}
         />
 
         {/* Selection Popup */}
@@ -445,7 +428,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
             onClick={toggleToc}
           />
           <TocPanel
-            items={mockToc}
+            items={tocItems}
             currentChapter={position?.chapter}
             onSelect={handleTocSelect}
             onClose={toggleToc}
@@ -483,7 +466,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       {/* Reading Stats Overlay */}
       <ReadingStatsOverlay
         bookId={bookId}
-        totalChapters={mockToc.length}
+        totalChapters={tocItems.length}
         bookTitle={bookTitle}
       />
 

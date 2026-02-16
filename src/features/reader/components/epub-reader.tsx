@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, forwardRef, useImperativeHandle } from 'react';
 import { useReaderStore } from '../stores/reader-store';
 import type { TocItem, SelectedText, BilingualChapter } from '../types';
 import { apiClient } from '@/lib/api/client';
@@ -8,21 +8,29 @@ import { useTranslate } from '../hooks/use-ai';
 import { normalizeParagraphText, hashText } from '../utils/translation-hash';
 import { sanitizeHtml } from '@/lib/sanitize';
 
+export interface EpubReaderHandle {
+  goTo: (target: string) => void;
+  goNext: () => void;
+  goPrev: () => void;
+}
+
 interface EpubReaderProps {
   bookId?: string;
   url: string;
   onReady?: () => void;
   onLocationChange?: (cfi: string, percentage: number) => void;
   onTextSelect?: (selection: SelectedText) => void;
+  onTocLoaded?: (toc: TocItem[]) => void;
 }
 
-export function EpubReader({
+export const EpubReader = forwardRef<EpubReaderHandle, EpubReaderProps>(function EpubReader({
   bookId,
   url,
   onReady,
   onLocationChange,
   onTextSelect,
-}: EpubReaderProps) {
+  onTocLoaded,
+}, ref) {
   const containerRef = useRef<HTMLDivElement>(null);
   const bookRef = useRef<any>(null);
   const renditionRef = useRef<any>(null);
@@ -49,6 +57,15 @@ export function EpubReader({
   const translateMutation = useTranslate();
   const bookIdRef = useRef<string | undefined>(bookId);
   const onTextSelectRef = useRef<typeof onTextSelect>(onTextSelect);
+  const onTocLoadedRef = useRef<typeof onTocLoaded>(onTocLoaded);
+
+  useEffect(() => { onTocLoadedRef.current = onTocLoaded; }, [onTocLoaded]);
+
+  useImperativeHandle(ref, () => ({
+    goTo: (target: string) => { renditionRef.current?.display(target); },
+    goNext: () => { renditionRef.current?.next(); },
+    goPrev: () => { renditionRef.current?.prev(); },
+  }), []);
   const translationActionsRef = useRef({
     markParagraphTranslated,
     clearParagraphTranslation,
@@ -410,11 +427,17 @@ export function EpubReader({
         const containerWidth = containerRef.current.clientWidth;
         const containerHeight = containerRef.current.clientHeight;
 
+        // Determine spread mode based on viewport width
+        const getSpreadMode = (w: number) => {
+          if (w >= 1400) return 'auto' as const; // Desktop: dual page spread
+          return 'none' as const; // Tablet/mobile: single page
+        };
+
         // Create rendition
         const rendition = book.renderTo(containerRef.current, {
           width: containerWidth,
           height: containerHeight,
-          spread: 'none',
+          spread: getSpreadMode(containerWidth),
           flow: 'paginated',
         });
 
@@ -423,6 +446,10 @@ export function EpubReader({
           for (const entry of entries) {
             const { width, height } = entry.contentRect;
             if (width > 0 && height > 0 && renditionRef.current) {
+              const newSpread = getSpreadMode(width);
+              if (renditionRef.current.settings.spread !== newSpread) {
+                renditionRef.current.spread(newSpread);
+              }
               renditionRef.current.resize(width, height);
             }
           }
@@ -625,15 +652,20 @@ export function EpubReader({
             })),
           }));
           setToc(tocItems);
+          onTocLoadedRef.current?.(tocItems);
         }
 
         // Apply initial settings
         const s = settingsRef.current;
+        const marginMap = { small: '20px', medium: '40px', large: '60px' } as const;
+        const marginPx = marginMap[s.marginSize] || '40px';
         rendition.themes.default({
           body: {
             'font-size': `${s.fontSize}px`,
             'font-family': s.fontFamily,
             'line-height': `${s.lineHeight}`,
+            'padding-left': `${marginPx} !important`,
+            'padding-right': `${marginPx} !important`,
             ...getThemeStylesRef.current().body,
           },
           p: {
@@ -721,11 +753,15 @@ export function EpubReader({
   // Update settings when changed
   useEffect(() => {
     if (renditionRef.current) {
+      const marginMap = { small: '20px', medium: '40px', large: '60px' } as const;
+      const marginPx = marginMap[settings.marginSize] || '40px';
       renditionRef.current.themes.default({
         body: {
           'font-size': `${settings.fontSize}px`,
           'font-family': settings.fontFamily,
           'line-height': `${settings.lineHeight}`,
+          'padding-left': `${marginPx} !important`,
+          'padding-right': `${marginPx} !important`,
           ...getThemeStyles().body,
         },
       });
@@ -841,4 +877,4 @@ export function EpubReader({
       />
     </div>
   );
-}
+});
