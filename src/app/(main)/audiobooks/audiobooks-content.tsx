@@ -141,14 +141,14 @@ function LanguageFilter({
 function AudiobookCard({ audiobook }: { audiobook: AudiobookListItem }) {
   return (
     <Link href={`/audiobooks/${audiobook.id}`} className="group flex gap-3">
-      <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-secondary">
+      <div className="relative h-[140px] w-[93px] flex-shrink-0 overflow-hidden rounded-lg bg-secondary">
         {audiobook.coverUrl ? (
           <Image
             src={audiobook.coverUrl}
             alt={audiobook.title}
             fill
             className="object-cover transition-transform group-hover:scale-105"
-            sizes="80px"
+            sizes="93px"
           />
         ) : (
           <div className="flex h-full items-center justify-center">
@@ -229,7 +229,7 @@ function AudiobookGrid({
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="flex gap-3">
-            <Skeleton className="h-20 w-20 flex-shrink-0 rounded-lg" />
+            <Skeleton className="h-[140px] w-[93px] flex-shrink-0 rounded-lg" />
             <div className="flex flex-col justify-center gap-1.5">
               <Skeleton className="h-4 w-40" />
               <Skeleton className="h-3 w-24" />
@@ -269,7 +269,7 @@ function AudiobookGrid({
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
               {Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="flex gap-3">
-                  <Skeleton className="h-20 w-20 flex-shrink-0 rounded-lg" />
+                  <Skeleton className="h-[140px] w-[93px] flex-shrink-0 rounded-lg" />
                   <div className="flex flex-col justify-center gap-1.5">
                     <Skeleton className="h-4 w-40" />
                     <Skeleton className="h-3 w-24" />
