@@ -405,11 +405,12 @@ export function EpubReader({
         const book = ePub(url);
         bookRef.current = book;
 
-        // Create rendition
+        // Create rendition - use spread on wide screens
+        const isWideScreen = window.innerWidth >= 1024;
         const rendition = book.renderTo(containerRef.current, {
           width: '100%',
           height: '100%',
-          spread: 'none',
+          spread: isWideScreen ? 'auto' : 'none',
           flow: 'paginated',
         });
         renditionRef.current = rendition;
@@ -633,6 +634,12 @@ export function EpubReader({
           await rendition.display();
         }
 
+        // Mark as loaded immediately after display (don't wait for locations.generate)
+        if (mounted) {
+          setIsLoading(false);
+          onReadyRef.current?.();
+        }
+
         // Location change handler
         rendition.on('relocated', (location: any) => {
           if (mounted) {
@@ -667,13 +674,8 @@ export function EpubReader({
           }
         });
 
-        // Generate locations for percentage tracking
-        await book.locations.generate(1024);
-
-        if (mounted) {
-          setIsLoading(false);
-          onReadyRef.current?.();
-        }
+        // Generate locations in background for percentage tracking
+        book.locations.generate(1024).catch(() => {});
       } catch (err) {
         console.error('Failed to load EPUB:', err);
         if (mounted) {
@@ -814,11 +816,11 @@ export function EpubReader({
       />
       {/* Click areas for navigation */}
       <div
-        className="absolute left-0 top-0 h-full w-1/4 cursor-pointer"
+        className="absolute left-0 top-0 z-10 h-full w-1/4 cursor-pointer"
         onClick={goPrev}
       />
       <div
-        className="absolute right-0 top-0 h-full w-1/4 cursor-pointer"
+        className="absolute right-0 top-0 z-10 h-full w-1/4 cursor-pointer"
         onClick={goNext}
       />
     </div>

@@ -126,9 +126,9 @@ interface ReaderActions {
 }
 
 const defaultSettings: ReaderSettings = {
-  fontSize: 18,
+  fontSize: 16,
   fontFamily: 'serif',
-  lineHeight: 1.8,
+  lineHeight: 1.6,
   theme: 'light',
   marginSize: 'medium',
 };
