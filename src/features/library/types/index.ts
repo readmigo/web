@@ -61,6 +61,7 @@ export interface Category {
   name: string;
   nameEn: string;
   slug: string;
+  iconUrl?: string;
   bookCount: number;
   children: Category[];
 }

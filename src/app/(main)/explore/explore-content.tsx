@@ -8,7 +8,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { BookRow } from '@/features/library/components/book-row';
 import { useInfiniteBooks } from '@/features/library/hooks/use-infinite-books';
 import { useCategories } from '@/features/library/hooks/use-categories';
-import { Search, RefreshCw, Loader2, BookOpen } from 'lucide-react';
+import {
+  Search, RefreshCw, Loader2, BookOpen, Library, Drama, Mountain,
+  Lightbulb, Quote, Wand2, Moon, Heart, Folder, Clock, FlaskConical,
+  Code, TrendingUp, Users, Palette, Sun, Star, Globe,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import type { Category } from '@/features/library/types';
 import { useSearch } from '@/features/search/hooks/use-search';
 import { useSearchSuggestions } from '@/features/search/hooks/use-search-suggestions';
 import { usePopularSearches, useTrendingSearches } from '@/features/search/hooks/use-popular-searches';
@@ -18,6 +24,38 @@ import { useBookLists } from '@/features/library/hooks/use-book-lists';
 import { HeroBanner } from '@/features/library/components/hero-banner';
 import { BookListSection, BookListSectionSkeleton } from '@/features/library/components/book-list-section';
 import { cn } from '@/lib/utils';
+
+const SLUG_ICON_MAP: Record<string, LucideIcon> = {
+  fiction: BookOpen,
+  classics: Library,
+  drama: Drama,
+  adventure: Mountain,
+  philosophy: Lightbulb,
+  poetry: Quote,
+  fantasy: Wand2,
+  mystery: Search,
+  horror: Moon,
+  romance: Heart,
+};
+
+const ICON_URL_MAP: Record<string, LucideIcon> = {
+  'book-open': BookOpen,
+  lightbulb: Lightbulb,
+  clock: Clock,
+  beaker: FlaskConical,
+  code: Code,
+  'chart-line': TrendingUp,
+  users: Users,
+  palette: Palette,
+  sun: Sun,
+  star: Star,
+  globe: Globe,
+  heart: Heart,
+};
+
+function getCategoryIcon(category: Category): LucideIcon {
+  return SLUG_ICON_MAP[category.slug] ?? ICON_URL_MAP[category.iconUrl ?? ''] ?? Folder;
+}
 
 export function ExploreContent() {
   const router = useRouter();
@@ -237,28 +275,29 @@ export function ExploreContent() {
                 All
               </span>
             </button>
-            {categoriesData?.map((category) => (
-              <button
-                key={category.id}
-                type="button"
-                className="flex flex-col items-center gap-1.5 min-w-[56px]"
-                onClick={() => router.push(`/category/${category.id}`)}
-              >
-                <div
-                  className={cn(
-                    'h-11 w-11 rounded-full flex items-center justify-center transition-colors',
-                    'bg-primary/10'
-                  )}
+            {categoriesData?.map((category) => {
+              const Icon = getCategoryIcon(category);
+              return (
+                <button
+                  key={category.id}
+                  type="button"
+                  className="flex flex-col items-center gap-1.5 min-w-[56px]"
+                  onClick={() => router.push(`/category/${category.id}`)}
                 >
-                  <BookOpen
-                    className="h-5 w-5 text-primary"
-                  />
-                </div>
-                <span className="text-xs whitespace-nowrap">
-                  {category.nameEn || category.name}
-                </span>
-              </button>
-            ))}
+                  <div
+                    className={cn(
+                      'h-11 w-11 rounded-full flex items-center justify-center transition-colors',
+                      'bg-primary/10'
+                    )}
+                  >
+                    <Icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <span className="text-xs whitespace-nowrap">
+                    {category.nameEn || category.name}
+                  </span>
+                </button>
+              );
+            })}
           </>
         )}
       </div>
