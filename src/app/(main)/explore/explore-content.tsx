@@ -246,35 +246,6 @@ export function ExploreContent() {
           </>
         ) : (
           <>
-            <button
-              type="button"
-              className="flex flex-col items-center gap-1.5"
-              onClick={() => setSelectedCategory('')}
-            >
-              <div
-                className={cn(
-                  'h-11 w-11 rounded-full flex items-center justify-center transition-colors',
-                  selectedCategory === ''
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-primary/10'
-                )}
-              >
-                <BookOpen
-                  className={cn(
-                    'h-5 w-5',
-                    selectedCategory === '' ? 'text-primary-foreground' : 'text-primary'
-                  )}
-                />
-              </div>
-              <span
-                className={cn(
-                  'text-xs whitespace-nowrap',
-                  selectedCategory === '' && 'font-semibold'
-                )}
-              >
-                All
-              </span>
-            </button>
             {categoriesData?.map((category) => {
               const Icon = getCategoryIcon(category);
               return (
