@@ -68,6 +68,19 @@ index 8392d8710b768cab227120ccf32ea8347e213e83..eca21d3ec5eb6ee5184e9981b823bbf3
      // https://github.com/futurepress/epub.js/issues/983
  
      this.css("-webkit-line-box-contain", "block glyphs replaced");
+diff --git a/lib/layout.js b/lib/layout.js
+index 3b925937c08f34af3233d65bf1ec367e2bb7f013..a9cd40307e2c6e11313727c1f1dd227bd67a2618 100644
+--- a/lib/layout.js
++++ b/lib/layout.js
+@@ -125,7 +125,7 @@ class Layout {
+     var delta;
+ 
+     if (this._spread && width >= this._minSpreadWidth) {
+-      divisor = 2;
++      divisor = width >= 2560 ? 3 : 2;
+     } else {
+       divisor = 1;
+     }
 diff --git a/src/contents.js b/src/contents.js
 index 3effe7252459218ad3d83d1b47ef338007a6d66a..960c6e6fc290fb3a3aadc6efb51f8695afbfee6a 100644
 --- a/src/contents.js
@@ -134,3 +147,16 @@ index 3effe7252459218ad3d83d1b47ef338007a6d66a..960c6e6fc290fb3a3aadc6efb51f8695
  		// Fix glyph clipping in WebKit
  		// https://github.com/futurepress/epub.js/issues/983
  		this.css("-webkit-line-box-contain", "block glyphs replaced");
+diff --git a/src/layout.js b/src/layout.js
+index 4f16a0f1d190f774ea6ae8e002c82fdf0e62821f..98dc6493efe2dcdab176999ea92e421396e75f67 100644
+--- a/src/layout.js
++++ b/src/layout.js
+@@ -118,7 +118,7 @@ class Layout {
+ 		var delta;
+ 
+ 		if (this._spread && width >= this._minSpreadWidth) {
+-			divisor = 2;
++			divisor = width >= 2560 ? 3 : 2;
+ 		} else {
+ 			divisor = 1;
+ 		}
