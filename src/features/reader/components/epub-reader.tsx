@@ -430,6 +430,15 @@ export function EpubReader({
         resizeObserver.observe(containerRef.current);
         renditionRef.current = rendition;
 
+        // Fix: epubjs v0.3.93 measures textWidth() BEFORE adjustImages hook
+        // constrains image max-width, causing inflated page count with wide images.
+        // After all content hooks fire, re-expand the view to recalculate pages.
+        rendition.on('rendered', (_section: any, view: any) => {
+          if (view && typeof view.expand === 'function') {
+            setTimeout(() => view.expand(), 10);
+          }
+        });
+
         rendition.hooks.content.register((contents: any) => {
           const doc = contents.document as Document;
           const win = contents.window as Window | undefined;
