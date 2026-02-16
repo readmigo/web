@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import { RankedBookCard } from './ranked-book-card';
 import { HeroBookCard } from './hero-book-card';
 import { useBookListDetail } from '../hooks/use-book-lists';
@@ -46,7 +47,10 @@ export function BookListSection({ bookList, styleIndex }: BookListSectionProps) 
     bookList.books && bookList.books.length > 0 ? '' : bookList.id
   );
 
-  const books = (bookList.books || detailData?.books || []).slice(0, 8);
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const maxDisplay = isDesktop ? 12 : 8;
+  const allBooks = bookList.books || detailData?.books || [];
+  const books = allBooks.length <= maxDisplay ? allBooks : allBooks.slice(0, maxDisplay);
 
   if (detailLoading && !bookList.books) {
     return <BookListSectionSkeleton />;
@@ -75,13 +79,15 @@ export function BookListSection({ bookList, styleIndex }: BookListSectionProps) 
             <p className="text-sm text-muted-foreground">{bookList.subtitle}</p>
           )}
         </div>
-        <Link
-          href={`/book-list/${bookList.id}`}
-          className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary"
-        >
-          View All
-          <ChevronRight className="h-4 w-4" />
-        </Link>
+        {books.length < allBooks.length && (
+          <Link
+            href={`/book-list/${bookList.id}`}
+            className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary"
+          >
+            View All
+            <ChevronRight className="h-4 w-4" />
+          </Link>
+        )}
       </div>
 
       {/* Horizontal Scrollable Books */}

@@ -234,11 +234,11 @@ export function ExploreContent() {
       <HeroBanner bookLists={featuredBookLists} isLoading={bookListsLoading} />
 
       {/* Category menu - circular icons */}
-      <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="grid grid-flow-col auto-cols-fr gap-2 overflow-x-auto pb-2 scrollbar-hide">
         {categoriesLoading ? (
           <>
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="flex flex-col items-center gap-1.5 min-w-[56px]">
+              <div key={i} className="flex flex-col items-center gap-1.5">
                 <Skeleton className="h-11 w-11 rounded-full" />
                 <Skeleton className="h-3 w-10" />
               </div>
@@ -248,7 +248,7 @@ export function ExploreContent() {
           <>
             <button
               type="button"
-              className="flex flex-col items-center gap-1.5 min-w-[56px]"
+              className="flex flex-col items-center gap-1.5"
               onClick={() => setSelectedCategory('')}
             >
               <div
@@ -281,7 +281,7 @@ export function ExploreContent() {
                 <button
                   key={category.id}
                   type="button"
-                  className="flex flex-col items-center gap-1.5 min-w-[56px]"
+                  className="flex flex-col items-center gap-1.5"
                   onClick={() => router.push(`/category/${category.id}`)}
                 >
                   <div
