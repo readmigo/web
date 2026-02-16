@@ -393,6 +393,7 @@ export function EpubReader({
   // Initialize EPUB
   useEffect(() => {
     let mounted = true;
+    let resizeObserver: ResizeObserver | null = null;
 
     const initBook = async () => {
       if (!containerRef.current) return;
@@ -405,13 +406,28 @@ export function EpubReader({
         const book = ePub(url);
         bookRef.current = book;
 
+        // Use explicit pixel dimensions to avoid epubjs column calculation bugs
+        const containerWidth = containerRef.current.clientWidth;
+        const containerHeight = containerRef.current.clientHeight;
+
         // Create rendition
         const rendition = book.renderTo(containerRef.current, {
-          width: '100%',
-          height: '100%',
+          width: containerWidth,
+          height: containerHeight,
           spread: 'none',
           flow: 'paginated',
         });
+
+        // Resize handler: update rendition when container dimensions change
+        resizeObserver = new ResizeObserver((entries) => {
+          for (const entry of entries) {
+            const { width, height } = entry.contentRect;
+            if (width > 0 && height > 0 && renditionRef.current) {
+              renditionRef.current.resize(width, height);
+            }
+          }
+        });
+        resizeObserver.observe(containerRef.current);
         renditionRef.current = rendition;
 
         rendition.hooks.content.register((contents: any) => {
@@ -688,6 +704,7 @@ export function EpubReader({
 
     return () => {
       mounted = false;
+      resizeObserver?.disconnect();
       contentsRef.current.clear();
       bilingualCacheRef.current.clear();
       pendingTranslationRef.current.clear();
