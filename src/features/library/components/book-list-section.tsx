@@ -1,28 +1,51 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { RankedBookCard } from './ranked-book-card';
-import { HeroBookCard } from './hero-book-card';
 import { useBookListDetail } from '../hooks/use-book-lists';
-import type { BookList, BookListType } from '../types';
+import type { BookList } from '../types';
+import {
+  GoldRankingSection,
+  StepLadderSection,
+  NeonSciFiSection,
+  AdventureMapSection,
+  ColorfulBubbleSection,
+  MinimalStoneSection,
+  DarkMysterySection,
+  RoyalTheaterSection,
+  BookSpineSection,
+  DifficultyLadderSection,
+} from './book-list-section-styles';
 
 /** iOS-matching background gradients for each ranking section */
 const SECTION_GRADIENTS = [
-  'linear-gradient(to bottom, rgba(249,115,22,0.08), transparent)', // 0: orange (高分经典)
-  'linear-gradient(to bottom, rgba(59,130,246,0.06), transparent)',  // 1: blue (入门推荐)
-  'linear-gradient(to right, rgba(168,85,247,0.08), rgba(99,102,241,0.06))', // 2: purple→indigo (科幻经典)
-  'linear-gradient(to bottom, rgba(180,83,9,0.08), transparent)',   // 3: brown (冒险故事)
-  'linear-gradient(to right, rgba(236,72,153,0.06), rgba(52,211,153,0.06), rgba(34,211,238,0.06))', // 4: pink→mint→cyan (儿童文学)
-  'linear-gradient(to bottom, rgba(107,114,128,0.06), transparent)', // 5: gray (哲学思想)
-  'linear-gradient(135deg, rgba(217,226,237,0.6), rgba(224,232,242,0.4))', // 6: blue-gray (侦探推理)
-  'linear-gradient(to bottom, rgba(168,85,247,0.06), rgba(234,179,8,0.04))', // 7: purple→yellow (莎士比亚)
-  'linear-gradient(to top, rgba(180,83,9,0.06), transparent)',      // 8: brown (鸿篇巨制)
-  'linear-gradient(to bottom, rgba(34,197,94,0.06), transparent)',  // 9: green (英语学习必读)
+  'linear-gradient(to bottom, rgba(249,115,22,0.08), transparent)', // 0: orange (金榜排行)
+  'linear-gradient(to bottom, rgba(59,130,246,0.06), transparent)',  // 1: blue (渐进阶梯)
+  'linear-gradient(to right, rgba(168,85,247,0.08), rgba(99,102,241,0.06))', // 2: purple→indigo (霓虹科幻)
+  'linear-gradient(to bottom, rgba(180,83,9,0.08), transparent)',   // 3: brown (地图探险)
+  'linear-gradient(to right, rgba(236,72,153,0.06), rgba(52,211,153,0.06), rgba(34,211,238,0.06))', // 4: pink→mint→cyan (彩色气泡)
+  'linear-gradient(to bottom, rgba(107,114,128,0.06), transparent)', // 5: gray (极简石刻)
+  'linear-gradient(135deg, rgba(217,226,237,0.6), rgba(224,232,242,0.4))', // 6: blue-gray (悬疑推理)
+  'linear-gradient(to bottom, rgba(168,85,247,0.06), rgba(234,179,8,0.04))', // 7: purple→yellow (皇家剧院)
+  'linear-gradient(to top, rgba(180,83,9,0.06), transparent)',      // 8: brown (书脊堆叠)
+  'linear-gradient(to bottom, rgba(34,197,94,0.06), transparent)',  // 9: green (难度阶梯)
+];
+
+/** Style dispatcher: maps styleIndex to the corresponding section component */
+const STYLE_COMPONENTS = [
+  GoldRankingSection,     // 0: 金榜排行
+  StepLadderSection,      // 1: 渐进阶梯
+  NeonSciFiSection,       // 2: 霓虹科幻
+  AdventureMapSection,    // 3: 地图探险
+  ColorfulBubbleSection,  // 4: 彩色气泡
+  MinimalStoneSection,    // 5: 极简石刻
+  DarkMysterySection,     // 6: 悬疑推理
+  RoyalTheaterSection,    // 7: 皇家剧院
+  BookSpineSection,       // 8: 书脊堆叠
+  DifficultyLadderSection, // 9: 难度阶梯
 ];
 
 interface BookListSectionProps {
@@ -30,19 +53,7 @@ interface BookListSectionProps {
   styleIndex?: number;
 }
 
-const RANKED_TYPES: BookListType[] = ['RANKING'];
-const HERO_TYPES: BookListType[] = ['AI_FEATURED', 'AI_RECOMMENDED', 'EDITORS_PICK'];
-
-function isRankedType(type: BookListType): boolean {
-  return RANKED_TYPES.includes(type);
-}
-
-function isHeroType(type: BookListType): boolean {
-  return HERO_TYPES.includes(type);
-}
-
 export function BookListSection({ bookList, styleIndex }: BookListSectionProps) {
-  // Fetch books from detail API if not already populated
   const { data: detailData, isLoading: detailLoading } = useBookListDetail(
     bookList.books && bookList.books.length > 0 ? '' : bookList.id
   );
@@ -60,11 +71,9 @@ export function BookListSection({ bookList, styleIndex }: BookListSectionProps) 
     return null;
   }
 
-  const useRanked = isRankedType(bookList.type);
-  const useHero = isHeroType(bookList.type);
-  const showAiBadge = bookList.type === 'AI_FEATURED' || bookList.type === 'AI_RECOMMENDED';
-
-  const gradient = styleIndex != null ? SECTION_GRADIENTS[styleIndex % SECTION_GRADIENTS.length] : undefined;
+  const idx = styleIndex ?? 0;
+  const gradient = SECTION_GRADIENTS[idx % SECTION_GRADIENTS.length];
+  const StyleComponent = STYLE_COMPONENTS[idx % STYLE_COMPONENTS.length];
 
   return (
     <div
@@ -79,83 +88,17 @@ export function BookListSection({ bookList, styleIndex }: BookListSectionProps) 
             <p className="text-sm text-muted-foreground">{bookList.subtitle}</p>
           )}
         </div>
-        {books.length < allBooks.length && (
-          <Link
-            href={`/book-list/${bookList.id}`}
-            className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary"
-          >
-            View All
-            <ChevronRight className="h-4 w-4" />
-          </Link>
-        )}
+        <Link
+          href={`/book-list/${bookList.id}`}
+          className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary"
+        >
+          查看全部
+          <ChevronRight className="h-4 w-4" />
+        </Link>
       </div>
 
-      {/* Horizontal Scrollable Books */}
-      <div className="scrollbar-hide -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
-        {books.map((book, index) => {
-          if (useRanked) {
-            return (
-              <RankedBookCard
-                key={book.id}
-                book={book}
-                rank={index + 1}
-                className="flex-shrink-0"
-              />
-            );
-          }
-
-          if (useHero) {
-            return (
-              <HeroBookCard
-                key={book.id}
-                book={book}
-                showAiBadge={showAiBadge}
-                className="flex-shrink-0"
-              />
-            );
-          }
-
-          // Default: standard inline card (iOS StandardBookCard 100x150)
-          return (
-            <Link
-              key={book.id}
-              href={`/book/${book.id}`}
-              className="group flex-shrink-0"
-            >
-              <div className="w-[100px] lg:w-[140px] space-y-2">
-                {/* Cover */}
-                <div className="relative h-[150px] w-[100px] lg:h-[210px] lg:w-[140px] overflow-hidden rounded-lg bg-muted shadow-sm transition-shadow group-hover:shadow-md">
-                  {book.coverUrl ? (
-                    <Image
-                      src={book.coverUrl}
-                      alt={book.title}
-                      fill
-                      className="object-cover transition-transform group-hover:scale-105"
-                      sizes="(min-width: 1024px) 140px, 100px"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center">
-                      <span className="text-2xl text-muted-foreground/40">
-                        {book.title.charAt(0)}
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Title & Author */}
-                <div>
-                  <p className="line-clamp-2 text-xs lg:text-sm font-medium leading-tight">
-                    {book.title}
-                  </p>
-                  <p className="mt-0.5 line-clamp-1 text-[11px] lg:text-xs text-muted-foreground">
-                    {book.author}
-                  </p>
-                </div>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
+      {/* Style-specific content */}
+      <StyleComponent books={books} />
     </div>
   );
 }

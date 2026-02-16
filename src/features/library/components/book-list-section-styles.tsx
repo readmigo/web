@@ -1,0 +1,560 @@
+'use client';
+
+import Image from 'next/image';
+import Link from 'next/link';
+import { Star, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { getDifficultyLevel } from '../utils/difficulty';
+import type { BookListBook } from '../types';
+
+// ============ Shared Helpers ============
+
+function getRating(book: BookListBook) {
+  return book.goodreadsRating || book.doubanRating;
+}
+
+function formatWordCount(count: number): string {
+  if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
+  if (count >= 1000) return `${(count / 1000).toFixed(count >= 10000 ? 0 : 1)}K`;
+  return `${count}`;
+}
+
+function getDifficultyColor(score: number | undefined | null): string {
+  if (score == null) return 'bg-gray-400';
+  if (score <= 3) return 'bg-green-500';
+  if (score <= 5) return 'bg-blue-500';
+  if (score <= 7) return 'bg-orange-500';
+  return 'bg-red-500';
+}
+
+function getDifficultyLabel(score: number | undefined | null): string {
+  if (score == null) return '';
+  if (score <= 3) return 'Easy';
+  if (score <= 5) return 'Medium';
+  if (score <= 7) return 'Hard';
+  return 'Expert';
+}
+
+function BookCover({
+  book,
+  width,
+  height,
+  className,
+  sizes,
+}: {
+  book: BookListBook;
+  width: number;
+  height: number;
+  className?: string;
+  sizes?: string;
+}) {
+  const url = book.coverThumbUrl || book.coverUrl;
+  return (
+    <div
+      className={cn(
+        'relative overflow-hidden rounded-lg bg-muted flex-shrink-0',
+        className
+      )}
+      style={{ width, height }}
+    >
+      {url ? (
+        <Image
+          src={url}
+          alt={book.title}
+          fill
+          className="object-cover"
+          sizes={sizes || `${width}px`}
+        />
+      ) : (
+        <div className="flex h-full items-center justify-center">
+          <span className="text-lg text-muted-foreground/40">
+            {book.title.charAt(0)}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RatingDisplay({ rating }: { rating: number | undefined }) {
+  if (!rating) return null;
+  return (
+    <span className="inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
+      <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+      {rating.toFixed(1)}
+    </span>
+  );
+}
+
+// ============ Style 0: 金榜排行 (GoldRankingSection) ============
+
+export function GoldRankingSection({ books }: { books: BookListBook[] }) {
+  return (
+    <div className="scrollbar-hide -mx-1 flex gap-3 overflow-x-auto px-1 pb-2">
+      {books.map((book, i) => {
+        const rank = i + 1;
+        const isTop3 = rank <= 3;
+        const rating = getRating(book);
+        return (
+          <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
+            <div className="w-[100px] lg:w-[120px] space-y-1.5">
+              <div className="relative overflow-hidden rounded-lg bg-muted"
+                style={{ aspectRatio: '2/3' }}>
+                {(book.coverThumbUrl || book.coverUrl) ? (
+                  <Image
+                    src={book.coverThumbUrl || book.coverUrl || ''}
+                    alt={book.title}
+                    fill
+                    className="object-cover transition-transform group-hover:scale-105"
+                    sizes="(min-width: 1024px) 120px, 100px"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <span className="text-xl text-muted-foreground/40">{book.title.charAt(0)}</span>
+                  </div>
+                )}
+                {/* Rank badge */}
+                <div
+                  className={cn(
+                    'absolute -left-0.5 -top-0.5 flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold text-white',
+                    isTop3 ? 'bg-orange-500' : 'bg-gray-400'
+                  )}
+                >
+                  {rank}
+                </div>
+              </div>
+              {rating && <RatingDisplay rating={rating} />}
+              <p className="line-clamp-1 text-xs font-medium leading-tight">{book.title}</p>
+              <p className="line-clamp-1 text-[11px] text-muted-foreground">{book.author}</p>
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============ Style 1: 渐进阶梯 (StepLadderSection) ============
+
+export function StepLadderSection({ books }: { books: BookListBook[] }) {
+  const display = books.slice(0, 5);
+  return (
+    <div className="rounded-xl bg-secondary/50 p-3">
+      {display.map((book, i) => {
+        const rating = getRating(book);
+        return (
+          <Link key={book.id} href={`/book/${book.id}`} className="group block">
+            <div className={cn(
+              'flex items-center gap-3 py-2.5',
+              i < display.length - 1 && 'border-b'
+            )}>
+              <BookCover book={book} width={50} height={75} className="rounded-md" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium line-clamp-1">{book.title}</p>
+                <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{book.author}</p>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {rating && <RatingDisplay rating={rating} />}
+                {book.wordCount && book.wordCount > 0 && (
+                  <span className="text-[11px] text-muted-foreground">
+                    {formatWordCount(book.wordCount)}
+                  </span>
+                )}
+                <div
+                  className={cn(
+                    'h-2 w-2 rounded-full',
+                    getDifficultyColor(book.difficultyScore)
+                  )}
+                />
+              </div>
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============ Style 2: 霓虹科幻 (NeonSciFiSection) ============
+
+export function NeonSciFiSection({ books }: { books: BookListBook[] }) {
+  return (
+    <div className="scrollbar-hide -mx-1 flex gap-3 overflow-x-auto px-1 pb-2">
+      {books.map((book) => {
+        const rating = getRating(book);
+        return (
+          <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
+            <div className="w-[90px] lg:w-[110px] space-y-1.5">
+              <div
+                className="relative overflow-hidden rounded-lg bg-muted shadow-[0_3px_6px_rgba(139,92,246,0.3)]"
+                style={{ aspectRatio: '2/3' }}
+              >
+                {(book.coverThumbUrl || book.coverUrl) ? (
+                  <Image
+                    src={book.coverThumbUrl || book.coverUrl || ''}
+                    alt={book.title}
+                    fill
+                    className="object-cover transition-transform group-hover:scale-105"
+                    sizes="(min-width: 1024px) 110px, 90px"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <span className="text-xl text-muted-foreground/40">{book.title.charAt(0)}</span>
+                  </div>
+                )}
+              </div>
+              <p className="line-clamp-1 text-xs font-medium leading-tight">{book.title}</p>
+              {rating && <RatingDisplay rating={rating} />}
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============ Style 3: 地图探险 (AdventureMapSection) ============
+
+export function AdventureMapSection({ books }: { books: BookListBook[] }) {
+  if (books.length === 0) return null;
+  const featured = books[0];
+  const secondary = books.slice(1, 4);
+
+  return (
+    <div className="flex gap-4">
+      {/* Featured large book */}
+      <Link href={`/book/${featured.id}`} className="group flex-shrink-0">
+        <div className="w-[130px] lg:w-[150px] space-y-1.5">
+          <div
+            className="relative overflow-hidden rounded-lg bg-muted shadow-md"
+            style={{ aspectRatio: '2/3' }}
+          >
+            {(featured.coverThumbUrl || featured.coverUrl) ? (
+              <Image
+                src={featured.coverThumbUrl || featured.coverUrl || ''}
+                alt={featured.title}
+                fill
+                className="object-cover transition-transform group-hover:scale-105"
+                sizes="(min-width: 1024px) 150px, 130px"
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <span className="text-2xl text-muted-foreground/40">{featured.title.charAt(0)}</span>
+              </div>
+            )}
+          </div>
+          <p className="line-clamp-2 text-sm font-medium leading-tight">{featured.title}</p>
+          <p className="text-xs text-muted-foreground line-clamp-1">{featured.author}</p>
+        </div>
+      </Link>
+
+      {/* Secondary stacked list */}
+      <div className="flex-1 flex flex-col justify-center min-w-0">
+        {secondary.map((book, i) => (
+          <Link key={book.id} href={`/book/${book.id}`} className="group block">
+            <div className={cn(
+              'flex items-center gap-2.5 py-2.5',
+              i < secondary.length - 1 && 'border-b'
+            )}>
+              <BookCover book={book} width={45} height={68} className="rounded-md" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium line-clamp-1">{book.title}</p>
+                <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{book.author}</p>
+              </div>
+              {book.wordCount && book.wordCount > 0 && (
+                <span className="text-[11px] text-orange-500 flex-shrink-0">
+                  {formatWordCount(book.wordCount)}
+                </span>
+              )}
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ============ Style 4: 彩色气泡 (ColorfulBubbleSection) ============
+
+const BUBBLE_COLORS = [
+  'rgba(236,72,153,0.3)',   // pink
+  'rgba(52,211,153,0.3)',   // mint
+  'rgba(34,211,238,0.3)',   // cyan
+  'rgba(234,179,8,0.3)',    // yellow
+  'rgba(168,85,247,0.3)',   // purple
+  'rgba(249,115,22,0.3)',   // orange
+  'rgba(34,197,94,0.3)',    // green
+  'rgba(59,130,246,0.3)',   // blue
+];
+
+export function ColorfulBubbleSection({ books }: { books: BookListBook[] }) {
+  return (
+    <div className="scrollbar-hide -mx-1 flex gap-3 overflow-x-auto px-1 pb-2">
+      {books.map((book, i) => {
+        const rating = getRating(book);
+        const shadowColor = BUBBLE_COLORS[i % BUBBLE_COLORS.length];
+        return (
+          <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
+            <div className="w-[90px] lg:w-[110px] space-y-1.5">
+              <div
+                className="relative overflow-hidden rounded-2xl bg-muted"
+                style={{
+                  aspectRatio: '2/3',
+                  boxShadow: `0 4px 6px ${shadowColor}`,
+                }}
+              >
+                {(book.coverThumbUrl || book.coverUrl) ? (
+                  <Image
+                    src={book.coverThumbUrl || book.coverUrl || ''}
+                    alt={book.title}
+                    fill
+                    className="object-cover transition-transform group-hover:scale-105"
+                    sizes="(min-width: 1024px) 110px, 90px"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <span className="text-xl text-muted-foreground/40">{book.title.charAt(0)}</span>
+                  </div>
+                )}
+              </div>
+              <p className="line-clamp-1 text-xs font-medium leading-tight">{book.title}</p>
+              {rating && <RatingDisplay rating={rating} />}
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============ Style 5: 极简石刻 (MinimalStoneSection) ============
+
+export function MinimalStoneSection({ books }: { books: BookListBook[] }) {
+  const display = books.slice(0, 4);
+  return (
+    <div className="rounded-xl border border-border/50 p-3">
+      {display.map((book, i) => {
+        const rating = getRating(book);
+        return (
+          <Link key={book.id} href={`/book/${book.id}`} className="group block">
+            <div className={cn(
+              'flex items-center gap-3 py-2.5',
+              i < display.length - 1 && 'border-b'
+            )}>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium line-clamp-1">{book.title}</p>
+                <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{book.author}</p>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {rating && <RatingDisplay rating={rating} />}
+                {book.wordCount && book.wordCount > 0 && (
+                  <span className="text-[11px] text-muted-foreground">
+                    {formatWordCount(book.wordCount)}
+                  </span>
+                )}
+                <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
+              </div>
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============ Style 6: 悬疑推理 (DarkMysterySection) ============
+
+export function DarkMysterySection({ books }: { books: BookListBook[] }) {
+  const display = books.slice(0, 5);
+  return (
+    <div>
+      {display.map((book, i) => {
+        const rank = i + 1;
+        const rating = getRating(book);
+        return (
+          <Link key={book.id} href={`/book/${book.id}`} className="group block">
+            <div className={cn(
+              'flex items-center gap-3 py-2.5',
+              i < display.length - 1 && 'border-b'
+            )}>
+              {/* Rank number */}
+              <span className="w-7 text-center text-lg font-bold text-orange-500 flex-shrink-0">
+                {rank}
+              </span>
+              <BookCover book={book} width={45} height={68} className="rounded-md" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium line-clamp-1">{book.title}</p>
+                <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{book.author}</p>
+              </div>
+              {rating && (
+                <div className="flex-shrink-0">
+                  <RatingDisplay rating={rating} />
+                </div>
+              )}
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============ Style 7: 皇家剧院 (RoyalTheaterSection) ============
+
+export function RoyalTheaterSection({ books }: { books: BookListBook[] }) {
+  // Split into two groups: first 4 as "悲剧", rest as "喜剧"
+  const tragedies = books.slice(0, 4);
+  const comedies = books.slice(4, 10);
+
+  const renderRow = (items: BookListBook[]) => (
+    <div className="scrollbar-hide -mx-1 flex gap-3 overflow-x-auto px-1 pb-2">
+      {items.map((book) => (
+        <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
+          <div className="w-[75px] lg:w-[90px] space-y-1">
+            <div
+              className="relative overflow-hidden rounded-lg bg-muted"
+              style={{ aspectRatio: '2/3' }}
+            >
+              {(book.coverThumbUrl || book.coverUrl) ? (
+                <Image
+                  src={book.coverThumbUrl || book.coverUrl || ''}
+                  alt={book.title}
+                  fill
+                  className="object-cover transition-transform group-hover:scale-105"
+                  sizes="(min-width: 1024px) 90px, 75px"
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center">
+                  <span className="text-lg text-muted-foreground/40">{book.title.charAt(0)}</span>
+                </div>
+              )}
+            </div>
+            <p className="line-clamp-1 text-[11px] font-medium leading-tight">{book.title}</p>
+          </div>
+        </Link>
+      ))}
+    </div>
+  );
+
+  return (
+    <div className="space-y-3">
+      {tragedies.length > 0 && (
+        <div>
+          <span className="mb-2 inline-block rounded-full bg-red-500/80 px-2.5 py-0.5 text-[11px] font-medium text-white">
+            悲剧
+          </span>
+          {renderRow(tragedies)}
+        </div>
+      )}
+      {comedies.length > 0 && (
+        <div>
+          <span className="mb-2 inline-block rounded-full bg-blue-500/80 px-2.5 py-0.5 text-[11px] font-medium text-white">
+            喜剧
+          </span>
+          {renderRow(comedies)}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============ Style 8: 书脊堆叠 (BookSpineSection) ============
+
+const SPINE_COLORS = [
+  'from-amber-800 to-amber-700',   // brown
+  'from-red-700 to-red-600',       // red
+  'from-blue-700 to-blue-600',     // blue
+  'from-green-700 to-green-600',   // green
+  'from-purple-700 to-purple-600', // purple
+  'from-orange-700 to-orange-600', // orange
+];
+
+export function BookSpineSection({ books }: { books: BookListBook[] }) {
+  const maxWordCount = Math.max(...books.map((b) => b.wordCount || 0), 1);
+
+  return (
+    <div className="scrollbar-hide -mx-1 flex items-end gap-1 overflow-x-auto px-1 pb-2">
+      {books.map((book, i) => {
+        const ratio = (book.wordCount || 0) / maxWordCount;
+        const width = Math.max(30, Math.round(ratio * 80));
+        const colorClass = SPINE_COLORS[i % SPINE_COLORS.length];
+
+        return (
+          <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
+            <div className="flex flex-col items-center gap-1">
+              <div
+                className={cn(
+                  'rounded-sm bg-gradient-to-b flex items-center justify-center overflow-hidden',
+                  colorClass
+                )}
+                style={{ width, height: 140 }}
+              >
+                <span
+                  className="text-[10px] font-medium text-white/90 leading-tight"
+                  style={{
+                    writingMode: 'vertical-rl',
+                    textOrientation: 'mixed',
+                    maxHeight: 120,
+                    overflow: 'hidden',
+                  }}
+                >
+                  {book.title}
+                </span>
+              </div>
+              {book.wordCount && book.wordCount > 0 && (
+                <span className="text-[10px] text-muted-foreground">
+                  {formatWordCount(book.wordCount)}
+                </span>
+              )}
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============ Style 9: 难度阶梯 (DifficultyLadderSection) ============
+
+export function DifficultyLadderSection({ books }: { books: BookListBook[] }) {
+  // Sort by difficulty ascending
+  const sorted = [...books]
+    .sort((a, b) => (a.difficultyScore || 0) - (b.difficultyScore || 0))
+    .slice(0, 6);
+
+  return (
+    <div className="rounded-xl bg-secondary/50 p-3">
+      {sorted.map((book, i) => {
+        const rating = getRating(book);
+        return (
+          <Link key={book.id} href={`/book/${book.id}`} className="group block">
+            <div className={cn(
+              'flex items-center gap-3 py-2.5',
+              i < sorted.length - 1 && 'border-b'
+            )}>
+              <BookCover book={book} width={45} height={68} className="rounded-md" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium line-clamp-1">{book.title}</p>
+                <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{book.author}</p>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {rating && <RatingDisplay rating={rating} />}
+                <div className="flex items-center gap-1">
+                  <div
+                    className={cn(
+                      'h-2 w-2 rounded-full',
+                      getDifficultyColor(book.difficultyScore)
+                    )}
+                  />
+                  <span className="text-[11px] text-muted-foreground">
+                    {getDifficultyLabel(book.difficultyScore)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
