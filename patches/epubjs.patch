@@ -1,8 +1,31 @@
 diff --git a/lib/contents.js b/lib/contents.js
-index 8392d8710b768cab227120ccf32ea8347e213e83..5bc7b7d7deb9b4288143c33fd09be9ee0cbdeddb 100644
+index 8392d8710b768cab227120ccf32ea8347e213e83..eca21d3ec5eb6ee5184e9981b823bbf3bdff35da 100644
 --- a/lib/contents.js
 +++ b/lib/contents.js
-@@ -1138,7 +1138,25 @@ class Contents {
+@@ -164,6 +164,22 @@ class Contents {
+       width += border.width;
+     }
+ 
++    // Sanity check: Range.getBoundingClientRect() can return inflated widths
++    // in CSS column layouts when oversized images are present.
++    // Fall back to measuring max child element width if range seems wrong.
++    var scrollW = content.scrollWidth;
++    if (scrollW > 0 && width > scrollW * 3) {
++      var maxChildW = 0;
++      var children = content.children;
++      for (var i = 0; i < children.length; i++) {
++        var cw = children[i].getBoundingClientRect().width;
++        if (cw > maxChildW) maxChildW = cw;
++      }
++      if (maxChildW > 0 && maxChildW < width) {
++        width = maxChildW;
++      }
++    }
++
+     return Math.round(width);
+   }
+   /**
+@@ -1138,7 +1154,41 @@ class Contents {
      this.css("max-width", "inherit");
      this.css(COLUMN_FILL, "auto");
      this.css(COLUMN_GAP, gap + "px");
@@ -11,8 +34,24 @@ index 8392d8710b768cab227120ccf32ea8347e213e83..5bc7b7d7deb9b4288143c33fd09be9ee
 +
 +    // Constrain images/SVGs to column width before expand() measures textWidth.
 +    // Without this, wide images inflate the measurement causing phantom blank pages.
++    // We set BOTH inline styles (immediate effect) and stylesheet rules (persistent).
 +    var horizontalPadding = gap; // gap/2 on each side
 +    var maxW = (columnWidth - horizontalPadding) + "px";
++
++    // 1) Inline styles on existing elements for immediate layout effect
++    var images = this.document.querySelectorAll("img");
++    for (var i = 0; i < images.length; i++) {
++      images[i].style.maxWidth = maxW;
++      images[i].style.height = "auto";
++      images[i].style.boxSizing = "border-box";
++    }
++    var svgs = this.document.querySelectorAll("svg");
++    for (var j = 0; j < svgs.length; j++) {
++      svgs[j].style.maxWidth = maxW;
++      svgs[j].style.height = "auto";
++    }
++
++    // 2) Stylesheet rules for elements loaded later
 +    this.addStylesheetRules({
 +      "img" : {
 +        "max-width": maxW + "!important",
@@ -30,17 +69,56 @@ index 8392d8710b768cab227120ccf32ea8347e213e83..5bc7b7d7deb9b4288143c33fd09be9ee
  
      this.css("-webkit-line-box-contain", "block glyphs replaced");
 diff --git a/src/contents.js b/src/contents.js
-index 3effe7252459218ad3d83d1b47ef338007a6d66a..a79f3ef9879c896584427d0a4324a43fa7155dfc 100644
+index 3effe7252459218ad3d83d1b47ef338007a6d66a..960c6e6fc290fb3a3aadc6efb51f8695afbfee6a 100644
 --- a/src/contents.js
 +++ b/src/contents.js
-@@ -1097,6 +1097,22 @@ class Contents {
+@@ -162,6 +162,22 @@ class Contents {
+ 			width += border.width;
+ 		}
+ 
++		// Sanity check: Range.getBoundingClientRect() can return inflated widths
++		// in CSS column layouts when oversized images are present.
++		// Fall back to measuring max child element width if range seems wrong.
++		let scrollW = content.scrollWidth;
++		if (scrollW > 0 && width > scrollW * 3) {
++			let maxChildW = 0;
++			let children = content.children;
++			for (let i = 0; i < children.length; i++) {
++				let cw = children[i].getBoundingClientRect().width;
++				if (cw > maxChildW) maxChildW = cw;
++			}
++			if (maxChildW > 0 && maxChildW < width) {
++				width = maxChildW;
++			}
++		}
++
+ 		return Math.round(width);
+ 	}
+ 
+@@ -1097,6 +1113,38 @@ class Contents {
  		this.css(COLUMN_GAP, gap+"px");
  		this.css(COLUMN_WIDTH, columnWidth+"px");
  
 +		// Constrain images/SVGs to column width before expand() measures textWidth.
 +		// Without this, wide images inflate the measurement causing phantom blank pages.
++		// We set BOTH inline styles (immediate effect) and stylesheet rules (persistent).
 +		let horizontalPadding = gap; // gap/2 on each side
 +		let maxW = (columnWidth - horizontalPadding) + "px";
++
++		// 1) Inline styles on existing elements for immediate layout effect
++		let images = this.document.querySelectorAll("img");
++		for (let i = 0; i < images.length; i++) {
++			images[i].style.maxWidth = maxW;
++			images[i].style.height = "auto";
++			images[i].style.boxSizing = "border-box";
++		}
++		let svgs = this.document.querySelectorAll("svg");
++		for (let i = 0; i < svgs.length; i++) {
++			svgs[i].style.maxWidth = maxW;
++			svgs[i].style.height = "auto";
++		}
++
++		// 2) Stylesheet rules for elements loaded later
 +		this.addStylesheetRules({
 +			"img" : {
 +				"max-width": maxW + "!important",
