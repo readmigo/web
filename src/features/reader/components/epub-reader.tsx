@@ -78,6 +78,7 @@ export function EpubReader({
     isParagraphTranslated,
   ]);
 
+
   // Apply theme styles
   const getThemeStyles = useCallback(() => {
     const themes: Record<string, { body: Record<string, string> }> = {
@@ -360,6 +361,35 @@ export function EpubReader({
     doc.head?.appendChild(style);
   }, []);
 
+  // Stable refs for callbacks used inside initBook effect (avoids re-init on callback identity change)
+  const getChapterOrderRef = useRef(getChapterOrder);
+  const injectContentStylesRef = useRef(injectContentStyles);
+  const isEligibleParagraphRef = useRef(isEligibleParagraph);
+  const ensureParagraphHashRef = useRef(ensureParagraphHash);
+  const applyPersistedTranslationsRef = useRef(applyPersistedTranslations);
+  const toggleParagraphTranslationRef = useRef(toggleParagraphTranslation);
+  const restoreParagraphRef = useRef(restoreParagraph);
+  const getThemeStylesRef = useRef(getThemeStyles);
+  const settingsRef = useRef(settings);
+  const positionRef = useRef(position);
+  const setPositionRef = useRef(setPosition);
+  const onLocationChangeRef = useRef(onLocationChange);
+  const onReadyRef = useRef(onReady);
+
+  useEffect(() => { getChapterOrderRef.current = getChapterOrder; }, [getChapterOrder]);
+  useEffect(() => { injectContentStylesRef.current = injectContentStyles; }, [injectContentStyles]);
+  useEffect(() => { isEligibleParagraphRef.current = isEligibleParagraph; }, [isEligibleParagraph]);
+  useEffect(() => { ensureParagraphHashRef.current = ensureParagraphHash; }, [ensureParagraphHash]);
+  useEffect(() => { applyPersistedTranslationsRef.current = applyPersistedTranslations; }, [applyPersistedTranslations]);
+  useEffect(() => { toggleParagraphTranslationRef.current = toggleParagraphTranslation; }, [toggleParagraphTranslation]);
+  useEffect(() => { restoreParagraphRef.current = restoreParagraph; }, [restoreParagraph]);
+  useEffect(() => { getThemeStylesRef.current = getThemeStyles; }, [getThemeStyles]);
+  useEffect(() => { settingsRef.current = settings; }, [settings]);
+  useEffect(() => { positionRef.current = position; }, [position]);
+  useEffect(() => { setPositionRef.current = setPosition; }, [setPosition]);
+  useEffect(() => { onLocationChangeRef.current = onLocationChange; }, [onLocationChange]);
+  useEffect(() => { onReadyRef.current = onReady; }, [onReady]);
+
   // Initialize EPUB
   useEffect(() => {
     let mounted = true;
@@ -391,22 +421,22 @@ export function EpubReader({
           if (doc.body.dataset.rmTranslationReady === 'true') return;
           doc.body.dataset.rmTranslationReady = 'true';
 
-          const chapterOrder = getChapterOrder(contents);
+          const chapterOrder = getChapterOrderRef.current(contents);
           if (!chapterOrder) return;
           contentsRef.current.set(contents, chapterOrder);
 
-          injectContentStyles(doc);
+          injectContentStylesRef.current(doc);
 
           const paragraphNodes = Array.from(
             doc.querySelectorAll('p, blockquote, figcaption')
           ) as HTMLElement[];
 
           paragraphNodes.forEach((node) => {
-            if (!isEligibleParagraph(node)) return;
-            ensureParagraphHash(node);
+            if (!isEligibleParagraphRef.current(node)) return;
+            ensureParagraphHashRef.current(node);
           });
 
-          void applyPersistedTranslations(contents, chapterOrder);
+          void applyPersistedTranslationsRef.current(contents, chapterOrder);
 
           let longPressTimer: number | null = null;
           let longPressTriggered = false;
@@ -429,7 +459,7 @@ export function EpubReader({
           const getParagraphFromTarget = (target: EventTarget | null) => {
             if (!(target instanceof HTMLElement)) return null;
             const node = target.closest('p, blockquote, figcaption') as HTMLElement | null;
-            if (!node || !isEligibleParagraph(node)) return null;
+            if (!node || !isEligibleParagraphRef.current(node)) return null;
             return node;
           };
 
@@ -438,7 +468,7 @@ export function EpubReader({
             if (selection && selection.toString().trim()) return;
 
             if (node.dataset.translated === 'true') {
-              restoreParagraph(node);
+              restoreParagraphRef.current(node);
             }
 
             const range = doc.createRange();
@@ -498,7 +528,7 @@ export function EpubReader({
             }
 
             if (event.pointerType === 'touch') {
-              const textHash = ensureParagraphHash(activeNode);
+              const textHash = ensureParagraphHashRef.current(activeNode);
               if (!textHash) {
                 activeNode = null;
                 return;
@@ -520,7 +550,7 @@ export function EpubReader({
                 win.setTimeout(() => {
                   suppressSelectionRef.current = false;
                 }, 100);
-                void toggleParagraphTranslation(activeNode, chapterOrder);
+                void toggleParagraphTranslationRef.current(activeNode, chapterOrder);
                 lastTapTime = 0;
                 lastTapHash = '';
               } else {
@@ -544,7 +574,7 @@ export function EpubReader({
             win.setTimeout(() => {
               suppressSelectionRef.current = false;
             }, 100);
-            void toggleParagraphTranslation(node, chapterOrder);
+            void toggleParagraphTranslationRef.current(node, chapterOrder);
           };
 
           const handleSelectionChange = () => {
@@ -582,12 +612,13 @@ export function EpubReader({
         }
 
         // Apply initial settings
+        const s = settingsRef.current;
         rendition.themes.default({
           body: {
-            'font-size': `${settings.fontSize}px`,
-            'font-family': settings.fontFamily,
-            'line-height': `${settings.lineHeight}`,
-            ...getThemeStyles().body,
+            'font-size': `${s.fontSize}px`,
+            'font-family': s.fontFamily,
+            'line-height': `${s.lineHeight}`,
+            ...getThemeStylesRef.current().body,
           },
           p: {
             'margin-bottom': '1em',
@@ -595,8 +626,9 @@ export function EpubReader({
         });
 
         // Display initial location
-        if (position?.cfi) {
-          await rendition.display(position.cfi);
+        const initialPosition = positionRef.current;
+        if (initialPosition?.cfi) {
+          await rendition.display(initialPosition.cfi);
         } else {
           await rendition.display();
         }
@@ -606,12 +638,12 @@ export function EpubReader({
           if (mounted) {
             const cfi = location.start.cfi;
             const percentage = book.locations.percentageFromCfi(cfi) || 0;
-            setPosition({
+            setPositionRef.current({
               cfi,
               percentage,
               chapter: location.start.index,
             });
-            onLocationChange?.(cfi, percentage);
+            onLocationChangeRef.current?.(cfi, percentage);
           }
         });
 
@@ -640,7 +672,7 @@ export function EpubReader({
 
         if (mounted) {
           setIsLoading(false);
-          onReady?.();
+          onReadyRef.current?.();
         }
       } catch (err) {
         console.error('Failed to load EPUB:', err);
@@ -665,19 +697,8 @@ export function EpubReader({
         bookRef.current.destroy();
       }
     };
-  }, [
-    url,
-    applyPersistedTranslations,
-    ensureParagraphHash,
-    getChapterOrder,
-    injectContentStyles,
-    isEligibleParagraph,
-    toggleParagraphTranslation,
-    restoreParagraph,
-    LONG_PRESS_DELAY,
-    DOUBLE_TAP_DELAY,
-    MOVE_THRESHOLD,
-  ]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url]);
 
   // Update settings when changed
   useEffect(() => {
