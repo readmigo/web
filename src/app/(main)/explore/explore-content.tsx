@@ -304,7 +304,7 @@ export function ExploreContent() {
         <div className="space-y-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="flex items-start gap-3 py-3 border-b last:border-b-0">
-              <Skeleton className="h-[105px] w-[70px] flex-shrink-0 rounded-lg" />
+              <Skeleton className="h-[140px] w-[93px] flex-shrink-0 rounded-lg" />
               <div className="flex flex-1 flex-col gap-2 py-0.5">
                 <Skeleton className="h-4 w-3/4" />
                 <Skeleton className="h-3 w-1/3" />

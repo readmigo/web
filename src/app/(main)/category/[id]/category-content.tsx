@@ -151,7 +151,7 @@ export function CategoryContent({ categoryId }: CategoryContentProps) {
         <div className="space-y-0">
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className="flex items-start gap-3 border-b py-3">
-              <Skeleton className="h-[105px] w-[70px] flex-shrink-0 rounded-lg" />
+              <Skeleton className="h-[140px] w-[93px] flex-shrink-0 rounded-lg" />
               <div className="flex flex-1 flex-col gap-2 py-0.5">
                 <Skeleton className="h-4 w-3/4" />
                 <Skeleton className="h-3 w-1/3" />

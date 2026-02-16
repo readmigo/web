@@ -46,14 +46,14 @@ export function BookRow({ book, className }: BookRowProps) {
       )}
     >
       {/* Cover */}
-      <div className="relative h-[105px] w-[70px] flex-shrink-0 overflow-hidden rounded-lg bg-muted">
+      <div className="relative h-[140px] w-[93px] flex-shrink-0 overflow-hidden rounded-lg bg-muted">
         {book.coverUrl ? (
           <Image
             src={book.coverUrl}
             alt={book.title}
             fill
             className="object-cover"
-            sizes="70px"
+            sizes="93px"
           />
         ) : (
           <div className="flex h-full items-center justify-center">
