@@ -1,0 +1,27 @@
+diff --git a/src/contents.js b/src/contents.js
+index 3effe7252459218ad3d83d1b47ef338007a6d66a..a79f3ef9879c896584427d0a4324a43fa7155dfc 100644
+--- a/src/contents.js
++++ b/src/contents.js
+@@ -1097,6 +1097,22 @@ class Contents {
+ 		this.css(COLUMN_GAP, gap+"px");
+ 		this.css(COLUMN_WIDTH, columnWidth+"px");
+ 
++		// Constrain images/SVGs to column width before expand() measures textWidth.
++		// Without this, wide images inflate the measurement causing phantom blank pages.
++		let horizontalPadding = gap; // gap/2 on each side
++		let maxW = (columnWidth - horizontalPadding) + "px";
++		this.addStylesheetRules({
++			"img" : {
++				"max-width": maxW + "!important",
++				"height": "auto",
++				"box-sizing": "border-box"
++			},
++			"svg" : {
++				"max-width": maxW + "!important",
++				"height": "auto"
++			}
++		});
++
+ 		// Fix glyph clipping in WebKit
+ 		// https://github.com/futurepress/epub.js/issues/983
+ 		this.css("-webkit-line-box-contain", "block glyphs replaced");

@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  epubjs:
+    hash: ou2kborxi7lijbuuik7fzd7oiu
+    path: patches/epubjs.patch
+
 importers:
 
   .:
@@ -94,7 +99,7 @@ importers:
         version: 3.6.0
       epubjs:
         specifier: ^0.3.93
-        version: 0.3.93
+        version: 0.3.93(patch_hash=ou2kborxi7lijbuuik7fzd7oiu)
       framer-motion:
         specifier: ^11.5.0
         version: 11.18.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -8044,7 +8049,7 @@ snapshots:
 
   entities@6.0.1: {}
 
-  epubjs@0.3.93:
+  epubjs@0.3.93(patch_hash=ou2kborxi7lijbuuik7fzd7oiu):
     dependencies:
       '@types/localforage': 0.0.34
       '@xmldom/xmldom': 0.7.13
