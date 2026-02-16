@@ -405,12 +405,12 @@ export function EpubReader({
         const book = ePub(url);
         bookRef.current = book;
 
-        // Create rendition - use spread on wide screens
-        const isWideScreen = window.innerWidth >= 1024;
+        // Create rendition - use spread on desktop (minSpreadWidth triggers spread above threshold)
         const rendition = book.renderTo(containerRef.current, {
           width: '100%',
           height: '100%',
-          spread: isWideScreen ? 'auto' : 'none',
+          spread: 'auto',
+          minSpreadWidth: 1024,
           flow: 'paginated',
         });
         renditionRef.current = rendition;
@@ -795,7 +795,7 @@ export function EpubReader({
   return (
     <div className="relative h-full">
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-background/80">
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/80">
           <div className="flex flex-col items-center gap-4">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
             <p className="text-sm text-muted-foreground">正在加载书籍...</p>
