@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -28,6 +29,8 @@ import { useLearningStore } from '@/features/learning/stores/learning-store';
 import { OfflineStorageCard } from '@/features/offline';
 
 export function SettingsContent() {
+  const t = useTranslations('settings');
+  const tc = useTranslations('common');
   const { theme, setTheme } = useTheme();
   const { settings: readerSettings, updateSettings: updateReaderSettings } = useReaderStore();
   const { vocabulary, getStats } = useLearningStore();
@@ -35,17 +38,23 @@ export function SettingsContent() {
 
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [autoPlayAudio, setAutoPlayAudio] = useState(false);
+  const [currentLocale, setCurrentLocale] = useState(() => {
+    if (typeof document !== 'undefined') {
+      return document.cookie.match(/NEXT_LOCALE=(\w+)/)?.[1] || 'zh';
+    }
+    return 'zh';
+  });
 
   const themes = [
-    { value: 'light', label: '浅色', icon: Sun },
-    { value: 'dark', label: '深色', icon: Moon },
-    { value: 'system', label: '跟随系统', icon: Monitor },
+    { value: 'light', label: t('light'), icon: Sun },
+    { value: 'dark', label: t('dark'), icon: Moon },
+    { value: 'system', label: t('system'), icon: Monitor },
   ];
 
   const readerThemes = [
-    { value: 'light', label: '白色', color: 'bg-white border' },
-    { value: 'sepia', label: '护眼', color: 'bg-[#f4ecd8]' },
-    { value: 'dark', label: '夜间', color: 'bg-[#1a1a1a]' },
+    { value: 'light', label: t('white'), color: 'bg-white border' },
+    { value: 'sepia', label: t('sepia'), color: 'bg-[#f4ecd8]' },
+    { value: 'dark', label: t('night'), color: 'bg-[#1a1a1a]' },
   ];
 
   const fontFamilies: { value: 'serif' | 'sans-serif' | 'monospace'; label: string }[] = [
@@ -54,6 +63,12 @@ export function SettingsContent() {
     { value: 'monospace', label: 'Monospace' },
   ];
 
+  const handleLocaleChange = (locale: string) => {
+    document.cookie = `NEXT_LOCALE=${locale};path=/;max-age=31536000`;
+    setCurrentLocale(locale);
+    window.location.reload();
+  };
+
   return (
     <div className="space-y-6">
       {/* Appearance */}
@@ -61,23 +76,23 @@ export function SettingsContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Eye className="h-5 w-5" />
-            外观
+            {t('appearance')}
           </CardTitle>
-          <CardDescription>自定义应用的外观主题</CardDescription>
+          <CardDescription>{t('appearanceDesc')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label>应用主题</Label>
+            <Label>{t('appTheme')}</Label>
             <div className="flex gap-2">
-              {themes.map((t) => (
+              {themes.map((themeOption) => (
                 <Button
-                  key={t.value}
-                  variant={theme === t.value ? 'default' : 'outline'}
+                  key={themeOption.value}
+                  variant={theme === themeOption.value ? 'default' : 'outline'}
                   className="flex-1"
-                  onClick={() => setTheme(t.value)}
+                  onClick={() => setTheme(themeOption.value)}
                 >
-                  <t.icon className="mr-2 h-4 w-4" />
-                  {t.label}
+                  <themeOption.icon className="mr-2 h-4 w-4" />
+                  {themeOption.label}
                 </Button>
               ))}
             </div>
@@ -90,33 +105,33 @@ export function SettingsContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BookOpen className="h-5 w-5" />
-            阅读器设置
+            {t('readerSettings')}
           </CardTitle>
-          <CardDescription>自定义阅读器的显示效果</CardDescription>
+          <CardDescription>{t('readerSettingsDesc')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Reader Theme */}
           <div className="space-y-2">
-            <Label>阅读器主题</Label>
+            <Label>{t('readerTheme')}</Label>
             <div className="flex gap-2">
-              {readerThemes.map((t) => (
+              {readerThemes.map((rt) => (
                 <button
-                  key={t.value}
-                  className={`flex-1 rounded-lg p-4 text-center ${t.color} ${
-                    readerSettings.theme === t.value
+                  key={rt.value}
+                  className={`flex-1 rounded-lg p-4 text-center ${rt.color} ${
+                    readerSettings.theme === rt.value
                       ? 'ring-2 ring-primary ring-offset-2'
                       : ''
                   }`}
                   onClick={() =>
-                    updateReaderSettings({ theme: t.value as 'light' | 'sepia' | 'dark' })
+                    updateReaderSettings({ theme: rt.value as 'light' | 'sepia' | 'dark' })
                   }
                 >
                   <span
                     className={
-                      t.value === 'dark' ? 'text-white' : 'text-gray-900'
+                      rt.value === 'dark' ? 'text-white' : 'text-gray-900'
                     }
                   >
-                    {t.label}
+                    {rt.label}
                   </span>
                 </button>
               ))}
@@ -126,7 +141,7 @@ export function SettingsContent() {
           {/* Font Size */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <Label>字体大小</Label>
+              <Label>{t('fontSize')}</Label>
               <span className="text-sm text-muted-foreground">
                 {readerSettings.fontSize}px
               </span>
@@ -139,14 +154,14 @@ export function SettingsContent() {
               onValueChange={([value]) => updateReaderSettings({ fontSize: value })}
             />
             <div className="flex justify-between text-xs text-muted-foreground">
-              <span>小</span>
-              <span>大</span>
+              <span>{t('small')}</span>
+              <span>{t('large')}</span>
             </div>
           </div>
 
           {/* Font Family */}
           <div className="space-y-2">
-            <Label>字体</Label>
+            <Label>{t('font')}</Label>
             <div className="flex gap-2">
               {fontFamilies.map((f) => (
                 <Button
@@ -165,7 +180,7 @@ export function SettingsContent() {
           {/* Line Height */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <Label>行间距</Label>
+              <Label>{t('lineHeight')}</Label>
               <span className="text-sm text-muted-foreground">
                 {readerSettings.lineHeight}
               </span>
@@ -178,8 +193,8 @@ export function SettingsContent() {
               onValueChange={([value]) => updateReaderSettings({ lineHeight: value })}
             />
             <div className="flex justify-between text-xs text-muted-foreground">
-              <span>紧凑</span>
-              <span>宽松</span>
+              <span>{t('compact')}</span>
+              <span>{t('loose')}</span>
             </div>
           </div>
         </CardContent>
@@ -190,16 +205,16 @@ export function SettingsContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Volume2 className="h-5 w-5" />
-            音频设置
+            {t('audioSettings')}
           </CardTitle>
-          <CardDescription>自定义有声书和朗读设置</CardDescription>
+          <CardDescription>{t('audioSettingsDesc')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <Label>自动播放</Label>
+              <Label>{t('autoPlay')}</Label>
               <p className="text-sm text-muted-foreground">
-                打开有声书时自动开始播放
+                {t('autoPlayDesc')}
               </p>
             </div>
             <Button
@@ -207,7 +222,7 @@ export function SettingsContent() {
               size="sm"
               onClick={() => setAutoPlayAudio(!autoPlayAudio)}
             >
-              {autoPlayAudio ? '开启' : '关闭'}
+              {autoPlayAudio ? tc('on') : tc('off')}
             </Button>
           </div>
         </CardContent>
@@ -218,16 +233,16 @@ export function SettingsContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Bell className="h-5 w-5" />
-            通知设置
+            {t('notifications')}
           </CardTitle>
-          <CardDescription>管理提醒和通知</CardDescription>
+          <CardDescription>{t('notificationsDesc')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <Label>复习提醒</Label>
+              <Label>{t('reviewReminder')}</Label>
               <p className="text-sm text-muted-foreground">
-                当有单词需要复习时通知你
+                {t('reviewReminderDesc')}
               </p>
             </div>
             <Button
@@ -235,7 +250,7 @@ export function SettingsContent() {
               size="sm"
               onClick={() => setNotificationsEnabled(!notificationsEnabled)}
             >
-              {notificationsEnabled ? '开启' : '关闭'}
+              {notificationsEnabled ? tc('on') : tc('off')}
             </Button>
           </div>
         </CardContent>
@@ -246,21 +261,21 @@ export function SettingsContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Keyboard className="h-5 w-5" />
-            快捷键
+            {t('shortcuts')}
           </CardTitle>
-          <CardDescription>查看可用的键盘快捷键</CardDescription>
+          <CardDescription>{t('shortcutsDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4">
             {[
-              { key: '← / →', desc: '翻页' },
-              { key: 'Space', desc: '下一页' },
-              { key: 'F', desc: '专注模式' },
-              { key: 'T', desc: '目录' },
-              { key: 'A', desc: 'AI 面板' },
-              { key: '?', desc: '快捷键帮助' },
-              { key: 'Ctrl + D', desc: '添加书签' },
-              { key: 'Ctrl + +/-', desc: '调整字体' },
+              { key: '← / →', desc: t('turnPage') },
+              { key: 'Space', desc: t('nextPage') },
+              { key: 'F', desc: t('focusMode') },
+              { key: 'T', desc: t('toc') },
+              { key: 'A', desc: t('aiPanel') },
+              { key: '?', desc: t('shortcutsHelp') },
+              { key: 'Ctrl + D', desc: t('addBookmark') },
+              { key: 'Ctrl + +/-', desc: t('adjustFont') },
             ].map((shortcut) => (
               <div
                 key={shortcut.key}
@@ -281,23 +296,23 @@ export function SettingsContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Database className="h-5 w-5" />
-            学习数据
+            {t('learningData')}
           </CardTitle>
-          <CardDescription>你的学习进度统计</CardDescription>
+          <CardDescription>{t('learningDataDesc')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div className="rounded-lg border p-4 text-center">
               <div className="text-2xl font-bold">{stats.totalWords}</div>
-              <div className="text-sm text-muted-foreground">词汇量</div>
+              <div className="text-sm text-muted-foreground">{t('vocabulary')}</div>
             </div>
             <div className="rounded-lg border p-4 text-center">
               <div className="text-2xl font-bold">{stats.totalReviews}</div>
-              <div className="text-sm text-muted-foreground">复习次数</div>
+              <div className="text-sm text-muted-foreground">{t('reviews')}</div>
             </div>
             <div className="rounded-lg border p-4 text-center">
               <div className="text-2xl font-bold">{stats.streakDays}</div>
-              <div className="text-sm text-muted-foreground">连续天数</div>
+              <div className="text-sm text-muted-foreground">{t('streakDays')}</div>
             </div>
           </div>
 
@@ -305,7 +320,7 @@ export function SettingsContent() {
 
           <Button variant="outline" className="justify-start">
             <Download className="mr-2 h-4 w-4" />
-            导出学习数据
+            {t('exportData')}
           </Button>
         </CardContent>
       </Card>
@@ -318,20 +333,25 @@ export function SettingsContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Globe className="h-5 w-5" />
-            语言
+            {t('language')}
           </CardTitle>
-          <CardDescription>选择应用语言</CardDescription>
+          <CardDescription>{t('languageDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex gap-2">
-            <Button variant="default" className="flex-1">
-              简体中文
+            <Button
+              variant={currentLocale === 'zh' ? 'default' : 'outline'}
+              className="flex-1"
+              onClick={() => handleLocaleChange('zh')}
+            >
+              {t('simplifiedChinese')}
             </Button>
-            <Button variant="outline" className="flex-1">
-              English
-            </Button>
-            <Button variant="outline" className="flex-1">
-              繁體中文
+            <Button
+              variant={currentLocale === 'en' ? 'default' : 'outline'}
+              className="flex-1"
+              onClick={() => handleLocaleChange('en')}
+            >
+              {t('english')}
             </Button>
           </div>
         </CardContent>
@@ -342,28 +362,28 @@ export function SettingsContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
-            账户
+            {t('account')}
           </CardTitle>
-          <CardDescription>管理你的账户信息</CardDescription>
+          <CardDescription>{t('accountDesc')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium">用户邮箱</p>
+              <p className="font-medium">{t('email')}</p>
               <p className="text-sm text-muted-foreground">user@example.com</p>
             </div>
-            <Badge>免费版</Badge>
+            <Badge>{t('free')}</Badge>
           </div>
 
           <Separator />
 
           <div className="flex flex-col gap-2">
             <Button variant="outline" className="justify-start">
-              升级到高级版
+              {t('upgrade')}
             </Button>
             <Button variant="outline" className="justify-start text-destructive hover:text-destructive">
               <LogOut className="mr-2 h-4 w-4" />
-              退出登录
+              {t('signOut')}
             </Button>
           </div>
         </CardContent>

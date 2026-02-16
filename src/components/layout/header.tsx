@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import {
   BookOpen,
@@ -12,16 +13,17 @@ import {
   Download,
 } from 'lucide-react';
 
-// iOS tab structure: 书城, 书城, 有声书, 我的
-const navigation = [
-  { name: '书城', href: '/explore', icon: Store },
-  { name: '书架', href: '/library', icon: BookOpen },
-  { name: '有声书', href: '/audiobooks', icon: Headphones },
-  { name: '我的', href: '/me', icon: UserCircle },
-];
-
 export function Header() {
   const pathname = usePathname();
+  const t = useTranslations('nav');
+
+  // iOS tab structure: 书城, 书架, 有声书, 我的
+  const navigation = [
+    { name: t('bookstore'), href: '/explore', icon: Store },
+    { name: t('library'), href: '/library', icon: BookOpen },
+    { name: t('audiobooks'), href: '/audiobooks', icon: Headphones },
+    { name: t('me'), href: '/me', icon: UserCircle },
+  ];
 
   const isActive = (href: string) =>
     pathname === href || (href === '/explore' && pathname === '/');
@@ -74,7 +76,7 @@ export function Header() {
             className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
           >
             <Download className="h-4 w-4" />
-            <span className="hidden sm:inline">下载 App</span>
+            <span className="hidden sm:inline">{t('downloadApp')}</span>
           </a>
         </div>
       </div>

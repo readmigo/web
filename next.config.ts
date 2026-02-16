@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 import withSerwistInit from "@serwist/next";
 import { withSentryConfig } from "@sentry/nextjs";
+
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const withSerwist = withSerwistInit({
   swSrc: "src/app/sw.ts",
@@ -109,7 +112,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withSentryConfig(withSerwist(nextConfig), {
+export default withSentryConfig(withNextIntl(withSerwist(nextConfig)), {
   silent: true,
   widenClientFileUpload: true,
   disableLogger: true,

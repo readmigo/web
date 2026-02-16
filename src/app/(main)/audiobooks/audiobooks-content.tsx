@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Search, Headphones } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useTranslations } from 'next-intl';
 import {
   useRecentlyListened,
   useAudiobookLanguages,
@@ -27,12 +28,13 @@ function useDebounce<T>(value: T, delay: number): T {
 // ============ Recently Listened Section ============
 
 function RecentlyListenedSection() {
+  const t = useTranslations('audiobooks');
   const { data: recentBooks, isLoading } = useRecentlyListened(10);
 
   if (isLoading) {
     return (
       <section className="mb-6">
-        <h2 className="text-lg font-semibold mb-3">最近收听</h2>
+        <h2 className="text-lg font-semibold mb-3">{t('recentlyListened')}</h2>
         <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="flex-shrink-0 w-28">
@@ -51,7 +53,7 @@ function RecentlyListenedSection() {
 
   return (
     <section className="mb-6">
-      <h2 className="text-lg font-semibold mb-3">最近收听</h2>
+      <h2 className="text-lg font-semibold mb-3">{t('recentlyListened')}</h2>
       <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
         {recentBooks.map((book: AudiobookWithProgress) => (
           <Link
@@ -91,6 +93,7 @@ function LanguageFilter({
   selectedLanguage: string | undefined;
   onSelect: (lang: string | undefined) => void;
 }) {
+  const t = useTranslations('audiobooks');
   const { data: languages, isLoading } = useAudiobookLanguages();
 
   if (isLoading) {
@@ -117,7 +120,7 @@ function LanguageFilter({
             : 'bg-secondary text-secondary-foreground'
         }`}
       >
-        全部
+        {t('all')}
       </button>
       {languages.map((lang: string) => (
         <button
@@ -139,16 +142,17 @@ function LanguageFilter({
 // ============ Audiobook Card ============
 
 function AudiobookCard({ audiobook }: { audiobook: AudiobookListItem }) {
+  const t = useTranslations('audiobooks');
   return (
     <Link href={`/audiobooks/${audiobook.id}`} className="group flex gap-3">
-      <div className="relative h-[140px] w-[93px] flex-shrink-0 overflow-hidden rounded-lg bg-secondary">
+      <div className="relative h-[105px] w-[70px] lg:h-[140px] lg:w-[93px] flex-shrink-0 overflow-hidden rounded-lg bg-secondary">
         {audiobook.coverUrl ? (
           <Image
             src={audiobook.coverUrl}
             alt={audiobook.title}
             fill
             className="object-cover transition-transform group-hover:scale-105"
-            sizes="93px"
+            sizes="(min-width: 1024px) 93px, 70px"
           />
         ) : (
           <div className="flex h-full items-center justify-center">
@@ -160,16 +164,16 @@ function AudiobookCard({ audiobook }: { audiobook: AudiobookListItem }) {
         </div>
       </div>
       <div className="flex flex-col justify-center min-w-0">
-        <h3 className="text-sm font-medium line-clamp-2">{audiobook.title}</h3>
-        <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
+        <h3 className="text-xs lg:text-sm font-medium line-clamp-2">{audiobook.title}</h3>
+        <p className="text-[11px] lg:text-xs text-muted-foreground line-clamp-1 mt-0.5">
           {audiobook.author}
         </p>
         {audiobook.narrator && (
-          <p className="text-xs text-muted-foreground line-clamp-1">
-            朗读: {audiobook.narrator}
+          <p className="text-[11px] lg:text-xs text-muted-foreground line-clamp-1">
+            {t('narrator', { name: audiobook.narrator })}
           </p>
         )}
-        <p className="text-xs text-muted-foreground mt-0.5">
+        <p className="text-[11px] lg:text-xs text-muted-foreground mt-0.5">
           {formatDuration(audiobook.totalDuration)}
         </p>
       </div>
@@ -186,6 +190,7 @@ function AudiobookGrid({
   language: string | undefined;
   search: string;
 }) {
+  const t = useTranslations('audiobooks');
   const debouncedSearch = useDebounce(search, 300);
   const params = useMemo(
     () => ({
@@ -229,7 +234,7 @@ function AudiobookGrid({
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="flex gap-3">
-            <Skeleton className="h-[140px] w-[93px] flex-shrink-0 rounded-lg" />
+            <Skeleton className="h-[105px] w-[70px] lg:h-[140px] lg:w-[93px] flex-shrink-0 rounded-lg" />
             <div className="flex flex-col justify-center gap-1.5">
               <Skeleton className="h-4 w-40" />
               <Skeleton className="h-3 w-24" />
@@ -245,10 +250,10 @@ function AudiobookGrid({
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <Headphones className="h-12 w-12 text-muted-foreground mb-3" />
-        <p className="text-lg text-muted-foreground">暂无有声书</p>
+        <p className="text-lg text-muted-foreground">{t('noAudiobooks')}</p>
         {debouncedSearch && (
           <p className="mt-2 text-sm text-muted-foreground">
-            没有找到与 &ldquo;{debouncedSearch}&rdquo; 相关的有声书
+            {t('noResults', { query: debouncedSearch })}
           </p>
         )}
       </div>
@@ -269,7 +274,7 @@ function AudiobookGrid({
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
               {Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="flex gap-3">
-                  <Skeleton className="h-[140px] w-[93px] flex-shrink-0 rounded-lg" />
+                  <Skeleton className="h-[105px] w-[70px] lg:h-[140px] lg:w-[93px] flex-shrink-0 rounded-lg" />
                   <div className="flex flex-col justify-center gap-1.5">
                     <Skeleton className="h-4 w-40" />
                     <Skeleton className="h-3 w-24" />
@@ -287,6 +292,7 @@ function AudiobookGrid({
 // ============ Main Content ============
 
 export function AudiobooksContent() {
+  const t = useTranslations('audiobooks');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>(
     undefined
@@ -299,7 +305,7 @@ export function AudiobooksContent() {
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <input
           type="text"
-          placeholder="搜索有声书..."
+          placeholder={t('searchPlaceholder')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full bg-secondary rounded-xl h-11 pl-10 pr-4 text-sm outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"

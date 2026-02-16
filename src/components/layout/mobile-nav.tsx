@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import {
   BookOpen,
@@ -10,16 +11,17 @@ import {
   UserCircle,
 } from 'lucide-react';
 
-// iOS tab structure: 书城, 书架, 有声书, 我的
-const navigation = [
-  { name: '书城', href: '/explore', icon: Store },
-  { name: '书架', href: '/library', icon: BookOpen },
-  { name: '有声书', href: '/audiobooks', icon: Headphones },
-  { name: '我的', href: '/me', icon: UserCircle },
-];
-
 export function MobileNav() {
   const pathname = usePathname();
+  const t = useTranslations('nav');
+
+  // iOS tab structure: 书城, 书架, 有声书, 我的
+  const navigation = [
+    { name: t('bookstore'), href: '/explore', icon: Store },
+    { name: t('library'), href: '/library', icon: BookOpen },
+    { name: t('audiobooks'), href: '/audiobooks', icon: Headphones },
+    { name: t('me'), href: '/me', icon: UserCircle },
+  ];
 
   const isActive = (href: string) =>
     pathname === href || (href === '/explore' && pathname === '/');

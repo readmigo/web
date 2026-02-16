@@ -10,6 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useUserLibrary, useContinueReading } from '@/features/library/hooks/use-user-library';
 import { useBrowsingHistory } from '@/features/library/hooks/use-browsing-history';
 import type { UserBook } from '@/features/library/types';
+import { useTranslations } from 'next-intl';
 
 // ─── Horizontal Book Card (for scrollable sections) ─────────────────────────
 function HorizontalBookCard({
@@ -32,7 +33,7 @@ function HorizontalBookCard({
             onRemove();
           }}
           className="absolute -right-1.5 -top-1.5 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-muted text-muted-foreground opacity-0 shadow-sm transition-opacity hover:bg-destructive hover:text-destructive-foreground group-hover:opacity-100"
-          aria-label="移除"
+          aria-label="Remove"
         >
           <X className="h-3 w-3" />
         </button>
@@ -126,19 +127,20 @@ function HorizontalSkeleton({ count = 5 }: { count?: number }) {
 
 // ─── Empty State ────────────────────────────────────────────────────────────
 function EmptyState() {
+  const t = useTranslations('library');
   return (
     <div className="flex flex-col items-center justify-center py-24">
       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
         <BookOpen className="h-8 w-8 text-muted-foreground" />
       </div>
       <p className="mt-4 text-lg font-medium text-muted-foreground">
-        您的书架还是空的
+        {t('emptyTitle')}
       </p>
       <p className="mt-1 text-sm text-muted-foreground">
-        去书城发现更多好书吧
+        {t('emptySubtitle')}
       </p>
       <Button className="mt-6" asChild>
-        <Link href="/explore">去书城看看</Link>
+        <Link href="/explore">{t('goToBookstore')}</Link>
       </Button>
     </div>
   );
@@ -146,12 +148,13 @@ function EmptyState() {
 
 // ─── Continue Reading Section ───────────────────────────────────────────────
 function ContinueReadingSection() {
+  const t = useTranslations('library');
   const { data: readingBooks, isLoading } = useContinueReading();
 
   if (isLoading) {
     return (
       <section className="space-y-3">
-        <SectionHeader title="继续阅读" />
+        <SectionHeader title={t('continueReading')} />
         <HorizontalSkeleton count={3} />
       </section>
     );
@@ -161,7 +164,7 @@ function ContinueReadingSection() {
 
   return (
     <section className="space-y-3">
-      <SectionHeader title="继续阅读" />
+      <SectionHeader title={t('continueReading')} />
       <div className="scrollbar-hide -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
         {readingBooks.map((userBook: UserBook) => (
           <HorizontalBookCard
@@ -177,6 +180,7 @@ function ContinueReadingSection() {
 
 // ─── Recently Browsed Section ───────────────────────────────────────────────
 function RecentlyBrowsedSection() {
+  const t = useTranslations('library');
   const { history, removeFromHistory, clearHistory } = useBrowsingHistory();
 
   if (history.length === 0) return null;
@@ -184,8 +188,8 @@ function RecentlyBrowsedSection() {
   return (
     <section className="space-y-3">
       <SectionHeader
-        title="最近浏览"
-        actionLabel="清除"
+        title={t('recentlyBrowsed')}
+        actionLabel={t('clear')}
         onAction={clearHistory}
       />
       <div className="scrollbar-hide -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
@@ -203,12 +207,13 @@ function RecentlyBrowsedSection() {
 
 // ─── Favorite Books Section (Grid) ──────────────────────────────────────────
 function FavoriteBooksSection() {
+  const t = useTranslations('library');
   const { data: userBooks, isLoading } = useUserLibrary();
 
   if (isLoading) {
     return (
       <section className="space-y-3">
-        <SectionHeader title="收藏书籍" />
+        <SectionHeader title={t('favorites')} />
         <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="space-y-2">
@@ -226,7 +231,7 @@ function FavoriteBooksSection() {
 
   return (
     <section className="space-y-3">
-      <SectionHeader title="收藏书籍" />
+      <SectionHeader title={t('favorites')} />
       <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
         {userBooks.map((userBook: UserBook) => (
           <HorizontalBookCard

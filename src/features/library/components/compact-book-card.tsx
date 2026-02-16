@@ -60,14 +60,14 @@ export function CompactBookCard({ book, rank, className }: CompactBookCardProps)
       )}
 
       {/* Small cover */}
-      <div className="relative h-[90px] w-[60px] flex-shrink-0 overflow-hidden rounded-md bg-muted">
+      <div className="relative h-[75px] w-[50px] lg:h-[90px] lg:w-[60px] flex-shrink-0 overflow-hidden rounded-md bg-muted">
         {book.coverUrl ? (
           <Image
             src={book.coverUrl}
             alt={book.title}
             fill
             className="object-cover"
-            sizes="60px"
+            sizes="(min-width: 1024px) 60px, 50px"
           />
         ) : (
           <div className="flex h-full items-center justify-center">
@@ -80,22 +80,22 @@ export function CompactBookCard({ book, rank, className }: CompactBookCardProps)
 
       {/* Info */}
       <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
-        <p className="line-clamp-1 text-sm font-medium leading-tight">
+        <p className="line-clamp-1 text-xs lg:text-sm font-medium leading-tight">
           {book.title}
         </p>
-        <p className="line-clamp-1 text-xs text-muted-foreground">
+        <p className="line-clamp-1 text-[11px] lg:text-xs text-muted-foreground">
           {book.author}
         </p>
 
         {/* Metadata row */}
         <div className="flex flex-wrap items-center gap-1.5">
           {'wordCount' in book && book.wordCount && book.wordCount > 0 && (
-            <span className="text-[11px] text-muted-foreground">
+            <span className="text-[11px] lg:text-xs text-muted-foreground">
               {formatWordCount(book.wordCount)}
             </span>
           )}
           {rating && (
-            <span className="inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
+            <span className="inline-flex items-center gap-0.5 text-[11px] lg:text-xs text-muted-foreground">
               <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
               {rating.toFixed(1)}
             </span>

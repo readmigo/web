@@ -13,6 +13,7 @@ import {
   MessageSquare,
   ChevronRight,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 function MenuRow({
   icon: Icon,
@@ -77,6 +78,7 @@ function MenuSection({
 }
 
 export function MeContent() {
+  const t = useTranslations('me');
   const { data: session } = useSession();
 
   return (
@@ -92,7 +94,7 @@ export function MeContent() {
               {session.user.name?.[0]?.toUpperCase() || 'U'}
             </div>
             <div>
-              <h2 className="text-lg font-bold">{session.user.name || '用户'}</h2>
+              <h2 className="text-lg font-bold">{session.user.name || t('user')}</h2>
               <p className="text-sm text-muted-foreground">{session.user.email}</p>
             </div>
           </div>
@@ -104,66 +106,66 @@ export function MeContent() {
             >
               <UserCircle className="h-10 w-10 text-white" />
             </div>
-            <p className="text-muted-foreground">还未登录</p>
+            <p className="text-muted-foreground">{t('notLoggedIn')}</p>
             <Button
               asChild
               className="text-white"
               style={{ backgroundImage: 'var(--brand-gradient)' }}
             >
-              <Link href="/login">登录 / 注册</Link>
+              <Link href="/login">{t('loginRegister')}</Link>
             </Button>
           </div>
         )}
       </div>
 
       {/* Contact Section */}
-      <MenuSection title="联系我们">
+      <MenuSection title={t('contactUs')}>
         <MenuRow
           icon={MessageSquare}
           iconColor="#3B82F6"
-          title="联系我们"
+          title={t('contactUs')}
           href="/settings"
         />
       </MenuSection>
 
       {/* Legal Section */}
-      <MenuSection title="法律条款">
+      <MenuSection title={t('legal')}>
         <MenuRow
           icon={Shield}
           iconColor="#22C55E"
-          title="隐私政策"
+          title={t('privacyPolicy')}
           onClick={() => window.open('https://readmigo.app/privacy', '_blank')}
         />
         <MenuRow
           icon={FileText}
           iconColor="#A855F7"
-          title="服务条款"
+          title={t('termsOfService')}
           onClick={() => window.open('https://readmigo.app/terms', '_blank')}
         />
         <MenuRow
           icon={CheckCircle}
           iconColor="#3B82F6"
-          title="用户协议"
+          title={t('userAgreement')}
           onClick={() => window.open('https://readmigo.app/terms', '_blank')}
         />
       </MenuSection>
 
       {/* About Section */}
-      <MenuSection title="关于">
+      <MenuSection title={t('about')}>
         <MenuRow
           icon={Info}
           iconColor="#6B7280"
-          title="关于 Readmigo"
+          title={t('aboutReadmigo')}
           href="/settings"
         />
       </MenuSection>
 
       {/* Sign Out */}
       {session?.user && (
-        <MenuSection title="账户">
+        <MenuSection title={t('account')}>
           <MenuRow
             icon={LogOut}
-            title="退出登录"
+            title={t('signOut')}
             destructive
             onClick={() => {
               // signOut handled by next-auth

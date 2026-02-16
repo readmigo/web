@@ -58,11 +58,11 @@ export function RankedBookCard({ book, rank, className }: RankedBookCardProps) {
 
   return (
     <Link href={`/book/${book.id}`} className={cn('group block', className)}>
-      <div className="w-[140px] space-y-2">
+      <div className="w-[100px] lg:w-[140px] space-y-2">
         {/* Cover with rank badge */}
         <div
           className={cn(
-            'relative h-[210px] w-[140px] overflow-hidden rounded-lg bg-muted transition-shadow',
+            'relative h-[150px] w-[100px] lg:h-[210px] lg:w-[140px] overflow-hidden rounded-lg bg-muted transition-shadow',
             rankStyle.glow
           )}
         >
@@ -72,7 +72,7 @@ export function RankedBookCard({ book, rank, className }: RankedBookCardProps) {
               alt={book.title}
               fill
               className="object-cover transition-transform group-hover:scale-105"
-              sizes="140px"
+              sizes="(min-width: 1024px) 140px, 100px"
             />
           ) : (
             <div className="flex h-full items-center justify-center">
@@ -119,14 +119,14 @@ export function RankedBookCard({ book, rank, className }: RankedBookCardProps) {
 
         {/* Title & Author & Rating */}
         <div>
-          <p className="line-clamp-1 text-xs font-medium leading-tight">
+          <p className="line-clamp-1 text-xs lg:text-sm font-medium leading-tight">
             {book.title}
           </p>
-          <p className="mt-0.5 line-clamp-1 text-[11px] text-muted-foreground">
+          <p className="mt-0.5 line-clamp-1 text-[11px] lg:text-xs text-muted-foreground">
             {book.author}
           </p>
           {rating && (
-            <p className="mt-0.5 inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
+            <p className="mt-0.5 inline-flex items-center gap-0.5 text-[11px] lg:text-xs text-muted-foreground">
               <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
               {rating.toFixed(1)}
             </p>

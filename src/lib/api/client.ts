@@ -53,12 +53,17 @@ class ApiClient {
       }
     }
 
+    // Detect browser language for Accept-Language header
+    const acceptLanguage =
+      typeof navigator !== 'undefined' ? navigator.language : 'zh-CN';
+
     // Cookies (including the NextAuth session cookie) are sent automatically
     // The proxy route reads the JWT and attaches the Bearer token
     const response = await fetch(url, {
       ...fetchOptions,
       headers: {
         'Content-Type': 'application/json',
+        'Accept-Language': acceptLanguage,
         ...fetchOptions.headers,
       },
       credentials: 'same-origin',

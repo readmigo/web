@@ -6,6 +6,7 @@ import { Heart, Star, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFavoriteBookIds, useToggleFavorite } from '../hooks/use-favorites';
 import { getDifficultyLevel, difficultyLabels, difficultyDotColors } from '../utils/difficulty';
+import { useTranslations } from 'next-intl';
 import type { Book } from '../types';
 
 interface BookRowProps {
@@ -24,6 +25,7 @@ function formatWordCount(count: number): string {
 }
 
 export function BookRow({ book, className }: BookRowProps) {
+  const t = useTranslations('favorites');
   const { favoriteIds, isAuthenticated } = useFavoriteBookIds();
   const { toggleFavorite } = useToggleFavorite();
   const isFavorited = favoriteIds.has(book.id);
@@ -46,14 +48,14 @@ export function BookRow({ book, className }: BookRowProps) {
       )}
     >
       {/* Cover */}
-      <div className="relative h-[140px] w-[93px] flex-shrink-0 overflow-hidden rounded-lg bg-muted">
+      <div className="relative h-[105px] w-[70px] lg:h-[140px] lg:w-[93px] flex-shrink-0 overflow-hidden rounded-lg bg-muted">
         {book.coverUrl ? (
           <Image
             src={book.coverUrl}
             alt={book.title}
             fill
             className="object-cover"
-            sizes="93px"
+            sizes="(min-width: 1024px) 93px, 70px"
           />
         ) : (
           <div className="flex h-full items-center justify-center">
@@ -110,7 +112,7 @@ export function BookRow({ book, className }: BookRowProps) {
             'opacity-0 group-hover:opacity-100',
             isFavorited && 'opacity-100'
           )}
-          aria-label={isFavorited ? '取消收藏' : '收藏'}
+          aria-label={isFavorited ? t('remove') : t('add')}
         >
           <Heart
             className={cn(

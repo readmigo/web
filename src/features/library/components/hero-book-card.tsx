@@ -30,16 +30,16 @@ export function HeroBookCard({ book, showAiBadge, className }: HeroBookCardProps
 
   return (
     <Link href={`/book/${book.id}`} className={cn('group block', className)}>
-      <div className="w-[140px] space-y-2">
+      <div className="w-[100px] lg:w-[140px] space-y-2">
         {/* Cover */}
-        <div className="relative h-[210px] w-[140px] overflow-hidden rounded-xl bg-muted shadow-md transition-shadow group-hover:shadow-xl">
+        <div className="relative h-[150px] w-[100px] lg:h-[210px] lg:w-[140px] overflow-hidden rounded-xl bg-muted shadow-md transition-shadow group-hover:shadow-xl">
           {book.coverUrl ? (
             <Image
               src={book.coverUrl}
               alt={book.title}
               fill
               className="object-cover transition-transform group-hover:scale-105"
-              sizes="140px"
+              sizes="(min-width: 1024px) 140px, 100px"
             />
           ) : (
             <div className="flex h-full items-center justify-center">
@@ -83,10 +83,10 @@ export function HeroBookCard({ book, showAiBadge, className }: HeroBookCardProps
 
         {/* Title & Author */}
         <div>
-          <p className="line-clamp-2 text-sm font-semibold leading-tight">
+          <p className="line-clamp-2 text-xs lg:text-sm font-semibold leading-tight">
             {book.title}
           </p>
-          <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+          <p className="mt-0.5 line-clamp-1 text-[11px] lg:text-xs text-muted-foreground">
             {book.author}
           </p>
         </div>

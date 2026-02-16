@@ -24,6 +24,7 @@ import { useBookLists } from '@/features/library/hooks/use-book-lists';
 import { HeroBanner } from '@/features/library/components/hero-banner';
 import { BookListSection, BookListSectionSkeleton } from '@/features/library/components/book-list-section';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 const SLUG_ICON_MAP: Record<string, LucideIcon> = {
   fiction: BookOpen,
@@ -59,6 +60,8 @@ function getCategoryIcon(category: Category): LucideIcon {
 
 export function ExploreContent() {
   const router = useRouter();
+  const t = useTranslations('explore');
+  const tc = useTranslations('common');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -178,7 +181,7 @@ export function ExploreContent() {
       <div className="relative" ref={searchContainerRef}>
         <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
         <Input
-          placeholder="搜索书名或作者..."
+          placeholder={t('searchPlaceholder')}
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
@@ -219,13 +222,13 @@ export function ExploreContent() {
 
       {error ? (
         <div className="flex flex-col items-center justify-center py-20">
-          <p className="text-lg text-destructive">加载失败</p>
+          <p className="text-lg text-destructive">{tc('loadingFailed')}</p>
           <p className="mt-2 text-sm text-muted-foreground">
-            {error instanceof Error ? error.message : '请稍后重试'}
+            {error instanceof Error ? error.message : tc('retryLater')}
           </p>
           <Button className="mt-4" variant="outline" onClick={() => refetch()}>
             <RefreshCw className="mr-2 h-4 w-4" />
-            重试
+            {tc('retry')}
           </Button>
         </div>
       ) : (
@@ -295,7 +298,7 @@ export function ExploreContent() {
       {/* "全部书籍" divider */}
       <div className="flex items-center gap-3">
         <div className="flex-1 border-t" />
-        <span className="text-sm text-muted-foreground">全部书籍</span>
+        <span className="text-sm text-muted-foreground">{t('allBooks')}</span>
         <div className="flex-1 border-t" />
       </div>
 
@@ -304,7 +307,7 @@ export function ExploreContent() {
         <div className="space-y-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="flex items-start gap-3 py-3 border-b last:border-b-0">
-              <Skeleton className="h-[140px] w-[93px] flex-shrink-0 rounded-lg" />
+              <Skeleton className="h-[105px] w-[70px] lg:h-[140px] lg:w-[93px] flex-shrink-0 rounded-lg" />
               <div className="flex flex-1 flex-col gap-2 py-0.5">
                 <Skeleton className="h-4 w-3/4" />
                 <Skeleton className="h-3 w-1/3" />
@@ -316,9 +319,9 @@ export function ExploreContent() {
         </div>
       ) : books.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12">
-          <p className="text-lg text-muted-foreground">暂无书籍</p>
+          <p className="text-lg text-muted-foreground">{t('noBooks')}</p>
           <p className="mt-2 text-sm text-muted-foreground">
-            去探索发现更多好书吧
+            {t('exploreMore')}
           </p>
         </div>
       ) : (
@@ -335,7 +338,7 @@ export function ExploreContent() {
               <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
             )}
             {!hasNextPage && books.length > 0 && (
-              <p className="text-sm text-muted-foreground">没有更多书籍了</p>
+              <p className="text-sm text-muted-foreground">{t('noMoreBooks')}</p>
             )}
           </div>
         </>
