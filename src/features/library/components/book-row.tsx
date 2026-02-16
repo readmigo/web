@@ -41,7 +41,7 @@ export function BookRow({ book, className }: BookRowProps) {
     <Link
       href={`/book/${book.id}`}
       className={cn(
-        'group flex items-start gap-3 border-b py-3 transition-colors last:border-b-0 hover:bg-muted/30',
+        'group flex items-start gap-3 lg:gap-4 border-b py-3 transition-colors last:border-b-0 hover:bg-muted/30',
         className
       )}
     >
@@ -66,33 +66,33 @@ export function BookRow({ book, className }: BookRowProps) {
 
       {/* Info */}
       <div className="flex min-w-0 flex-1 flex-col justify-center gap-1 py-0.5">
-        <h3 className="line-clamp-2 text-sm font-medium leading-tight">
+        <h3 className="line-clamp-2 text-sm lg:text-base font-medium leading-tight">
           {book.title}
         </h3>
-        <p className="line-clamp-1 text-xs text-muted-foreground">
+        <p className="line-clamp-1 text-xs lg:text-sm text-muted-foreground">
           {book.author}
         </p>
         {book.description && (
-          <p className="line-clamp-2 text-xs text-muted-foreground">
+          <p className="line-clamp-2 text-xs lg:text-sm text-muted-foreground">
             {book.description}
           </p>
         )}
         {/* Metadata row: word count · rating · difficulty (matching iOS) */}
         <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
           {book.wordCount > 0 && (
-            <span className="inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
-              <FileText className="h-3 w-3" />
+            <span className="inline-flex items-center gap-0.5 text-[11px] lg:text-xs text-muted-foreground">
+              <FileText className="h-3 w-3 lg:h-3.5 lg:w-3.5" />
               {formatWordCount(book.wordCount)}
             </span>
           )}
           {rating && (
-            <span className="inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
-              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+            <span className="inline-flex items-center gap-0.5 text-[11px] lg:text-xs text-muted-foreground">
+              <Star className="h-3 w-3 lg:h-3.5 lg:w-3.5 fill-amber-400 text-amber-400" />
               {rating.toFixed(1)}
             </span>
           )}
           {diffLevel && diffLevel >= 1 && diffLevel <= 5 && (
-            <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+            <span className="inline-flex items-center gap-1 text-[11px] lg:text-xs text-muted-foreground">
               <span className={cn('h-1.5 w-1.5 rounded-full', difficultyDotColors[diffLevel])} />
               {difficultyLabels[diffLevel]}
             </span>
