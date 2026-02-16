@@ -58,8 +58,9 @@ export function BookListSection({ bookList, styleIndex }: BookListSectionProps) 
     bookList.books && bookList.books.length > 0 ? '' : bookList.id
   );
 
+  const isPad = useMediaQuery('(min-width: 768px)');
   const isDesktop = useMediaQuery('(min-width: 1024px)');
-  const maxDisplay = isDesktop ? 12 : 8;
+  const maxDisplay = isDesktop ? 12 : isPad ? 10 : 8;
   const allBooks = bookList.books || detailData?.books || [];
   const books = allBooks.length <= maxDisplay ? allBooks : allBooks.slice(0, maxDisplay);
 
@@ -112,8 +113,8 @@ export function BookListSectionSkeleton() {
       </div>
       <div className="flex gap-4 overflow-hidden">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="w-[100px] lg:w-[140px] flex-shrink-0 space-y-2">
-            <Skeleton className="h-[150px] w-[100px] lg:h-[210px] lg:w-[140px] rounded-lg" />
+          <div key={i} className="w-[100px] md:w-[120px] lg:w-[140px] flex-shrink-0 space-y-2">
+            <Skeleton className="h-[150px] w-[100px] md:h-[180px] md:w-[120px] lg:h-[210px] lg:w-[140px] rounded-lg" />
             <Skeleton className="h-4 w-3/4" />
             <Skeleton className="h-3 w-1/2" />
           </div>

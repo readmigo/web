@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Star, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { getDifficultyLevel } from '../utils/difficulty';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import type { BookListBook } from '../types';
 
 // ============ Shared Helpers ============
@@ -35,16 +35,18 @@ function getDifficultyLabel(score: number | undefined | null): string {
   return 'Expert';
 }
 
+/**
+ * Responsive BookCover using Tailwind classes for Phone / Pad / Desktop.
+ * `sizeClass` should contain responsive w-/h- classes, e.g. "w-[100px] h-[150px] md:w-[120px] md:h-[180px] lg:w-[140px] lg:h-[210px]"
+ */
 function BookCover({
   book,
-  width,
-  height,
+  sizeClass,
   className,
   sizes,
 }: {
   book: BookListBook;
-  width: number;
-  height: number;
+  sizeClass: string;
   className?: string;
   sizes?: string;
 }) {
@@ -53,9 +55,9 @@ function BookCover({
     <div
       className={cn(
         'relative overflow-hidden rounded-lg bg-muted flex-shrink-0',
+        sizeClass,
         className
       )}
-      style={{ width, height }}
     >
       {url ? (
         <Image
@@ -63,7 +65,7 @@ function BookCover({
           alt={book.title}
           fill
           className="object-cover"
-          sizes={sizes || `${width}px`}
+          sizes={sizes || '140px'}
         />
       ) : (
         <div className="flex h-full items-center justify-center">
@@ -72,6 +74,49 @@ function BookCover({
           </span>
         </div>
       )}
+    </div>
+  );
+}
+
+/**
+ * Responsive carousel cover with aspect-ratio 2/3 and optional overlay children.
+ */
+function CarouselCover({
+  book,
+  widthClass,
+  className,
+  sizes,
+  children,
+}: {
+  book: BookListBook;
+  widthClass: string;
+  className?: string;
+  sizes?: string;
+  children?: React.ReactNode;
+}) {
+  const url = book.coverThumbUrl || book.coverUrl;
+  return (
+    <div
+      className={cn(
+        'relative overflow-hidden rounded-lg bg-muted',
+        className
+      )}
+      style={{ aspectRatio: '2/3' }}
+    >
+      {url ? (
+        <Image
+          src={url}
+          alt={book.title}
+          fill
+          className="object-cover transition-transform group-hover:scale-105"
+          sizes={sizes || '140px'}
+        />
+      ) : (
+        <div className="flex h-full items-center justify-center">
+          <span className="text-xl text-muted-foreground/40">{book.title.charAt(0)}</span>
+        </div>
+      )}
+      {children}
     </div>
   );
 }
@@ -87,6 +132,7 @@ function RatingDisplay({ rating }: { rating: number | undefined }) {
 }
 
 // ============ Style 0: 金榜排行 (GoldRankingSection) ============
+// Phone: 100px  Pad: 120px  Desktop: 140px
 
 export function GoldRankingSection({ books }: { books: BookListBook[] }) {
   return (
@@ -97,22 +143,12 @@ export function GoldRankingSection({ books }: { books: BookListBook[] }) {
         const rating = getRating(book);
         return (
           <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
-            <div className="w-[100px] lg:w-[120px] space-y-1.5">
-              <div className="relative overflow-hidden rounded-lg bg-muted"
-                style={{ aspectRatio: '2/3' }}>
-                {(book.coverThumbUrl || book.coverUrl) ? (
-                  <Image
-                    src={book.coverThumbUrl || book.coverUrl || ''}
-                    alt={book.title}
-                    fill
-                    className="object-cover transition-transform group-hover:scale-105"
-                    sizes="(min-width: 1024px) 120px, 100px"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center">
-                    <span className="text-xl text-muted-foreground/40">{book.title.charAt(0)}</span>
-                  </div>
-                )}
+            <div className="w-[100px] md:w-[120px] lg:w-[140px] space-y-1.5">
+              <CarouselCover
+                book={book}
+                widthClass="w-[100px] md:w-[120px] lg:w-[140px]"
+                sizes="(min-width: 1024px) 140px, (min-width: 768px) 120px, 100px"
+              >
                 {/* Rank badge */}
                 <div
                   className={cn(
@@ -122,7 +158,7 @@ export function GoldRankingSection({ books }: { books: BookListBook[] }) {
                 >
                   {rank}
                 </div>
-              </div>
+              </CarouselCover>
               {rating && <RatingDisplay rating={rating} />}
               <p className="line-clamp-1 text-xs font-medium leading-tight">{book.title}</p>
               <p className="line-clamp-1 text-[11px] text-muted-foreground">{book.author}</p>
@@ -135,6 +171,7 @@ export function GoldRankingSection({ books }: { books: BookListBook[] }) {
 }
 
 // ============ Style 1: 渐进阶梯 (StepLadderSection) ============
+// Phone: 50×75  Pad: 60×90  Desktop: 70×105
 
 export function StepLadderSection({ books }: { books: BookListBook[] }) {
   const display = books.slice(0, 5);
@@ -148,7 +185,12 @@ export function StepLadderSection({ books }: { books: BookListBook[] }) {
               'flex items-center gap-3 py-2.5',
               i < display.length - 1 && 'border-b'
             )}>
-              <BookCover book={book} width={50} height={75} className="rounded-md" />
+              <BookCover
+                book={book}
+                sizeClass="w-[50px] h-[75px] md:w-[60px] md:h-[90px] lg:w-[70px] lg:h-[105px]"
+                className="rounded-md"
+                sizes="(min-width: 1024px) 70px, (min-width: 768px) 60px, 50px"
+              />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium line-clamp-1">{book.title}</p>
                 <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{book.author}</p>
@@ -176,6 +218,7 @@ export function StepLadderSection({ books }: { books: BookListBook[] }) {
 }
 
 // ============ Style 2: 霓虹科幻 (NeonSciFiSection) ============
+// Phone: 90px  Pad: 110px  Desktop: 130px
 
 export function NeonSciFiSection({ books }: { books: BookListBook[] }) {
   return (
@@ -184,25 +227,13 @@ export function NeonSciFiSection({ books }: { books: BookListBook[] }) {
         const rating = getRating(book);
         return (
           <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
-            <div className="w-[90px] lg:w-[110px] space-y-1.5">
-              <div
-                className="relative overflow-hidden rounded-lg bg-muted shadow-[0_3px_6px_rgba(139,92,246,0.3)]"
-                style={{ aspectRatio: '2/3' }}
-              >
-                {(book.coverThumbUrl || book.coverUrl) ? (
-                  <Image
-                    src={book.coverThumbUrl || book.coverUrl || ''}
-                    alt={book.title}
-                    fill
-                    className="object-cover transition-transform group-hover:scale-105"
-                    sizes="(min-width: 1024px) 110px, 90px"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center">
-                    <span className="text-xl text-muted-foreground/40">{book.title.charAt(0)}</span>
-                  </div>
-                )}
-              </div>
+            <div className="w-[90px] md:w-[110px] lg:w-[130px] space-y-1.5">
+              <CarouselCover
+                book={book}
+                widthClass="w-[90px] md:w-[110px] lg:w-[130px]"
+                className="shadow-[0_3px_6px_rgba(139,92,246,0.3)]"
+                sizes="(min-width: 1024px) 130px, (min-width: 768px) 110px, 90px"
+              />
               <p className="line-clamp-1 text-xs font-medium leading-tight">{book.title}</p>
               {rating && <RatingDisplay rating={rating} />}
             </div>
@@ -214,6 +245,8 @@ export function NeonSciFiSection({ books }: { books: BookListBook[] }) {
 }
 
 // ============ Style 3: 地图探险 (AdventureMapSection) ============
+// Featured: Phone 130px  Pad 150px  Desktop 170px
+// Secondary: Phone 45×68  Pad 55×82  Desktop 65×98
 
 export function AdventureMapSection({ books }: { books: BookListBook[] }) {
   if (books.length === 0) return null;
@@ -224,25 +257,13 @@ export function AdventureMapSection({ books }: { books: BookListBook[] }) {
     <div className="flex gap-4">
       {/* Featured large book */}
       <Link href={`/book/${featured.id}`} className="group flex-shrink-0">
-        <div className="w-[130px] lg:w-[150px] space-y-1.5">
-          <div
-            className="relative overflow-hidden rounded-lg bg-muted shadow-md"
-            style={{ aspectRatio: '2/3' }}
-          >
-            {(featured.coverThumbUrl || featured.coverUrl) ? (
-              <Image
-                src={featured.coverThumbUrl || featured.coverUrl || ''}
-                alt={featured.title}
-                fill
-                className="object-cover transition-transform group-hover:scale-105"
-                sizes="(min-width: 1024px) 150px, 130px"
-              />
-            ) : (
-              <div className="flex h-full items-center justify-center">
-                <span className="text-2xl text-muted-foreground/40">{featured.title.charAt(0)}</span>
-              </div>
-            )}
-          </div>
+        <div className="w-[130px] md:w-[150px] lg:w-[170px] space-y-1.5">
+          <CarouselCover
+            book={featured}
+            widthClass="w-[130px] md:w-[150px] lg:w-[170px]"
+            className="shadow-md"
+            sizes="(min-width: 1024px) 170px, (min-width: 768px) 150px, 130px"
+          />
           <p className="line-clamp-2 text-sm font-medium leading-tight">{featured.title}</p>
           <p className="text-xs text-muted-foreground line-clamp-1">{featured.author}</p>
         </div>
@@ -256,7 +277,12 @@ export function AdventureMapSection({ books }: { books: BookListBook[] }) {
               'flex items-center gap-2.5 py-2.5',
               i < secondary.length - 1 && 'border-b'
             )}>
-              <BookCover book={book} width={45} height={68} className="rounded-md" />
+              <BookCover
+                book={book}
+                sizeClass="w-[45px] h-[68px] md:w-[55px] md:h-[82px] lg:w-[65px] lg:h-[98px]"
+                className="rounded-md"
+                sizes="(min-width: 1024px) 65px, (min-width: 768px) 55px, 45px"
+              />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium line-clamp-1">{book.title}</p>
                 <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{book.author}</p>
@@ -275,6 +301,7 @@ export function AdventureMapSection({ books }: { books: BookListBook[] }) {
 }
 
 // ============ Style 4: 彩色气泡 (ColorfulBubbleSection) ============
+// Phone: 90px  Pad: 110px  Desktop: 130px
 
 const BUBBLE_COLORS = [
   'rgba(236,72,153,0.3)',   // pink
@@ -293,9 +320,10 @@ export function ColorfulBubbleSection({ books }: { books: BookListBook[] }) {
       {books.map((book, i) => {
         const rating = getRating(book);
         const shadowColor = BUBBLE_COLORS[i % BUBBLE_COLORS.length];
+        const url = book.coverThumbUrl || book.coverUrl;
         return (
           <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
-            <div className="w-[90px] lg:w-[110px] space-y-1.5">
+            <div className="w-[90px] md:w-[110px] lg:w-[130px] space-y-1.5">
               <div
                 className="relative overflow-hidden rounded-2xl bg-muted"
                 style={{
@@ -303,13 +331,13 @@ export function ColorfulBubbleSection({ books }: { books: BookListBook[] }) {
                   boxShadow: `0 4px 6px ${shadowColor}`,
                 }}
               >
-                {(book.coverThumbUrl || book.coverUrl) ? (
+                {url ? (
                   <Image
-                    src={book.coverThumbUrl || book.coverUrl || ''}
+                    src={url}
                     alt={book.title}
                     fill
                     className="object-cover transition-transform group-hover:scale-105"
-                    sizes="(min-width: 1024px) 110px, 90px"
+                    sizes="(min-width: 1024px) 130px, (min-width: 768px) 110px, 90px"
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center">
@@ -328,6 +356,7 @@ export function ColorfulBubbleSection({ books }: { books: BookListBook[] }) {
 }
 
 // ============ Style 5: 极简石刻 (MinimalStoneSection) ============
+// No covers
 
 export function MinimalStoneSection({ books }: { books: BookListBook[] }) {
   const display = books.slice(0, 4);
@@ -363,6 +392,7 @@ export function MinimalStoneSection({ books }: { books: BookListBook[] }) {
 }
 
 // ============ Style 6: 悬疑推理 (DarkMysterySection) ============
+// Phone: 45×68  Pad: 55×82  Desktop: 65×98
 
 export function DarkMysterySection({ books }: { books: BookListBook[] }) {
   const display = books.slice(0, 5);
@@ -381,7 +411,12 @@ export function DarkMysterySection({ books }: { books: BookListBook[] }) {
               <span className="w-7 text-center text-lg font-bold text-orange-500 flex-shrink-0">
                 {rank}
               </span>
-              <BookCover book={book} width={45} height={68} className="rounded-md" />
+              <BookCover
+                book={book}
+                sizeClass="w-[45px] h-[68px] md:w-[55px] md:h-[82px] lg:w-[65px] lg:h-[98px]"
+                className="rounded-md"
+                sizes="(min-width: 1024px) 65px, (min-width: 768px) 55px, 45px"
+              />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium line-clamp-1">{book.title}</p>
                 <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{book.author}</p>
@@ -400,6 +435,7 @@ export function DarkMysterySection({ books }: { books: BookListBook[] }) {
 }
 
 // ============ Style 7: 皇家剧院 (RoyalTheaterSection) ============
+// Phone: 75px  Pad: 90px  Desktop: 110px
 
 export function RoyalTheaterSection({ books }: { books: BookListBook[] }) {
   // Split into two groups: first 4 as "悲剧", rest as "喜剧"
@@ -410,25 +446,12 @@ export function RoyalTheaterSection({ books }: { books: BookListBook[] }) {
     <div className="scrollbar-hide -mx-1 flex gap-3 overflow-x-auto px-1 pb-2">
       {items.map((book) => (
         <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
-          <div className="w-[75px] lg:w-[90px] space-y-1">
-            <div
-              className="relative overflow-hidden rounded-lg bg-muted"
-              style={{ aspectRatio: '2/3' }}
-            >
-              {(book.coverThumbUrl || book.coverUrl) ? (
-                <Image
-                  src={book.coverThumbUrl || book.coverUrl || ''}
-                  alt={book.title}
-                  fill
-                  className="object-cover transition-transform group-hover:scale-105"
-                  sizes="(min-width: 1024px) 90px, 75px"
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center">
-                  <span className="text-lg text-muted-foreground/40">{book.title.charAt(0)}</span>
-                </div>
-              )}
-            </div>
+          <div className="w-[75px] md:w-[90px] lg:w-[110px] space-y-1">
+            <CarouselCover
+              book={book}
+              widthClass="w-[75px] md:w-[90px] lg:w-[110px]"
+              sizes="(min-width: 1024px) 110px, (min-width: 768px) 90px, 75px"
+            />
             <p className="line-clamp-1 text-[11px] font-medium leading-tight">{book.title}</p>
           </div>
         </Link>
@@ -459,6 +482,7 @@ export function RoyalTheaterSection({ books }: { books: BookListBook[] }) {
 }
 
 // ============ Style 8: 书脊堆叠 (BookSpineSection) ============
+// Phone: h140 w30-80  Pad: h160 w35-90  Desktop: h180 w40-100
 
 const SPINE_COLORS = [
   'from-amber-800 to-amber-700',   // brown
@@ -470,13 +494,21 @@ const SPINE_COLORS = [
 ];
 
 export function BookSpineSection({ books }: { books: BookListBook[] }) {
+  const isPad = useMediaQuery('(min-width: 768px)');
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
+
+  const spineHeight = isDesktop ? 180 : isPad ? 160 : 140;
+  const minWidth = isDesktop ? 40 : isPad ? 35 : 30;
+  const maxWidth = isDesktop ? 100 : isPad ? 90 : 80;
+  const maxTextHeight = spineHeight - 20;
+
   const maxWordCount = Math.max(...books.map((b) => b.wordCount || 0), 1);
 
   return (
     <div className="scrollbar-hide -mx-1 flex items-end gap-1 overflow-x-auto px-1 pb-2">
       {books.map((book, i) => {
         const ratio = (book.wordCount || 0) / maxWordCount;
-        const width = Math.max(30, Math.round(ratio * 80));
+        const width = Math.max(minWidth, Math.round(ratio * maxWidth));
         const colorClass = SPINE_COLORS[i % SPINE_COLORS.length];
 
         return (
@@ -487,14 +519,14 @@ export function BookSpineSection({ books }: { books: BookListBook[] }) {
                   'rounded-sm bg-gradient-to-b flex items-center justify-center overflow-hidden',
                   colorClass
                 )}
-                style={{ width, height: 140 }}
+                style={{ width, height: spineHeight }}
               >
                 <span
                   className="text-[10px] font-medium text-white/90 leading-tight"
                   style={{
                     writingMode: 'vertical-rl',
                     textOrientation: 'mixed',
-                    maxHeight: 120,
+                    maxHeight: maxTextHeight,
                     overflow: 'hidden',
                   }}
                 >
@@ -515,6 +547,7 @@ export function BookSpineSection({ books }: { books: BookListBook[] }) {
 }
 
 // ============ Style 9: 难度阶梯 (DifficultyLadderSection) ============
+// Phone: 45×68  Pad: 55×82  Desktop: 65×98
 
 export function DifficultyLadderSection({ books }: { books: BookListBook[] }) {
   // Sort by difficulty ascending
@@ -532,7 +565,12 @@ export function DifficultyLadderSection({ books }: { books: BookListBook[] }) {
               'flex items-center gap-3 py-2.5',
               i < sorted.length - 1 && 'border-b'
             )}>
-              <BookCover book={book} width={45} height={68} className="rounded-md" />
+              <BookCover
+                book={book}
+                sizeClass="w-[45px] h-[68px] md:w-[55px] md:h-[82px] lg:w-[65px] lg:h-[98px]"
+                className="rounded-md"
+                sizes="(min-width: 1024px) 65px, (min-width: 768px) 55px, 45px"
+              />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium line-clamp-1">{book.title}</p>
                 <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{book.author}</p>
