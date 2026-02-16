@@ -62,7 +62,7 @@ export interface AudiobookListItem {
   coverUrl?: string;
   totalDuration: number;
   chapterCount: number;
-  source: AudiobookSource;
+  source?: AudiobookSource;
   language: string;
   bookId?: string;
 }
@@ -161,10 +161,12 @@ export interface AudiobooksQueryParams {
 }
 
 export interface AudiobooksResponse {
-  data: AudiobookListItem[];
+  items: AudiobookListItem[];
+  data?: AudiobookListItem[];
   total: number;
   page: number;
   limit: number;
+  totalPages: number;
 }
 
 export interface StartAudiobookRequest {

@@ -24,7 +24,7 @@ export function useInfiniteAudiobooks(params?: InfiniteAudiobooksParams) {
       queryParams.page = String(pageParam);
       queryParams.limit = String(limit);
 
-      const response = await apiClient.get<AudiobooksResponse & { items?: AudiobooksResponse['data'] }>('/audiobooks', {
+      const response = await apiClient.get<AudiobooksResponse>('/audiobooks', {
         params: queryParams,
       });
       return {
