@@ -155,6 +155,9 @@ function AudiobookCard({ audiobook }: { audiobook: AudiobookListItem }) {
             <Headphones className="h-8 w-8 text-muted-foreground" />
           </div>
         )}
+        <div className="absolute top-1 right-1 h-5 w-5 rounded-full bg-black/50 flex items-center justify-center">
+          <Headphones className="h-3 w-3 text-white" />
+        </div>
       </div>
       <div className="flex flex-col justify-center min-w-0">
         <h3 className="text-sm font-medium line-clamp-2">{audiobook.title}</h3>
