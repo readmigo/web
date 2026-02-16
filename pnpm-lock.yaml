@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   epubjs:
-    hash: vlzmrsbejenysn3gsmjg2rud7y
+    hash: bu4rpsdmx72m22rfs4i3ak2foa
     path: patches/epubjs.patch
 
 importers:
@@ -99,7 +99,7 @@ importers:
         version: 3.6.0
       epubjs:
         specifier: ^0.3.93
-        version: 0.3.93(patch_hash=vlzmrsbejenysn3gsmjg2rud7y)
+        version: 0.3.93(patch_hash=bu4rpsdmx72m22rfs4i3ak2foa)
       framer-motion:
         specifier: ^11.5.0
         version: 11.18.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -8049,7 +8049,7 @@ snapshots:
 
   entities@6.0.1: {}
 
-  epubjs@0.3.93(patch_hash=vlzmrsbejenysn3gsmjg2rud7y):
+  epubjs@0.3.93(patch_hash=bu4rpsdmx72m22rfs4i3ak2foa):
     dependencies:
       '@types/localforage': 0.0.34
       '@xmldom/xmldom': 0.7.13

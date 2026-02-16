@@ -429,6 +429,7 @@ export const EpubReader = forwardRef<EpubReaderHandle, EpubReaderProps>(function
 
         // Determine spread mode based on viewport width
         const getSpreadMode = (w: number) => {
+          if (w >= 2560) return 'none' as const; // Ultrawide: single view with 3 CSS columns
           if (w >= 1400) return 'auto' as const; // Desktop: dual page spread
           return 'none' as const; // Tablet/mobile: single page
         };
@@ -657,17 +658,21 @@ export const EpubReader = forwardRef<EpubReaderHandle, EpubReaderProps>(function
 
         // Apply initial settings
         const s = settingsRef.current;
-        const marginMap = containerWidth >= 2560
+        const isUltrawide = containerWidth >= 2560;
+        const marginMap = isUltrawide
           ? { small: '60px', medium: '100px', large: '140px' } as const
           : { small: '20px', medium: '40px', large: '60px' } as const;
-        const marginPx = marginMap[s.marginSize] || (containerWidth >= 2560 ? '100px' : '40px');
+        const marginPx = marginMap[s.marginSize] || (isUltrawide ? '100px' : '40px');
         rendition.themes.default({
           body: {
             'font-size': `${s.fontSize}px`,
             'font-family': s.fontFamily,
             'line-height': `${s.lineHeight}`,
-            'padding-left': `${marginPx} !important`,
-            'padding-right': `${marginPx} !important`,
+            // Ultrawide uses epubjs gap for column spacing; body padding would break CSS columns
+            ...(isUltrawide ? {} : {
+              'padding-left': `${marginPx} !important`,
+              'padding-right': `${marginPx} !important`,
+            }),
             ...getThemeStylesRef.current().body,
           },
           p: {
@@ -756,17 +761,20 @@ export const EpubReader = forwardRef<EpubReaderHandle, EpubReaderProps>(function
   useEffect(() => {
     if (renditionRef.current) {
       const cw = containerRef.current?.clientWidth || 0;
-      const marginMap = cw >= 2560
+      const isUltrawide = cw >= 2560;
+      const marginMap = isUltrawide
         ? { small: '60px', medium: '100px', large: '140px' } as const
         : { small: '20px', medium: '40px', large: '60px' } as const;
-      const marginPx = marginMap[settings.marginSize] || (cw >= 2560 ? '100px' : '40px');
+      const marginPx = marginMap[settings.marginSize] || (isUltrawide ? '100px' : '40px');
       renditionRef.current.themes.default({
         body: {
           'font-size': `${settings.fontSize}px`,
           'font-family': settings.fontFamily,
           'line-height': `${settings.lineHeight}`,
-          'padding-left': `${marginPx} !important`,
-          'padding-right': `${marginPx} !important`,
+          ...(isUltrawide ? {} : {
+            'padding-left': `${marginPx} !important`,
+            'padding-right': `${marginPx} !important`,
+          }),
           ...getThemeStyles().body,
         },
       });
