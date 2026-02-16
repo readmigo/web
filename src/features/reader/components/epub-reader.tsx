@@ -657,8 +657,10 @@ export const EpubReader = forwardRef<EpubReaderHandle, EpubReaderProps>(function
 
         // Apply initial settings
         const s = settingsRef.current;
-        const marginMap = { small: '20px', medium: '40px', large: '60px' } as const;
-        const marginPx = marginMap[s.marginSize] || '40px';
+        const marginMap = containerWidth >= 2560
+          ? { small: '60px', medium: '100px', large: '140px' } as const
+          : { small: '20px', medium: '40px', large: '60px' } as const;
+        const marginPx = marginMap[s.marginSize] || (containerWidth >= 2560 ? '100px' : '40px');
         rendition.themes.default({
           body: {
             'font-size': `${s.fontSize}px`,
@@ -753,8 +755,11 @@ export const EpubReader = forwardRef<EpubReaderHandle, EpubReaderProps>(function
   // Update settings when changed
   useEffect(() => {
     if (renditionRef.current) {
-      const marginMap = { small: '20px', medium: '40px', large: '60px' } as const;
-      const marginPx = marginMap[settings.marginSize] || '40px';
+      const cw = containerRef.current?.clientWidth || 0;
+      const marginMap = cw >= 2560
+        ? { small: '60px', medium: '100px', large: '140px' } as const
+        : { small: '20px', medium: '40px', large: '60px' } as const;
+      const marginPx = marginMap[settings.marginSize] || (cw >= 2560 ? '100px' : '40px');
       renditionRef.current.themes.default({
         body: {
           'font-size': `${settings.fontSize}px`,
