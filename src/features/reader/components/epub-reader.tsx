@@ -405,12 +405,11 @@ export function EpubReader({
         const book = ePub(url);
         bookRef.current = book;
 
-        // Create rendition - use spread on desktop (minSpreadWidth triggers spread above threshold)
+        // Create rendition
         const rendition = book.renderTo(containerRef.current, {
           width: '100%',
           height: '100%',
-          spread: 'auto',
-          minSpreadWidth: 1024,
+          spread: 'none',
           flow: 'paginated',
         });
         renditionRef.current = rendition;
