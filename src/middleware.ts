@@ -5,6 +5,7 @@ import { getToken } from 'next-auth/jwt';
 const publicPaths = [
   '/explore',
   '/book/',
+  '/read/',
   '/author/',
   '/category/',
   '/book-list/',
