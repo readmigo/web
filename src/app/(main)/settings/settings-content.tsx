@@ -123,7 +123,7 @@ export function SettingsContent() {
                       : ''
                   }`}
                   onClick={() =>
-                    updateReaderSettings({ theme: rt.value as 'light' | 'sepia' | 'dark' })
+                    updateReaderSettings({ theme: rt.value as 'light' | 'sepia' | 'dark' | 'ultraDark' })
                   }
                 >
                   <span

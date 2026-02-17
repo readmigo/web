@@ -53,6 +53,9 @@ interface ReaderState {
   currentSession: ReadingSession | null;
   bookStats: Record<string, BookReadingStats>;
 
+  // System appearance (runtime only, not persisted)
+  systemIsDark: boolean;
+
   // Sync state
   isSyncing: boolean;
   lastSyncedAt: Date | null;
@@ -118,6 +121,9 @@ interface ReaderActions {
   getLastPosition: (bookId: string) => ReaderPosition | null;
   getCurrentSessionDuration: () => number;
 
+  // System appearance
+  setSystemIsDark: (isDark: boolean) => void;
+
   // Sync
   syncHighlightsFromBackend: (bookId: string) => Promise<void>;
   syncBookmarksFromBackend: (bookId: string) => Promise<void>;
@@ -131,6 +137,15 @@ const defaultSettings: ReaderSettings = {
   lineHeight: 1.6,
   theme: 'light',
   marginSize: 'medium',
+  letterSpacing: 0,
+  wordSpacing: 0,
+  paragraphSpacing: 12,
+  textAlign: 'justify',
+  hyphenation: true,
+  columnCount: 1,
+  textIndent: 0,
+  fontWeight: 'regular',
+  appearanceMode: 'auto',
 };
 
 const MAX_TRANSLATIONS_PER_BOOK = 1000;
@@ -146,6 +161,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
       showAiPanel: false,
       showReadingStats: false,
       selectedText: null,
+      systemIsDark: false,
       translationStates: {},
       bookmarks: [],
       highlights: [],
@@ -531,6 +547,9 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
         if (!currentSession) return 0;
         return Math.floor((Date.now() - currentSession.startTime) / 1000);
       },
+
+      // System appearance
+      setSystemIsDark: (isDark) => set({ systemIsDark: isDark }),
 
       // Sync methods
       syncHighlightsFromBackend: async (bookId: string) => {

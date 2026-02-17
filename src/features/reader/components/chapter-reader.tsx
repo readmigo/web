@@ -5,6 +5,9 @@ import {
   ChapterRenderer,
   Paginator,
   THEMES,
+  watchSystemAppearance,
+  resolveTheme,
+  DEFAULT_THEME_MAPPING,
 } from '@readmigo/reader-engine';
 import type { ReaderSettings as EngineSettings } from '@readmigo/reader-engine';
 import { useReaderStore } from '../stores/reader-store';
@@ -41,25 +44,36 @@ interface ChapterContentResponse {
 }
 
 /** Maps web settings to reader-engine settings. */
-function mapSettings(s: ReturnType<typeof useReaderStore.getState>['settings']): EngineSettings {
+function mapSettings(
+  s: ReturnType<typeof useReaderStore.getState>['settings'],
+  systemIsDark: boolean,
+): EngineSettings {
   const marginMap = { small: 20, medium: 40, large: 60 } as const;
   const fontMap = {
     serif: 'Georgia, serif',
     'sans-serif': '"Helvetica Neue", Helvetica, Arial, sans-serif',
     monospace: 'monospace',
   } as const;
+  const resolvedTheme = resolveTheme(s.appearanceMode, DEFAULT_THEME_MAPPING, systemIsDark);
   return {
     fontSize: s.fontSize,
     fontFamily: fontMap[s.fontFamily] || 'Georgia, serif',
     lineHeight: s.lineHeight,
-    letterSpacing: 0,
-    wordSpacing: 0,
-    paragraphSpacing: 12,
-    textAlign: 'justify',
-    hyphenation: true,
-    theme: s.theme,
+    letterSpacing: s.letterSpacing,
+    wordSpacing: s.wordSpacing,
+    paragraphSpacing: s.paragraphSpacing,
+    textAlign: s.textAlign,
+    hyphenation: s.hyphenation,
+    theme: resolvedTheme,
     readingMode: 'paginated',
     margin: marginMap[s.marginSize] || 40,
+    columnCount: s.columnCount,
+    textIndent: s.textIndent,
+    fontWeight: s.fontWeight,
+    pageTransition: 'slide',
+    transitionDuration: 300,
+    swipeEnabled: true,
+    autoPageInterval: null,
   };
 }
 
@@ -80,7 +94,9 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
     const {
       settings,
       position,
+      systemIsDark,
       setPosition,
+      setSystemIsDark,
       markParagraphTranslated,
       clearParagraphTranslation,
       getParagraphTranslation,
@@ -99,6 +115,18 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
     useEffect(() => { onTocLoadedRef.current = onTocLoaded; }, [onTocLoaded]);
     useEffect(() => { onReadyRef.current = onReady; }, [onReady]);
     useEffect(() => { settingsRef.current = settings; }, [settings]);
+
+    const systemIsDarkRef = useRef(systemIsDark);
+    useEffect(() => { systemIsDarkRef.current = systemIsDark; }, [systemIsDark]);
+
+    // Watch system appearance for auto mode
+    useEffect(() => {
+      const { isDark, cleanup } = watchSystemAppearance((dark: boolean) => {
+        setSystemIsDark(dark);
+      });
+      setSystemIsDark(isDark);
+      return cleanup;
+    }, [setSystemIsDark]);
 
     const translationActionsRef = useRef({
       markParagraphTranslated,
@@ -477,7 +505,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
         cleanupInteractionsRef.current = null;
 
         // Create/reuse renderer
-        const engineSettings = mapSettings(settingsRef.current);
+        const engineSettings = mapSettings(settingsRef.current, systemIsDarkRef.current);
         if (!rendererRef.current) {
           rendererRef.current = new ChapterRenderer(containerRef.current, engineSettings);
         } else {
@@ -594,7 +622,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
     // Update settings when changed
     useEffect(() => {
       if (!rendererRef.current) return;
-      const engineSettings = mapSettings(settings);
+      const engineSettings = mapSettings(settings, systemIsDark);
       rendererRef.current.updateSettings(engineSettings);
       if (paginatorRef.current) {
         paginatorRef.current.recalculate();
@@ -604,7 +632,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
           paginatorRef.current.totalPages,
         );
       }
-    }, [settings, emitPosition]);
+    }, [settings, systemIsDark, emitPosition]);
 
     // Handle resize
     useEffect(() => {
@@ -665,8 +693,9 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
       return () => window.removeEventListener('keydown', handleKeyDown);
     }, [chapters.length, emitPosition, loadChapter]);
 
-    // Get theme background color
-    const themeColors = THEMES[settings.theme] || THEMES.light;
+    // Get theme background color (use resolved theme for auto mode)
+    const resolvedThemeName = resolveTheme(settings.appearanceMode, DEFAULT_THEME_MAPPING, systemIsDark);
+    const themeColors = THEMES[resolvedThemeName] || THEMES.light;
 
     if (error) {
       return (
