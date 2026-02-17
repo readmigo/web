@@ -5,8 +5,8 @@ import {
   ChapterRenderer,
   Paginator,
   THEMES,
-} from '@/lib/reader-engine';
-import type { ReaderSettings as EngineSettings } from '@/lib/reader-engine';
+} from '@readmigo/reader-engine';
+import type { ReaderSettings as EngineSettings } from '@readmigo/reader-engine';
 import { useReaderStore } from '../stores/reader-store';
 import type { TocItem, SelectedText, BilingualChapter } from '../types';
 import type { Chapter } from '@/features/library/types';
