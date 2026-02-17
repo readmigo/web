@@ -13,7 +13,6 @@ import type { Chapter } from '@/features/library/types';
 import { apiClient } from '@/lib/api/client';
 import { useTranslate } from '../hooks/use-ai';
 import { normalizeParagraphText, hashText } from '../utils/translation-hash';
-import { sanitizeHtml } from '@/lib/sanitize';
 
 export interface ChapterReaderHandle {
   goTo: (chapterId: string) => void;
