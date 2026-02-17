@@ -45,3 +45,8 @@ When investigating problems, output using this template:
 | Environment | URL |
 |-------------|-----|
 | Production | https://app.readmigo.com |
+
+## Readmigo Team Knowledge Base
+
+所有 Readmigo 项目文档集中存储在：`/Users/HONGBGU/Documents/readmigo-repos/docs/`
+当需要跨项目上下文（产品需求、架构决策、设计规范等）时，主动到 docs 目录读取相关文档。
