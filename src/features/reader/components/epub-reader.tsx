@@ -434,12 +434,16 @@ export const EpubReader = forwardRef<EpubReaderHandle, EpubReaderProps>(function
           return 'none' as const; // Tablet/mobile: single page
         };
 
-        // Create rendition
+        // Create rendition – use "continuous" manager so content from
+        // subsequent chapters flows into remaining page columns instead
+        // of leaving them blank.
         const rendition = book.renderTo(containerRef.current, {
           width: containerWidth,
           height: containerHeight,
           spread: getSpreadMode(containerWidth),
           flow: 'paginated',
+          manager: 'continuous',
+          snap: true,
         });
 
         // Resize handler: update rendition when container dimensions change
