@@ -8,8 +8,9 @@ interface AudiobookPageProps {
 export async function generateMetadata({
   params,
 }: AudiobookPageProps): Promise<Metadata> {
+  const { id } = await params;
   // TODO: Fetch audiobook data for metadata
-  void (await params);
+  void id;
   return {
     title: '有声书播放',
     description: '收听有声书',

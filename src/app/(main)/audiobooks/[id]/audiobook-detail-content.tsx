@@ -184,7 +184,7 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
         {/* Play Button */}
         <div className="space-y-3">
           <Button
-            className="w-full h-12 rounded-xl"
+            className="h-12 w-full rounded-xl"
             size="lg"
             onClick={handlePlay}
             disabled={isPlayerLoading && isCurrentAudiobook}
