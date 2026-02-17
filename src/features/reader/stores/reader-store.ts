@@ -507,9 +507,9 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
           apiClient
             .post('/reading/progress', {
               bookId: currentSession.bookId,
-              cfi: position.cfi,
+              cfi: `ch:${position.chapterIndex}:pg:${position.page}`,
               percentage: position.percentage,
-              chapter: position.chapter,
+              chapter: position.chapterIndex,
               readingTime: sessionDuration,
             })
             .catch((error) => {

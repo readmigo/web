@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
-import { EpubReader, type EpubReaderHandle } from '@/features/reader/components/epub-reader';
+import { ChapterReader, type ChapterReaderHandle } from '@/features/reader/components/chapter-reader';
 import { ReaderToolbar } from '@/features/reader/components/reader-toolbar';
 import { ReaderSettingsPanel } from '@/features/reader/components/reader-settings-panel';
 import { TocPanel } from '@/features/reader/components/toc-panel';
@@ -28,7 +28,7 @@ interface ReaderContentProps {
 }
 
 export function ReaderContent({ bookId }: ReaderContentProps) {
-  const epubReaderRef = useRef<EpubReaderHandle>(null);
+  const readerRef = useRef<ChapterReaderHandle>(null);
   const [isReady, setIsReady] = useState(false);
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [showTTSPanel, setShowTTSPanel] = useState(false);
@@ -65,11 +65,11 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
 
   // Navigation handlers
   const handlePrev = useCallback(() => {
-    epubReaderRef.current?.goPrev();
+    readerRef.current?.goPrev();
   }, []);
 
   const handleNext = useCallback(() => {
-    epubReaderRef.current?.goNext();
+    readerRef.current?.goNext();
   }, []);
 
   // TTS handlers
@@ -158,7 +158,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           if (position) {
             addBookmark({
               bookId,
-              cfi: position.cfi,
+              cfi: `ch:${position.chapterIndex}:pg:${position.page}`,
               title: `书签 - ${Math.round(position.percentage * 100)}%`,
             });
           }
@@ -293,13 +293,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     setIsReady(true);
   }, []);
 
-  const handleLocationChange = useCallback(
-    (_cfi: string, _percentage: number) => {
-      // Location tracking is handled in the store
-    },
-    []
-  );
-
   const handleTextSelect = useCallback(
     (selection: SelectedText) => {
       setSelectedText(selection);
@@ -308,7 +301,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   );
 
   const handleTocSelect = useCallback((href: string) => {
-    epubReaderRef.current?.goTo(href);
+    readerRef.current?.goTo(href);
   }, []);
 
   const handleTranslate = useCallback(() => {
@@ -356,9 +349,8 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     );
   }
 
-  // Get EPUB URL from book data or use fallback
-  const epubUrl = book?.epubUrl || `/books/${bookId}.epub`;
   const bookTitle = book?.title || 'Loading...';
+  const chapters = book?.chapters || [];
 
   // Focus mode renders differently
   if (isFocusMode) {
@@ -370,12 +362,11 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         progress={(position?.percentage || 0) * 100}
         theme={settings.theme}
       >
-        <EpubReader
-          ref={epubReaderRef}
+        <ChapterReader
+          ref={readerRef}
           bookId={bookId}
-          url={epubUrl}
+          chapters={chapters}
           onReady={handleReaderReady}
-          onLocationChange={handleLocationChange}
           onTextSelect={handleTextSelect}
           onTocLoaded={setTocItems}
         />
@@ -397,12 +388,11 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
 
       {/* Reader */}
       <div className="relative flex-1">
-        <EpubReader
-          ref={epubReaderRef}
+        <ChapterReader
+          ref={readerRef}
           bookId={bookId}
-          url={epubUrl}
+          chapters={chapters}
           onReady={handleReaderReady}
-          onLocationChange={handleLocationChange}
           onTextSelect={handleTextSelect}
           onTocLoaded={setTocItems}
         />
@@ -429,7 +419,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           />
           <TocPanel
             items={tocItems}
-            currentChapter={position?.chapter}
+            currentChapter={position?.chapterIndex}
             onSelect={handleTocSelect}
             onClose={toggleToc}
           />

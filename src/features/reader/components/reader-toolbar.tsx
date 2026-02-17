@@ -49,11 +49,11 @@ export function ReaderToolbar({
   } = useReaderStore();
 
   const handleAddBookmark = () => {
-    if (position?.cfi) {
+    if (position) {
       addBookmark({
         bookId,
-        cfi: position.cfi,
-        title: `第 ${position.chapter + 1} 章`,
+        cfi: `ch:${position.chapterIndex}:pg:${position.page}`,
+        title: `第 ${position.chapterIndex + 1} 章`,
       });
     }
   };

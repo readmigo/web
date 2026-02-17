@@ -7,10 +7,9 @@ export interface ReaderSettings {
 }
 
 export interface ReaderPosition {
-  cfi: string;
+  chapterIndex: number;
+  page: number;
   percentage: number;
-  chapter: number;
-  page?: number;
 }
 
 export interface Highlight {
@@ -33,7 +32,7 @@ export interface Bookmark {
 
 export interface SelectedText {
   text: string;
-  cfiRange: string;
+  cfiRange?: string;
   rect: DOMRect;
   source?: 'selection' | 'paragraph';
 }
