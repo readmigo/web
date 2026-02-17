@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   description: '阅读文章，学习英语',
 };
 
-export default function ArticlePage({ params }: { params: { id: string } }) {
-  return <ArticleReader articleId={params.id} />;
+export default async function ArticlePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <ArticleReader articleId={id} />;
 }
