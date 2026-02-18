@@ -15,7 +15,6 @@ import {
   GraduationCap,
   Settings,
   BarChart3,
-  Library,
   Compass,
   FileText,
   Clock,
@@ -54,14 +53,6 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
         description: '返回首页',
         icon: <Compass className="h-4 w-4" />,
         href: '/',
-      },
-      {
-        id: 'library',
-        type: 'page',
-        title: '书库',
-        description: '浏览和管理你的书籍',
-        icon: <Library className="h-4 w-4" />,
-        href: '/library',
       },
       {
         id: 'explore',
