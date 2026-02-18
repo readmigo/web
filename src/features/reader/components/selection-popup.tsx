@@ -46,7 +46,7 @@ export function SelectionPopup({
   const handleHighlight = (color: 'yellow' | 'green' | 'blue' | 'pink' | 'purple' | 'orange') => {
     addHighlight({
       bookId,
-      cfiRange: selection.cfiRange,
+      cfiRange: selection.cfiRange || '',
       text: selection.text,
       color,
     });
@@ -63,7 +63,7 @@ export function SelectionPopup({
     if (!note.trim()) return;
     addHighlight({
       bookId,
-      cfiRange: selection.cfiRange,
+      cfiRange: selection.cfiRange || '',
       text: selection.text,
       color: 'yellow',
       note: note.trim(),

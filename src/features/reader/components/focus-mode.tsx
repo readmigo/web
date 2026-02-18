@@ -13,7 +13,7 @@ interface FocusModeProps {
   progress?: number;
   currentPage?: number;
   totalPages?: number;
-  theme?: 'light' | 'sepia' | 'dark';
+  theme?: 'light' | 'sepia' | 'dark' | 'ultraDark';
 }
 
 export function FocusMode({
@@ -42,12 +42,14 @@ export function FocusMode({
     light: 'bg-white',
     sepia: 'bg-[#f4ecd8]',
     dark: 'bg-[#1a1a1a]',
+    ultraDark: 'bg-black',
   };
 
   const textColors = {
     light: 'text-gray-900',
     sepia: 'text-[#5b4636]',
     dark: 'text-gray-100',
+    ultraDark: 'text-gray-100',
   };
 
   return (

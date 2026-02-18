@@ -139,7 +139,7 @@ export function AiPanel({ onClose, bookId }: AiPanelProps) {
     if (selectedText) {
       addHighlight({
         bookId: bookId || '',
-        cfiRange: selectedText.cfiRange,
+        cfiRange: selectedText.cfiRange || '',
         text: selectedText.text,
         color,
       });

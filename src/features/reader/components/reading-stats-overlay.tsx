@@ -57,7 +57,7 @@ export function ReadingStatsOverlay({
   };
 
   const percentage = position?.percentage || 0;
-  const currentChapter = (position?.chapter || 0) + 1;
+  const currentChapter = (position?.chapterIndex || 0) + 1;
   const estimatedTimeRemaining = bookStats?.averageWpm
     ? Math.round(((1 - percentage) * 50000) / bookStats.averageWpm) // Assuming ~50k words per book
     : 0;
