@@ -111,15 +111,25 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
           style={{ backgroundImage: 'var(--brand-gradient)' }}
         />
         <div className="relative mx-auto flex max-w-2xl flex-col items-center">
-          {/* Back button */}
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="mb-2 flex h-9 w-9 items-center justify-center self-start rounded-full bg-background/60 backdrop-blur transition-colors hover:bg-background/80"
-            aria-label="返回"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
+          {/* Back & Share buttons */}
+          <div className="mb-2 flex w-full items-center justify-between">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-background/60 backdrop-blur transition-colors hover:bg-background/80"
+              aria-label="返回"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              onClick={handleShare}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-background/60 backdrop-blur transition-colors hover:bg-background/80"
+              aria-label="分享"
+            >
+              <Share2 className="h-4 w-4" />
+            </button>
+          </div>
           {/* Book Cover */}
           <div className="relative aspect-[2/3] h-[200px] overflow-hidden rounded-xl shadow-lg">
             {book.coverUrl ? (
@@ -164,29 +174,24 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
               开始阅读
             </Link>
           </Button>
-          <div className="flex items-center gap-3">
-            <Button
-              size="lg"
-              variant={isFavorited ? 'secondary' : 'outline'}
-              onClick={handleToggleFavorite}
-              className="flex-1 h-11 rounded-xl"
-            >
-              {isFavorited ? (
-                <>
-                  <Check className="mr-1.5 h-4 w-4" />
-                  已在书架
-                </>
-              ) : (
-                <>
-                  <Plus className="mr-1.5 h-4 w-4" />
-                  加入书架
-                </>
-              )}
-            </Button>
-            <Button size="icon" variant="outline" onClick={handleShare} className="h-11 w-11 rounded-xl">
-              <Share2 className="h-4 w-4" />
-            </Button>
-          </div>
+          <Button
+            size="lg"
+            variant={isFavorited ? 'secondary' : 'outline'}
+            onClick={handleToggleFavorite}
+            className="w-full h-11 rounded-xl"
+          >
+            {isFavorited ? (
+              <>
+                <Check className="mr-1.5 h-4 w-4" />
+                已在书架
+              </>
+            ) : (
+              <>
+                <Plus className="mr-1.5 h-4 w-4" />
+                加入书架
+              </>
+            )}
+          </Button>
         </div>
 
         {/* Audiobook Section */}
@@ -352,7 +357,8 @@ function BookDetailSkeleton() {
   return (
     <div className="pb-12">
       {/* Header skeleton */}
-      <div className="px-4 pt-6">
+      <div className="flex items-center justify-between px-4 pt-6">
+        <Skeleton className="h-9 w-9 rounded-full" />
         <Skeleton className="h-9 w-9 rounded-full" />
       </div>
       <div className="flex flex-col items-center px-4 pb-8">
@@ -362,10 +368,9 @@ function BookDetailSkeleton() {
       </div>
       {/* Content skeleton */}
       <div className="mx-auto max-w-2xl space-y-6 px-4">
-        <div className="flex gap-3">
-          <Skeleton className="h-11 flex-1" />
-          <Skeleton className="h-11 flex-1" />
-          <Skeleton className="h-11 w-11" />
+        <div className="space-y-3">
+          <Skeleton className="h-12 w-full rounded-xl" />
+          <Skeleton className="h-11 w-full rounded-xl" />
         </div>
         <Skeleton className="h-24 w-full rounded-xl" />
         <Skeleton className="h-40 w-full rounded-xl" />
