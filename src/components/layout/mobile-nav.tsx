@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import {
-  BookOpen,
   Store,
   Headphones,
   UserCircle,
@@ -15,10 +14,8 @@ export function MobileNav() {
   const pathname = usePathname();
   const t = useTranslations('nav');
 
-  // iOS tab structure: 书城, 书架, 有声书, 我的
   const navigation = [
     { name: t('bookstore'), href: '/explore', icon: Store },
-    { name: t('library'), href: '/library', icon: BookOpen },
     { name: t('audiobooks'), href: '/audiobooks', icon: Headphones },
     { name: t('me'), href: '/me', icon: UserCircle },
   ];

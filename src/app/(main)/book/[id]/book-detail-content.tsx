@@ -100,15 +100,25 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
           style={{ backgroundImage: 'var(--brand-gradient)' }}
         />
         <div className="relative mx-auto flex max-w-2xl flex-col items-center">
-          {/* Back button */}
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="mb-2 flex h-9 w-9 items-center justify-center self-start rounded-full bg-background/60 backdrop-blur transition-colors hover:bg-background/80"
-            aria-label="返回"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
+          {/* Back & Share buttons */}
+          <div className="mb-2 flex w-full items-center justify-between">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-background/60 backdrop-blur transition-colors hover:bg-background/80"
+              aria-label="返回"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              onClick={handleShare}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-background/60 backdrop-blur transition-colors hover:bg-background/80"
+              aria-label="分享"
+            >
+              <Share2 className="h-4 w-4" />
+            </button>
+          </div>
           {/* Book Cover */}
           <div className="relative aspect-[2/3] h-[200px] overflow-hidden rounded-xl shadow-lg">
             {book.coverUrl ? (
@@ -143,21 +153,16 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
       <div className="mx-auto max-w-2xl space-y-6 px-4">
         {/* Action Buttons */}
         <div className="space-y-3">
-          <div className="flex items-center gap-3">
-            <Button className="flex-1 h-12 rounded-xl" size="lg" asChild>
-              <Link
-                href={`/read/${book.id}`}
-                className="inline-flex items-center justify-center gap-2"
-                style={{ backgroundImage: 'var(--brand-gradient)' }}
-              >
-                <BookOpen className="h-5 w-5" />
-                开始阅读
-              </Link>
-            </Button>
-            <Button size="icon" variant="outline" onClick={handleShare} className="h-12 w-12 rounded-xl">
-              <Share2 className="h-4 w-4" />
-            </Button>
-          </div>
+          <Button className="w-full h-12 rounded-xl" size="lg" asChild>
+            <Link
+              href={`/read/${book.id}`}
+              className="inline-flex items-center justify-center gap-2"
+              style={{ backgroundImage: 'var(--brand-gradient)' }}
+            >
+              <BookOpen className="h-5 w-5" />
+              开始阅读
+            </Link>
+          </Button>
         </div>
 
         {/* Audiobook Section */}
@@ -323,7 +328,8 @@ function BookDetailSkeleton() {
   return (
     <div className="pb-12">
       {/* Header skeleton */}
-      <div className="px-4 pt-6">
+      <div className="flex items-center justify-between px-4 pt-6">
+        <Skeleton className="h-9 w-9 rounded-full" />
         <Skeleton className="h-9 w-9 rounded-full" />
       </div>
       <div className="flex flex-col items-center px-4 pb-8">
@@ -333,9 +339,8 @@ function BookDetailSkeleton() {
       </div>
       {/* Content skeleton */}
       <div className="mx-auto max-w-2xl space-y-6 px-4">
-        <div className="flex gap-3">
-          <Skeleton className="h-12 flex-1 rounded-xl" />
-          <Skeleton className="h-12 w-12 rounded-xl" />
+        <div className="space-y-3">
+          <Skeleton className="h-12 w-full rounded-xl" />
         </div>
         <Skeleton className="h-24 w-full rounded-xl" />
         <Skeleton className="h-40 w-full rounded-xl" />
