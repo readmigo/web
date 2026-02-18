@@ -9,8 +9,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import {
   BookOpen,
   Clock,
-  Plus,
-  Check,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
@@ -20,7 +18,6 @@ import {
   FileText,
 } from 'lucide-react';
 import { useBookDetail } from '@/features/library/hooks/use-books';
-import { useFavoriteBookIds, useToggleFavorite } from '@/features/library/hooks/use-favorites';
 import { useAudiobookByBookId } from '@/features/audiobook/hooks/use-audiobooks';
 import { useReadingGuide, useBookContext } from '@/features/library/hooks/use-book-extras';
 import { ReadingGuideSection } from '@/features/library/components/reading-guide-section';
@@ -55,8 +52,6 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
   const { data: audiobook } = useAudiobookByBookId(bookId);
   const { data: readingGuide, isLoading: isGuideLoading } = useReadingGuide(bookId);
   const { data: bookContext, isLoading: isContextLoading } = useBookContext(bookId);
-  const { favoriteIds, isAuthenticated } = useFavoriteBookIds();
-  const { toggleFavorite } = useToggleFavorite();
 
   if (isLoading) {
     return <BookDetailSkeleton />;
@@ -72,14 +67,8 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
     );
   }
 
-  const isFavorited = favoriteIds.has(book.id);
   const hasAudiobook = book.hasAudiobook || !!audiobook;
   const chaptersToShow = showAllChapters ? book.chapters : book.chapters.slice(0, 10);
-
-  const handleToggleFavorite = () => {
-    if (!isAuthenticated) return;
-    toggleFavorite(book.id, isFavorited);
-  };
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -173,24 +162,6 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
               <BookOpen className="h-5 w-5" />
               开始阅读
             </Link>
-          </Button>
-          <Button
-            size="lg"
-            variant={isFavorited ? 'secondary' : 'outline'}
-            onClick={handleToggleFavorite}
-            className="w-full h-11 rounded-xl"
-          >
-            {isFavorited ? (
-              <>
-                <Check className="mr-1.5 h-4 w-4" />
-                已在书架
-              </>
-            ) : (
-              <>
-                <Plus className="mr-1.5 h-4 w-4" />
-                加入书架
-              </>
-            )}
           </Button>
         </div>
 
@@ -370,7 +341,6 @@ function BookDetailSkeleton() {
       <div className="mx-auto max-w-2xl space-y-6 px-4">
         <div className="space-y-3">
           <Skeleton className="h-12 w-full rounded-xl" />
-          <Skeleton className="h-11 w-full rounded-xl" />
         </div>
         <Skeleton className="h-24 w-full rounded-xl" />
         <Skeleton className="h-40 w-full rounded-xl" />
