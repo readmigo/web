@@ -21,7 +21,8 @@ jobs:
           repository: readmigo/reader-engine
           path: ../reader-engine
       - name: Build reader-engine
-        run: cd ../reader-engine && npm ci && npm run build
+        working-directory: ../reader-engine
+        run: npm ci && npm run build
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -41,7 +42,8 @@ jobs:
           repository: readmigo/reader-engine
           path: ../reader-engine
       - name: Build reader-engine
-        run: cd ../reader-engine && npm ci && npm run build
+        working-directory: ../reader-engine
+        run: npm ci && npm run build
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -61,7 +63,8 @@ jobs:
           repository: readmigo/reader-engine
           path: ../reader-engine
       - name: Build reader-engine
-        run: cd ../reader-engine && npm ci && npm run build
+        working-directory: ../reader-engine
+        run: npm ci && npm run build
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -81,7 +84,8 @@ jobs:
           repository: readmigo/reader-engine
           path: ../reader-engine
       - name: Build reader-engine
-        run: cd ../reader-engine && npm ci && npm run build
+        working-directory: ../reader-engine
+        run: npm ci && npm run build
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -108,7 +112,8 @@ jobs:
           repository: readmigo/reader-engine
           path: ../reader-engine
       - name: Build reader-engine
-        run: cd ../reader-engine && npm ci && npm run build
+        working-directory: ../reader-engine
+        run: npm ci && npm run build
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
