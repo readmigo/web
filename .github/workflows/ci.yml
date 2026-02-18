@@ -16,13 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          repository: readmigo/reader-engine
-          path: ../reader-engine
-      - name: Build reader-engine
-        working-directory: ../reader-engine
-        run: npm ci && npm run build
+      - name: Clone and build reader-engine
+        run: git clone --depth 1 https://github.com/readmigo/reader-engine.git ../reader-engine && cd ../reader-engine && npm ci && npm run build
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -37,13 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          repository: readmigo/reader-engine
-          path: ../reader-engine
-      - name: Build reader-engine
-        working-directory: ../reader-engine
-        run: npm ci && npm run build
+      - name: Clone and build reader-engine
+        run: git clone --depth 1 https://github.com/readmigo/reader-engine.git ../reader-engine && cd ../reader-engine && npm ci && npm run build
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -58,13 +48,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          repository: readmigo/reader-engine
-          path: ../reader-engine
-      - name: Build reader-engine
-        working-directory: ../reader-engine
-        run: npm ci && npm run build
+      - name: Clone and build reader-engine
+        run: git clone --depth 1 https://github.com/readmigo/reader-engine.git ../reader-engine && cd ../reader-engine && npm ci && npm run build
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -79,13 +64,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          repository: readmigo/reader-engine
-          path: ../reader-engine
-      - name: Build reader-engine
-        working-directory: ../reader-engine
-        run: npm ci && npm run build
+      - name: Clone and build reader-engine
+        run: git clone --depth 1 https://github.com/readmigo/reader-engine.git ../reader-engine && cd ../reader-engine && npm ci && npm run build
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -107,13 +87,8 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          repository: readmigo/reader-engine
-          path: ../reader-engine
-      - name: Build reader-engine
-        working-directory: ../reader-engine
-        run: npm ci && npm run build
+      - name: Clone and build reader-engine
+        run: git clone --depth 1 https://github.com/readmigo/reader-engine.git ../reader-engine && cd ../reader-engine && npm ci && npm run build
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
