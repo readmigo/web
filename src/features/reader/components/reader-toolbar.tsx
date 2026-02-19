@@ -12,9 +12,11 @@ import {
   ChevronRight,
   BarChart3,
   Volume2,
+  Headphones,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useReaderStore } from '../stores/reader-store';
+import { useWhispersyncFromBook } from '@/features/audiobook/hooks/use-whispersync';
 import { HighlightSidebar } from './highlight-sidebar';
 import { SearchPanel } from './search-panel';
 
@@ -47,6 +49,8 @@ export function ReaderToolbar({
     toggleReadingStats,
     addBookmark,
   } = useReaderStore();
+
+  const { audiobook, hasAudiobook } = useWhispersyncFromBook(bookId);
 
   const handleAddBookmark = () => {
     if (position) {
@@ -106,6 +110,13 @@ export function ReaderToolbar({
           bookId={bookId}
           onNavigateToHighlight={onNavigateToHighlight}
         />
+        {hasAudiobook && audiobook && (
+          <Button variant="ghost" size="icon" asChild title="Audiobook">
+            <Link href={`/audiobooks/${audiobook.id}`}>
+              <Headphones className="h-5 w-5 text-primary" />
+            </Link>
+          </Button>
+        )}
         <Button
           variant="ghost"
           size="icon"

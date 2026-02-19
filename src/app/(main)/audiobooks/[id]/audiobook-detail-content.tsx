@@ -22,6 +22,7 @@ import {
   useStartAudiobook,
 } from '@/features/audiobook/hooks/use-audiobooks';
 import { useAudioPlayerStore, formatDuration, formatTime } from '@/features/audiobook/stores/audio-player-store';
+import { useWhispersyncFromAudiobook } from '@/features/audiobook/hooks/use-whispersync';
 
 interface AudiobookDetailContentProps {
   audiobookId: string;
@@ -51,6 +52,7 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
     );
   }
 
+  const { book, hasBook, getBookChapterId } = useWhispersyncFromAudiobook(audiobook);
   const progress = audiobook.progress;
   const isCurrentlyPlaying = currentAudiobook?.id === audiobook.id;
   const chaptersToShow = showAllChapters ? audiobook.chapters : audiobook.chapters.slice(0, 10);
@@ -170,7 +172,23 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
             }
           </Button>
           <div className="flex items-center gap-3">
-            {audiobook.bookId && (
+            {hasBook && book ? (
+              <Button
+                size="lg"
+                variant="outline"
+                className="flex-1 h-11 rounded-xl"
+                asChild
+              >
+                <Link href={
+                  progress
+                    ? `/read/${book.id}${getBookChapterId(progress.currentChapter) ? `?chapter=${getBookChapterId(progress.currentChapter)}` : ''}`
+                    : `/read/${book.id}`
+                }>
+                  <BookOpen className="mr-1.5 h-4 w-4" />
+                  {progress ? t('readFromHere') : t('viewEbook')}
+                </Link>
+              </Button>
+            ) : audiobook.bookId ? (
               <Button
                 size="lg"
                 variant="outline"
@@ -182,7 +200,7 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
                   {t('viewEbook')}
                 </Link>
               </Button>
-            )}
+            ) : null}
             <Button
               size="icon"
               variant="outline"

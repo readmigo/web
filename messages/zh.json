@@ -51,7 +51,13 @@
     "complete": "完成",
     "cancelTimer": "取消定时",
     "minutes": "{count} 分钟",
-    "endOfChapter": "本章结束时"
+    "endOfChapter": "本章结束时",
+    "listenToChapter": "收听此章节",
+    "readThisChapter": "阅读此章节",
+    "readFromHere": "从这里阅读",
+    "followAlong": "跟读",
+    "followAlongUnavailable": "此有声书暂不支持跟读功能",
+    "followAlongNoContent": "章节文本不可用"
   },
   "category": {
     "backToExplore": "返回探索",
