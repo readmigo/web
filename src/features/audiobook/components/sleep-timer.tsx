@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Moon, MoonStar } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { SLEEP_TIMER_OPTIONS, type SleepTimerOption } from '../types';
 
 interface SleepTimerProps {
@@ -18,6 +19,7 @@ interface SleepTimerProps {
 }
 
 export function SleepTimer({ activeTimer, endTime, onSetTimer }: SleepTimerProps) {
+  const t = useTranslations('audiobooks');
   const [remainingTime, setRemainingTime] = useState<string | null>(null);
 
   useEffect(() => {
@@ -63,7 +65,7 @@ export function SleepTimer({ activeTimer, endTime, onSetTimer }: SleepTimerProps
       <DropdownMenuContent align="end">
         {isActive && (
           <DropdownMenuItem onClick={() => onSetTimer(null)} className="text-destructive">
-            Cancel timer
+            {t('cancelTimer')}
           </DropdownMenuItem>
         )}
         {SLEEP_TIMER_OPTIONS.map((option) => (
@@ -72,7 +74,9 @@ export function SleepTimer({ activeTimer, endTime, onSetTimer }: SleepTimerProps
             onClick={() => onSetTimer(option.value)}
             className={activeTimer === option.value ? 'bg-accent' : ''}
           >
-            {option.label}
+            {option.value === 'end_of_chapter'
+              ? t('endOfChapter')
+              : t('minutes', { count: option.value })}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

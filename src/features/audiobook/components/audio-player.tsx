@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { ChevronDown, List, Volume2, VolumeX } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
+import { useTranslations } from 'next-intl';
 import { useAudioPlayerStore, formatTime, formatDuration } from '../stores/audio-player-store';
 import { PlayerControls } from './player-controls';
 import { ProgressSlider } from './progress-slider';
@@ -44,6 +45,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
     setSleepTimer,
   } = useAudioPlayerStore();
 
+  const t = useTranslations('audiobooks');
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
   if (!audiobook) return null;
@@ -66,7 +68,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                 <ChevronDown className="h-5 w-5" />
               </Button>
               <SheetTitle className="flex-1 text-center text-sm font-medium">
-                Now Playing
+                {t('nowPlaying')}
               </SheetTitle>
               <div className="w-10" /> {/* Spacer for centering */}
             </div>
@@ -101,7 +103,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                     <p className="text-muted-foreground">{audiobook.author}</p>
                     {audiobook.narrator && (
                       <p className="text-sm text-muted-foreground">
-                        Narrated by {audiobook.narrator}
+                        {t('narratedBy', { name: audiobook.narrator })}
                       </p>
                     )}
                   </div>
@@ -109,10 +111,10 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                   {/* Current Chapter */}
                   <div className="mt-4 text-center">
                     <p className="text-sm font-medium">
-                      {currentChapter?.title || `Chapter ${currentChapter?.number}`}
+                      {currentChapter?.title || t('chapterNumber', { number: currentChapter?.number ?? 0 })}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Chapter {chapterIndex + 1} of {audiobook.chapters.length}
+                      {t('chapterOf', { current: chapterIndex + 1, total: audiobook.chapters.length })}
                     </p>
                   </div>
 
@@ -182,7 +184,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                   <div className="mt-6 text-center">
                     <p className="text-xs text-muted-foreground">
                       {formatTime(totalProgress)} / {formatDuration(audiobook.totalDuration)}
-                      {' '}({Math.round(totalProgressPercent)}% complete)
+                      {' '}({Math.round(totalProgressPercent)}% {t('complete')})
                     </p>
                   </div>
                 </div>
@@ -200,11 +202,11 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
               {/* Tab Navigation */}
               <TabsList className="flex-shrink-0 w-full justify-center rounded-none border-t">
                 <TabsTrigger value="player" className="flex-1">
-                  Player
+                  {t('player')}
                 </TabsTrigger>
                 <TabsTrigger value="chapters" className="flex-1">
                   <List className="mr-2 h-4 w-4" />
-                  Chapters
+                  {t('chaptersTab')}
                 </TabsTrigger>
               </TabsList>
             </Tabs>
