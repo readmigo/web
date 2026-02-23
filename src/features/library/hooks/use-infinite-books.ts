@@ -53,11 +53,11 @@ export function useInfiniteBooks(params?: InfiniteBooksParams) {
       queryParams.page = String(pageParam);
       queryParams.pageSize = String(limit);
 
-      const response = await apiClient.get<BooksApiResponse>('/recommendation/discover', {
+      const response = await apiClient.get<BooksApiResponse>('/bookstore', {
         params: queryParams,
         skipAuth: true,
       });
-      // /recommendation/discover returns { books: [{ book, scores, source }] }
+      // /bookstore returns { books: [{ book, scores, source }] }
       const books = response.books
         ? response.books.map((item) => item.book)
         : response.items ?? response.data ?? [];
