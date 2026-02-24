@@ -2,13 +2,12 @@
 
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Loader2, Plus, Check, Mic, Volume2 } from 'lucide-react';
+import { BookOpen, Loader2, Plus, Check, Volume2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useChapterText } from '../hooks/use-chapter-text';
 import { useWhispersyncFromAudiobook } from '../hooks/use-whispersync';
 import { useAudioPlayerStore } from '../stores/audio-player-store';
 import { useLearningStore } from '@/features/learning/stores/learning-store';
-import { PronunciationPractice } from './pronunciation-practice';
 import type { Audiobook } from '../types';
 
 interface StudyModeViewProps {
@@ -43,9 +42,6 @@ export function StudyModeView({ audiobook }: StudyModeViewProps) {
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
   const [wordDef, setWordDef] = useState<WordDefinition | null>(null);
   const [isLookingUp, setIsLookingUp] = useState(false);
-  const [showPractice, setShowPractice] = useState(false);
-  const [practiceSentenceIndex, setPracticeSentenceIndex] = useState(0);
-
   // Build sentences from paragraphs
   const sentences = useMemo(() => {
     if (!chapterData?.paragraphs) return [];
@@ -160,32 +156,8 @@ export function StudyModeView({ audiobook }: StudyModeViewProps) {
       <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
         <BookOpen className="h-10 w-10 text-muted-foreground" />
         <p className="text-sm text-muted-foreground">
-          {t('followAlongNoContent')}
+          {t('chapterTextUnavailable')}
         </p>
-      </div>
-    );
-  }
-
-  // --- Pronunciation practice sub-view ---
-
-  if (showPractice) {
-    return (
-      <div className="h-full overflow-y-auto px-4 py-4">
-        <div className="mb-4 flex items-center justify-between">
-          <h3 className="font-semibold">{t('pronunciationPractice')}</h3>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowPractice(false)}
-          >
-            {t('backToStudy')}
-          </Button>
-        </div>
-        <PronunciationPractice
-          sentences={sentences}
-          currentSentenceIndex={practiceSentenceIndex}
-          onSentenceChange={setPracticeSentenceIndex}
-        />
       </div>
     );
   }
@@ -196,20 +168,7 @@ export function StudyModeView({ audiobook }: StudyModeViewProps) {
     <div ref={containerRef} className="flex h-full flex-col">
       {/* Sticky header */}
       <div className="flex-shrink-0 border-b bg-background/95 px-4 py-2 backdrop-blur">
-        <div className="flex items-center justify-between">
-          <p className="text-xs text-muted-foreground">{t('tapToLookup')}</p>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              setPracticeSentenceIndex(currentSentenceIndex);
-              setShowPractice(true);
-            }}
-          >
-            <Mic className="mr-1.5 h-3.5 w-3.5" />
-            {t('pronunciationPractice')}
-          </Button>
-        </div>
+        <p className="text-xs text-muted-foreground">{t('tapToLookup')}</p>
       </div>
 
       {/* Sentences */}

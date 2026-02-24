@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { ChevronDown, List, Volume2, VolumeX, BookOpen, GraduationCap } from 'lucide-react';
+import { ChevronDown, List, Volume2, VolumeX, GraduationCap } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { useTranslations } from 'next-intl';
 import { useAudioPlayerStore, formatTime, formatDuration } from '../stores/audio-player-store';
@@ -16,7 +16,6 @@ import { SpeedSelector } from './speed-selector';
 import { SleepTimer } from './sleep-timer';
 import { ChapterList } from './chapter-list';
 import { WhispersyncToBook } from './whispersync-banner';
-import { FollowAlongView } from './follow-along-view';
 import { StudyModeView } from './study-mode-view';
 
 interface AudioPlayerProps {
@@ -216,12 +215,6 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
               </TabsContent>
 
               {hasBook && (
-                <TabsContent value="follow-along" className="flex-1 overflow-hidden">
-                  <FollowAlongView audiobook={audiobook} />
-                </TabsContent>
-              )}
-
-              {hasBook && (
                 <TabsContent value="study" className="flex-1 overflow-hidden">
                   <StudyModeView audiobook={audiobook} />
                 </TabsContent>
@@ -236,12 +229,6 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                   <List className="mr-2 h-4 w-4" />
                   {t('chaptersTab')}
                 </TabsTrigger>
-                {hasBook && (
-                  <TabsTrigger value="follow-along" className="flex-1">
-                    <BookOpen className="mr-2 h-4 w-4" />
-                    {t('followAlong')}
-                  </TabsTrigger>
-                )}
                 {hasBook && (
                   <TabsTrigger value="study" className="flex-1">
                     <GraduationCap className="mr-2 h-4 w-4" />
