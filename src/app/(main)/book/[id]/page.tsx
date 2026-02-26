@@ -6,8 +6,10 @@ interface BookPageProps {
   params: Promise<{ id: string }>;
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('metadata');
+export async function generateMetadata({
+  params,
+}: BookPageProps): Promise<Metadata> {
+  const [t] = await Promise.all([getTranslations('metadata'), params]);
   // TODO: Fetch book data for metadata
   return {
     title: t('bookDetailTitle'),
