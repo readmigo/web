@@ -3,7 +3,6 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -25,7 +24,7 @@ import { SearchResultsDropdown } from '@/features/search/components/search-resul
 import { useBookLists } from '@/features/library/hooks/use-book-lists';
 import { HeroBanner } from '@/features/library/components/hero-banner';
 import { BookListSection, BookListSectionSkeleton } from '@/features/library/components/book-list-section';
-import { useContinueReading } from '@/features/library/hooks/use-user-library';
+import { ContinueReadingCard } from '@/features/library/components/continue-reading-card';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 
@@ -65,7 +64,6 @@ export function ExploreContent() {
   const router = useRouter();
   const t = useTranslations('explore');
   const tc = useTranslations('common');
-  const tl = useTranslations('library');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -108,9 +106,6 @@ export function ExploreContent() {
 
   // Search history
   const { history: searchHistory, addSearch, removeSearch, clearHistory } = useSearchHistory();
-
-  // Continue reading (iOS: ContinueActivityWrapper)
-  const { data: continueReadingBooks } = useContinueReading();
 
   // Book lists for hero banner and sections
   const { data: bookListsData, isLoading: bookListsLoading } = useBookLists();
@@ -244,41 +239,7 @@ export function ExploreContent() {
       <HeroBanner bookLists={featuredBookLists} isLoading={bookListsLoading} />
 
       {/* Continue Reading (iOS: ContinueActivityWrapper) */}
-      {continueReadingBooks && continueReadingBooks.length > 0 && (
-        <Link href={`/reader/${continueReadingBooks[0].bookId}`} className="block">
-          <div className="rounded-2xl bg-card p-4 shadow-sm transition-colors hover:bg-accent">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-2">{tl('continueReading')}</h3>
-            <div className="flex items-center gap-3">
-              <div className="relative h-[60px] w-[40px] flex-shrink-0 overflow-hidden rounded-md bg-secondary">
-                {continueReadingBooks[0].book?.coverUrl ? (
-                  <Image
-                    src={continueReadingBooks[0].book.coverUrl}
-                    alt={continueReadingBooks[0].book.title}
-                    fill
-                    className="object-cover"
-                    sizes="40px"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center text-muted-foreground text-xs">📖</div>
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium line-clamp-1">{continueReadingBooks[0].book?.title}</p>
-                <p className="text-xs text-muted-foreground line-clamp-1">{continueReadingBooks[0].book?.author}</p>
-                {continueReadingBooks[0].progress > 0 && (
-                  <div className="mt-1 h-1.5 w-full rounded-full bg-secondary overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-primary"
-                      style={{ width: `${Math.min(continueReadingBooks[0].progress * 100, 100)}%` }}
-                    />
-                  </div>
-                )}
-              </div>
-              <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-            </div>
-          </div>
-        </Link>
-      )}
+      <ContinueReadingCard />
 
       {/* Category menu - circular icons */}
       <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">

@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { useBookLists } from '@/features/library/hooks/use-book-lists';
 import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 import { cn } from '@/lib/utils';
 import type { BookList } from '@/features/library/types';
 
@@ -34,8 +35,9 @@ const typeLabels: Record<string, string> = {
   AI_FEATURED: 'AI Featured',
 };
 
-function BookListCard({ list }: { list: BookList }) {
+function BookListCard({ list, locale }: { list: BookList; locale: string }) {
   const gradient = gradientMap[list.type] || 'from-gray-500 to-blue-600';
+  const displayName = locale === 'en' ? (list.nameEn || list.name) : list.name;
 
   return (
     <Link href={`/book-list/${list.id}`} className="group block">
@@ -57,7 +59,7 @@ function BookListCard({ list }: { list: BookList }) {
           </div>
         </div>
         <div className="p-3">
-          <h3 className="text-sm font-semibold line-clamp-1">{list.nameEn || list.name}</h3>
+          <h3 className="text-sm font-semibold line-clamp-1">{displayName}</h3>
           {list.subtitle && (
             <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">{list.subtitle}</p>
           )}
@@ -72,6 +74,7 @@ function BookListCard({ list }: { list: BookList }) {
 
 export function BookListsContent() {
   const t = useTranslations('explore');
+  const locale = useLocale();
   const { data: bookLists, isLoading } = useBookLists();
   const activeLists = (bookLists || []).filter((list) => list.bookCount > 0);
 
@@ -106,7 +109,7 @@ export function BookListsContent() {
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
           {activeLists.map((list) => (
-            <BookListCard key={list.id} list={list} />
+            <BookListCard key={list.id} list={list} locale={locale} />
           ))}
         </div>
       )}
