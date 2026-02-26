@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,13 +13,23 @@ import {
   LogOut,
   MessageSquare,
   ChevronRight,
+  Clock,
+  Heart,
+  BarChart3,
+  Crown,
+  Bell,
+  Building2,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useContinueReading } from '@/features/library/hooks/use-user-library';
+import { useBrowsingHistory } from '@/features/library/hooks/use-browsing-history';
+import { useFavoriteBookIds } from '@/features/library/hooks/use-favorites';
 
 function MenuRow({
   icon: Icon,
   iconColor,
   title,
+  subtitle,
   href,
   onClick,
   destructive,
@@ -26,6 +37,7 @@ function MenuRow({
   icon: React.ComponentType<{ className?: string }>;
   iconColor?: string;
   title: string;
+  subtitle?: string;
   href?: string;
   onClick?: () => void;
   destructive?: boolean;
@@ -40,11 +52,16 @@ function MenuRow({
           <Icon className="h-4 w-4" />
         </div>
       </div>
-      <span
-        className={`flex-1 text-sm font-medium ${destructive ? 'text-destructive' : 'text-foreground'}`}
-      >
-        {title}
-      </span>
+      <div className="flex-1 min-w-0">
+        <span
+          className={`text-sm font-medium ${destructive ? 'text-destructive' : 'text-foreground'}`}
+        >
+          {title}
+        </span>
+        {subtitle && (
+          <p className="text-xs text-muted-foreground">{subtitle}</p>
+        )}
+      </div>
       {!destructive && <ChevronRight className="h-4 w-4 text-muted-foreground" />}
     </div>
   );
@@ -77,13 +94,69 @@ function MenuSection({
   );
 }
 
+// Currently Reading Section (matches iOS ContinueActivitySection)
+function CurrentlyReadingSection() {
+  const tl = useTranslations('library');
+  const { data: currentBooks, isLoading } = useContinueReading();
+
+  if (isLoading || !currentBooks || currentBooks.length === 0) return null;
+
+  const book = currentBooks[0];
+
+  return (
+    <Link href={`/reader/${book.bookId}`} className="block">
+      <div className="rounded-2xl bg-card p-4 shadow-sm transition-colors hover:bg-accent">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+          {tl('continueReading')}
+        </h3>
+        <div className="flex items-center gap-3">
+          <div className="relative h-[60px] w-[40px] flex-shrink-0 overflow-hidden rounded-md bg-secondary">
+            {book.book?.coverUrl ? (
+              <Image
+                src={book.book.coverUrl}
+                alt={book.book.title}
+                fill
+                className="object-cover"
+                sizes="40px"
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center text-muted-foreground text-xs">📖</div>
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium line-clamp-1">{book.book?.title}</p>
+            <p className="text-xs text-muted-foreground line-clamp-1">{book.book?.author}</p>
+            {book.progress > 0 && (
+              <div className="mt-1 h-1.5 w-full rounded-full bg-secondary overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-primary"
+                  style={{ width: `${Math.min(book.progress * 100, 100)}%` }}
+                />
+              </div>
+            )}
+          </div>
+          <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+        </div>
+      </div>
+    </Link>
+  );
+}
+
 export function MeContent() {
   const t = useTranslations('me');
+  const tl = useTranslations('library');
   const { data: session } = useSession();
+  const isAuthenticated = !!session?.user;
+  const { history } = useBrowsingHistory();
+  const { favoriteIds } = useFavoriteBookIds();
+
+  const hasHistory = history.length > 0;
+  const hasFavorites = favoriteIds.size > 0;
+  const hasMyContent = isAuthenticated && (hasHistory || hasFavorites);
 
   return (
     <div className="space-y-6 pb-8">
-      {/* Profile Card */}
+      {/* 1. Profile Card */}
       <div className="rounded-2xl bg-card p-6 shadow-sm">
         {session?.user ? (
           <div className="flex items-center gap-4">
@@ -118,18 +191,82 @@ export function MeContent() {
         )}
       </div>
 
-      {/* Contact Section */}
-      <MenuSection title={t('contactUs')}>
+      {/* 2. Currently Reading (iOS: ContinueActivitySection) */}
+      {isAuthenticated && <CurrentlyReadingSection />}
+
+      {/* 3. My Content (iOS: section.myContent - Recently Browsed + Favorites) */}
+      {hasMyContent && (
+        <MenuSection title={t('myContent')}>
+          {hasHistory && (
+            <MenuRow
+              icon={Clock}
+              iconColor="#F97316"
+              title={tl('recentlyBrowsed')}
+              href="/library"
+            />
+          )}
+          {hasFavorites && (
+            <MenuRow
+              icon={Heart}
+              iconColor="#EF4444"
+              title={tl('favorites')}
+              href="/library"
+            />
+          )}
+        </MenuSection>
+      )}
+
+      {/* 4. Reading Data (iOS: section.readingData - Stats + Subscription) */}
+      <MenuSection title={t('readingData')}>
         <MenuRow
-          icon={MessageSquare}
+          icon={BarChart3}
           iconColor="#3B82F6"
-          title={t('contactUs')}
+          title={t('viewStats')}
+          href="/settings"
+        />
+        <MenuRow
+          icon={Crown}
+          iconColor="#EAB308"
+          title={t('subscription')}
+          subtitle={t('subscriptionFree')}
           href="/settings"
         />
       </MenuSection>
 
-      {/* Legal Section */}
-      <MenuSection title={t('legal')}>
+      {/* 5. Notifications & Messages (iOS: section.notifications) */}
+      <MenuSection title={t('notifications')}>
+        <MenuRow
+          icon={Bell}
+          iconColor="#F97316"
+          title={t('notificationCenter')}
+          href="/settings"
+        />
+        <MenuRow
+          icon={MessageSquare}
+          iconColor="#3B82F6"
+          title={t('sendMessage')}
+          href="/settings"
+        />
+      </MenuSection>
+
+      {/* 6. Community (iOS: nav.agora) */}
+      <MenuSection title={t('community')}>
+        <MenuRow
+          icon={Building2}
+          iconColor="#A855F7"
+          title={t('agora')}
+          href="/community"
+        />
+      </MenuSection>
+
+      {/* 7. Other (iOS: section.other - About + Legal) */}
+      <MenuSection title={t('other')}>
+        <MenuRow
+          icon={Info}
+          iconColor="#6B7280"
+          title={t('aboutReadmigo')}
+          href="/settings"
+        />
         <MenuRow
           icon={Shield}
           iconColor="#22C55E"
@@ -150,25 +287,14 @@ export function MeContent() {
         />
       </MenuSection>
 
-      {/* About Section */}
-      <MenuSection title={t('about')}>
-        <MenuRow
-          icon={Info}
-          iconColor="#6B7280"
-          title={t('aboutReadmigo')}
-          href="/settings"
-        />
-      </MenuSection>
-
-      {/* Sign Out */}
-      {session?.user && (
+      {/* 8. Account - Sign Out (iOS: section.account) */}
+      {isAuthenticated && (
         <MenuSection title={t('account')}>
           <MenuRow
             icon={LogOut}
             title={t('signOut')}
             destructive
             onClick={() => {
-              // signOut handled by next-auth
               window.location.href = '/api/auth/signout';
             }}
           />
