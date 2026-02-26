@@ -1,10 +1,13 @@
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
-export default function AuthLayout({
+export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const t = await getTranslations('auth');
+
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500">
       <main className="flex flex-1 items-center justify-center p-4">
@@ -16,7 +19,7 @@ export default function AuthLayout({
           target="_blank"
           className="hover:text-white/80 transition-colors"
         >
-          服务条款
+          {t('termsOfService')}
         </Link>
         <span>·</span>
         <Link
@@ -24,7 +27,7 @@ export default function AuthLayout({
           target="_blank"
           className="hover:text-white/80 transition-colors"
         >
-          隐私政策
+          {t('privacyPolicy')}
         </Link>
       </footer>
     </div>

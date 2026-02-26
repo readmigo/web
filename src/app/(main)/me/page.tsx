@@ -1,9 +1,14 @@
+import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { MeContent } from './me-content';
 
-export const metadata = {
-  title: '我的 - Readmigo',
-  description: '个人中心与设置',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+  return {
+    title: t('meTitle'),
+    description: t('meDescription'),
+  };
+}
 
 export default function MePage() {
   return (

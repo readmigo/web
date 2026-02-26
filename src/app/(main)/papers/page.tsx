@@ -1,19 +1,25 @@
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { PapersContent } from './papers-content';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
-  title: '论文库',
-  description: '管理和阅读你的学术论文',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+  return {
+    title: t('papersTitle'),
+    description: t('papersDescription'),
+  };
+}
 
-export default function PapersPage() {
+export default async function PapersPage() {
+  const t = await getTranslations('metadata');
+
   return (
     <div className="container py-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">论文库</h1>
-        <p className="text-muted-foreground">浏览和阅读学术论文</p>
+        <h1 className="text-2xl font-bold">{t('papersTitle')}</h1>
+        <p className="text-muted-foreground">{t('papersSubtitle')}</p>
       </div>
       <PapersContent />
     </div>

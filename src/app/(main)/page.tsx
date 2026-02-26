@@ -1,9 +1,14 @@
+import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { ExploreContent } from './explore/explore-content';
 
-export const metadata = {
-  title: '书城 - Readmigo',
-  description: '发现超过 100,000 本免费英文原版书籍',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+  return {
+    title: t('exploreTitle'),
+    description: t('exploreDescription'),
+  };
+}
 
 export default function HomePage() {
   return <ExploreContent />;

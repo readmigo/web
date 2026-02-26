@@ -1,10 +1,14 @@
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { AudiobooksContent } from './audiobooks-content';
 
-export const metadata: Metadata = {
-  title: '有声书',
-  description: '探索免费英文原版有声书',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+  return {
+    title: t('audiobooksTitle'),
+    description: t('audiobooksDescription'),
+  };
+}
 
 export default function AudiobooksPage() {
   return (

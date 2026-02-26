@@ -1,17 +1,23 @@
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { LibraryContent } from './library-content';
 
-export const metadata: Metadata = {
-  title: '我的书架',
-  description: '管理你的阅读书籍',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+  return {
+    title: t('libraryTitle'),
+    description: t('libraryDescription'),
+  };
+}
 
-export default function LibraryPage() {
+export default async function LibraryPage() {
+  const t = await getTranslations('metadata');
+
   return (
     <div className="container py-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">我的书架</h1>
-        <p className="text-muted-foreground">管理你的阅读书籍和进度</p>
+        <h1 className="text-2xl font-bold">{t('libraryTitle')}</h1>
+        <p className="text-muted-foreground">{t('librarySubtitle')}</p>
       </div>
       <LibraryContent />
     </div>
