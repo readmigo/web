@@ -1,10 +1,14 @@
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { RegisterForm } from '@/features/auth/components/register-form';
 
-export const metadata: Metadata = {
-  title: '注册',
-  description: '创建你的 Readmigo 账户',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+  return {
+    title: t('registerTitle'),
+    description: t('registerDescription'),
+  };
+}
 
 interface RegisterPageProps {
   searchParams: Promise<{ callbackUrl?: string }>;

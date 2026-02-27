@@ -1,6 +1,11 @@
+'use client';
+
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 export function Footer() {
+  const t = useTranslations('footer');
+
   return (
     <footer className="fixed bottom-0 left-0 right-0 z-40 hidden border-t bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 md:block">
       <div className="container flex h-12 items-center justify-between text-xs text-muted-foreground">
@@ -21,7 +26,7 @@ export function Footer() {
             rel="noopener noreferrer"
             className="transition-colors hover:text-foreground"
           >
-            隐私政策
+            {t('privacyPolicy')}
           </a>
           <a
             href="https://readmigo.app/terms"
@@ -29,7 +34,7 @@ export function Footer() {
             rel="noopener noreferrer"
             className="transition-colors hover:text-foreground"
           >
-            服务条款
+            {t('termsOfService')}
           </a>
           <a
             href="https://readmigo.app"
@@ -37,7 +42,7 @@ export function Footer() {
             rel="noopener noreferrer"
             className="transition-colors hover:text-foreground"
           >
-            官网
+            {t('website')}
           </a>
         </div>
       </div>

@@ -1,13 +1,39 @@
 'use client';
 
+const translations = {
+  zh: {
+    title: '应用发生严重错误',
+    description: '非常抱歉，应用遇到了无法恢复的错误。请尝试重新加载页面。',
+    reload: '重新加载',
+  },
+  en: {
+    title: 'Critical Error',
+    description: "We're sorry, the app encountered an unrecoverable error. Please try reloading the page.",
+    reload: 'Reload',
+  },
+} as const;
+
+function getLocale(): 'zh' | 'en' {
+  if (typeof document !== 'undefined') {
+    const match = document.cookie.match(/NEXT_LOCALE=(\w+)/);
+    if (match && (match[1] === 'en' || match[1] === 'zh')) {
+      return match[1];
+    }
+  }
+  return 'zh';
+}
+
 export default function GlobalError({
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const locale = getLocale();
+  const t = translations[locale];
+
   return (
-    <html lang="zh-CN">
+    <html lang={locale === 'zh' ? 'zh-CN' : 'en'}>
       <body
         style={{
           margin: 0,
@@ -57,7 +83,7 @@ export default function GlobalError({
               marginBottom: '8px',
             }}
           >
-            应用发生严重错误
+            {t.title}
           </h2>
           <p
             style={{
@@ -67,7 +93,7 @@ export default function GlobalError({
               lineHeight: 1.6,
             }}
           >
-            非常抱歉，应用遇到了无法恢复的错误。请尝试重新加载页面。
+            {t.description}
           </p>
           <button
             onClick={() => reset()}
@@ -82,7 +108,7 @@ export default function GlobalError({
               cursor: 'pointer',
             }}
           >
-            重新加载
+            {t.reload}
           </button>
         </div>
       </body>

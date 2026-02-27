@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -22,6 +23,7 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
+  const t = useTranslations('auth');
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -43,12 +45,12 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
       });
 
       if (result?.error) {
-        setError('邮箱或密码错误');
+        setError(t('invalidCredentials'));
       } else if (result?.url) {
         window.location.href = result.url;
       }
     } catch {
-      setError('登录失败，请稍后重试');
+      setError(t('loginFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -67,7 +69,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
             onClick={() => setShowEmailForm(false)}
             className="mb-4 text-sm text-white/70 hover:text-white transition-colors"
           >
-            ← 返回
+            {t('back')}
           </button>
           <div className="flex justify-center mb-4">
             <Image
@@ -78,7 +80,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
               className="rounded-2xl shadow-lg"
             />
           </div>
-          <h1 className="text-2xl font-bold text-white">邮箱登录</h1>
+          <h1 className="text-2xl font-bold text-white">{t('emailLogin')}</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -89,7 +91,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-white/80">邮箱</Label>
+            <Label htmlFor="email" className="text-white/80">{t('emailLabel')}</Label>
             <Input
               id="email"
               type="email"
@@ -103,12 +105,12 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="password" className="text-white/80">密码</Label>
+              <Label htmlFor="password" className="text-white/80">{t('passwordLabel')}</Label>
               <Link
                 href="/forgot-password"
                 className="text-sm text-white/60 hover:text-white transition-colors"
               >
-                忘记密码?
+                {t('forgotPassword')}
               </Link>
             </div>
             <div className="relative">
@@ -140,14 +142,14 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
             className="w-full h-12 rounded-xl bg-white text-purple-600 font-semibold hover:bg-white/90"
             disabled={isLoading}
           >
-            {isLoading ? '登录中...' : '登录'}
+            {isLoading ? t('loggingIn') : t('login')}
           </Button>
         </form>
 
         <p className="text-center text-sm text-white/60">
-          还没有账户?{' '}
+          {t('noAccount')}{' '}
           <Link href="/register" className="text-white hover:underline">
-            免费注册
+            {t('freeRegister')}
           </Link>
         </p>
       </div>
@@ -169,7 +171,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
         />
         <div className="text-center">
           <h1 className="text-4xl font-bold text-white">Readmigo</h1>
-          <p className="mt-2 text-white/70">AI-powered English reading companion</p>
+          <p className="mt-2 text-white/70">{t('tagline')}</p>
         </div>
       </div>
 
@@ -181,7 +183,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
           onClick={() => handleOAuthSignIn('apple')}
         >
           <AppleLogo className="mr-2 h-5 w-5" />
-          Sign in with Apple
+          {t('signInApple')}
         </Button>
 
         {/* Google Sign In */}
@@ -207,7 +209,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
           </svg>
-          Sign in with Google
+          {t('signInGoogle')}
         </Button>
 
         {/* Email Sign In */}
@@ -217,7 +219,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
           onClick={() => setShowEmailForm(true)}
         >
           <Mail className="mr-2 h-5 w-5" />
-          Sign in with Email
+          {t('signInEmail')}
         </Button>
 
         {/* Guest Mode */}
@@ -226,7 +228,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
             href="/"
             className="text-sm text-white/60 underline underline-offset-4 hover:text-white/80 transition-colors"
           >
-            Browse as Guest
+            {t('browseGuest')}
           </Link>
         </div>
       </div>

@@ -1,17 +1,23 @@
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { SettingsContent } from './settings-content';
 
-export const metadata: Metadata = {
-  title: '设置',
-  description: '管理你的 Readmigo 设置',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+  return {
+    title: t('settingsTitle'),
+    description: t('settingsDescription'),
+  };
+}
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const t = await getTranslations('metadata');
+
   return (
     <div className="container max-w-4xl py-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">设置</h1>
-        <p className="text-muted-foreground">管理你的应用设置和偏好</p>
+        <h1 className="text-2xl font-bold">{t('settingsTitle')}</h1>
+        <p className="text-muted-foreground">{t('settingsSubtitle')}</p>
       </div>
       <SettingsContent />
     </div>

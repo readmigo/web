@@ -1,7 +1,10 @@
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { Button } from '@/components/ui/button';
 
-export default function NotFound() {
+export default async function NotFound() {
+  const t = await getTranslations('notFound');
+
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="text-center max-w-md">
@@ -21,13 +24,13 @@ export default function NotFound() {
           </svg>
         </div>
         <h2 className="mb-2 text-2xl font-bold text-foreground">
-          页面不存在
+          {t('title')}
         </h2>
         <p className="mb-6 text-muted-foreground">
-          你访问的页面不存在或已被移除。
+          {t('description')}
         </p>
         <Button asChild>
-          <Link href="/explore">返回首页</Link>
+          <Link href="/explore">{t('backHome')}</Link>
         </Button>
       </div>
     </div>

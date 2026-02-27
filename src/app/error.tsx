@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 
 export default function Error({
@@ -11,6 +12,7 @@ export default function Error({
   reset: () => void;
 }) {
   const router = useRouter();
+  const t = useTranslations('error');
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
@@ -31,17 +33,17 @@ export default function Error({
           </svg>
         </div>
         <h2 className="mb-2 text-2xl font-bold text-foreground">
-          出了点问题
+          {t('title')}
         </h2>
         <p className="mb-6 text-muted-foreground">
-          {error.message || '页面加载时发生了意外错误，请稍后重试。'}
+          {error.message || t('description')}
         </p>
         <div className="flex items-center justify-center gap-3">
           <Button variant="outline" onClick={() => router.push('/explore')}>
-            返回首页
+            {t('backHome')}
           </Button>
           <Button onClick={() => reset()}>
-            重新尝试
+            {t('retry')}
           </Button>
         </div>
       </div>

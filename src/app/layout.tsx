@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { NextIntlClientProvider } from 'next-intl';
-import { getLocale, getMessages } from 'next-intl/server';
+import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 import { Providers } from '@/lib/providers';
 import './globals.css';
 
@@ -23,47 +23,48 @@ const inter = Inter({
   subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: 'Readmigo - 在故事中学英语',
-    template: '%s | Readmigo',
-  },
-  description:
-    '通过阅读英文原版书籍，在故事中学习语言。Readmigo 结合 AI 技术，为你提供沉浸式的语言学习体验。',
-  keywords: ['英语学习', '原版阅读', 'AI', '电子书', '有声书', '语言学习'],
-  authors: [{ name: 'Readmigo Team' }],
-  creator: 'Readmigo',
-  manifest: '/manifest.json',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'default',
-    title: 'Readmigo',
-  },
-  formatDetection: {
-    telephone: false,
-  },
-  openGraph: {
-    type: 'website',
-    locale: 'zh_CN',
-    url: 'https://readmigo.com',
-    siteName: 'Readmigo',
-    title: 'Readmigo - 在故事中学英语',
-    description:
-      '通过阅读英文原版书籍，在故事中学习语言。Readmigo 结合 AI 技术，为你提供沉浸式的语言学习体验。',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Readmigo - 在故事中学英语',
-    description: '通过阅读英文原版书籍，在故事中学习语言。',
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  other: {
-    'mobile-web-app-capable': 'yes',
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+
+  return {
+    title: {
+      default: t('homeTitle'),
+      template: '%s | Readmigo',
+    },
+    description: t('homeDescription'),
+    keywords: t('homeKeywords').split(', '),
+    authors: [{ name: 'Readmigo Team' }],
+    creator: 'Readmigo',
+    manifest: '/manifest.json',
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: 'default',
+      title: 'Readmigo',
+    },
+    formatDetection: {
+      telephone: false,
+    },
+    openGraph: {
+      type: 'website',
+      url: 'https://readmigo.com',
+      siteName: 'Readmigo',
+      title: t('homeTitle'),
+      description: t('homeDescription'),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('homeTitle'),
+      description: t('homeDescription'),
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+    other: {
+      'mobile-web-app-capable': 'yes',
+    },
+  };
+}
 
 export default async function RootLayout({
   children,

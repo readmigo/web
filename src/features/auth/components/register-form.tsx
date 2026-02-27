@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,6 +16,7 @@ interface RegisterFormProps {
 }
 
 export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
+  const t = useTranslations('auth');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,12 +31,12 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
     setError('');
 
     if (password !== confirmPassword) {
-      setError('两次输入的密码不一致');
+      setError(t('passwordMismatch'));
       return;
     }
 
     if (!agreeTerms) {
-      setError('请同意用户协议和隐私政策');
+      setError(t('agreeRequired'));
       return;
     }
 
@@ -50,7 +52,7 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.message || '注册失败');
+        throw new Error(data.message || t('registerFailed'));
       }
 
       // Auto sign in after registration
@@ -60,7 +62,7 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
         callbackUrl,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : '注册失败，请稍后重试');
+      setError(err instanceof Error ? err.message : t('registerFailedRetry'));
     } finally {
       setIsLoading(false);
     }
@@ -73,8 +75,8 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
   return (
     <div className="w-full max-w-sm space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold">创建账户</h1>
-        <p className="mt-2 text-muted-foreground">开始你的英语阅读之旅</p>
+        <h1 className="text-2xl font-bold">{t('createAccount')}</h1>
+        <p className="mt-2 text-muted-foreground">{t('registerSubtitle')}</p>
       </div>
 
       {/* OAuth Buttons */}
@@ -85,7 +87,7 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
           onClick={() => handleOAuthSignIn('apple')}
         >
           <Apple className="mr-2 h-5 w-5" />
-          使用 Apple 注册
+          {t('signUpApple')}
         </Button>
         <Button
           variant="outline"
@@ -110,14 +112,14 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
           </svg>
-          使用 Google 注册
+          {t('signUpGoogle')}
         </Button>
       </div>
 
       <div className="relative">
         <Separator />
         <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs text-muted-foreground">
-          或使用邮箱
+          {t('orEmail')}
         </span>
       </div>
 
@@ -130,13 +132,13 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
         )}
 
         <div className="space-y-2">
-          <Label htmlFor="name">昵称</Label>
+          <Label htmlFor="name">{t('nicknameLabel')}</Label>
           <div className="relative">
             <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               id="name"
               type="text"
-              placeholder="你的昵称"
+              placeholder={t('nicknamePlaceholder')}
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="pl-9"
@@ -146,7 +148,7 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email">邮箱</Label>
+          <Label htmlFor="email">{t('emailLabel')}</Label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -162,12 +164,12 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">密码</Label>
+          <Label htmlFor="password">{t('passwordLabel')}</Label>
           <div className="relative">
             <Input
               id="password"
               type={showPassword ? 'text' : 'password'}
-              placeholder="至少 8 个字符"
+              placeholder={t('passwordPlaceholder')}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               minLength={8}
@@ -188,11 +190,11 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword">确认密码</Label>
+          <Label htmlFor="confirmPassword">{t('confirmPasswordLabel')}</Label>
           <Input
             id="confirmPassword"
             type={showPassword ? 'text' : 'password'}
-            placeholder="再次输入密码"
+            placeholder={t('confirmPasswordPlaceholder')}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
@@ -206,26 +208,26 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
             onCheckedChange={(checked) => setAgreeTerms(checked === true)}
           />
           <label htmlFor="terms" className="text-sm text-muted-foreground">
-            我已阅读并同意{' '}
+            {t('agreePrefix')}
             <Link href="/terms" className="text-primary hover:underline">
-              用户协议
-            </Link>{' '}
-            和{' '}
+              {t('userAgreement')}
+            </Link>
+            {t('and')}
             <Link href="/privacy" className="text-primary hover:underline">
-              隐私政策
+              {t('privacyPolicy')}
             </Link>
           </label>
         </div>
 
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? '注册中...' : '创建账户'}
+          {isLoading ? t('registering') : t('createAccount')}
         </Button>
       </form>
 
       <p className="text-center text-sm text-muted-foreground">
-        已有账户?{' '}
+        {t('hasAccount')}{' '}
         <Link href="/login" className="text-primary hover:underline">
-          立即登录
+          {t('loginNow')}
         </Link>
       </p>
     </div>

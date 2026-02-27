@@ -1,10 +1,14 @@
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { LoginForm } from '@/features/auth/components/login-form';
 
-export const metadata: Metadata = {
-  title: '登录',
-  description: '登录你的 Readmigo 账户',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+  return {
+    title: t('loginTitle'),
+    description: t('loginDescription'),
+  };
+}
 
 interface LoginPageProps {
   searchParams: Promise<{ callbackUrl?: string }>;
