@@ -20,7 +20,8 @@
     "allBooks": "全部书籍",
     "noBooks": "暂无书籍",
     "exploreMore": "去探索发现更多好书吧",
-    "noMoreBooks": "没有更多书籍了"
+    "noMoreBooks": "没有更多书籍了",
+    "viewAllLists": "查看全部书单"
   },
   "audiobooks": {
     "recentlyListened": "最近收听",
@@ -54,6 +55,17 @@
     "user": "用户",
     "notLoggedIn": "还未登录",
     "loginRegister": "登录 / 注册",
+    "myContent": "我的内容",
+    "readingData": "阅读数据",
+    "viewStats": "阅读统计",
+    "subscription": "订阅管理",
+    "subscriptionFree": "免费版",
+    "notifications": "通知与消息",
+    "notificationCenter": "通知中心",
+    "sendMessage": "发送消息",
+    "community": "社区",
+    "agora": "广场",
+    "other": "其他",
     "contactUs": "联系我们",
     "legal": "法律条款",
     "privacyPolicy": "隐私政策",

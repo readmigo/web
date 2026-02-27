@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -11,7 +12,7 @@ import { useCategories } from '@/features/library/hooks/use-categories';
 import {
   Search, RefreshCw, Loader2, BookOpen, Library, Drama, Mountain,
   Lightbulb, Quote, Wand2, Moon, Heart, Folder, Clock, FlaskConical,
-  Code, TrendingUp, Users, Palette, Sun, Star, Globe,
+  Code, TrendingUp, Users, Palette, Sun, Star, Globe, ChevronRight, ListMusic,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { Category } from '@/features/library/types';
@@ -23,6 +24,7 @@ import { SearchResultsDropdown } from '@/features/search/components/search-resul
 import { useBookLists } from '@/features/library/hooks/use-book-lists';
 import { HeroBanner } from '@/features/library/components/hero-banner';
 import { BookListSection, BookListSectionSkeleton } from '@/features/library/components/book-list-section';
+import { ContinueReadingCard } from '@/features/library/components/continue-reading-card';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 
@@ -236,6 +238,9 @@ export function ExploreContent() {
       {/* Hero Banner */}
       <HeroBanner bookLists={featuredBookLists} isLoading={bookListsLoading} />
 
+      {/* Continue Reading (iOS: ContinueActivityWrapper) */}
+      <ContinueReadingCard />
+
       {/* Category menu - circular icons */}
       <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
         {categoriesLoading ? (
@@ -293,6 +298,18 @@ export function ExploreContent() {
             ))}
           </div>
         )
+      )}
+
+      {/* View All Lists Entry (iOS: MoreListsEntryWrapper) */}
+      {!bookListsLoading && allBookLists.length > 0 && (
+        <Link
+          href="/book-list"
+          className="flex items-center justify-center gap-2 rounded-xl bg-secondary/50 px-4 py-3 transition-colors hover:bg-secondary"
+        >
+          <ListMusic className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm font-medium text-muted-foreground">{t('viewAllLists')}</span>
+          <ChevronRight className="h-4 w-4 text-muted-foreground" />
+        </Link>
       )}
 
       {/* "全部书籍" divider */}

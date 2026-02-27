@@ -20,7 +20,8 @@
     "allBooks": "All Books",
     "noBooks": "No books found",
     "exploreMore": "Explore to discover more great books",
-    "noMoreBooks": "No more books"
+    "noMoreBooks": "No more books",
+    "viewAllLists": "View All Lists"
   },
   "audiobooks": {
     "recentlyListened": "Recently Listened",
@@ -54,6 +55,17 @@
     "user": "User",
     "notLoggedIn": "Not logged in",
     "loginRegister": "Login / Register",
+    "myContent": "My Content",
+    "readingData": "Reading Data",
+    "viewStats": "Reading Stats",
+    "subscription": "Subscription",
+    "subscriptionFree": "Free",
+    "notifications": "Notifications & Messages",
+    "notificationCenter": "Notification Center",
+    "sendMessage": "Send Message",
+    "community": "Community",
+    "agora": "Agora",
+    "other": "Other",
     "contactUs": "Contact Us",
     "legal": "Legal",
     "privacyPolicy": "Privacy Policy",
