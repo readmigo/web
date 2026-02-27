@@ -392,7 +392,7 @@ export function SettingsContent() {
       {/* Version Info */}
       <div className="text-center text-sm text-muted-foreground">
         <p>Readmigo Web App v1.0.0</p>
-        <p className="mt-1">© 2024 Readmigo. All rights reserved.</p>
+        <p className="mt-1">© 2026 Readmigo. All rights reserved.</p>
       </div>
     </div>
   );
