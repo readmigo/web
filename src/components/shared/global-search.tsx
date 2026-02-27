@@ -8,24 +8,18 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
 import {
   Search,
-  BookOpen,
-  GraduationCap,
   Settings,
-  BarChart3,
   Library,
   Compass,
-  FileText,
   Clock,
   ArrowRight,
 } from 'lucide-react';
-import { useLearningStore } from '@/features/learning/stores/learning-store';
 
 interface SearchResult {
   id: string;
-  type: 'page' | 'book' | 'vocabulary' | 'action';
+  type: 'page' | 'book' | 'action';
   title: string;
   description?: string;
   icon: React.ReactNode;
@@ -42,7 +36,6 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const { vocabulary } = useLearningStore();
 
   // Static navigation items
   const navigationItems: SearchResult[] = useMemo(
@@ -70,22 +63,6 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
         description: '探索新书籍',
         icon: <Compass className="h-4 w-4" />,
         href: '/explore',
-      },
-      {
-        id: 'vocabulary',
-        type: 'page',
-        title: '生词本',
-        description: '管理和复习词汇',
-        icon: <GraduationCap className="h-4 w-4" />,
-        href: '/vocabulary',
-      },
-      {
-        id: 'learn',
-        type: 'page',
-        title: '学习中心',
-        description: '查看学习统计和进度',
-        icon: <BarChart3 className="h-4 w-4" />,
-        href: '/learn',
       },
       {
         id: 'settings',
@@ -126,25 +103,8 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
       }
     });
 
-    // Search vocabulary
-    vocabulary.forEach((word) => {
-      if (
-        word.word.toLowerCase().includes(lowerQuery) ||
-        word.translation.includes(query)
-      ) {
-        filtered.push({
-          id: `vocab-${word.id}`,
-          type: 'vocabulary',
-          title: word.word,
-          description: word.translation,
-          icon: <FileText className="h-4 w-4" />,
-          href: '/vocabulary',
-        });
-      }
-    });
-
     return filtered.slice(0, 10);
-  }, [query, navigationItems, vocabulary]);
+  }, [query, navigationItems]);
 
   // Reset selection when results change
   useEffect(() => {
@@ -262,11 +222,6 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
                       <div className="flex-1 overflow-hidden">
                         <div className="flex items-center gap-2">
                           <span className="font-medium">{result.title}</span>
-                          {result.type === 'vocabulary' && (
-                            <Badge variant="secondary" className="text-xs">
-                              词汇
-                            </Badge>
-                          )}
                         </div>
                         {'description' in result && result.description && (
                           <p className="truncate text-sm text-muted-foreground">

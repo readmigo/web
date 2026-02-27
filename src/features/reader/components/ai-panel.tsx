@@ -14,7 +14,6 @@ import {
   Languages,
   Sparkles,
   Volume2,
-  Plus,
   Loader2,
 } from 'lucide-react';
 import { useReaderStore } from '../stores/reader-store';
@@ -129,12 +128,6 @@ export function AiPanel({ onClose, bookId }: AiPanelProps) {
     }
   };
 
-  const handleAddToVocabulary = () => {
-    if (wordDefinition) {
-      // TODO: Implement add to vocabulary via API
-    }
-  };
-
   const handleHighlight = (color: 'yellow' | 'green' | 'blue' | 'pink') => {
     if (selectedText) {
       addHighlight({
@@ -153,8 +146,6 @@ export function AiPanel({ onClose, bookId }: AiPanelProps) {
       speechSynthesis.speak(utterance);
     }
   };
-
-  const isLoading = explainMutation.isPending || translateMutation.isPending || qaMutation.isPending;
 
   return (
     <div className="fixed inset-y-0 right-0 z-50 flex w-96 flex-col border-l bg-background shadow-lg">
@@ -260,23 +251,13 @@ export function AiPanel({ onClose, bookId }: AiPanelProps) {
               </div>
             ) : wordDefinition ? (
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg font-bold">
-                      {wordDefinition.word}
-                    </span>
-                    <Badge variant="secondary">
-                      {wordDefinition.partOfSpeech}
-                    </Badge>
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={handleAddToVocabulary}
-                  >
-                    <Plus className="mr-1 h-3 w-3" />
-                    加入生词本
-                  </Button>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-bold">
+                    {wordDefinition.word}
+                  </span>
+                  <Badge variant="secondary">
+                    {wordDefinition.partOfSpeech}
+                  </Badge>
                 </div>
                 {wordDefinition.phonetic && (
                   <p className="text-sm text-muted-foreground">
