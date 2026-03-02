@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useReaderStore } from '../stores/reader-store';
 import type { SelectedText } from '../types';
+import { trackEvent } from '@/lib/amplitude';
 
 interface SelectionPopupProps {
   selection: SelectedText;
@@ -50,6 +51,7 @@ export function SelectionPopup({
       text: selection.text,
       color,
     });
+    trackEvent('highlight_created', { book_id: bookId, color });
     setSelectedText(null);
   };
 
@@ -68,6 +70,7 @@ export function SelectionPopup({
       color: 'yellow',
       note: note.trim(),
     });
+    trackEvent('highlight_created', { book_id: bookId, has_note: true });
     setSelectedText(null);
   };
 
@@ -132,7 +135,10 @@ export function SelectionPopup({
             variant="ghost"
             size="sm"
             className="h-8 px-2"
-            onClick={onSpeak}
+            onClick={() => {
+              trackEvent('tts_started', { book_id: bookId });
+              onSpeak();
+            }}
           >
             <Volume2 className="h-4 w-4" />
           </Button>
@@ -142,7 +148,10 @@ export function SelectionPopup({
               variant="ghost"
               size="sm"
               className="h-8 px-2"
-              onClick={onAddWord}
+              onClick={() => {
+                trackEvent('word_saved', { book_id: bookId });
+                onAddWord();
+              }}
             >
               <Plus className="h-4 w-4" />
             </Button>

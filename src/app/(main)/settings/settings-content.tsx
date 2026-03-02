@@ -27,6 +27,7 @@ import {
 import { useReaderStore } from '@/features/reader/stores/reader-store';
 import { useLearningStore } from '@/features/learning/stores/learning-store';
 import { OfflineStorageCard } from '@/features/offline';
+import { trackEvent } from '@/lib/amplitude';
 
 export function SettingsContent() {
   const t = useTranslations('settings');
@@ -64,6 +65,7 @@ export function SettingsContent() {
   ];
 
   const handleLocaleChange = (locale: string) => {
+    trackEvent('language_changed', { language: locale });
     document.cookie = `NEXT_LOCALE=${locale};path=/;max-age=31536000`;
     setCurrentLocale(locale);
     window.location.reload();

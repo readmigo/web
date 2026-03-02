@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Apple, Mail, Eye, EyeOff, User } from 'lucide-react';
+import { trackEvent } from '@/lib/amplitude';
 
 interface RegisterFormProps {
   callbackUrl?: string;
@@ -54,6 +55,7 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
       }
 
       // Auto sign in after registration
+      trackEvent('user_signed_up', { method: 'email' });
       await signIn('credentials', {
         email,
         password,
@@ -67,6 +69,7 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
   };
 
   const handleOAuthSignIn = (provider: 'apple' | 'google') => {
+    trackEvent('user_signed_up', { method: provider });
     signIn(provider, { callbackUrl });
   };
 

@@ -4,6 +4,7 @@ import type { ReaderSettings, ReaderPosition, Highlight, Bookmark, SelectedText 
 import { apiClient } from '@/lib/api/client';
 import { addToOfflineQueue } from '../hooks/use-highlights';
 import { buildParagraphKey } from '../utils/translation-hash';
+import { trackEvent } from '@/lib/amplitude';
 
 // Reading session for tracking time and progress
 interface ReadingSession {
@@ -291,6 +292,8 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
           pendingSync: new Set([...state.pendingSync, newBookmark.id]),
         }));
 
+        trackEvent('bookmark_created', { book_id: bookmark.bookId });
+
         // Sync to backend
         apiClient
           .post('/reading/bookmarks', {
@@ -331,6 +334,8 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
         set((state) => ({
           bookmarks: state.bookmarks.filter((b) => b.id !== id),
         }));
+
+        trackEvent('bookmark_deleted', { book_id: bookId });
 
         // Sync to backend
         apiClient.delete(`/reading/bookmarks/${id}`).catch((error) => {
@@ -401,6 +406,8 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
         set((state) => ({
           highlights: state.highlights.filter((h) => h.id !== id),
         }));
+
+        trackEvent('highlight_deleted', { book_id: bookId });
 
         // Sync to backend
         apiClient.delete(`/reading/highlights/${id}`).catch((error) => {

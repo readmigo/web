@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -26,6 +26,7 @@ import { useReadingGuide, useBookContext } from '@/features/library/hooks/use-bo
 import { ReadingGuideSection } from '@/features/library/components/reading-guide-section';
 import { BookContextSection } from '@/features/library/components/book-context-section';
 import { formatDuration } from '@/features/audiobook/stores/audio-player-store';
+import { trackEvent } from '@/lib/amplitude';
 
 function formatWordCount(count: number): string {
   if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
@@ -76,8 +77,19 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
   const hasAudiobook = book.hasAudiobook || !!audiobook;
   const chaptersToShow = showAllChapters ? book.chapters : book.chapters.slice(0, 10);
 
+  useEffect(() => {
+    if (book) {
+      trackEvent('book_detail_viewed', { book_id: bookId, book_title: book.title });
+    }
+  }, [book, bookId]);
+
   const handleToggleFavorite = () => {
     if (!isAuthenticated) return;
+    if (isFavorited) {
+      trackEvent('library_book_removed', { book_id: book.id });
+    } else {
+      trackEvent('library_book_added', { book_id: book.id });
+    }
     toggleFavorite(book.id, isFavorited);
   };
 

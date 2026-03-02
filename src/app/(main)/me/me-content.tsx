@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
+import { trackEvent, resetAmplitude } from '@/lib/amplitude';
 import {
   UserCircle,
   Shield,
@@ -168,7 +169,8 @@ export function MeContent() {
             title={t('signOut')}
             destructive
             onClick={() => {
-              // signOut handled by next-auth
+              trackEvent('user_logged_out');
+              resetAmplitude();
               window.location.href = '/api/auth/signout';
             }}
           />
