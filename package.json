@@ -18,6 +18,7 @@
     "test:e2e:prod": "playwright test --config=playwright.prod.config.ts"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^2.35.4",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.0",

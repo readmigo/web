@@ -6,6 +6,7 @@ import { ThemeProvider } from 'next-themes';
 import { useState, type ReactNode } from 'react';
 import { Toaster } from 'sonner';
 import { GlobalAudioPlayer } from '@/features/audiobook/components/global-audio-player';
+import { AmplitudeProvider } from './amplitude-provider';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -25,19 +26,21 @@ export function Providers({ children }: ProvidersProps) {
   );
 
   return (
-    <SessionProvider>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <GlobalAudioPlayer />
-          <Toaster position="top-center" richColors />
-        </ThemeProvider>
-      </QueryClientProvider>
-    </SessionProvider>
+    <AmplitudeProvider>
+      <SessionProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <GlobalAudioPlayer />
+            <Toaster position="top-center" richColors />
+          </ThemeProvider>
+        </QueryClientProvider>
+      </SessionProvider>
+    </AmplitudeProvider>
   );
 }
