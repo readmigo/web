@@ -1,4 +1,5 @@
 import * as amplitude from '@amplitude/analytics-browser';
+import { Revenue } from '@amplitude/analytics-browser';
 
 let initialized = false;
 
@@ -50,4 +51,21 @@ export function setUserProperties(properties: Record<string, unknown>): void {
 export function resetAmplitude(): void {
   if (typeof window === 'undefined' || !initialized) return;
   amplitude.reset();
+}
+
+export function trackRevenue(
+  productId: string,
+  price: number,
+  quantity: number = 1,
+  revenueType?: string
+): void {
+  if (typeof window === 'undefined' || !initialized) return;
+  const rev = new Revenue()
+    .setProductId(productId)
+    .setPrice(price)
+    .setQuantity(quantity);
+  if (revenueType) {
+    rev.setRevenueType(revenueType);
+  }
+  amplitude.revenue(rev);
 }

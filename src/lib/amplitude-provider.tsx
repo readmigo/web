@@ -21,6 +21,9 @@ export function AmplitudeProvider({ children }: AmplitudeProviderProps) {
       identifyUser(session.user.id, {
         email: session.user.email,
         name: session.user.name,
+        language: navigator.language,
+        platform: 'Web',
+        last_active_date: new Date().toISOString(),
       });
     }
   }, [session]);
