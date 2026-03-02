@@ -10,6 +10,7 @@ import { Slider } from '@/components/ui/slider';
 import { useTranslations } from 'next-intl';
 import { useAudioPlayerStore, formatTime, formatDuration } from '../stores/audio-player-store';
 import { useWhispersyncFromAudiobook } from '../hooks/use-whispersync';
+import { useDanmaku, useSendDanmaku } from '../hooks/use-danmaku';
 import { PlayerControls } from './player-controls';
 import { ProgressSlider } from './progress-slider';
 import { SpeedSelector } from './speed-selector';
@@ -17,6 +18,7 @@ import { SleepTimer } from './sleep-timer';
 import { ChapterList } from './chapter-list';
 import { WhispersyncToBook } from './whispersync-banner';
 import { StudyModeView } from './study-mode-view';
+import { DanmakuOverlay } from './danmaku-overlay';
 
 interface AudioPlayerProps {
   isOpen: boolean;
@@ -51,6 +53,8 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
   const t = useTranslations('audiobooks');
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const { book, hasBook, getBookChapterId } = useWhispersyncFromAudiobook(audiobook);
+  const { data: danmakuData } = useDanmaku(audiobook?.id, currentChapter?.number);
+  const sendDanmaku = useSendDanmaku();
 
   if (!audiobook) return null;
 
@@ -83,7 +87,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
             <Tabs defaultValue="player" className="flex h-full flex-col">
               <TabsContent value="player" className="flex-1 overflow-auto">
                 <div className="flex flex-col items-center px-6 py-8">
-                  {/* Cover Art */}
+                  {/* Cover Art + Danmaku */}
                   <div className="relative aspect-square w-full max-w-[280px] overflow-hidden rounded-xl shadow-lg">
                     {audiobook.coverUrl ? (
                       <Image
@@ -98,6 +102,21 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                           {audiobook.title.charAt(0)}
                         </span>
                       </div>
+                    )}
+                    {danmakuData && (
+                      <DanmakuOverlay
+                        items={danmakuData.items}
+                        onSend={(content) => {
+                          if (audiobook && currentChapter) {
+                            sendDanmaku.mutate({
+                              audiobookId: audiobook.id,
+                              chapterNumber: currentChapter.number,
+                              content,
+                            });
+                          }
+                        }}
+                        isSending={sendDanmaku.isPending}
+                      />
                     )}
                   </div>
 

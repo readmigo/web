@@ -13,3 +13,5 @@ export {
 export { useInfiniteAudiobooks } from './use-infinite-audiobooks';
 
 export { useMediaSession } from './use-media-session';
+
+export { useDanmaku, useSendDanmaku } from './use-danmaku';
