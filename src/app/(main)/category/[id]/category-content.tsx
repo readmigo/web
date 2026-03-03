@@ -115,14 +115,14 @@ export function CategoryContent({ categoryId }: CategoryContentProps) {
         <div>
           <h1 className="text-2xl font-bold">{category.nameEn || category.name}</h1>
           <p className="text-muted-foreground">
-            {isLoading ? tc('loading') : t('booksCount', { count: total })}
+            {isLoading ? tc('loadingText') : t('booksCount', { count: total })}
           </p>
         </div>
       ) : (
         <div>
           <h1 className="text-2xl font-bold">{t('category')}</h1>
           <p className="text-muted-foreground">
-            {isLoading ? tc('loading') : t('booksCount', { count: total })}
+            {isLoading ? tc('loadingText') : t('booksCount', { count: total })}
           </p>
         </div>
       )}
@@ -166,7 +166,7 @@ export function CategoryContent({ categoryId }: CategoryContentProps) {
         </div>
       ) : books.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12">
-          <p className="text-lg text-muted-foreground">{t('noBooks')}</p>
+          <p className="text-lg text-muted-foreground">{t('emptyTitle')}</p>
           <p className="mt-2 text-sm text-muted-foreground">
             {t('tryOther')}
           </p>

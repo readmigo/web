@@ -59,7 +59,7 @@ function getCategoryIcon(category: Category): LucideIcon {
 
 export function ExploreContent() {
   const router = useRouter();
-  const t = useTranslations('explore');
+  const t = useTranslations('discover');
   const tc = useTranslations('common');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -180,7 +180,7 @@ export function ExploreContent() {
       <div className="relative" ref={searchContainerRef}>
         <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
         <Input
-          placeholder={t('searchPlaceholder')}
+          placeholder={t('search.placeholder')}
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
@@ -318,7 +318,7 @@ export function ExploreContent() {
         </div>
       ) : books.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12">
-          <p className="text-lg text-muted-foreground">{t('noBooks')}</p>
+          <p className="text-lg text-muted-foreground">{t('emptyTitle')}</p>
           <p className="mt-2 text-sm text-muted-foreground">
             {t('exploreMore')}
           </p>

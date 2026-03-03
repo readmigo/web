@@ -1,6 +1,6 @@
 {
   "common": {
-    "loading": "Loading...",
+    "loadingText": "Loading...",
     "loadingFailed": "Loading failed",
     "retryLater": "Please try again later",
     "retry": "Retry",
@@ -15,19 +15,23 @@
     "me": "Me",
     "downloadApp": "Download App"
   },
-  "explore": {
-    "searchPlaceholder": "Search books or authors...",
+  "discover": {
+    "search": {
+      "placeholder": "Search books or authors..."
+    },
     "allBooks": "All Books",
-    "noBooks": "No books found",
+    "emptyTitle": "No books found",
     "exploreMore": "Explore to discover more great books",
     "noMoreBooks": "No more books"
   },
   "audiobooks": {
     "recentlyListened": "Recently Listened",
     "all": "All",
-    "searchPlaceholder": "Search audiobooks...",
-    "noAudiobooks": "No audiobooks found",
-    "noResults": "No audiobooks found related to \"{query}\"",
+    "search": {
+      "placeholder": "Search audiobooks...",
+      "emptyTitle": "No audiobooks found related to \"{query}\""
+    },
+    "emptyTitle": "No audiobooks found",
     "narrator": "Narrator: {name}",
     "back": "Back",
     "loadError": "Failed to load audiobook",
@@ -70,7 +74,7 @@
     "booksCount": "{count} books",
     "category": "Category",
     "subcategories": "Subcategories",
-    "noBooks": "No books in this category",
+    "emptyTitle": "No books in this category",
     "tryOther": "Try other categories",
     "exploreMore": "Explore More",
     "noMoreBooks": "No more books"

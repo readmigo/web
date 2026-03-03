@@ -1,6 +1,6 @@
 {
   "common": {
-    "loading": "加载中...",
+    "loadingText": "加载中...",
     "loadingFailed": "加载失败",
     "retryLater": "请稍后重试",
     "retry": "重试",
@@ -15,19 +15,23 @@
     "me": "我的",
     "downloadApp": "下载 App"
   },
-  "explore": {
-    "searchPlaceholder": "搜索书名或作者...",
+  "discover": {
+    "search": {
+      "placeholder": "搜索书名或作者..."
+    },
     "allBooks": "全部书籍",
-    "noBooks": "暂无书籍",
+    "emptyTitle": "暂无书籍",
     "exploreMore": "去探索发现更多好书吧",
     "noMoreBooks": "没有更多书籍了"
   },
   "audiobooks": {
     "recentlyListened": "最近收听",
     "all": "全部",
-    "searchPlaceholder": "搜索有声书...",
-    "noAudiobooks": "暂无有声书",
-    "noResults": "没有找到与 \"{query}\" 相关的有声书",
+    "search": {
+      "placeholder": "搜索有声书...",
+      "emptyTitle": "没有找到与 \"{query}\" 相关的有声书"
+    },
+    "emptyTitle": "暂无有声书",
     "narrator": "朗读: {name}",
     "back": "返回",
     "loadError": "加载有声书失败",
@@ -70,7 +74,7 @@
     "booksCount": "共 {count} 本书籍",
     "category": "分类",
     "subcategories": "子分类",
-    "noBooks": "该分类暂无书籍",
+    "emptyTitle": "该分类暂无书籍",
     "tryOther": "试试其他分类吧",
     "exploreMore": "探索更多",
     "noMoreBooks": "没有更多书籍了"
