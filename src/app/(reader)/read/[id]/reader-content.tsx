@@ -21,8 +21,6 @@ import {
   type KeyboardShortcut,
 } from '@/lib/hooks/use-keyboard-shortcuts';
 import type { SelectedText, TocItem } from '@/features/reader/types';
-import { trackEvent } from '@/lib/amplitude';
-
 
 interface ReaderContentProps {
   bookId: string;
@@ -245,13 +243,11 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       const lastPos = getLastPosition(bookId);
       const startPercentage = lastPos?.percentage || position?.percentage || 0;
       startReadingSession(bookId, startPercentage);
-      trackEvent('reading_session_started', { book_id: bookId });
     }
 
     // End reading session when component unmounts
     return () => {
       endReadingSession();
-      trackEvent('reading_session_ended', { book_id: bookId });
     };
   }, [bookId, isReady, startReadingSession, endReadingSession, getLastPosition]);
 

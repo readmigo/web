@@ -8,8 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Mail, Eye, EyeOff } from 'lucide-react';
-import { trackEvent } from '@/lib/amplitude';
-
 function AppleLogo({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -46,7 +44,6 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
       if (result?.error) {
         setError('邮箱或密码错误');
       } else if (result?.url) {
-        trackEvent('user_logged_in', { method: 'email' });
         window.location.href = result.url;
       }
     } catch {
@@ -57,7 +54,6 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
   };
 
   const handleOAuthSignIn = (provider: 'apple' | 'google') => {
-    trackEvent('user_logged_in', { method: provider });
     signIn(provider, { callbackUrl });
   };
 

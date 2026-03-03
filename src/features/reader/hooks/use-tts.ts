@@ -1,8 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { trackEvent } from '@/lib/amplitude';
-
 export interface TTSVoice {
   name: string;
   lang: string;
@@ -243,7 +241,6 @@ export function useTTS() {
       progress: (startFromIndex / sentences.length) * 100,
     }));
 
-    trackEvent('tts_started');
     speakNextSentence();
   }, [speakNextSentence]);
 
@@ -294,7 +291,6 @@ export function useTTS() {
       progress: 0,
     });
 
-    trackEvent('tts_stopped');
   }, []);
 
   // Toggle play/pause

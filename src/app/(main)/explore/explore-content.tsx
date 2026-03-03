@@ -25,8 +25,6 @@ import { HeroBanner } from '@/features/library/components/hero-banner';
 import { BookListSection, BookListSectionSkeleton } from '@/features/library/components/book-list-section';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
-import { trackEvent } from '@/lib/amplitude';
-
 const SLUG_ICON_MAP: Record<string, LucideIcon> = {
   fiction: BookOpen,
   classics: Library,
@@ -201,7 +199,6 @@ export function ExploreContent() {
             onSelect={() => {
               if (debouncedDropdownQuery.trim().length >= 2) {
                 addSearch(debouncedDropdownQuery.trim());
-                trackEvent('search_performed', { query: debouncedDropdownQuery });
               }
               setShowDropdown(false);
             }}

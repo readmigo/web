@@ -24,8 +24,6 @@ import {
   useAIQA,
   type WordExplanation,
 } from '../hooks/use-ai';
-import { trackEvent } from '@/lib/amplitude';
-
 interface AiPanelProps {
   onClose: () => void;
   bookId?: string;
@@ -66,7 +64,6 @@ export function AiPanel({ onClose, bookId }: AiPanelProps) {
         bookId,
       });
       setWordDefinition(result);
-      trackEvent('ai_explain_used', { book_id: bookId });
     } catch (error) {
       console.error('Failed to explain:', error);
     }
@@ -82,7 +79,6 @@ export function AiPanel({ onClose, bookId }: AiPanelProps) {
         bookId,
       });
       setTranslation(result.translation);
-      trackEvent('ai_translate_used', { book_id: bookId });
     } catch (error) {
       console.error('Failed to translate:', error);
     }
@@ -101,7 +97,6 @@ export function AiPanel({ onClose, bookId }: AiPanelProps) {
         { role: 'user', content: `简化: "${selectedText.text}"` },
         { role: 'assistant', content: result.simplified },
       ]);
-      trackEvent('ai_simplify_used', { book_id: bookId });
     } catch (error) {
       console.error('Failed to simplify:', error);
     }
@@ -124,7 +119,6 @@ export function AiPanel({ onClose, bookId }: AiPanelProps) {
         ...prev,
         { role: 'assistant', content: result.answer },
       ]);
-      trackEvent('ai_chat_message_sent', { book_id: bookId });
     } catch (error) {
       setChatHistory((prev) => [
         ...prev,
