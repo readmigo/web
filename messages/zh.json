@@ -164,6 +164,27 @@
     "remove": "取消收藏",
     "add": "收藏"
   },
+  "quotes": {
+    "dailyQuote": "每日名言",
+    "trending": "热门名言",
+    "searchPlaceholder": "搜索名言...",
+    "all": "全部",
+    "empty": "暂无名言"
+  },
+  "analytics": {
+    "totalTime": "总阅读时长",
+    "booksFinished": "已读完",
+    "currentStreak": "连续阅读",
+    "avgDaily": "日均阅读",
+    "readingTrend": "阅读趋势",
+    "daysActive": "{count} 天活跃",
+    "avgPerDay": "日均 {minutes} 分钟",
+    "currentlyReading": "正在阅读",
+    "recentSessions": "最近阅读",
+    "locked.title": "详细统计",
+    "locked.desc": "升级 Pro 查看完整阅读数据分析",
+    "locked.upgrade": "升级 Pro"
+  },
   "auth": {
     "loginRequired": "需要登录",
     "loginPromptDesc": "登录后即可使用此功能，享受完整的阅读体验。",

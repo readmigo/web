@@ -164,6 +164,27 @@
     "remove": "Remove from favorites",
     "add": "Add to favorites"
   },
+  "quotes": {
+    "dailyQuote": "Daily Quote",
+    "trending": "Trending",
+    "searchPlaceholder": "Search quotes...",
+    "all": "All",
+    "empty": "No quotes found"
+  },
+  "analytics": {
+    "totalTime": "Total Reading",
+    "booksFinished": "Books Finished",
+    "currentStreak": "Current Streak",
+    "avgDaily": "Daily Average",
+    "readingTrend": "Reading Trend",
+    "daysActive": "{count} days active",
+    "avgPerDay": "Avg {minutes}min/day",
+    "currentlyReading": "Currently Reading",
+    "recentSessions": "Recent Sessions",
+    "locked.title": "Detailed Statistics",
+    "locked.desc": "Upgrade to Pro to see full reading analytics",
+    "locked.upgrade": "Upgrade to Pro"
+  },
   "auth": {
     "loginRequired": "Login Required",
     "loginPromptDesc": "Sign in to use this feature and enjoy the full reading experience.",
