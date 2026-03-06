@@ -8,6 +8,8 @@ import { Toaster } from 'sonner';
 import { GlobalAudioPlayer } from '@/features/audiobook/components/global-audio-player';
 import { OnboardingGate } from '@/features/onboarding/components/onboarding-gate';
 import { PostHogProvider, PostHogIdentify } from '@/lib/posthog';
+import { AmplitudeProvider } from '@/lib/amplitude';
+
 interface ProvidersProps {
   children: ReactNode;
 }
@@ -26,6 +28,7 @@ export function Providers({ children }: ProvidersProps) {
   );
 
   return (
+    <AmplitudeProvider>
     <PostHogProvider>
       <SessionProvider>
         <QueryClientProvider client={queryClient}>
@@ -44,5 +47,6 @@ export function Providers({ children }: ProvidersProps) {
         </QueryClientProvider>
       </SessionProvider>
     </PostHogProvider>
+    </AmplitudeProvider>
   );
 }

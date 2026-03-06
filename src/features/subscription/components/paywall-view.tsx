@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
-import { usePostHog } from 'posthog-js/react';
+import { trackEvent } from '@/lib/analytics';
 import {
   X,
   Sparkles,
@@ -74,7 +74,6 @@ interface PaywallViewProps {
 
 export function PaywallView({ triggerSource, onDismiss }: PaywallViewProps) {
   const t = useTranslations('subscription');
-  const posthog = usePostHog();
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionPeriod>('yearly');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -82,7 +81,7 @@ export function PaywallView({ triggerSource, onDismiss }: PaywallViewProps) {
 
   const handleSubscribe = useCallback(async () => {
     setIsLoading(true);
-    posthog?.capture('purchase_initiated', {
+    trackEvent('purchase_initiated', {
       plan: selectedPlan,
       source: triggerSource,
     });
@@ -101,11 +100,11 @@ export function PaywallView({ triggerSource, onDismiss }: PaywallViewProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [selectedPlan, triggerSource, posthog]);
+  }, [selectedPlan, triggerSource]);
 
   // Track view
   useState(() => {
-    posthog?.capture('paywall_viewed', { source: triggerSource });
+    trackEvent('paywall_viewed', { source: triggerSource });
   });
 
   return (
@@ -115,7 +114,7 @@ export function PaywallView({ triggerSource, onDismiss }: PaywallViewProps) {
         <button
           className="absolute right-4 top-4 rounded-full p-1 hover:bg-muted"
           onClick={() => {
-            posthog?.capture('paywall_dismissed', { source: triggerSource });
+            trackEvent('paywall_dismissed', { source: triggerSource });
             onDismiss();
           }}
         >

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { BookOpen, Headphones, BarChart3, Monitor, BookMarked } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
-import { usePostHog } from 'posthog-js/react';
+import { trackEvent } from '@/lib/analytics';
 import type { LucideIcon } from 'lucide-react';
 
 interface OnboardingPage {
@@ -67,27 +67,26 @@ interface OnboardingViewProps {
 export function OnboardingView({ onComplete }: OnboardingViewProps) {
   const [currentPage, setCurrentPage] = useState(0);
   const t = useTranslations('onboarding');
-  const posthog = usePostHog();
 
   const isLastPage = currentPage === PAGES.length - 1;
   const page = PAGES[currentPage];
   const Icon = page.icon;
 
   const handleNext = useCallback(() => {
-    posthog?.capture('onboarding_step_completed', { step: currentPage });
+    trackEvent('onboarding_step_completed', { step: currentPage });
 
     if (isLastPage) {
-      posthog?.capture('onboarding_completed', { completionPage: currentPage });
+      trackEvent('onboarding_completed', { completionPage: currentPage });
       onComplete();
     } else {
       setCurrentPage((prev) => prev + 1);
     }
-  }, [currentPage, isLastPage, onComplete, posthog]);
+  }, [currentPage, isLastPage, onComplete]);
 
   const handleSkip = useCallback(() => {
-    posthog?.capture('onboarding_completed', { completionPage: currentPage, skipped: true });
+    trackEvent('onboarding_completed', { completionPage: currentPage, skipped: true });
     onComplete();
-  }, [currentPage, onComplete, posthog]);
+  }, [currentPage, onComplete]);
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-background">
