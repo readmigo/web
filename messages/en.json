@@ -164,6 +164,18 @@
     "remove": "Remove from favorites",
     "add": "Add to favorites"
   },
+  "badges": {
+    "earned": "Earned",
+    "inProgress": "In Progress",
+    "allBadges": "All Badges",
+    "empty": "No badges yet",
+    "categories.all": "All",
+    "categories.reading": "Reading",
+    "categories.vocabulary": "Vocabulary",
+    "categories.streak": "Streak",
+    "categories.milestone": "Milestone",
+    "categories.social": "Social"
+  },
   "quotes": {
     "dailyQuote": "Daily Quote",
     "trending": "Trending",

@@ -164,6 +164,18 @@
     "remove": "取消收藏",
     "add": "收藏"
   },
+  "badges": {
+    "earned": "已获得",
+    "inProgress": "进行中",
+    "allBadges": "全部徽章",
+    "empty": "暂无徽章",
+    "categories.all": "全部",
+    "categories.reading": "阅读",
+    "categories.vocabulary": "词汇",
+    "categories.streak": "连续",
+    "categories.milestone": "里程碑",
+    "categories.social": "社交"
+  },
   "quotes": {
     "dailyQuote": "每日名言",
     "trending": "热门名言",
