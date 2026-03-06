@@ -4,7 +4,9 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
+import { Suspense } from 'react';
 import { Providers } from '@/lib/providers';
+import { PostHogPageView } from '@/lib/posthog';
 import './globals.css';
 
 export const viewport: Viewport = {
@@ -79,7 +81,12 @@ export default async function RootLayout({
         className={`${inter.variable} font-sans antialiased min-h-screen`}
       >
         <NextIntlClientProvider messages={messages}>
-          <Providers>{children}</Providers>
+          <Providers>
+            <Suspense fallback={null}>
+              <PostHogPageView />
+            </Suspense>
+            {children}
+          </Providers>
         </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />
