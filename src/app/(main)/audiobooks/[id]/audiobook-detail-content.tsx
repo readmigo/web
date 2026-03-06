@@ -36,6 +36,7 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
   const { data: audiobook, isLoading, error } = useAudiobookWithProgress(audiobookId);
   const { mutate: startAudiobook } = useStartAudiobook();
   const { loadAudiobook, play, audiobook: currentAudiobook } = useAudioPlayerStore();
+  const { book, hasBook, getBookChapterId } = useWhispersyncFromAudiobook(audiobook ?? null);
 
   if (isLoading) {
     return <AudiobookDetailSkeleton />;
@@ -51,8 +52,6 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
       </div>
     );
   }
-
-  const { book, hasBook, getBookChapterId } = useWhispersyncFromAudiobook(audiobook);
   const progress = audiobook.progress;
   const isCurrentlyPlaying = currentAudiobook?.id === audiobook.id;
   const chaptersToShow = showAllChapters ? audiobook.chapters : audiobook.chapters.slice(0, 10);
