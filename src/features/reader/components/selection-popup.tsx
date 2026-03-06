@@ -1,14 +1,12 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import {
-  Languages,
-  BookOpen,
-  Plus,
-  Volume2,
-  Share2,
+  Copy,
+  Highlighter,
   MessageSquare,
+  Share2,
 } from 'lucide-react';
 import { useReaderStore } from '../stores/reader-store';
 import type { SelectedText } from '../types';
@@ -16,24 +14,15 @@ import type { SelectedText } from '../types';
 interface SelectionPopupProps {
   selection: SelectedText;
   bookId: string;
-  onTranslate: () => void;
-  onExplain: () => void;
-  onSpeak: () => void;
-  onAddWord: () => void;
 }
 
 export function SelectionPopup({
   selection,
   bookId,
-  onTranslate,
-  onExplain,
-  onSpeak,
-  onAddWord,
 }: SelectionPopupProps) {
   const popupRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const { addHighlight, setShowAiPanel, setSelectedText } = useReaderStore();
-  const isParagraphMenu = selection.source === 'paragraph';
+  const { addHighlight, setSelectedText } = useReaderStore();
 
   useEffect(() => {
     if (selection.rect) {
@@ -43,35 +32,42 @@ export function SelectionPopup({
     }
   }, [selection]);
 
-  const handleHighlight = (color: 'yellow' | 'green' | 'blue' | 'pink' | 'purple' | 'orange') => {
+  const handleCopy = useCallback(async () => {
+    const text = selection.text.trim();
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (error) {
+      console.error('Failed to copy:', error);
+    }
+    setSelectedText(null);
+  }, [selection.text, setSelectedText]);
+
+  const handleHighlight = useCallback(() => {
     addHighlight({
       bookId,
-      cfiRange: selection.cfiRange,
+      cfiRange: selection.cfiRange || '',
       text: selection.text,
-      color,
+      color: 'yellow',
     });
     setSelectedText(null);
-  };
+  }, [addHighlight, bookId, selection, setSelectedText]);
 
-  const handleOpenAI = () => {
-    setShowAiPanel(true);
-  };
-
-  const handleAddNote = () => {
+  const handleThoughts = useCallback(() => {
     const note = window.prompt('Add a note', '');
     if (note === null) return;
     if (!note.trim()) return;
     addHighlight({
       bookId,
-      cfiRange: selection.cfiRange,
+      cfiRange: selection.cfiRange || '',
       text: selection.text,
       color: 'yellow',
       note: note.trim(),
     });
     setSelectedText(null);
-  };
+  }, [addHighlight, bookId, selection, setSelectedText]);
 
-  const handleShare = async () => {
+  const handleShare = useCallback(async () => {
     const shareText = selection.text.trim();
     if (!shareText) return;
 
@@ -93,10 +89,7 @@ export function SelectionPopup({
         console.error('Failed to copy text:', error);
       }
     }
-  };
-
-  // Check if selection is a single word
-  const isSingleWord = selection.text.trim().split(/\s+/).length === 1;
+  }, [selection.text, setSelectedText]);
 
   return (
     <div
@@ -107,103 +100,46 @@ export function SelectionPopup({
         top: position.y,
         transform: 'translate(-50%, -100%)',
       }}
+    >
+      <Button
+        variant="ghost"
+        size="sm"
+        className="h-8 px-2"
+        onClick={handleCopy}
+        title="Copy"
       >
-      {!isParagraphMenu && (
-        <>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 px-2"
-            onClick={onTranslate}
-          >
-            <Languages className="h-4 w-4" />
-          </Button>
+        <Copy className="h-4 w-4" />
+      </Button>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 px-2"
-            onClick={handleOpenAI}
-          >
-            <BookOpen className="h-4 w-4" />
-          </Button>
+      <Button
+        variant="ghost"
+        size="sm"
+        className="h-8 px-2"
+        onClick={handleHighlight}
+        title="Highlight"
+      >
+        <Highlighter className="h-4 w-4" />
+      </Button>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 px-2"
-            onClick={onSpeak}
-          >
-            <Volume2 className="h-4 w-4" />
-          </Button>
+      <Button
+        variant="ghost"
+        size="sm"
+        className="h-8 px-2"
+        onClick={handleThoughts}
+        title="Thoughts"
+      >
+        <MessageSquare className="h-4 w-4" />
+      </Button>
 
-          {isSingleWord && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 px-2"
-              onClick={onAddWord}
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          )}
-        </>
-      )}
-
-      {isParagraphMenu && (
-        <>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 px-2"
-            onClick={handleAddNote}
-          >
-            <MessageSquare className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 px-2"
-            onClick={handleShare}
-          >
-            <Share2 className="h-4 w-4" />
-          </Button>
-        </>
-      )}
-
-      {/* Highlight colors */}
-      <div className="flex items-center gap-0.5 border-l pl-1 ml-1">
-        <button
-          onClick={() => handleHighlight('yellow')}
-          className="h-5 w-5 rounded-full bg-yellow-300 hover:ring-2 hover:ring-ring hover:ring-offset-1"
-          title="Yellow"
-        />
-        <button
-          onClick={() => handleHighlight('green')}
-          className="h-5 w-5 rounded-full bg-green-300 hover:ring-2 hover:ring-ring hover:ring-offset-1"
-          title="Green"
-        />
-        <button
-          onClick={() => handleHighlight('blue')}
-          className="h-5 w-5 rounded-full bg-blue-300 hover:ring-2 hover:ring-ring hover:ring-offset-1"
-          title="Blue"
-        />
-        <button
-          onClick={() => handleHighlight('pink')}
-          className="h-5 w-5 rounded-full bg-pink-300 hover:ring-2 hover:ring-ring hover:ring-offset-1"
-          title="Pink"
-        />
-        <button
-          onClick={() => handleHighlight('purple')}
-          className="h-5 w-5 rounded-full bg-purple-300 hover:ring-2 hover:ring-ring hover:ring-offset-1"
-          title="Purple"
-        />
-        <button
-          onClick={() => handleHighlight('orange')}
-          className="h-5 w-5 rounded-full bg-orange-300 hover:ring-2 hover:ring-ring hover:ring-offset-1"
-          title="Orange"
-        />
-      </div>
+      <Button
+        variant="ghost"
+        size="sm"
+        className="h-8 px-2"
+        onClick={handleShare}
+        title="Share"
+      >
+        <Share2 className="h-4 w-4" />
+      </Button>
     </div>
   );
 }

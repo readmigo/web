@@ -17,8 +17,6 @@ import {
 import type { LucideIcon } from 'lucide-react';
 import type { Category } from '@/features/library/types';
 import { useSearch } from '@/features/search/hooks/use-search';
-import { useSearchSuggestions } from '@/features/search/hooks/use-search-suggestions';
-import { usePopularSearches, useTrendingSearches } from '@/features/search/hooks/use-popular-searches';
 import { useSearchHistory } from '@/features/search/hooks/use-search-history';
 import { SearchResultsDropdown } from '@/features/search/components/search-results-dropdown';
 import { useBookLists } from '@/features/library/hooks/use-book-lists';
@@ -27,7 +25,6 @@ import { BookListSection, BookListSectionSkeleton } from '@/features/library/com
 import { ContinueReadingCard } from '@/features/library/components/continue-reading-card';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
-
 const SLUG_ICON_MAP: Record<string, LucideIcon> = {
   fiction: BookOpen,
   classics: Library,
@@ -62,7 +59,7 @@ function getCategoryIcon(category: Category): LucideIcon {
 
 export function ExploreContent() {
   const router = useRouter();
-  const t = useTranslations('explore');
+  const t = useTranslations('discover');
   const tc = useTranslations('common');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -93,16 +90,6 @@ export function ExploreContent() {
     data: searchResults,
     isLoading: isSearchLoading,
   } = useSearch(debouncedDropdownQuery);
-
-  // Autocomplete suggestions
-  const {
-    data: suggestions,
-    isLoading: isSuggestionsLoading,
-  } = useSearchSuggestions(debouncedDropdownQuery);
-
-  // Popular & trending searches
-  const { data: popularSearches } = usePopularSearches();
-  const { data: trendingSearches } = useTrendingSearches();
 
   // Search history
   const { history: searchHistory, addSearch, removeSearch, clearHistory } = useSearchHistory();
@@ -183,7 +170,7 @@ export function ExploreContent() {
       <div className="relative" ref={searchContainerRef}>
         <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
         <Input
-          placeholder={t('searchPlaceholder')}
+          placeholder={t('search.placeholder')}
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
@@ -211,13 +198,9 @@ export function ExploreContent() {
               setDebouncedSearch(term);
               addSearch(term);
             }}
-            suggestions={suggestions}
-            suggestionsLoading={isSuggestionsLoading}
             searchHistory={searchHistory}
             onRemoveHistory={removeSearch}
             onClearHistory={clearHistory}
-            popularSearches={popularSearches}
-            trendingSearches={trendingSearches}
           />
         )}
       </div>
@@ -336,7 +319,7 @@ export function ExploreContent() {
         </div>
       ) : books.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12">
-          <p className="text-lg text-muted-foreground">{t('noBooks')}</p>
+          <p className="text-lg text-muted-foreground">{t('emptyTitle')}</p>
           <p className="mt-2 text-sm text-muted-foreground">
             {t('exploreMore')}
           </p>

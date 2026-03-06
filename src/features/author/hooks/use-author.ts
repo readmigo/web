@@ -108,6 +108,30 @@ export function useLikeQuote() {
   });
 }
 
+// Related authors (same era/nationality) — aligned with iOS AuthorManager
+export function useRelatedAuthors(authorId: string) {
+  return useQuery({
+    queryKey: [...authorKeys.detail(authorId), 'related'],
+    queryFn: () =>
+      apiClient.get<AuthorListItem[]>(`/authors/${authorId}/related`, { skipAuth: true }),
+    enabled: !!authorId,
+    staleTime: 10 * 60 * 1000,
+  });
+}
+
+// Author reading progress — aligned with iOS AuthorReadingProgress
+export function useAuthorReadingProgress(authorId: string) {
+  return useQuery({
+    queryKey: [...authorKeys.detail(authorId), 'reading-progress'],
+    queryFn: () =>
+      apiClient.get<{ booksRead: number; totalBooks: number; readBookIds: string[] }>(
+        `/authors/${authorId}/reading-progress`,
+      ),
+    enabled: !!authorId,
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
 // Featured/popular authors for homepage
 export function useFeaturedAuthors(limit: number = 6) {
   return useQuery({

@@ -1,36 +1,34 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
-import { EpubReader, type EpubReaderHandle } from '@/features/reader/components/epub-reader';
+import { ChapterReader, type ChapterReaderHandle } from '@/features/reader/components/chapter-reader';
 import { ReaderToolbar } from '@/features/reader/components/reader-toolbar';
 import { ReaderSettingsPanel } from '@/features/reader/components/reader-settings-panel';
 import { TocPanel } from '@/features/reader/components/toc-panel';
-import { AiPanel } from '@/features/reader/components/ai-panel';
 import { SelectionPopup } from '@/features/reader/components/selection-popup';
-import { FocusMode } from '@/features/reader/components/focus-mode';
 import { ReadingStatsOverlay } from '@/features/reader/components/reading-stats-overlay';
 import { TTSControls, MiniTTSControls } from '@/features/reader/components/tts-controls';
 import { KeyboardShortcutsDialog } from '@/components/shared/keyboard-shortcuts-dialog';
 import { useReaderStore } from '@/features/reader/stores/reader-store';
 import { useBookDetail } from '@/features/library/hooks/use-books';
-import { useLearningStore } from '@/features/learning/stores/learning-store';
 import { useTTS } from '@/features/reader/hooks/use-tts';
 import { processOfflineQueue } from '@/features/reader/hooks/use-highlights';
 import {
   useKeyboardShortcuts,
   type KeyboardShortcut,
 } from '@/lib/hooks/use-keyboard-shortcuts';
+import { usePositionSync } from '@/features/reader/hooks/use-position-sync';
 import type { SelectedText, TocItem } from '@/features/reader/types';
-
 
 interface ReaderContentProps {
   bookId: string;
 }
 
 export function ReaderContent({ bookId }: ReaderContentProps) {
-  const epubReaderRef = useRef<EpubReaderHandle>(null);
+  // Debounced position sync (3s, matching iOS)
+  usePositionSync(bookId);
+  const readerRef = useRef<ChapterReaderHandle>(null);
   const [isReady, setIsReady] = useState(false);
-  const [isFocusMode, setIsFocusMode] = useState(false);
   const [showTTSPanel, setShowTTSPanel] = useState(false);
   const [tocItems, setTocItems] = useState<TocItem[]>([]);
 
@@ -43,14 +41,11 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   const {
     showToc,
     showSettings,
-    showAiPanel,
     selectedText,
     position,
     settings,
     toggleToc,
     toggleSettings,
-    toggleAiPanel,
-    setShowAiPanel,
     setSelectedText,
     addBookmark,
     syncHighlightsFromBackend,
@@ -61,15 +56,13 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     getLastPosition,
   } = useReaderStore();
 
-  const { addWord } = useLearningStore();
-
   // Navigation handlers
   const handlePrev = useCallback(() => {
-    epubReaderRef.current?.goPrev();
+    readerRef.current?.goPrev();
   }, []);
 
   const handleNext = useCallback(() => {
-    epubReaderRef.current?.goNext();
+    readerRef.current?.goNext();
   }, []);
 
   // TTS handlers
@@ -123,30 +116,11 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         action: toggleToc,
       },
       {
-        key: 'a',
-        description: '切换AI面板',
-        category: '面板',
-        action: toggleAiPanel,
-      },
-      {
         key: ',',
         ctrl: true,
         description: '打开设置',
         category: '面板',
         action: toggleSettings,
-      },
-      // Reading modes
-      {
-        key: 'f',
-        description: '进入专注模式',
-        category: '阅读模式',
-        action: () => setIsFocusMode(true),
-      },
-      {
-        key: 'Escape',
-        description: '退出专注模式',
-        category: '阅读模式',
-        action: () => setIsFocusMode(false),
       },
       // Bookmarks
       {
@@ -158,7 +132,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           if (position) {
             addBookmark({
               bookId,
-              cfi: position.cfi,
+              cfi: `ch:${position.chapterIndex}:pg:${position.page}`,
               title: `书签 - ${Math.round(position.percentage * 100)}%`,
             });
           }
@@ -210,7 +184,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       handleNext,
       handlePrev,
       toggleToc,
-      toggleAiPanel,
       toggleSettings,
       bookId,
       position,
@@ -221,7 +194,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   );
 
   const { showHelp, setShowHelp } = useKeyboardShortcuts({
-    enabled: !isFocusMode, // Disable shortcuts in focus mode (it handles its own)
+    enabled: true,
     shortcuts,
   });
 
@@ -293,13 +266,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     setIsReady(true);
   }, []);
 
-  const handleLocationChange = useCallback(
-    (_cfi: string, _percentage: number) => {
-      // Location tracking is handled in the store
-    },
-    []
-  );
-
   const handleTextSelect = useCallback(
     (selection: SelectedText) => {
       setSelectedText(selection);
@@ -308,41 +274,9 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   );
 
   const handleTocSelect = useCallback((href: string) => {
-    epubReaderRef.current?.goTo(href);
+    readerRef.current?.goTo(href);
   }, []);
 
-  const handleTranslate = useCallback(() => {
-    setShowAiPanel(true);
-  }, [setShowAiPanel]);
-
-  const handleExplain = useCallback(() => {
-    setShowAiPanel(true);
-  }, [setShowAiPanel]);
-
-  const handleSpeak = useCallback(() => {
-    if (selectedText) {
-      const utterance = new SpeechSynthesisUtterance(selectedText.text);
-      utterance.lang = 'en-US';
-      speechSynthesis.speak(utterance);
-    }
-  }, [selectedText]);
-
-  const handleAddWord = useCallback(() => {
-    if (selectedText) {
-      // Add word to vocabulary with basic info
-      // In real app, would get AI explanation first
-      addWord({
-        word: selectedText.text.trim().split(/\s+/)[0],
-        partOfSpeech: 'unknown',
-        definition: '',
-        translation: '',
-        examples: [],
-        bookId,
-        bookTitle: book?.title,
-        context: selectedText.text,
-      });
-    }
-  }, [selectedText, addWord, bookId, book?.title]);
 
   // Loading state
   if (isLoadingBook) {
@@ -356,32 +290,8 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     );
   }
 
-  // Get EPUB URL from book data or use fallback
-  const epubUrl = book?.epubUrl || `/books/${bookId}.epub`;
   const bookTitle = book?.title || 'Loading...';
-
-  // Focus mode renders differently
-  if (isFocusMode) {
-    return (
-      <FocusMode
-        onExit={() => setIsFocusMode(false)}
-        onPrev={handlePrev}
-        onNext={handleNext}
-        progress={(position?.percentage || 0) * 100}
-        theme={settings.theme}
-      >
-        <EpubReader
-          ref={epubReaderRef}
-          bookId={bookId}
-          url={epubUrl}
-          onReady={handleReaderReady}
-          onLocationChange={handleLocationChange}
-          onTextSelect={handleTextSelect}
-          onTocLoaded={setTocItems}
-        />
-      </FocusMode>
-    );
-  }
+  const chapters = book?.chapters || [];
 
   return (
     <div className="flex h-full flex-col">
@@ -397,12 +307,11 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
 
       {/* Reader */}
       <div className="relative flex-1">
-        <EpubReader
-          ref={epubReaderRef}
+        <ChapterReader
+          ref={readerRef}
           bookId={bookId}
-          url={epubUrl}
+          chapters={chapters}
           onReady={handleReaderReady}
-          onLocationChange={handleLocationChange}
           onTextSelect={handleTextSelect}
           onTocLoaded={setTocItems}
         />
@@ -412,10 +321,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           <SelectionPopup
             selection={selectedText}
             bookId={bookId}
-            onTranslate={handleTranslate}
-            onExplain={handleExplain}
-            onSpeak={handleSpeak}
-            onAddWord={handleAddWord}
           />
         )}
       </div>
@@ -429,7 +334,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           />
           <TocPanel
             items={tocItems}
-            currentChapter={position?.chapter}
+            currentChapter={position?.chapterIndex}
             onSelect={handleTocSelect}
             onClose={toggleToc}
           />
@@ -443,16 +348,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
             onClick={toggleSettings}
           />
           <ReaderSettingsPanel onClose={toggleSettings} />
-        </>
-      )}
-
-      {showAiPanel && (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-black/50"
-            onClick={() => setShowAiPanel(false)}
-          />
-          <AiPanel onClose={() => setShowAiPanel(false)} bookId={bookId} />
         </>
       )}
 

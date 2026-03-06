@@ -7,14 +7,15 @@ import {
   List,
   Settings,
   Bookmark,
-  MessageSquare,
   ChevronLeft,
   ChevronRight,
   BarChart3,
   Volume2,
+  Headphones,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useReaderStore } from '../stores/reader-store';
+import { useWhispersyncFromBook } from '@/features/audiobook/hooks/use-whispersync';
 import { HighlightSidebar } from './highlight-sidebar';
 import { SearchPanel } from './search-panel';
 
@@ -43,17 +44,18 @@ export function ReaderToolbar({
     position,
     toggleToc,
     toggleSettings,
-    toggleAiPanel,
     toggleReadingStats,
     addBookmark,
   } = useReaderStore();
 
+  const { audiobook, hasAudiobook } = useWhispersyncFromBook(bookId);
+
   const handleAddBookmark = () => {
-    if (position?.cfi) {
+    if (position) {
       addBookmark({
         bookId,
-        cfi: position.cfi,
-        title: `第 ${position.chapter + 1} 章`,
+        cfi: `ch:${position.chapterIndex}:pg:${position.page}`,
+        title: `第 ${position.chapterIndex + 1} 章`,
       });
     }
   };
@@ -106,6 +108,13 @@ export function ReaderToolbar({
           bookId={bookId}
           onNavigateToHighlight={onNavigateToHighlight}
         />
+        {hasAudiobook && audiobook && (
+          <Button variant="ghost" size="icon" asChild title="Audiobook">
+            <Link href={`/audiobooks/${audiobook.id}`}>
+              <Headphones className="h-5 w-5 text-primary" />
+            </Link>
+          </Button>
+        )}
         <Button
           variant="ghost"
           size="icon"
@@ -117,9 +126,6 @@ export function ReaderToolbar({
         </Button>
         <Button variant="ghost" size="icon" onClick={toggleReadingStats} className="md:hidden">
           <BarChart3 className="h-5 w-5" />
-        </Button>
-        <Button variant="ghost" size="icon" onClick={toggleAiPanel}>
-          <MessageSquare className="h-5 w-5" />
         </Button>
         <Button variant="ghost" size="icon" onClick={toggleSettings}>
           <Settings className="h-5 w-5" />

@@ -9,33 +9,19 @@ import {
   Quote,
   Search,
   Clock,
-  Flame,
-  Sparkles,
   X,
 } from 'lucide-react';
-import type { SearchResponse, SearchSuggestion, PopularSearch } from '../types';
+import type { SearchResponse } from '../types';
 
 interface SearchResultsDropdownProps {
-  /** Search results data (from useSearch) */
   data: SearchResponse | undefined;
-  /** Whether search results are loading */
   isLoading: boolean;
-  /** Current search query */
   query: string;
-  /** Called when user selects a result (navigates away) */
   onSelect: () => void;
-  /** Called when user clicks a suggestion/history/popular item to fill the input */
   onSelectQuery?: (query: string) => void;
-  /** Autocomplete suggestions */
-  suggestions?: SearchSuggestion[];
-  suggestionsLoading?: boolean;
-  /** Search history */
   searchHistory?: string[];
   onRemoveHistory?: (query: string) => void;
   onClearHistory?: () => void;
-  /** Popular & trending searches */
-  popularSearches?: PopularSearch[];
-  trendingSearches?: PopularSearch[];
 }
 
 function DropdownWrapper({ children }: { children: React.ReactNode }) {
@@ -76,13 +62,9 @@ export function SearchResultsDropdown({
   query,
   onSelect,
   onSelectQuery,
-  suggestions,
-  suggestionsLoading,
   searchHistory,
   onRemoveHistory,
   onClearHistory,
-  popularSearches,
-  trendingSearches,
 }: SearchResultsDropdownProps) {
   const router = useRouter();
 
@@ -98,21 +80,18 @@ export function SearchResultsDropdown({
   const trimmedQuery = query.trim();
 
   // ──────────────────────────────────────────
-  // State A: Empty query — show history, popular, trending
+  // State A: Empty query — show history only
   // ──────────────────────────────────────────
   if (trimmedQuery.length < 2) {
     const hasHistory = searchHistory && searchHistory.length > 0;
-    const hasPopular = popularSearches && popularSearches.length > 0;
-    const hasTrending = trendingSearches && trendingSearches.length > 0;
 
-    if (!hasHistory && !hasPopular && !hasTrending) {
+    if (!hasHistory) {
       return null;
     }
 
     return (
       <DropdownWrapper>
         <div className="p-2">
-          {/* Recent Searches */}
           {hasHistory && (
             <div>
               <SectionHeader
@@ -156,118 +135,13 @@ export function SearchResultsDropdown({
               ))}
             </div>
           )}
-
-          {/* Popular Searches */}
-          {hasPopular && (
-            <div>
-              {hasHistory && <SectionDivider />}
-              <SectionHeader
-                icon={<Flame className="h-3 w-3" />}
-                label="热门搜索"
-              />
-              {popularSearches.map((item) => (
-                <button
-                  key={item.term}
-                  className="flex w-full items-center gap-3 rounded-md px-2 py-2 text-left transition-colors hover:bg-accent"
-                  onClick={() => handleSelectQuery(item.term)}
-                >
-                  <Flame className="h-4 w-4 shrink-0 text-orange-500" />
-                  <span className="flex-1 truncate text-sm">{item.term}</span>
-                  <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
-                    {item.count}
-                  </span>
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Trending Today */}
-          {hasTrending && (
-            <div>
-              {(hasHistory || hasPopular) && <SectionDivider />}
-              <SectionHeader
-                icon={<Sparkles className="h-3 w-3" />}
-                label="今日趋势"
-              />
-              {trendingSearches.map((item) => (
-                <button
-                  key={item.term}
-                  className="flex w-full items-center gap-3 rounded-md px-2 py-2 text-left transition-colors hover:bg-accent"
-                  onClick={() => handleSelectQuery(item.term)}
-                >
-                  <Sparkles className="h-4 w-4 shrink-0 text-purple-500" />
-                  <span className="flex-1 truncate text-sm">{item.term}</span>
-                </button>
-              ))}
-            </div>
-          )}
         </div>
       </DropdownWrapper>
     );
   }
 
   // ──────────────────────────────────────────
-  // State B: Typing (2+ chars), show suggestions if no results yet
-  // ──────────────────────────────────────────
-  if (suggestionsLoading) {
-    return (
-      <DropdownWrapper>
-        <div className="p-3 space-y-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-3">
-              <Skeleton className="h-6 w-6 rounded" />
-              <Skeleton className="h-4 w-40" />
-            </div>
-          ))}
-        </div>
-      </DropdownWrapper>
-    );
-  }
-
-  // Show suggestions when we have them and search results haven't loaded yet
-  if (suggestions && suggestions.length > 0 && !data && !isLoading) {
-    return (
-      <DropdownWrapper>
-        <div className="p-2">
-          <SectionHeader
-            icon={<Search className="h-3 w-3" />}
-            label="搜索建议"
-          />
-          {suggestions.map((suggestion, idx) => {
-            const SuggestionIcon =
-              suggestion.type === 'author'
-                ? User
-                : suggestion.type === 'book'
-                  ? BookOpen
-                  : Quote;
-
-            return (
-              <button
-                key={`${suggestion.text}-${idx}`}
-                className="flex w-full items-center gap-3 rounded-md px-2 py-2 text-left transition-colors hover:bg-accent"
-                onClick={() => handleSelectQuery(suggestion.text)}
-              >
-                <SuggestionIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
-                <span className="flex-1 truncate text-sm">
-                  {suggestion.text}
-                </span>
-                <span className="shrink-0 text-[10px] text-muted-foreground capitalize">
-                  {suggestion.type === 'author'
-                    ? '作者'
-                    : suggestion.type === 'book'
-                      ? '书籍'
-                      : '名言'}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </DropdownWrapper>
-    );
-  }
-
-  // ──────────────────────────────────────────
-  // State C: Results loading
+  // State B: Results loading
   // ──────────────────────────────────────────
   if (isLoading) {
     return (
@@ -287,7 +161,6 @@ export function SearchResultsDropdown({
     );
   }
 
-  // No data yet (but not loading and no suggestions)
   if (!data) return null;
 
   // ──────────────────────────────────────────
@@ -304,7 +177,6 @@ export function SearchResultsDropdown({
     bookItems.length > 0 ||
     quoteItems.length > 0;
 
-  // Empty state
   if (!hasResults) {
     return (
       <DropdownWrapper>
@@ -321,7 +193,6 @@ export function SearchResultsDropdown({
   return (
     <DropdownWrapper>
       <div className="p-2">
-        {/* Authors section */}
         {authorItems.length > 0 && (
           <div>
             <SectionHeader
@@ -363,7 +234,6 @@ export function SearchResultsDropdown({
           </div>
         )}
 
-        {/* Books section */}
         {bookItems.length > 0 && (
           <div>
             {authorItems.length > 0 && <SectionDivider />}
@@ -399,7 +269,6 @@ export function SearchResultsDropdown({
           </div>
         )}
 
-        {/* Quotes section */}
         {quoteItems.length > 0 && (
           <div>
             {(authorItems.length > 0 || bookItems.length > 0) && (

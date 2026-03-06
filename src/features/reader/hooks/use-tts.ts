@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-
 export interface TTSVoice {
   name: string;
   lang: string;
@@ -291,6 +290,7 @@ export function useTTS() {
       currentText: '',
       progress: 0,
     });
+
   }, []);
 
   // Toggle play/pause

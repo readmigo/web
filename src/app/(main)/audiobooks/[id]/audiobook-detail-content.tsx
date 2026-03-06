@@ -1,25 +1,28 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
-  ChevronLeft,
   Headphones,
+  ChevronLeft,
   Play,
   Clock,
+  BookOpen,
+  ChevronDown,
   Share2,
-  Loader2,
+  User,
 } from 'lucide-react';
-import { useAudiobook, useAudiobookProgress } from '@/features/audiobook/hooks';
+import { useTranslations } from 'next-intl';
+import {
+  useAudiobookWithProgress,
+  useStartAudiobook,
+} from '@/features/audiobook/hooks/use-audiobooks';
 import { useAudioPlayerStore, formatDuration, formatTime } from '@/features/audiobook/stores/audio-player-store';
-import { ChapterList } from '@/features/audiobook/components/chapter-list';
-import { PlayerControls } from '@/features/audiobook/components/player-controls';
-import { ProgressSlider } from '@/features/audiobook/components/progress-slider';
-import { SpeedSelector } from '@/features/audiobook/components/speed-selector';
-import { SleepTimer } from '@/features/audiobook/components/sleep-timer';
+import { useWhispersyncFromAudiobook } from '@/features/audiobook/hooks/use-whispersync';
 
 interface AudiobookDetailContentProps {
   audiobookId: string;
@@ -27,42 +30,12 @@ interface AudiobookDetailContentProps {
 
 export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentProps) {
   const router = useRouter();
+  const t = useTranslations('audiobooks');
+  const [showAllChapters, setShowAllChapters] = useState(false);
 
-  const { data: audiobook, isLoading, error } = useAudiobook(audiobookId);
-  const { data: progress } = useAudiobookProgress(audiobookId);
-
-  const {
-    audiobook: currentAudiobook,
-    isPlaying,
-    isLoading: isPlayerLoading,
-    currentTime,
-    duration,
-    chapterIndex,
-    playbackSpeed,
-    sleepTimer,
-    sleepTimerEndTime,
-    loadAudiobook,
-    togglePlay,
-    seek,
-    seekForward,
-    seekBackward,
-    nextChapter,
-    previousChapter,
-    goToChapter,
-    setPlaybackSpeed,
-    setSleepTimer,
-  } = useAudioPlayerStore();
-
-  const isCurrentAudiobook = currentAudiobook?.id === audiobookId;
-
-  // Auto-load audiobook if not already loaded
-  useEffect(() => {
-    if (audiobook && !isCurrentAudiobook) {
-      const startChapter = progress?.currentChapter ?? 0;
-      const startPosition = progress?.currentPosition ?? 0;
-      loadAudiobook(audiobook, startChapter, startPosition);
-    }
-  }, [audiobook, isCurrentAudiobook, progress, loadAudiobook]);
+  const { data: audiobook, isLoading, error } = useAudiobookWithProgress(audiobookId);
+  const { mutate: startAudiobook } = useStartAudiobook();
+  const { loadAudiobook, play, audiobook: currentAudiobook } = useAudioPlayerStore();
 
   if (isLoading) {
     return <AudiobookDetailSkeleton />;
@@ -71,28 +44,35 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
   if (error || !audiobook) {
     return (
       <div className="container py-12 text-center">
+        <Headphones className="mx-auto h-12 w-12 text-muted-foreground mb-3" />
         <p className="text-muted-foreground">
-          {error ? '加载有声书失败，请稍后重试' : '未找到该有声书'}
+          {error ? t('loadError') : t('notFound')}
         </p>
       </div>
     );
   }
 
-  const handlePlay = () => {
-    if (!isCurrentAudiobook) {
-      const startChapter = progress?.currentChapter ?? 0;
-      const startPosition = progress?.currentPosition ?? 0;
-      loadAudiobook(audiobook, startChapter, startPosition);
-    }
-    togglePlay();
+  const { book, hasBook, getBookChapterId } = useWhispersyncFromAudiobook(audiobook);
+  const progress = audiobook.progress;
+  const isCurrentlyPlaying = currentAudiobook?.id === audiobook.id;
+  const chaptersToShow = showAllChapters ? audiobook.chapters : audiobook.chapters.slice(0, 10);
+
+  const handlePlay = async () => {
+    const startChapter = progress?.currentChapter ?? 0;
+    const startPosition = progress?.currentPosition ?? 0;
+
+    startAudiobook({ audiobookId: audiobook.id });
+    await loadAudiobook(audiobook, startChapter, startPosition);
+    await play();
   };
 
-  const handleChapterSelect = (index: number) => {
-    if (!isCurrentAudiobook) {
-      loadAudiobook(audiobook, index);
-    } else {
-      goToChapter(index);
-    }
+  const handlePlayChapter = async (chapterIndex: number) => {
+    startAudiobook({
+      audiobookId: audiobook.id,
+      request: { chapterIndex, positionSeconds: 0 },
+    });
+    await loadAudiobook(audiobook, chapterIndex, 0);
+    await play();
   };
 
   const handleShare = async () => {
@@ -104,25 +84,16 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
           url: window.location.href,
         });
       } catch {
-        // User cancelled or share failed
+        // cancelled
       }
     } else {
       await navigator.clipboard.writeText(window.location.href);
     }
   };
 
-  // Calculate total progress
-  const totalDurationBefore = isCurrentAudiobook
-    ? audiobook.chapters.slice(0, chapterIndex).reduce((sum, ch) => sum + ch.duration, 0)
-    : 0;
-  const totalProgress = isCurrentAudiobook ? totalDurationBefore + currentTime : 0;
-  const totalProgressPercent = audiobook.totalDuration > 0
-    ? (totalProgress / audiobook.totalDuration) * 100
-    : 0;
-
   return (
-    <div className="pb-24">
-      {/* Header Section */}
+    <div className="pb-12">
+      {/* Header with gradient */}
       <div
         className="relative w-full px-4 pb-8 pt-6"
         style={{
@@ -139,7 +110,7 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
             type="button"
             onClick={() => router.back()}
             className="mb-2 flex h-9 w-9 items-center justify-center self-start rounded-full bg-background/60 backdrop-blur transition-colors hover:bg-background/80"
-            aria-label="返回"
+            aria-label={t('back')}
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
@@ -166,15 +137,20 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
           <h1 className="mt-4 text-center text-2xl font-bold">{audiobook.title}</h1>
           <p className="mt-1 text-center text-muted-foreground">{audiobook.author}</p>
           {audiobook.narrator && (
-            <p className="mt-0.5 text-center text-sm text-muted-foreground">
-              朗读: {audiobook.narrator}
+            <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+              <User className="h-3.5 w-3.5" />
+              {t('narrator', { name: audiobook.narrator })}
             </p>
           )}
-          <div className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-            <Clock className="h-3.5 w-3.5" />
-            {formatDuration(audiobook.totalDuration)}
-            <span className="mx-1">·</span>
-            {audiobook.chapters.length} 章
+
+          {/* Stats */}
+          <div className="mt-3 flex items-center gap-4 text-sm text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <Clock className="h-3.5 w-3.5" />
+              {formatDuration(audiobook.totalDuration)}
+            </span>
+            <span>{t('chapterCount', { count: audiobook.chapters.length })}</span>
+            {audiobook.language && <span>{audiobook.language}</span>}
           </div>
         </div>
       </div>
@@ -184,103 +160,162 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
         {/* Play Button */}
         <div className="space-y-3">
           <Button
-            className="h-12 w-full rounded-xl"
+            className="w-full h-12 rounded-xl"
             size="lg"
             onClick={handlePlay}
-            disabled={isPlayerLoading && isCurrentAudiobook}
+            style={{ backgroundImage: 'var(--brand-gradient)' }}
           >
-            {isPlayerLoading && isCurrentAudiobook ? (
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            ) : isPlaying && isCurrentAudiobook ? (
-              <Headphones className="mr-2 h-5 w-5" />
-            ) : (
-              <Play className="mr-2 h-5 w-5" />
-            )}
-            {isPlaying && isCurrentAudiobook ? '正在播放' : '开始播放'}
+            <Play className="mr-2 h-5 w-5" />
+            {progress && progress.status === 'IN_PROGRESS'
+              ? t('continueListening')
+              : t('startListening')
+            }
           </Button>
           <div className="flex items-center gap-3">
-            <Button size="icon" variant="outline" onClick={handleShare} className="h-11 w-11 rounded-xl">
+            {hasBook && book ? (
+              <Button
+                size="lg"
+                variant="outline"
+                className="flex-1 h-11 rounded-xl"
+                asChild
+              >
+                <Link href={
+                  progress
+                    ? `/read/${book.id}${getBookChapterId(progress.currentChapter) ? `?chapter=${getBookChapterId(progress.currentChapter)}` : ''}`
+                    : `/read/${book.id}`
+                }>
+                  <BookOpen className="mr-1.5 h-4 w-4" />
+                  {progress ? t('readFromHere') : t('viewEbook')}
+                </Link>
+              </Button>
+            ) : audiobook.bookId ? (
+              <Button
+                size="lg"
+                variant="outline"
+                className="flex-1 h-11 rounded-xl"
+                asChild
+              >
+                <Link href={`/book/${audiobook.bookId}`}>
+                  <BookOpen className="mr-1.5 h-4 w-4" />
+                  {t('viewEbook')}
+                </Link>
+              </Button>
+            ) : null}
+            <Button
+              size="icon"
+              variant="outline"
+              onClick={handleShare}
+              className="h-11 w-11 rounded-xl"
+            >
               <Share2 className="h-4 w-4" />
             </Button>
           </div>
         </div>
 
-        {/* Now Playing Controls (only show when this audiobook is playing) */}
-        {isCurrentAudiobook && (
-          <div className="rounded-xl bg-card p-6 shadow-sm space-y-4">
-            <div className="text-center">
-              <p className="text-sm font-medium">
-                {audiobook.chapters[chapterIndex]?.title || `第 ${chapterIndex + 1} 章`}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                第 {chapterIndex + 1} / {audiobook.chapters.length} 章
-              </p>
+        {/* Progress Section */}
+        {progress && progress.status === 'IN_PROGRESS' && (
+          <div className="rounded-xl bg-card p-4 shadow-sm">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">{t('progress')}</span>
+              <span className="font-medium">
+                {t('chapterProgress', {
+                  current: progress.currentChapter + 1,
+                  total: audiobook.chapters.length,
+                })}
+              </span>
             </div>
-
-            {/* Progress Slider */}
-            <ProgressSlider
-              currentTime={currentTime}
-              duration={duration}
-              onSeek={seek}
-            />
-
-            {/* Player Controls */}
-            <PlayerControls
-              isPlaying={isPlaying}
-              isLoading={isPlayerLoading}
-              onPlayPause={togglePlay}
-              onPrevious={previousChapter}
-              onNext={nextChapter}
-              onSeekBackward={() => seekBackward(15)}
-              onSeekForward={() => seekForward(15)}
-              size="lg"
-            />
-
-            {/* Secondary Controls */}
-            <div className="flex items-center justify-center gap-4">
-              <SpeedSelector
-                speed={playbackSpeed}
-                onSpeedChange={setPlaybackSpeed}
-              />
-              <SleepTimer
-                activeTimer={sleepTimer}
-                endTime={sleepTimerEndTime}
-                onSetTimer={setSleepTimer}
+            <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-secondary">
+              <div
+                className="h-full rounded-full bg-primary transition-all"
+                style={{
+                  width: `${Math.min(100, (progress.totalListened / audiobook.totalDuration) * 100)}%`,
+                }}
               />
             </div>
-
-            {/* Total Progress */}
-            <div className="text-center">
-              <p className="text-xs text-muted-foreground">
-                {formatTime(totalProgress)} / {formatDuration(audiobook.totalDuration)}
-                {' '}({Math.round(totalProgressPercent)}%)
-              </p>
-            </div>
+            <p className="mt-1 text-xs text-muted-foreground text-right">
+              {formatDuration(progress.totalListened)} / {formatDuration(audiobook.totalDuration)}
+            </p>
           </div>
         )}
 
         {/* Description */}
         {audiobook.description && (
           <div className="rounded-xl bg-card p-4 shadow-sm">
-            <h2 className="text-lg font-semibold">简介</h2>
+            <h2 className="text-lg font-semibold">{t('description')}</h2>
             <p className="mt-2 leading-relaxed text-muted-foreground">
               {audiobook.description}
             </p>
           </div>
         )}
 
-        {/* Chapter List */}
-        <div className="rounded-xl bg-card p-4 shadow-sm">
-          <h2 className="text-lg font-semibold mb-2">
-            目录 ({audiobook.chapters.length} 章)
-          </h2>
-          <ChapterList
-            chapters={audiobook.chapters}
-            currentChapterIndex={isCurrentAudiobook ? chapterIndex : -1}
-            isPlaying={isPlaying && isCurrentAudiobook}
-            onChapterSelect={handleChapterSelect}
-          />
-        </div>
+        {/* Chapters */}
+        {audiobook.chapters.length > 0 && (
+          <div className="rounded-xl bg-card p-4 shadow-sm">
+            <h2 className="text-lg font-semibold">
+              {t('chapters')} ({audiobook.chapters.length})
+            </h2>
+            <div className="mt-2 divide-y">
+              {chaptersToShow.map((chapter, index) => {
+                const isCurrent = progress?.currentChapter === index;
+                const isPast = progress ? index < progress.currentChapter : false;
+
+                return (
+                  <button
+                    key={chapter.id}
+                    type="button"
+                    onClick={() => handlePlayChapter(index)}
+                    className={`flex w-full items-center gap-3 py-3 transition-colors hover:bg-muted rounded-lg px-2 text-left ${
+                      isCurrent ? 'bg-primary/5' : ''
+                    }`}
+                  >
+                    <span className={`w-7 flex-shrink-0 text-sm text-right ${
+                      isCurrent ? 'text-primary font-semibold' : isPast ? 'text-muted-foreground' : 'text-muted-foreground'
+                    }`}>
+                      {index + 1}.
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <span className={`block truncate text-sm ${
+                        isCurrent ? 'text-primary font-medium' : ''
+                      }`}>
+                        {chapter.title || t('chapterNumber', { number: chapter.number })}
+                      </span>
+                      {chapter.readerName && (
+                        <span className="text-xs text-muted-foreground">
+                          {chapter.readerName}
+                        </span>
+                      )}
+                    </div>
+                    <span className="flex-shrink-0 text-xs text-muted-foreground">
+                      {formatDuration(chapter.duration)}
+                    </span>
+                    <Play className={`h-4 w-4 flex-shrink-0 ${
+                      isCurrent ? 'text-primary' : 'text-muted-foreground'
+                    }`} />
+                  </button>
+                );
+              })}
+              {audiobook.chapters.length > 10 && (
+                <button
+                  type="button"
+                  onClick={() => setShowAllChapters(!showAllChapters)}
+                  className="flex w-full items-center justify-center gap-1 rounded-lg py-3 text-sm font-medium text-primary transition-colors hover:bg-muted"
+                >
+                  {showAllChapters ? (
+                    <>
+                      {t('collapse')}
+                      <ChevronDown className="h-4 w-4 rotate-180" />
+                    </>
+                  ) : (
+                    <>
+                      {t('viewAllChapters', { count: audiobook.chapters.length })}
+                      <ChevronDown className="h-4 w-4" />
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -289,7 +324,6 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
 function AudiobookDetailSkeleton() {
   return (
     <div className="pb-12">
-      {/* Header skeleton */}
       <div className="px-4 pt-6">
         <Skeleton className="h-9 w-9 rounded-full" />
       </div>
@@ -299,11 +333,10 @@ function AudiobookDetailSkeleton() {
         <Skeleton className="mt-2 h-5 w-32" />
         <Skeleton className="mt-2 h-4 w-24" />
       </div>
-      {/* Content skeleton */}
       <div className="mx-auto max-w-2xl space-y-6 px-4">
         <Skeleton className="h-12 w-full rounded-xl" />
         <Skeleton className="h-24 w-full rounded-xl" />
-        <Skeleton className="h-60 w-full rounded-xl" />
+        <Skeleton className="h-40 w-full rounded-xl" />
       </div>
     </div>
   );

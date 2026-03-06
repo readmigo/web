@@ -3,6 +3,7 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Play, Pause, Check } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { formatDuration } from '../stores/audio-player-store';
 import type { AudiobookChapter } from '../types';
 
@@ -19,6 +20,7 @@ export function ChapterList({
   isPlaying,
   onChapterSelect,
 }: ChapterListProps) {
+  const t = useTranslations('audiobooks');
   return (
     <ScrollArea className="h-[300px]">
       <div className="space-y-1 p-2">
@@ -44,7 +46,7 @@ export function ChapterList({
               </div>
               <div className="flex-1 text-left">
                 <div className="font-medium">
-                  {chapter.title || `Chapter ${chapter.number}`}
+                  {chapter.title || t('chapterNumber', { number: chapter.number })}
                 </div>
                 <div className="text-xs text-muted-foreground">
                   {formatDuration(chapter.duration)}

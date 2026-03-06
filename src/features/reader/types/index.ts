@@ -2,15 +2,23 @@ export interface ReaderSettings {
   fontSize: number;
   fontFamily: 'serif' | 'sans-serif' | 'monospace';
   lineHeight: number;
-  theme: 'light' | 'sepia' | 'dark';
+  theme: 'light' | 'sepia' | 'dark' | 'ultraDark';
   marginSize: 'small' | 'medium' | 'large';
+  letterSpacing: number;
+  wordSpacing: number;
+  paragraphSpacing: number;
+  textAlign: 'left' | 'center' | 'right' | 'justify';
+  hyphenation: boolean;
+  columnCount: 1 | 2 | 3;
+  textIndent: number;
+  fontWeight: 'light' | 'regular' | 'medium' | 'semibold' | 'bold';
+  appearanceMode: 'light' | 'dark' | 'auto';
 }
 
 export interface ReaderPosition {
-  cfi: string;
+  chapterIndex: number;
+  page: number;
   percentage: number;
-  chapter: number;
-  page?: number;
 }
 
 export interface Highlight {
@@ -33,7 +41,7 @@ export interface Bookmark {
 
 export interface SelectedText {
   text: string;
-  cfiRange: string;
+  cfiRange?: string;
   rect: DOMRect;
   source?: 'selection' | 'paragraph';
 }

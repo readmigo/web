@@ -1,0 +1,163 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --color-brand-primary: #7c8df5; /** Main brand color */
+  --color-brand-primary-dark: #8b9bff; /** Main brand color (dark) */
+  --color-brand-blue: #8bb9ff; /** Gradient start */
+  --color-brand-blue-dark: #7aabff; /** Gradient start (dark) */
+  --color-brand-purple: #b9b3f5; /** Gradient middle */
+  --color-brand-purple-dark: #a8a2e6; /** Gradient middle (dark) */
+  --color-brand-pink: #f6b6e8; /** Gradient end */
+  --color-brand-pink-dark: #e5a5d7; /** Gradient end (dark) */
+  --color-accent-purple: #9a8cf2;
+  --color-accent-purple-dark: #aba0ff;
+  --color-accent-pink: #f3a6dc;
+  --color-accent-pink-dark: #ff9ed4;
+  --color-accent-blue: #a5c7ff;
+  --color-accent-blue-dark: #8db8ff;
+  --color-accent-gold: #ffd36a;
+  --color-accent-gold-dark: #ffcc4d;
+  --color-accent-system: #a78bfa; /** iOS AccentColor */
+  --color-accent-system-dark: #8b5cf6; /** iOS AccentColor (dark) */
+  --color-semantic-success: #6ed6a8;
+  --color-semantic-success-dark: #4ad98d;
+  --color-semantic-warning: #ffc26a;
+  --color-semantic-warning-dark: #ffb74d;
+  --color-semantic-error: #ff6b6b;
+  --color-semantic-error-dark: #ff5e5e;
+  --color-semantic-info: #7baaff;
+  --color-semantic-info-dark: #6b9aef;
+  --color-text-primary: #2d2e4a;
+  --color-text-primary-dark: #f5f5f7;
+  --color-text-secondary: #6b6f9c;
+  --color-text-secondary-dark: #a1a1a6;
+  --color-text-hint: #a3a6c8;
+  --color-text-hint-dark: #636366;
+  --color-text-on-dark: #ffffff;
+  --color-background-main: #f7f8fd;
+  --color-background-card: #ffffff;
+  --color-background-subtle: #eef0fa;
+  --color-background-main-dark: #000000;
+  --color-background-card-dark: #1c1c1e;
+  --color-background-subtle-dark: #2c2c2e;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f4f4f5;
+  --color-gray-200: #e4e4e7;
+  --color-gray-300: #d4d4d8;
+  --color-gray-400: #a1a1aa;
+  --color-gray-500: #71717a;
+  --color-gray-600: #52525b;
+  --color-gray-700: #3f3f46;
+  --color-gray-800: #27272a;
+  --color-gray-900: #18181b;
+  --font-family-primary: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-mono: 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  --font-family-reader: Georgia;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-size-display: 34px;
+  --font-size-title1: 28px;
+  --font-size-title2: 22px;
+  --font-size-title3: 20px;
+  --font-size-headline: 17px;
+  --font-size-body: 17px;
+  --font-size-callout: 16px;
+  --font-size-subheadline: 15px;
+  --font-size-footnote: 13px;
+  --font-size-caption1: 12px;
+  --font-size-caption2: 11px;
+  --font-line-height-display: 40px;
+  --font-line-height-title1: 34px;
+  --font-line-height-title2: 28px;
+  --font-line-height-title3: 25px;
+  --font-line-height-headline: 22px;
+  --font-line-height-body: 22px;
+  --font-line-height-callout: 21px;
+  --font-line-height-subheadline: 20px;
+  --font-line-height-footnote: 18px;
+  --font-line-height-caption1: 16px;
+  --font-line-height-caption2: 13px;
+  --spacing-0: 0px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --radius-none: 0px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-default: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-lg: 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-xl: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+  --shadow-2xl: 0 20px 25px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.04);
+  --component-button-primary-height-sm: 32px;
+  --component-button-primary-height-md: 40px;
+  --component-button-primary-height-lg: 48px;
+  --component-button-primary-font-size-sm: 14px;
+  --component-button-primary-font-size-md: 16px;
+  --component-button-primary-font-size-lg: 17px;
+  --component-input-height: 44px;
+  --component-reader-light-background: #ffffff;
+  --component-reader-light-text: #000000;
+  --component-reader-light-link: #007aff;
+  --component-reader-sepia-background: #faf2e3;
+  --component-reader-sepia-text: #4d331a;
+  --component-reader-sepia-link: #0066cc;
+  --component-reader-dark-background: #1f1f1f;
+  --component-reader-dark-text: #d9d9d9;
+  --component-reader-dark-link: #64b5f6;
+  --semantic-action-primary: var(--color-brand-primary);
+  --semantic-action-secondary: var(--color-accent-purple);
+  --semantic-text-primary: var(--color-text-primary);
+  --semantic-text-secondary: var(--color-text-secondary);
+  --semantic-text-hint: var(--color-text-hint);
+  --semantic-text-inverse: var(--color-text-on-dark);
+  --semantic-surface-background: var(--color-background-main);
+  --semantic-surface-card: var(--color-background-card);
+  --semantic-surface-subtle: var(--color-background-subtle);
+  --semantic-status-success: var(--color-semantic-success);
+  --semantic-status-warning: var(--color-semantic-warning);
+  --semantic-status-error: var(--color-semantic-error);
+  --semantic-status-info: var(--color-semantic-info);
+  --semantic-border-default: var(--color-gray-200);
+  --semantic-border-light: var(--color-background-subtle);
+  --semantic-gradient-start: var(--color-brand-blue);
+  --semantic-gradient-middle: var(--color-brand-purple);
+  --semantic-gradient-end: var(--color-brand-pink);
+  --component-button-primary-text: var(--color-white);
+  --component-button-primary-radius: var(--radius-default);
+  --component-button-primary-padding-v: var(--spacing-3);
+  --component-button-primary-padding-h: var(--spacing-4);
+  --component-button-secondary-background: var(--color-gray-100);
+  --component-button-destructive-text: var(--color-white);
+  --component-card-radius: var(--radius-lg);
+  --component-card-padding: var(--spacing-4);
+  --component-card-shadow: var(--shadow-sm);
+  --component-input-radius: var(--radius-default);
+  --component-input-padding-v: var(--spacing-3);
+  --component-input-padding-h: var(--spacing-4);
+  --component-button-primary-background: var(--semantic-action-primary);
+  --component-button-secondary-text: var(--semantic-text-primary);
+  --component-button-destructive-background: var(--semantic-status-error);
+  --component-card-background: var(--semantic-surface-card);
+  --component-input-border: var(--semantic-border-default);
+  --component-input-border-focus: var(--semantic-action-primary);
+  --component-input-placeholder: var(--semantic-text-hint);
+}

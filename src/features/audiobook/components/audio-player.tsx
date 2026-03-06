@@ -7,12 +7,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { ChevronDown, List, Volume2, VolumeX } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
+import { useTranslations } from 'next-intl';
 import { useAudioPlayerStore, formatTime, formatDuration } from '../stores/audio-player-store';
+import { useWhispersyncFromAudiobook } from '../hooks/use-whispersync';
+import { useDanmaku, useSendDanmaku } from '../hooks/use-danmaku';
 import { PlayerControls } from './player-controls';
 import { ProgressSlider } from './progress-slider';
 import { SpeedSelector } from './speed-selector';
 import { SleepTimer } from './sleep-timer';
 import { ChapterList } from './chapter-list';
+import { WhispersyncToBook } from './whispersync-banner';
+import { DanmakuOverlay } from './danmaku-overlay';
 
 interface AudioPlayerProps {
   isOpen: boolean;
@@ -44,7 +49,11 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
     setSleepTimer,
   } = useAudioPlayerStore();
 
+  const t = useTranslations('audiobooks');
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
+  const { book, hasBook, getBookChapterId } = useWhispersyncFromAudiobook(audiobook);
+  const { data: danmakuData } = useDanmaku(audiobook?.id, currentChapter?.number);
+  const sendDanmaku = useSendDanmaku();
 
   if (!audiobook) return null;
 
@@ -66,7 +75,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                 <ChevronDown className="h-5 w-5" />
               </Button>
               <SheetTitle className="flex-1 text-center text-sm font-medium">
-                Now Playing
+                {t('nowPlaying')}
               </SheetTitle>
               <div className="w-10" /> {/* Spacer for centering */}
             </div>
@@ -77,7 +86,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
             <Tabs defaultValue="player" className="flex h-full flex-col">
               <TabsContent value="player" className="flex-1 overflow-auto">
                 <div className="flex flex-col items-center px-6 py-8">
-                  {/* Cover Art */}
+                  {/* Cover Art + Danmaku */}
                   <div className="relative aspect-square w-full max-w-[280px] overflow-hidden rounded-xl shadow-lg">
                     {audiobook.coverUrl ? (
                       <Image
@@ -93,6 +102,21 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                         </span>
                       </div>
                     )}
+                    {danmakuData && (
+                      <DanmakuOverlay
+                        items={danmakuData.items}
+                        onSend={(content) => {
+                          if (audiobook && currentChapter) {
+                            sendDanmaku.mutate({
+                              audiobookId: audiobook.id,
+                              chapterNumber: currentChapter.number,
+                              content,
+                            });
+                          }
+                        }}
+                        isSending={sendDanmaku.isPending}
+                      />
+                    )}
                   </div>
 
                   {/* Title & Author */}
@@ -101,7 +125,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                     <p className="text-muted-foreground">{audiobook.author}</p>
                     {audiobook.narrator && (
                       <p className="text-sm text-muted-foreground">
-                        Narrated by {audiobook.narrator}
+                        {t('narratedBy', { name: audiobook.narrator })}
                       </p>
                     )}
                   </div>
@@ -109,10 +133,10 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                   {/* Current Chapter */}
                   <div className="mt-4 text-center">
                     <p className="text-sm font-medium">
-                      {currentChapter?.title || `Chapter ${currentChapter?.number}`}
+                      {currentChapter?.title || t('chapterNumber', { number: currentChapter?.number ?? 0 })}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Chapter {chapterIndex + 1} of {audiobook.chapters.length}
+                      {t('chapterOf', { current: chapterIndex + 1, total: audiobook.chapters.length })}
                     </p>
                   </div>
 
@@ -182,9 +206,20 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                   <div className="mt-6 text-center">
                     <p className="text-xs text-muted-foreground">
                       {formatTime(totalProgress)} / {formatDuration(audiobook.totalDuration)}
-                      {' '}({Math.round(totalProgressPercent)}% complete)
+                      {' '}({Math.round(totalProgressPercent)}% {t('complete')})
                     </p>
                   </div>
+
+                  {/* Whispersync Banner */}
+                  {hasBook && book && (
+                    <div className="mt-4 w-full max-w-[320px]">
+                      <WhispersyncToBook
+                        book={book}
+                        currentAudioChapterIndex={chapterIndex}
+                        bookChapterId={getBookChapterId(chapterIndex)}
+                      />
+                    </div>
+                  )}
                 </div>
               </TabsContent>
 
@@ -197,14 +232,15 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                 />
               </TabsContent>
 
+
               {/* Tab Navigation */}
               <TabsList className="flex-shrink-0 w-full justify-center rounded-none border-t">
                 <TabsTrigger value="player" className="flex-1">
-                  Player
+                  {t('player')}
                 </TabsTrigger>
                 <TabsTrigger value="chapters" className="flex-1">
                   <List className="mr-2 h-4 w-4" />
-                  Chapters
+                  {t('chaptersTab')}
                 </TabsTrigger>
               </TabsList>
             </Tabs>

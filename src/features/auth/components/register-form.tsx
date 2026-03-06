@@ -10,7 +10,6 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Apple, Mail, Eye, EyeOff, User } from 'lucide-react';
-
 interface RegisterFormProps {
   callbackUrl?: string;
 }

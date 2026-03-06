@@ -15,9 +15,6 @@ const nextConfig: NextConfig = {
   // Enable standalone output for Docker/serverless
   output: "standalone",
 
-  // Enable turbopack (default in Next.js 16)
-  turbopack: {},
-
   // Image optimization
   images: {
     remotePatterns: [
