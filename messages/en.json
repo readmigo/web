@@ -164,6 +164,12 @@
     "remove": "Remove from favorites",
     "add": "Add to favorites"
   },
+  "auth": {
+    "loginRequired": "Login Required",
+    "loginPromptDesc": "Sign in to use this feature and enjoy the full reading experience.",
+    "loginNow": "Sign In",
+    "continueBrowsing": "Continue Browsing"
+  },
   "subscription": {
     "title": "Upgrade to Readmigo Pro",
     "subtitle": "Unlock all features and enjoy unlimited reading",

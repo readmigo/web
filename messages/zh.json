@@ -164,6 +164,12 @@
     "remove": "取消收藏",
     "add": "收藏"
   },
+  "auth": {
+    "loginRequired": "需要登录",
+    "loginPromptDesc": "登录后即可使用此功能，享受完整的阅读体验。",
+    "loginNow": "立即登录",
+    "continueBrowsing": "继续浏览"
+  },
   "subscription": {
     "title": "升级 Readmigo Pro",
     "subtitle": "解锁全部功能，畅享无限阅读",
