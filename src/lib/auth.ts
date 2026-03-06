@@ -64,14 +64,22 @@ async function refreshBackendToken(refreshToken: string): Promise<{
 }
 
 async function authenticateWithBackend(
-  provider: 'apple' | 'google',
+  provider: 'apple' | 'google' | 'line' | 'kakao',
   token: string
 ): Promise<BackendAuthResponse | null> {
   try {
-    const endpoint = provider === 'apple' ? '/auth/apple' : '/auth/google';
+    const endpointMap: Record<string, string> = {
+      apple: '/auth/apple',
+      google: '/auth/google',
+      line: '/auth/line',
+      kakao: '/auth/kakao',
+    };
+    const endpoint = endpointMap[provider];
     const body = provider === 'apple'
       ? { identityToken: token }
-      : { idToken: token };
+      : provider === 'google'
+        ? { idToken: token }
+        : { accessToken: token };
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'POST',
@@ -112,6 +120,55 @@ if (process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET) {
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
     })
   );
+}
+
+// Add LINE provider only if credentials are configured
+if (process.env.AUTH_LINE_CHANNEL_ID && process.env.AUTH_LINE_CHANNEL_SECRET) {
+  providers.push({
+    id: 'line',
+    name: 'LINE',
+    type: 'oauth' as const,
+    authorization: {
+      url: 'https://access.line.me/oauth2/v2.1/authorize',
+      params: { scope: 'profile openid email', bot_prompt: 'normal' },
+    },
+    token: 'https://api.line.me/oauth2/v2.1/token',
+    userinfo: 'https://api.line.me/v2/profile',
+    clientId: process.env.AUTH_LINE_CHANNEL_ID,
+    clientSecret: process.env.AUTH_LINE_CHANNEL_SECRET,
+    profile(profile: Record<string, string>) {
+      return {
+        id: profile.userId,
+        name: profile.displayName,
+        image: profile.pictureUrl,
+      };
+    },
+  });
+}
+
+// Add Kakao provider only if credentials are configured
+if (process.env.AUTH_KAKAO_CLIENT_ID && process.env.AUTH_KAKAO_CLIENT_SECRET) {
+  providers.push({
+    id: 'kakao',
+    name: 'Kakao',
+    type: 'oauth' as const,
+    authorization: {
+      url: 'https://kauth.kakao.com/oauth/authorize',
+      params: { scope: 'profile_nickname profile_image account_email' },
+    },
+    token: 'https://kauth.kakao.com/oauth/token',
+    userinfo: 'https://kapi.kakao.com/v2/user/me',
+    clientId: process.env.AUTH_KAKAO_CLIENT_ID,
+    clientSecret: process.env.AUTH_KAKAO_CLIENT_SECRET,
+    profile(profile: { id: number; kakao_account?: { profile?: { nickname?: string; profile_image_url?: string }; email?: string } }) {
+      return {
+        id: String(profile.id),
+        name: profile.kakao_account?.profile?.nickname,
+        email: profile.kakao_account?.email,
+        image: profile.kakao_account?.profile?.profile_image_url,
+      };
+    },
+  });
 }
 
 providers.push(
@@ -169,12 +226,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // Initial sign in
       if (account && user) {
         // For OAuth providers, authenticate with backend
-        if (account.provider === 'apple' || account.provider === 'google') {
-          const idToken = account.id_token;
-          if (idToken) {
+        if (
+          account.provider === 'apple' ||
+          account.provider === 'google' ||
+          account.provider === 'line' ||
+          account.provider === 'kakao'
+        ) {
+          const oauthToken =
+            account.provider === 'line' || account.provider === 'kakao'
+              ? account.access_token
+              : account.id_token;
+          if (oauthToken) {
             const backendAuth = await authenticateWithBackend(
-              account.provider as 'apple' | 'google',
-              idToken
+              account.provider as 'apple' | 'google' | 'line' | 'kakao',
+              oauthToken
             );
 
             if (backendAuth) {

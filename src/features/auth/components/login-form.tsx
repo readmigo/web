@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -9,6 +9,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Mail, Eye, EyeOff } from 'lucide-react';
+function LineLogo({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314" />
+    </svg>
+  );
+}
+
+function KakaoLogo({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 3c5.799 0 10.5 3.664 10.5 8.185 0 4.52-4.701 8.184-10.5 8.184a13.5 13.5 0 0 1-1.727-.11l-4.408 2.883c-.501.265-.678.236-.472-.413l.892-3.678c-2.88-1.46-4.785-3.99-4.785-6.866C1.5 6.664 6.201 3 12 3z" />
+    </svg>
+  );
+}
+
 function AppleLogo({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -29,6 +45,13 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [userRegion, setUserRegion] = useState<string>('other');
+
+  useEffect(() => {
+    const lang = navigator.language || '';
+    if (lang.startsWith('ja')) setUserRegion('jp');
+    else if (lang.startsWith('ko')) setUserRegion('kr');
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +78,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
     }
   };
 
-  const handleOAuthSignIn = (provider: 'apple' | 'google') => {
+  const handleOAuthSignIn = (provider: 'apple' | 'google' | 'line' | 'kakao') => {
     signIn(provider, { callbackUrl });
   };
 
@@ -157,7 +180,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
 
   // Main login page — iOS style
   return (
-    <div className="flex w-full max-w-sm flex-col items-center space-y-8">
+    <div className="flex w-full max-w-sm flex-col items-center space-y-8 overflow-y-auto max-h-screen">
       {/* Logo */}
       <div className="flex flex-col items-center gap-4">
         <Image
@@ -176,6 +199,28 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
 
       {/* Auth Buttons */}
       <div className="w-full space-y-3">
+        {/* LINE Sign In — Japan only */}
+        {userRegion === 'jp' && (
+          <Button
+            className="w-full h-[50px] rounded-xl bg-[#06C755] text-white font-medium hover:bg-[#06C755]/90 text-base"
+            onClick={() => handleOAuthSignIn('line')}
+          >
+            <LineLogo className="mr-2 h-5 w-5" />
+            {t('signInLine')}
+          </Button>
+        )}
+
+        {/* Kakao Sign In — Korea only */}
+        {userRegion === 'kr' && (
+          <Button
+            className="w-full h-[50px] rounded-xl bg-[#FEE500] text-[#000000D9] font-medium hover:bg-[#FEE500]/90 text-base"
+            onClick={() => handleOAuthSignIn('kakao')}
+          >
+            <KakaoLogo className="mr-2 h-5 w-5" />
+            {t('signInKakao')}
+          </Button>
+        )}
+
         {/* Apple Sign In */}
         <Button
           className="w-full h-[50px] rounded-xl bg-white text-black font-medium hover:bg-white/90 text-base"
