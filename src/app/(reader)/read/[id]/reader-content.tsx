@@ -17,6 +17,7 @@ import {
   useKeyboardShortcuts,
   type KeyboardShortcut,
 } from '@/lib/hooks/use-keyboard-shortcuts';
+import { usePositionSync } from '@/features/reader/hooks/use-position-sync';
 import type { SelectedText, TocItem } from '@/features/reader/types';
 
 interface ReaderContentProps {
@@ -24,6 +25,8 @@ interface ReaderContentProps {
 }
 
 export function ReaderContent({ bookId }: ReaderContentProps) {
+  // Debounced position sync (3s, matching iOS)
+  usePositionSync(bookId);
   const readerRef = useRef<ChapterReaderHandle>(null);
   const [isReady, setIsReady] = useState(false);
   const [showTTSPanel, setShowTTSPanel] = useState(false);
