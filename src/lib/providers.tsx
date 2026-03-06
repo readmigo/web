@@ -6,6 +6,7 @@ import { ThemeProvider } from 'next-themes';
 import { useState, type ReactNode } from 'react';
 import { Toaster } from 'sonner';
 import { GlobalAudioPlayer } from '@/features/audiobook/components/global-audio-player';
+import { OnboardingGate } from '@/features/onboarding/components/onboarding-gate';
 import { PostHogProvider, PostHogIdentify } from '@/lib/posthog';
 interface ProvidersProps {
   children: ReactNode;
@@ -35,6 +36,7 @@ export function Providers({ children }: ProvidersProps) {
             disableTransitionOnChange
           >
             {children}
+            <OnboardingGate />
             <PostHogIdentify />
             <GlobalAudioPlayer />
             <Toaster position="top-center" richColors />
