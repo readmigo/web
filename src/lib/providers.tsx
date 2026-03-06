@@ -6,6 +6,9 @@ import { ThemeProvider } from 'next-themes';
 import { useState, type ReactNode } from 'react';
 import { Toaster } from 'sonner';
 import { GlobalAudioPlayer } from '@/features/audiobook/components/global-audio-player';
+import { OnboardingGate } from '@/features/onboarding/components/onboarding-gate';
+import { PostHogProvider, PostHogIdentify } from '@/lib/posthog';
+import { AmplitudeProvider } from '@/lib/amplitude';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -25,19 +28,25 @@ export function Providers({ children }: ProvidersProps) {
   );
 
   return (
-    <SessionProvider>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <GlobalAudioPlayer />
-          <Toaster position="top-center" richColors />
-        </ThemeProvider>
-      </QueryClientProvider>
-    </SessionProvider>
+    <AmplitudeProvider>
+    <PostHogProvider>
+      <SessionProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <OnboardingGate />
+            <PostHogIdentify />
+            <GlobalAudioPlayer />
+            <Toaster position="top-center" richColors />
+          </ThemeProvider>
+        </QueryClientProvider>
+      </SessionProvider>
+    </PostHogProvider>
+    </AmplitudeProvider>
   );
 }
