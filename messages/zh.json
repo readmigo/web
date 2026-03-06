@@ -257,6 +257,15 @@
     "crossPlatform.f2": "手机 / iPad 无缝切换",
     "crossPlatform.f3": "Web 端随时访问"
   },
+  "notifications": {
+    "empty": "暂无通知"
+  },
+  "messaging": {
+    "thread": "对话详情",
+    "inputPlaceholder": "输入消息...",
+    "empty": "暂无消息",
+    "newTicket": "新建工单"
+  },
   "notFound": {
     "title": "页面不存在",
     "description": "你访问的页面不存在或已被移除。",

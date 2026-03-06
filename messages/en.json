@@ -257,6 +257,15 @@
     "crossPlatform.f2": "iPhone / iPad seamless switching",
     "crossPlatform.f3": "Web access anytime"
   },
+  "notifications": {
+    "empty": "No notifications"
+  },
+  "messaging": {
+    "thread": "Conversation",
+    "inputPlaceholder": "Type a message...",
+    "empty": "No messages yet",
+    "newTicket": "New Ticket"
+  },
   "notFound": {
     "title": "Page Not Found",
     "description": "The page you visited does not exist or has been removed.",
