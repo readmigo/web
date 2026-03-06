@@ -35,7 +35,6 @@ interface ReaderState {
   // UI state
   showToc: boolean;
   showSettings: boolean;
-  showAiPanel: boolean;
   showReadingStats: boolean;
 
   // Selection
@@ -72,8 +71,6 @@ interface ReaderActions {
   // UI
   toggleToc: () => void;
   toggleSettings: () => void;
-  toggleAiPanel: () => void;
-  setShowAiPanel: (show: boolean) => void;
   toggleReadingStats: () => void;
 
   // Selection
@@ -157,7 +154,6 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
       position: null,
       showToc: false,
       showSettings: false,
-      showAiPanel: false,
       showReadingStats: false,
       selectedText: null,
       systemIsDark: false,
@@ -214,12 +210,6 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
 
       toggleSettings: () =>
         set((state) => ({ showSettings: !state.showSettings })),
-
-      toggleAiPanel: () =>
-        set((state) => ({ showAiPanel: !state.showAiPanel })),
-
-      setShowAiPanel: (show) =>
-        set({ showAiPanel: show }),
 
       toggleReadingStats: () =>
         set((state) => ({ showReadingStats: !state.showReadingStats })),

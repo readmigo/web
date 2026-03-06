@@ -7,7 +7,6 @@ import {
   List,
   Settings,
   Bookmark,
-  MessageSquare,
   ChevronLeft,
   ChevronRight,
   BarChart3,
@@ -45,7 +44,6 @@ export function ReaderToolbar({
     position,
     toggleToc,
     toggleSettings,
-    toggleAiPanel,
     toggleReadingStats,
     addBookmark,
   } = useReaderStore();
@@ -128,9 +126,6 @@ export function ReaderToolbar({
         </Button>
         <Button variant="ghost" size="icon" onClick={toggleReadingStats} className="md:hidden">
           <BarChart3 className="h-5 w-5" />
-        </Button>
-        <Button variant="ghost" size="icon" onClick={toggleAiPanel}>
-          <MessageSquare className="h-5 w-5" />
         </Button>
         <Button variant="ghost" size="icon" onClick={toggleSettings}>
           <Settings className="h-5 w-5" />

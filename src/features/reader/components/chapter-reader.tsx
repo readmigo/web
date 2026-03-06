@@ -14,7 +14,6 @@ import { useReaderStore } from '../stores/reader-store';
 import type { TocItem, SelectedText, BilingualChapter } from '../types';
 import type { Chapter } from '@/features/library/types';
 import { apiClient } from '@/lib/api/client';
-import { useTranslate } from '../hooks/use-ai';
 import { normalizeParagraphText, hashText } from '../utils/translation-hash';
 import { sanitizeHtml } from '@/lib/sanitize';
 
@@ -103,7 +102,6 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
       isParagraphTranslated,
     } = useReaderStore();
 
-    const translateMutation = useTranslate();
     const bookIdRef = useRef(bookId);
     const onTextSelectRef = useRef(onTextSelect);
     const onTocLoadedRef = useRef(onTocLoaded);
@@ -237,14 +235,14 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
 
         pendingTranslationRef.current.add(key);
         try {
-          const result = await translateMutation.mutateAsync({
-            text: originalText,
-            targetLanguage: 'zh',
-            bookId: book,
-          });
-          if (result?.translation) {
-            applyTranslationToNode(node, result.translation);
-            translationActionsRef.current.markParagraphTranslated(book, chapterOrder, textHash, result.translation);
+          const result = await apiClient.post<{ translation: string }>(
+            '/translate',
+            { text: originalText, targetLanguage: 'zh', bookId: book },
+          );
+          const translation = (result as { translation?: string }).translation;
+          if (translation) {
+            applyTranslationToNode(node, translation);
+            translationActionsRef.current.markParagraphTranslated(book, chapterOrder, textHash, translation);
           }
         } catch (err) {
           console.error('Failed to translate paragraph:', err);
@@ -252,7 +250,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
           pendingTranslationRef.current.delete(key);
         }
       },
-      [applyTranslationToNode, translateMutation],
+      [applyTranslationToNode],
     );
 
     const applyPersistedTranslations = useCallback(

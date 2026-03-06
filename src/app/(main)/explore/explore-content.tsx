@@ -16,8 +16,6 @@ import {
 import type { LucideIcon } from 'lucide-react';
 import type { Category } from '@/features/library/types';
 import { useSearch } from '@/features/search/hooks/use-search';
-import { useSearchSuggestions } from '@/features/search/hooks/use-search-suggestions';
-import { usePopularSearches, useTrendingSearches } from '@/features/search/hooks/use-popular-searches';
 import { useSearchHistory } from '@/features/search/hooks/use-search-history';
 import { SearchResultsDropdown } from '@/features/search/components/search-results-dropdown';
 import { useBookLists } from '@/features/library/hooks/use-book-lists';
@@ -90,16 +88,6 @@ export function ExploreContent() {
     data: searchResults,
     isLoading: isSearchLoading,
   } = useSearch(debouncedDropdownQuery);
-
-  // Autocomplete suggestions
-  const {
-    data: suggestions,
-    isLoading: isSuggestionsLoading,
-  } = useSearchSuggestions(debouncedDropdownQuery);
-
-  // Popular & trending searches
-  const { data: popularSearches } = usePopularSearches();
-  const { data: trendingSearches } = useTrendingSearches();
 
   // Search history
   const { history: searchHistory, addSearch, removeSearch, clearHistory } = useSearchHistory();
@@ -208,13 +196,9 @@ export function ExploreContent() {
               setDebouncedSearch(term);
               addSearch(term);
             }}
-            suggestions={suggestions}
-            suggestionsLoading={isSuggestionsLoading}
             searchHistory={searchHistory}
             onRemoveHistory={removeSearch}
             onClearHistory={clearHistory}
-            popularSearches={popularSearches}
-            trendingSearches={trendingSearches}
           />
         )}
       </div>

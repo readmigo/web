@@ -5,15 +5,12 @@ import { ChapterReader, type ChapterReaderHandle } from '@/features/reader/compo
 import { ReaderToolbar } from '@/features/reader/components/reader-toolbar';
 import { ReaderSettingsPanel } from '@/features/reader/components/reader-settings-panel';
 import { TocPanel } from '@/features/reader/components/toc-panel';
-import { AiPanel } from '@/features/reader/components/ai-panel';
 import { SelectionPopup } from '@/features/reader/components/selection-popup';
-import { FocusMode } from '@/features/reader/components/focus-mode';
 import { ReadingStatsOverlay } from '@/features/reader/components/reading-stats-overlay';
 import { TTSControls, MiniTTSControls } from '@/features/reader/components/tts-controls';
 import { KeyboardShortcutsDialog } from '@/components/shared/keyboard-shortcuts-dialog';
 import { useReaderStore } from '@/features/reader/stores/reader-store';
 import { useBookDetail } from '@/features/library/hooks/use-books';
-import { useLearningStore } from '@/features/learning/stores/learning-store';
 import { useTTS } from '@/features/reader/hooks/use-tts';
 import { processOfflineQueue } from '@/features/reader/hooks/use-highlights';
 import {
@@ -29,7 +26,6 @@ interface ReaderContentProps {
 export function ReaderContent({ bookId }: ReaderContentProps) {
   const readerRef = useRef<ChapterReaderHandle>(null);
   const [isReady, setIsReady] = useState(false);
-  const [isFocusMode, setIsFocusMode] = useState(false);
   const [showTTSPanel, setShowTTSPanel] = useState(false);
   const [tocItems, setTocItems] = useState<TocItem[]>([]);
 
@@ -42,14 +38,11 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   const {
     showToc,
     showSettings,
-    showAiPanel,
     selectedText,
     position,
     settings,
     toggleToc,
     toggleSettings,
-    toggleAiPanel,
-    setShowAiPanel,
     setSelectedText,
     addBookmark,
     syncHighlightsFromBackend,
@@ -59,8 +52,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     updateReadingActivity,
     getLastPosition,
   } = useReaderStore();
-
-  const { addWord } = useLearningStore();
 
   // Navigation handlers
   const handlePrev = useCallback(() => {
@@ -122,30 +113,11 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         action: toggleToc,
       },
       {
-        key: 'a',
-        description: '切换AI面板',
-        category: '面板',
-        action: toggleAiPanel,
-      },
-      {
         key: ',',
         ctrl: true,
         description: '打开设置',
         category: '面板',
         action: toggleSettings,
-      },
-      // Reading modes
-      {
-        key: 'f',
-        description: '进入专注模式',
-        category: '阅读模式',
-        action: () => setIsFocusMode(true),
-      },
-      {
-        key: 'Escape',
-        description: '退出专注模式',
-        category: '阅读模式',
-        action: () => setIsFocusMode(false),
       },
       // Bookmarks
       {
@@ -209,7 +181,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       handleNext,
       handlePrev,
       toggleToc,
-      toggleAiPanel,
       toggleSettings,
       bookId,
       position,
@@ -220,7 +191,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   );
 
   const { showHelp, setShowHelp } = useKeyboardShortcuts({
-    enabled: !isFocusMode, // Disable shortcuts in focus mode (it handles its own)
+    enabled: true,
     shortcuts,
   });
 
@@ -303,38 +274,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     readerRef.current?.goTo(href);
   }, []);
 
-  const handleTranslate = useCallback(() => {
-    setShowAiPanel(true);
-  }, [setShowAiPanel]);
-
-  const handleExplain = useCallback(() => {
-    setShowAiPanel(true);
-  }, [setShowAiPanel]);
-
-  const handleSpeak = useCallback(() => {
-    if (selectedText) {
-      const utterance = new SpeechSynthesisUtterance(selectedText.text);
-      utterance.lang = 'en-US';
-      speechSynthesis.speak(utterance);
-    }
-  }, [selectedText]);
-
-  const handleAddWord = useCallback(() => {
-    if (selectedText) {
-      // Add word to vocabulary with basic info
-      // In real app, would get AI explanation first
-      addWord({
-        word: selectedText.text.trim().split(/\s+/)[0],
-        partOfSpeech: 'unknown',
-        definition: '',
-        translation: '',
-        examples: [],
-        bookId,
-        bookTitle: book?.title,
-        context: selectedText.text,
-      });
-    }
-  }, [selectedText, addWord, bookId, book?.title]);
 
   // Loading state
   if (isLoadingBook) {
@@ -350,28 +289,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
 
   const bookTitle = book?.title || 'Loading...';
   const chapters = book?.chapters || [];
-
-  // Focus mode renders differently
-  if (isFocusMode) {
-    return (
-      <FocusMode
-        onExit={() => setIsFocusMode(false)}
-        onPrev={handlePrev}
-        onNext={handleNext}
-        progress={(position?.percentage || 0) * 100}
-        theme={settings.theme}
-      >
-        <ChapterReader
-          ref={readerRef}
-          bookId={bookId}
-          chapters={chapters}
-          onReady={handleReaderReady}
-          onTextSelect={handleTextSelect}
-          onTocLoaded={setTocItems}
-        />
-      </FocusMode>
-    );
-  }
 
   return (
     <div className="flex h-full flex-col">
@@ -401,10 +318,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           <SelectionPopup
             selection={selectedText}
             bookId={bookId}
-            onTranslate={handleTranslate}
-            onExplain={handleExplain}
-            onSpeak={handleSpeak}
-            onAddWord={handleAddWord}
           />
         )}
       </div>
@@ -432,16 +345,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
             onClick={toggleSettings}
           />
           <ReaderSettingsPanel onClose={toggleSettings} />
-        </>
-      )}
-
-      {showAiPanel && (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-black/50"
-            onClick={() => setShowAiPanel(false)}
-          />
-          <AiPanel onClose={() => setShowAiPanel(false)} bookId={bookId} />
         </>
       )}
 

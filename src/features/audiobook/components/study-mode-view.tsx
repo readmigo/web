@@ -2,12 +2,11 @@
 
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Loader2, Plus, Check, Volume2 } from 'lucide-react';
+import { BookOpen, Loader2, Volume2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useChapterText } from '../hooks/use-chapter-text';
 import { useWhispersyncFromAudiobook } from '../hooks/use-whispersync';
 import { useAudioPlayerStore } from '../stores/audio-player-store';
-import { useLearningStore } from '@/features/learning/stores/learning-store';
 import type { Audiobook } from '../types';
 
 interface StudyModeViewProps {
@@ -33,8 +32,6 @@ export function StudyModeView({ audiobook }: StudyModeViewProps) {
 
   const { chapterIndex, currentTime, duration } = useAudioPlayerStore();
   const { book, hasBook, getBookChapterId } = useWhispersyncFromAudiobook(audiobook);
-  const vocabulary = useLearningStore((s) => s.vocabulary);
-  const addWord = useLearningStore((s) => s.addWord);
 
   const bookChapterId = getBookChapterId(chapterIndex);
   const { data: chapterData, isLoading } = useChapterText(book?.id, bookChapterId);
@@ -62,12 +59,6 @@ export function StudyModeView({ audiobook }: StudyModeViewProps) {
     }
     return sentences.length - 1;
   }, [sentences, currentTime, duration]);
-
-  // Vocabulary set for quick lookup
-  const vocabSet = useMemo(
-    () => new Set(vocabulary.map((v) => v.word.toLowerCase())),
-    [vocabulary]
-  );
 
   // Auto-scroll to current sentence
   useEffect(() => {
@@ -106,22 +97,6 @@ export function StudyModeView({ audiobook }: StudyModeViewProps) {
       setIsLookingUp(false);
     }
   }, []);
-
-  // Add word to vocabulary
-  const handleAddWord = () => {
-    if (!wordDef) return;
-    addWord({
-      word: wordDef.word,
-      phonetic: wordDef.phonetic,
-      partOfSpeech: wordDef.partOfSpeech || 'unknown',
-      definition: wordDef.definition || '',
-      translation: '',
-      examples: [],
-      bookId: book?.id,
-      bookTitle: audiobook.title,
-    });
-    setSelectedWord(null);
-  };
 
   // Text-to-speech for a single word
   const speakWord = (word: string) => {
@@ -195,7 +170,6 @@ export function StudyModeView({ audiobook }: StudyModeViewProps) {
                 const cleanWord = token
                   .replace(/[^a-zA-Z]/g, '')
                   .toLowerCase();
-                const isInVocab = cleanWord.length >= 2 && vocabSet.has(cleanWord);
                 const isSelected = selectedWord?.toLowerCase() === cleanWord;
 
                 return (
@@ -207,11 +181,9 @@ export function StudyModeView({ audiobook }: StudyModeViewProps) {
                     className={`cursor-pointer rounded px-0.5 text-sm leading-relaxed transition-colors ${
                       isSelected
                         ? 'bg-primary/20 text-primary font-medium'
-                        : isInVocab
-                          ? 'underline decoration-primary/40 decoration-dotted underline-offset-4'
-                          : isCurrent
-                            ? 'text-foreground hover:bg-primary/10'
-                            : 'text-muted-foreground hover:bg-muted'
+                        : isCurrent
+                          ? 'text-foreground hover:bg-primary/10'
+                          : 'text-muted-foreground hover:bg-muted'
                     }`}
                   >
                     {token}
@@ -262,17 +234,6 @@ export function StudyModeView({ audiobook }: StudyModeViewProps) {
                 </p>
               )}
               <div className="flex gap-2">
-                {vocabSet.has(wordDef.word.toLowerCase()) ? (
-                  <Button size="sm" variant="outline" disabled>
-                    <Check className="mr-1.5 h-3.5 w-3.5" />
-                    {t('alreadyInVocabulary')}
-                  </Button>
-                ) : (
-                  <Button size="sm" onClick={handleAddWord}>
-                    <Plus className="mr-1.5 h-3.5 w-3.5" />
-                    {t('addToVocabulary')}
-                  </Button>
-                )}
                 <Button
                   size="sm"
                   variant="ghost"
