@@ -257,6 +257,24 @@
     "crossPlatform.f2": "iPhone / iPad seamless switching",
     "crossPlatform.f3": "Web access anytime"
   },
+  "postcards": {
+    "empty": "No postcards yet",
+    "createNew": "Create Postcard",
+    "postcards": "postcards",
+    "allTemplates": "All",
+    "yourText": "Your Text",
+    "textPlaceholder": "Enter a quote or thought to share...",
+    "backgroundColor": "Background Color",
+    "textColor": "Text Color",
+    "font": "Font",
+    "preview": "Preview",
+    "sampleText": "Enter your text here",
+    "template": "Template",
+    "cancel": "Cancel",
+    "back": "Back",
+    "next": "Next",
+    "create": "Create"
+  },
   "annualReport": {
     "loading": "Loading report...",
     "generating": "Generating your report",

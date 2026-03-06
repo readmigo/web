@@ -257,6 +257,24 @@
     "crossPlatform.f2": "手机 / iPad 无缝切换",
     "crossPlatform.f3": "Web 端随时访问"
   },
+  "postcards": {
+    "empty": "还没有卡片",
+    "createNew": "创建卡片",
+    "postcards": "张卡片",
+    "allTemplates": "全部",
+    "yourText": "你的文字",
+    "textPlaceholder": "输入你想分享的语录或感想...",
+    "backgroundColor": "背景颜色",
+    "textColor": "文字颜色",
+    "font": "字体",
+    "preview": "预览",
+    "sampleText": "在此输入你的文字",
+    "template": "模板",
+    "cancel": "取消",
+    "back": "上一步",
+    "next": "下一步",
+    "create": "创建"
+  },
   "annualReport": {
     "loading": "加载报告中...",
     "generating": "正在生成报告",
