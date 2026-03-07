@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useReaderStore } from '../stores/reader-store';
 import type { SelectedText } from '../types';
+import { NoteInputDialog } from './note-input-dialog';
 
 interface SelectionPopupProps {
   selection: SelectedText;
@@ -22,6 +23,7 @@ export function SelectionPopup({
 }: SelectionPopupProps) {
   const popupRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [showNoteDialog, setShowNoteDialog] = useState(false);
   const { addHighlight, setSelectedText } = useReaderStore();
 
   useEffect(() => {
@@ -54,15 +56,16 @@ export function SelectionPopup({
   }, [addHighlight, bookId, selection, setSelectedText]);
 
   const handleThoughts = useCallback(() => {
-    const note = window.prompt('Add a note', '');
-    if (note === null) return;
-    if (!note.trim()) return;
+    setShowNoteDialog(true);
+  }, []);
+
+  const handleSaveNote = useCallback((note: string) => {
     addHighlight({
       bookId,
       cfiRange: selection.cfiRange || '',
       text: selection.text,
       color: 'yellow',
-      note: note.trim(),
+      note,
     });
     setSelectedText(null);
   }, [addHighlight, bookId, selection, setSelectedText]);
@@ -140,6 +143,13 @@ export function SelectionPopup({
       >
         <Share2 className="h-4 w-4" />
       </Button>
+
+      <NoteInputDialog
+        open={showNoteDialog}
+        selectedText={selection.text}
+        onSave={handleSaveNote}
+        onClose={() => setShowNoteDialog(false)}
+      />
     </div>
   );
 }
