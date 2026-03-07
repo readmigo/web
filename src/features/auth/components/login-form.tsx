@@ -120,7 +120,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
               placeholder="your@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="bg-white/15 border-white/20 text-white placeholder:text-white/40 focus:ring-white/30 h-12 rounded-xl"
+              className="bg-white/15 border-white/20 text-white placeholder:text-white/40 focus:ring-white/30 h-12 rounded-[10px]"
               required
             />
           </div>
@@ -142,7 +142,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-white/15 border-white/20 text-white placeholder:text-white/40 focus:ring-white/30 h-12 rounded-xl pr-10"
+                className="bg-white/15 border-white/20 text-white placeholder:text-white/40 focus:ring-white/30 h-12 rounded-[10px] pr-10"
                 required
               />
               <button
@@ -161,7 +161,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
 
           <Button
             type="submit"
-            className="w-full h-12 rounded-xl bg-white text-purple-600 font-semibold hover:bg-white/90"
+            className="w-full h-12 rounded-[10px] bg-white text-purple-600 font-semibold hover:bg-white/90"
             disabled={isLoading}
           >
             {isLoading ? t('loggingIn') : t('login')}
@@ -198,11 +198,11 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
       </div>
 
       {/* Auth Buttons */}
-      <div className="w-full space-y-3">
+      <div className="w-full space-y-4">
         {/* LINE Sign In — Japan only */}
         {userRegion === 'jp' && (
           <Button
-            className="w-full h-[50px] rounded-xl bg-[#06C755] text-white font-medium hover:bg-[#06C755]/90 text-base"
+            className="w-full h-[50px] rounded-[10px] bg-[#06C755] text-white font-medium hover:bg-[#06C755]/90 text-base"
             onClick={() => handleOAuthSignIn('line')}
           >
             <LineLogo className="mr-2 h-5 w-5" />
@@ -213,7 +213,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
         {/* Kakao Sign In — Korea only */}
         {userRegion === 'kr' && (
           <Button
-            className="w-full h-[50px] rounded-xl bg-[#FEE500] text-[#000000D9] font-medium hover:bg-[#FEE500]/90 text-base"
+            className="w-full h-[50px] rounded-[10px] bg-[#FEE500] text-[#000000D9] font-medium hover:bg-[#FEE500]/90 text-base"
             onClick={() => handleOAuthSignIn('kakao')}
           >
             <KakaoLogo className="mr-2 h-5 w-5" />
@@ -223,7 +223,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
 
         {/* Apple Sign In */}
         <Button
-          className="w-full h-[50px] rounded-xl bg-white text-black font-medium hover:bg-white/90 text-base"
+          className="w-full h-[50px] rounded-[10px] bg-white text-black font-medium hover:bg-white/90 text-base"
           onClick={() => handleOAuthSignIn('apple')}
         >
           <AppleLogo className="mr-2 h-5 w-5" />
@@ -232,7 +232,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
 
         {/* Google Sign In */}
         <Button
-          className="w-full h-[50px] rounded-xl bg-white text-black font-medium hover:bg-white/90 text-base"
+          className="w-full h-[50px] rounded-[10px] bg-white text-black font-medium hover:bg-white/90 text-base"
           onClick={() => handleOAuthSignIn('google')}
         >
           <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
@@ -258,7 +258,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
 
         {/* Email Sign In */}
         <Button
-          className="w-full h-[50px] rounded-xl bg-white/15 text-white font-medium border border-white/30 hover:bg-white/25 text-base"
+          className="w-full h-[50px] rounded-[10px] bg-white/15 text-white font-medium border border-white/30 hover:bg-white/25 text-base"
           variant="ghost"
           onClick={() => setShowEmailForm(true)}
         >

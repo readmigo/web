@@ -113,7 +113,16 @@
     "about": "About",
     "aboutReadmigo": "About Readmigo",
     "account": "Account",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "avatar": {
+      "title": "Change Avatar",
+      "choosePhoto": "Choose Photo",
+      "removeAvatar": "Remove Avatar",
+      "uploadError": "Failed to upload avatar. Please try again.",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "zoom": "Zoom"
+    }
   },
   "settings": {
     "appearance": "Appearance",
@@ -205,12 +214,19 @@
     "privacyPolicy": "Privacy Policy",
     "registering": "Registering...",
     "hasAccount": "Already have an account?",
-    "loginNow": "Login now",
+    "loginNow": "Sign In",
     "passwordMismatch": "Passwords do not match",
     "agreeRequired": "Please agree to the User Agreement and Privacy Policy",
     "registerFailed": "Registration failed",
     "registerFailedRetry": "Registration failed, please try again later",
-    "termsOfService": "Terms of Service"
+    "termsOfService": "Terms of Service",
+    "signInLine": "Sign in with LINE",
+    "signInKakao": "Sign in with Kakao",
+    "signUpLine": "Sign up with LINE",
+    "signUpKakao": "Sign up with Kakao",
+    "loginRequired": "Login Required",
+    "loginPromptDesc": "Sign in to use this feature and enjoy the full reading experience.",
+    "continueBrowsing": "Continue Browsing"
   },
   "footer": {
     "privacyPolicy": "Privacy Policy",
@@ -286,12 +302,6 @@
     "locked.title": "Detailed Statistics",
     "locked.desc": "Upgrade to Pro to see full reading analytics",
     "locked.upgrade": "Upgrade to Pro"
-  },
-  "auth": {
-    "loginRequired": "Login Required",
-    "loginPromptDesc": "Sign in to use this feature and enjoy the full reading experience.",
-    "loginNow": "Sign In",
-    "continueBrowsing": "Continue Browsing"
   },
   "subscription": {
     "title": "Upgrade to Readmigo Pro",

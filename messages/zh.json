@@ -113,7 +113,16 @@
     "about": "关于",
     "aboutReadmigo": "关于 Readmigo",
     "account": "账户",
-    "signOut": "退出登录"
+    "signOut": "退出登录",
+    "avatar": {
+      "title": "更换头像",
+      "choosePhoto": "从相册选择",
+      "removeAvatar": "使用默认头像",
+      "uploadError": "头像上传失败，请重试。",
+      "cancel": "取消",
+      "confirm": "确认",
+      "zoom": "缩放"
+    }
   },
   "settings": {
     "appearance": "外观",
@@ -210,7 +219,14 @@
     "agreeRequired": "请同意用户协议和隐私政策",
     "registerFailed": "注册失败",
     "registerFailedRetry": "注册失败，请稍后重试",
-    "termsOfService": "服务条款"
+    "termsOfService": "服务条款",
+    "signInLine": "使用 LINE 登录",
+    "signInKakao": "使用 Kakao 登录",
+    "signUpLine": "使用 LINE 注册",
+    "signUpKakao": "使用 Kakao 注册",
+    "loginRequired": "需要登录",
+    "loginPromptDesc": "登录后即可使用此功能，享受完整的阅读体验。",
+    "continueBrowsing": "继续浏览"
   },
   "footer": {
     "privacyPolicy": "隐私政策",
@@ -286,12 +302,6 @@
     "locked.title": "详细统计",
     "locked.desc": "升级 Pro 查看完整阅读数据分析",
     "locked.upgrade": "升级 Pro"
-  },
-  "auth": {
-    "loginRequired": "需要登录",
-    "loginPromptDesc": "登录后即可使用此功能，享受完整的阅读体验。",
-    "loginNow": "立即登录",
-    "continueBrowsing": "继续浏览"
   },
   "subscription": {
     "title": "升级 Readmigo Pro",
