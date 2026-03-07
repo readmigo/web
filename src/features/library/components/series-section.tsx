@@ -5,7 +5,7 @@ import { apiClient } from '@/lib/api/client';
 import { Badge } from '@/components/ui/badge';
 import { BookOpen, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 interface SeriesInfo {
   id: string;
@@ -77,7 +77,15 @@ export function SeriesSection({ series }: SeriesSectionProps) {
                 </div>
               )}
               {book.coverUrl ? (
-                <img src={book.coverUrl} alt={book.title} className="h-10 w-7 rounded object-cover" />
+                <div className="relative h-10 w-7 flex-shrink-0 overflow-hidden rounded">
+                  <Image
+                    src={book.coverUrl}
+                    alt={book.title}
+                    fill
+                    className="object-cover"
+                    sizes="28px"
+                  />
+                </div>
               ) : (
                 <div className="flex h-10 w-7 items-center justify-center rounded bg-muted">
                   <BookOpen className="h-3 w-3 text-muted-foreground" />

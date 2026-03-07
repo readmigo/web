@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -18,6 +18,7 @@ import {
   FileText,
   Heart,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useBookDetail } from '@/features/library/hooks/use-books';
 import { useAudiobookByBookId } from '@/features/audiobook/hooks/use-audiobooks';
 import { useReadingGuide, useBookContext } from '@/features/library/hooks/use-book-extras';
@@ -48,6 +49,8 @@ interface BookDetailContentProps {
 
 export function BookDetailContent({ bookId }: BookDetailContentProps) {
   const router = useRouter();
+  const t = useTranslations('book');
+  const tFav = useTranslations('favorites');
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [showAllChapters, setShowAllChapters] = useState(false);
 
@@ -67,7 +70,7 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
     return (
       <div className="container py-12 text-center">
         <p className="text-muted-foreground">
-          {error ? '加载书籍详情失败，请稍后重试' : '未找到该书籍'}
+          {error ? t('loadError') : t('notFound')}
         </p>
       </div>
     );
@@ -115,7 +118,7 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
         <div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, var(--background) 90%)',
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, var(--background) 90%)',
           }}
         />
         <div className="relative mx-auto flex max-w-2xl flex-col items-center">
@@ -125,7 +128,7 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
               type="button"
               onClick={() => router.back()}
               className="flex h-9 w-9 items-center justify-center rounded-full bg-background/60 backdrop-blur transition-colors hover:bg-background/80"
-              aria-label="返回"
+              aria-label={t('collapse')}
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
@@ -133,7 +136,7 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
               type="button"
               onClick={handleShare}
               className="flex h-9 w-9 items-center justify-center rounded-full bg-background/60 backdrop-blur transition-colors hover:bg-background/80"
-              aria-label="分享"
+              aria-label={t('startReading')}
             >
               <Share2 className="h-4 w-4" />
             </button>
@@ -179,7 +182,7 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
               style={{ backgroundImage: 'var(--brand-gradient)' }}
             >
               <BookOpen className="h-5 w-5" />
-              开始阅读
+              {t('startReading')}
             </Link>
           </Button>
           {isAuthenticated && (
@@ -188,7 +191,7 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
               onClick={() => toggleFavorite(book.id, isFavorited)}
               disabled={isFavoriteLoading}
               className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-secondary transition-colors hover:bg-secondary/80 disabled:opacity-50"
-              aria-label={isFavorited ? '取消收藏' : '收藏'}
+              aria-label={isFavorited ? tFav('remove') : tFav('add')}
             >
               <Heart
                 className={`h-5 w-5 transition-colors ${isFavorited ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`}
@@ -215,11 +218,11 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <Headphones className="h-4 w-4 text-primary" />
-                  <span className="font-medium">有声版</span>
+                  <span className="font-medium">{t('audiobookVersion')}</span>
                 </div>
                 <div className="mt-0.5 flex items-center gap-3 text-sm text-muted-foreground">
                   {audiobook?.narrator && (
-                    <span className="truncate">朗读: {audiobook.narrator}</span>
+                    <span className="truncate">{t('narrator', { name: audiobook.narrator })}</span>
                   )}
                   {audiobook?.totalDuration && (
                     <span className="flex items-center gap-1">
@@ -237,7 +240,7 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
         {/* Author Section */}
         {book.authorId && (
           <div>
-            <h2 className="mb-2 text-lg font-semibold">作者</h2>
+            <h2 className="mb-2 text-lg font-semibold">{t('authorSection')}</h2>
             <Link
               href={`/author/${book.authorId}`}
               className="flex items-center gap-3 rounded-xl bg-secondary/50 p-4 transition-colors hover:bg-secondary"
@@ -273,7 +276,7 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
 
         {/* Description Section */}
         <div className="rounded-xl bg-card p-4 shadow-sm">
-          <h2 className="text-lg font-semibold">简介</h2>
+          <h2 className="text-lg font-semibold">{t('description')}</h2>
           <div className="relative mt-2">
             <p
               className={`leading-relaxed text-muted-foreground ${
@@ -288,7 +291,7 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
                 onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
                 className="mt-1 text-sm font-medium text-primary"
               >
-                {isDescriptionExpanded ? '收起' : '展开全文'}
+                {isDescriptionExpanded ? t('collapse') : t('expandFull')}
               </button>
             )}
           </div>
@@ -322,7 +325,7 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
         {book.chapters.length > 0 && (
           <div className="rounded-xl bg-card p-4 shadow-sm">
             <h2 className="text-lg font-semibold">
-              目录 ({book.chapters.length} 章)
+              {t('tableOfContents')} ({book.chapters.length})
             </h2>
             <div className="mt-2 divide-y">
               {chaptersToShow.map((chapter, index) => (
@@ -350,12 +353,12 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
                 >
                   {showAllChapters ? (
                     <>
-                      收起
+                      {t('collapse')}
                       <ChevronDown className="h-4 w-4 rotate-180" />
                     </>
                   ) : (
                     <>
-                      查看全部 {book.chapters.length} 章
+                      {t('viewAllChapters', { count: book.chapters.length })}
                       <ChevronDown className="h-4 w-4" />
                     </>
                   )}
