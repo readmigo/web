@@ -1,8 +1,19 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import {
   UserCircle,
   Shield,
@@ -18,6 +29,8 @@ import {
   Crown,
   Bell,
   Building2,
+  HardDrive,
+  Trash2,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ContinueReadingCard } from '@/features/library/components/continue-reading-card';
@@ -32,6 +45,7 @@ function MenuRow({
   href,
   onClick,
   destructive,
+  showChevron = true,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   iconColor?: string;
@@ -40,9 +54,10 @@ function MenuRow({
   href?: string;
   onClick?: () => void;
   destructive?: boolean;
+  showChevron?: boolean;
 }) {
   const content = (
-    <div className="flex items-center gap-3 rounded-xl bg-card px-4 py-3 transition-colors hover:bg-accent">
+    <div className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-accent">
       <div
         className="flex h-8 w-8 items-center justify-center rounded-lg"
         style={{ backgroundColor: iconColor ? `${iconColor}20` : undefined }}
@@ -61,7 +76,7 @@ function MenuRow({
           <p className="text-xs text-muted-foreground">{subtitle}</p>
         )}
       </div>
-      {!destructive && <ChevronRight className="h-4 w-4 text-muted-foreground" />}
+      {showChevron && !destructive && <ChevronRight className="h-4 w-4 text-muted-foreground" />}
     </div>
   );
 
@@ -76,6 +91,10 @@ function MenuRow({
   );
 }
 
+function MenuDivider() {
+  return <hr className="ml-[52px] border-border" />;
+}
+
 function MenuSection({
   title,
   children,
@@ -85,10 +104,10 @@ function MenuSection({
 }) {
   return (
     <div className="space-y-1.5">
-      <h3 className="px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+      <h3 className="px-1 text-sm font-semibold text-muted-foreground">
         {title}
       </h3>
-      <div className="space-y-1">{children}</div>
+      <div className="overflow-hidden rounded-xl bg-card">{children}</div>
     </div>
   );
 }
@@ -100,13 +119,41 @@ export function MeContent() {
   const isAuthenticated = !!session?.user;
   const { history } = useBrowsingHistory();
   const { favoriteIds } = useFavoriteBookIds();
+  const [showSignOutDialog, setShowSignOutDialog] = useState(false);
+  const [showClearCacheDialog, setShowClearCacheDialog] = useState(false);
+  const [cacheSize, setCacheSize] = useState<string | null>(null);
 
   const hasHistory = history.length > 0;
   const hasFavorites = favoriteIds.size > 0;
   const hasMyContent = isAuthenticated && (hasHistory || hasFavorites);
 
+  useEffect(() => {
+    if ('storage' in navigator && 'estimate' in navigator.storage) {
+      navigator.storage.estimate().then(({ usage }) => {
+        if (usage != null) {
+          const mb = usage / (1024 * 1024);
+          setCacheSize(mb < 1 ? `${Math.round(usage / 1024)} KB` : `${mb.toFixed(1)} MB`);
+        }
+      });
+    }
+  }, []);
+
+  const handleClearCache = async () => {
+    try {
+      localStorage.clear();
+      sessionStorage.clear();
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((key) => caches.delete(key)));
+      }
+      setCacheSize('0 KB');
+    } catch {
+      // ignore
+    }
+  };
+
   return (
-    <div className="space-y-6 pb-8">
+    <div className="space-y-4 pb-8">
       {/* 1. Profile Card */}
       <div className="rounded-2xl bg-card p-6 shadow-sm">
         {session?.user ? (
@@ -142,10 +189,10 @@ export function MeContent() {
         )}
       </div>
 
-      {/* 2. Currently Reading (iOS: ContinueActivitySection) */}
+      {/* 2. Currently Reading */}
       {isAuthenticated && <ContinueReadingCard />}
 
-      {/* 3. My Content (iOS: section.myContent - Recently Browsed + Favorites) */}
+      {/* 3. My Content */}
       {hasMyContent && (
         <MenuSection title={t('myContent')}>
           {hasHistory && (
@@ -156,6 +203,7 @@ export function MeContent() {
               href="/library"
             />
           )}
+          {hasHistory && hasFavorites && <MenuDivider />}
           {hasFavorites && (
             <MenuRow
               icon={Heart}
@@ -167,14 +215,15 @@ export function MeContent() {
         </MenuSection>
       )}
 
-      {/* 4. Reading Data (iOS: section.readingData - Stats + Subscription) */}
+      {/* 4. Reading Data */}
       <MenuSection title={t('readingData')}>
         <MenuRow
           icon={BarChart3}
           iconColor="#3B82F6"
           title={t('viewStats')}
-          href="/settings"
+          href="/stats"
         />
+        <MenuDivider />
         <MenuRow
           icon={Crown}
           iconColor="#EAB308"
@@ -184,23 +233,24 @@ export function MeContent() {
         />
       </MenuSection>
 
-      {/* 5. Notifications & Messages (iOS: section.notifications) */}
+      {/* 5. Notifications & Messages */}
       <MenuSection title={t('notifications')}>
         <MenuRow
           icon={Bell}
           iconColor="#F97316"
           title={t('notificationCenter')}
-          href="/settings"
+          href="/notifications"
         />
+        <MenuDivider />
         <MenuRow
           icon={MessageSquare}
           iconColor="#3B82F6"
           title={t('sendMessage')}
-          href="/settings"
+          href="/messaging"
         />
       </MenuSection>
 
-      {/* 6. Community (iOS: nav.agora) */}
+      {/* 6. Community */}
       <MenuSection title={t('community')}>
         <MenuRow
           icon={Building2}
@@ -210,26 +260,48 @@ export function MeContent() {
         />
       </MenuSection>
 
-      {/* 7. Other (iOS: section.other - About + Legal) */}
+      {/* 7. Storage */}
+      <MenuSection title="Storage">
+        <MenuRow
+          icon={HardDrive}
+          iconColor="#6B7280"
+          title="Cache Size"
+          subtitle={cacheSize ?? '—'}
+          showChevron={false}
+        />
+        <MenuDivider />
+        <MenuRow
+          icon={Trash2}
+          title="Clear Cache"
+          destructive
+          showChevron={false}
+          onClick={() => setShowClearCacheDialog(true)}
+        />
+      </MenuSection>
+
+      {/* 8. Other */}
       <MenuSection title={t('other')}>
         <MenuRow
           icon={Info}
           iconColor="#6B7280"
           title={t('aboutReadmigo')}
-          href="/settings"
+          href="/about"
         />
+        <MenuDivider />
         <MenuRow
           icon={Shield}
           iconColor="#22C55E"
           title={t('privacyPolicy')}
           onClick={() => window.open('https://readmigo.app/privacy', '_blank')}
         />
+        <MenuDivider />
         <MenuRow
           icon={FileText}
           iconColor="#A855F7"
           title={t('termsOfService')}
           onClick={() => window.open('https://readmigo.app/terms', '_blank')}
         />
+        <MenuDivider />
         <MenuRow
           icon={CheckCircle}
           iconColor="#3B82F6"
@@ -238,19 +310,60 @@ export function MeContent() {
         />
       </MenuSection>
 
-      {/* 8. Account - Sign Out (iOS: section.account) */}
+      {/* 9. Account - Sign Out */}
       {isAuthenticated && (
         <MenuSection title={t('account')}>
           <MenuRow
             icon={LogOut}
             title={t('signOut')}
             destructive
-            onClick={() => {
-              window.location.href = '/api/auth/signout';
-            }}
+            showChevron={false}
+            onClick={() => setShowSignOutDialog(true)}
           />
         </MenuSection>
       )}
+
+      {/* Sign Out Confirmation */}
+      <AlertDialog open={showSignOutDialog} onOpenChange={setShowSignOutDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('signOut')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              确定要退出登录吗？
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>取消</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => { window.location.href = '/api/auth/signout'; }}
+            >
+              {t('signOut')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Clear Cache Confirmation */}
+      <AlertDialog open={showClearCacheDialog} onOpenChange={setShowClearCacheDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Clear Cache</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will clear all cached data ({cacheSize ?? '—'}). This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={handleClearCache}
+            >
+              Clear
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
