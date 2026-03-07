@@ -21,7 +21,7 @@ export function SettingsContent() {
 
   const [currentLocale, setCurrentLocale] = useState(() => {
     if (typeof document !== 'undefined') {
-      return document.cookie.match(/NEXT_LOCALE=(\w+)/)?.[1] || 'zh';
+      return document.cookie.match(/NEXT_LOCALE=([\w-]+)/)?.[1] || 'zh';
     }
     return 'zh';
   });
@@ -44,21 +44,28 @@ export function SettingsContent() {
           <CardDescription>{t('languageDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-2">
-            <Button
-              variant={currentLocale === 'zh' ? 'default' : 'outline'}
-              className="flex-1"
-              onClick={() => handleLocaleChange('zh')}
-            >
-              {t('simplifiedChinese')}
-            </Button>
-            <Button
-              variant={currentLocale === 'en' ? 'default' : 'outline'}
-              className="flex-1"
-              onClick={() => handleLocaleChange('en')}
-            >
-              {t('english')}
-            </Button>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {([
+              ['zh', t('simplifiedChinese')],
+              ['zh-Hant', t('traditionalChinese')],
+              ['en', t('english')],
+              ['es', t('spanish')],
+              ['fr', t('french')],
+              ['pt', t('portuguese')],
+              ['ja', t('japanese')],
+              ['ko', t('korean')],
+              ['ar', t('arabic')],
+              ['id', t('indonesian')],
+              ['ru', t('russian')],
+            ] as [string, string][]).map(([locale, label]) => (
+              <Button
+                key={locale}
+                variant={currentLocale === locale ? 'default' : 'outline'}
+                onClick={() => handleLocaleChange(locale)}
+              >
+                {label}
+              </Button>
+            ))}
           </div>
         </CardContent>
       </Card>

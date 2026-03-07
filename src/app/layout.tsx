@@ -74,10 +74,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const locale = await getLocale();
+  const dir = locale === 'ar' ? 'rtl' : 'ltr';
   const messages = await getMessages();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} dir={dir} suppressHydrationWarning>
       <body
         className={`${inter.variable} font-sans antialiased min-h-screen`}
       >
