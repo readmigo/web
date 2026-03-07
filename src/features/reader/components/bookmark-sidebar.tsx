@@ -66,6 +66,7 @@ export function BookmarkSidebar({ bookId, onNavigateToBookmark }: BookmarkSideba
                   <Button
                     variant="ghost"
                     size="icon"
+                    aria-label={`删除书签 ${bookmark.title}`}
                     className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive"
                     onClick={(e) => {
                       e.stopPropagation();

@@ -52,10 +52,7 @@ describe('BookmarkSidebar', () => {
     render(<BookmarkSidebar bookId="book-123" onNavigateToBookmark={onNavigate} />);
     fireEvent.click(screen.getByRole('button', { name: /书签/i }));
 
-    // Find the row containing "第 1 章" and click its delete button
-    const bookmark1Title = screen.getByText('第 1 章');
-    const bookmark1Row = bookmark1Title.closest('div[class*="flex items-center justify-between"]') as HTMLElement;
-    const deleteButton = bookmark1Row.querySelector('button') as HTMLElement;
+    const deleteButton = screen.getByRole('button', { name: '删除书签 第 1 章' });
     fireEvent.click(deleteButton);
 
     expect(removeBookmark).toHaveBeenCalledWith('bm-1', 'book-123');
