@@ -22,8 +22,6 @@ interface SelectionBottomSheetProps {
   selection: SelectedText;
   bookId: string;
   onClose: () => void;
-  bookTitle?: string;
-  authorName?: string;
 }
 
 export function SelectionBottomSheet({ selection, bookId, onClose }: SelectionBottomSheetProps) {

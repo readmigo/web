@@ -18,7 +18,7 @@ const mockStore = {
 };
 
 beforeEach(() => {
-  vi.mocked(useReaderStore).mockReturnValue(mockStore as any);
+  vi.mocked(useReaderStore).mockReturnValue(mockStore as unknown as ReturnType<typeof useReaderStore>);
   mockStore.addHighlight.mockClear();
   mockStore.setSelectedText.mockClear();
 });
