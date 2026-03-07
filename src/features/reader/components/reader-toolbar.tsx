@@ -12,6 +12,7 @@ import {
   BarChart3,
   Volume2,
   Headphones,
+  GitBranch,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useReaderStore } from '../stores/reader-store';
@@ -31,6 +32,7 @@ interface ReaderToolbarProps {
   onToggleTTS?: () => void;
   isTTSActive?: boolean;
   showControls?: boolean;
+  onToggleTimeline?: () => void;
 }
 
 export function ReaderToolbar({
@@ -44,6 +46,7 @@ export function ReaderToolbar({
   onToggleTTS,
   isTTSActive,
   showControls,
+  onToggleTimeline,
 }: ReaderToolbarProps) {
   const {
     position,
@@ -127,6 +130,9 @@ export function ReaderToolbar({
         </Button>
         <Button variant="ghost" size="icon" onClick={toggleReadingStats} className="md:hidden">
           <BarChart3 className="h-5 w-5" />
+        </Button>
+        <Button variant="ghost" size="icon" onClick={onToggleTimeline} title="故事时间线">
+          <GitBranch className="h-5 w-5" />
         </Button>
         <Button variant="ghost" size="icon" onClick={toggleSettings}>
           <Settings className="h-5 w-5" />

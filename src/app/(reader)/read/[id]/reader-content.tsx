@@ -9,6 +9,7 @@ import { SelectionBottomSheet } from '@/features/reader/components/selection-bot
 import { TranslationSheet } from '@/features/reader/components/translation-sheet';
 import { ReadingStatsOverlay } from '@/features/reader/components/reading-stats-overlay';
 import { TTSControls, MiniTTSControls } from '@/features/reader/components/tts-controls';
+import { TimelinePanel } from '@/features/reader/components/timeline-panel';
 import { KeyboardShortcutsDialog } from '@/components/shared/keyboard-shortcuts-dialog';
 import { useTranslations } from 'next-intl';
 import { useReaderStore } from '@/features/reader/stores/reader-store';
@@ -60,6 +61,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   } = useReaderStore();
 
   const [showControls, setShowControls] = useState(false);
+  const [showTimeline, setShowTimeline] = useState(false);
   const [translationText, setTranslationText] = useState<string | null>(null);
   const showControlsRef = useRef(false);
   const autoHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -356,6 +358,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         onToggleTTS={handleStartTTS}
         isTTSActive={tts.ttsState === 'playing' || tts.ttsState === 'paused' || tts.ttsState === 'loading'}
         showControls={showControls}
+        onToggleTimeline={() => setShowTimeline((v) => !v)}
         onNavigateToBookmark={(cfi) => {
           const match = cfi.match(/ch:(\d+)/);
           if (match) {
@@ -432,6 +435,19 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
             onClick={toggleSettings}
           />
           <ReaderSettingsPanel onClose={toggleSettings} />
+        </>
+      )}
+
+      {showTimeline && (
+        <>
+          <div className="fixed inset-0 z-40 bg-black/50" onClick={() => setShowTimeline(false)} />
+          <TimelinePanel
+            items={tocItems}
+            currentChapter={position?.chapterIndex}
+            totalProgress={position?.percentage || 0}
+            onSelect={handleTocSelect}
+            onClose={() => setShowTimeline(false)}
+          />
         </>
       )}
 
