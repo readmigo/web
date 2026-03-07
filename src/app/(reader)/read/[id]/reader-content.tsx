@@ -6,6 +6,7 @@ import { ReaderToolbar } from '@/features/reader/components/reader-toolbar';
 import { ReaderSettingsPanel } from '@/features/reader/components/reader-settings-panel';
 import { TocPanel } from '@/features/reader/components/toc-panel';
 import { SelectionBottomSheet } from '@/features/reader/components/selection-bottom-sheet';
+import { TranslationSheet } from '@/features/reader/components/translation-sheet';
 import { ReadingStatsOverlay } from '@/features/reader/components/reading-stats-overlay';
 import { TTSControls, MiniTTSControls } from '@/features/reader/components/tts-controls';
 import { KeyboardShortcutsDialog } from '@/components/shared/keyboard-shortcuts-dialog';
@@ -59,6 +60,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   } = useReaderStore();
 
   const [showControls, setShowControls] = useState(false);
+  const [translationText, setTranslationText] = useState<string | null>(null);
   const showControlsRef = useRef(false);
   const autoHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -380,6 +382,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           onReady={handleReaderReady}
           onTextSelect={handleTextSelect}
           onTocLoaded={setTocItems}
+          onParagraphClick={(text) => setTranslationText(text)}
         />
 
         {/* Selection Bottom Sheet */}
@@ -390,6 +393,14 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
             onClose={() => setSelectedText(null)}
           />
         )}
+
+        {/* Paragraph Translation Sheet */}
+        <TranslationSheet
+          open={!!translationText}
+          originalText={translationText || ''}
+          bookId={bookId}
+          onClose={() => setTranslationText(null)}
+        />
       </div>
 
       {/* Side Panels */}

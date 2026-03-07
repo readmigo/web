@@ -32,6 +32,7 @@ interface ChapterReaderProps {
   onReady?: () => void;
   onTextSelect?: (selection: SelectedText) => void;
   onTocLoaded?: (toc: TocItem[]) => void;
+  onParagraphClick?: (text: string) => void;
 }
 
 interface ChapterContentResponse {
@@ -79,7 +80,7 @@ function mapSettings(
 }
 
 export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>(
-  function ChapterReader({ bookId, chapters, initialChapterIndex, onReady, onTextSelect, onTocLoaded }, ref) {
+  function ChapterReader({ bookId, chapters, initialChapterIndex, onReady, onTextSelect, onTocLoaded, onParagraphClick }, ref) {
     const t = useTranslations('reader');
     const containerRef = useRef<HTMLDivElement>(null);
     const rendererRef = useRef<ChapterRenderer | null>(null);
@@ -109,12 +110,14 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
     const onTextSelectRef = useRef(onTextSelect);
     const onTocLoadedRef = useRef(onTocLoaded);
     const onReadyRef = useRef(onReady);
+    const onParagraphClickRef = useRef(onParagraphClick);
     const settingsRef = useRef(settings);
 
     useEffect(() => { bookIdRef.current = bookId; }, [bookId]);
     useEffect(() => { onTextSelectRef.current = onTextSelect; }, [onTextSelect]);
     useEffect(() => { onTocLoadedRef.current = onTocLoaded; }, [onTocLoaded]);
     useEffect(() => { onReadyRef.current = onReady; }, [onReady]);
+    useEffect(() => { onParagraphClickRef.current = onParagraphClick; }, [onParagraphClick]);
     useEffect(() => { settingsRef.current = settings; }, [settings]);
 
     const systemIsDarkRef = useRef(systemIsDark);
@@ -449,12 +452,37 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
             lastTapHash = textHash;
             lastTapX = event.clientX;
             lastTapY = event.clientY;
+            // Fire single-tap callback after double-tap window expires
+            const tappedNode = activeNode;
+            setTimeout(() => {
+              if (lastTapHash === textHash) {
+                onParagraphClickRef.current?.(tappedNode.textContent?.trim() || '');
+              }
+            }, DOUBLE_TAP_DELAY + 50);
           }
         }
         activeNode = null;
       };
 
+      let clickTimer: ReturnType<typeof setTimeout> | null = null;
+
+      const handleClick = (event: MouseEvent) => {
+        // Only handle primary mouse button, ignore if text is selected
+        if (event.button !== 0) return;
+        const node = getParagraphFromTarget(event.target);
+        if (!node) return;
+        const selection = window.getSelection();
+        if (selection && selection.toString().trim()) return;
+        if (clickTimer) { clearTimeout(clickTimer); clickTimer = null; }
+        clickTimer = setTimeout(() => {
+          clickTimer = null;
+          onParagraphClickRef.current?.(node.textContent?.trim() || '');
+        }, DOUBLE_TAP_DELAY + 50);
+      };
+
       const handleDoubleClick = (event: MouseEvent) => {
+        // Cancel pending single-click callback
+        if (clickTimer) { clearTimeout(clickTimer); clickTimer = null; }
         const node = getParagraphFromTarget(event.target);
         if (!node) return;
         event.preventDefault();
@@ -474,6 +502,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
       contentEl.addEventListener('pointermove', handlePointerMove);
       contentEl.addEventListener('pointerup', handlePointerUp);
       contentEl.addEventListener('pointercancel', handlePointerUp);
+      contentEl.addEventListener('click', handleClick);
       contentEl.addEventListener('dblclick', handleDoubleClick);
       document.addEventListener('selectionchange', handleSelectionChange);
 
@@ -482,8 +511,10 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
         contentEl.removeEventListener('pointermove', handlePointerMove);
         contentEl.removeEventListener('pointerup', handlePointerUp);
         contentEl.removeEventListener('pointercancel', handlePointerUp);
+        contentEl.removeEventListener('click', handleClick);
         contentEl.removeEventListener('dblclick', handleDoubleClick);
         document.removeEventListener('selectionchange', handleSelectionChange);
+        if (clickTimer) clearTimeout(clickTimer);
       };
     }, [LONG_PRESS_DELAY, DOUBLE_TAP_DELAY, MOVE_THRESHOLD]);
 
