@@ -317,6 +317,14 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         onNext={handleNext}
         onToggleTTS={handleStartTTS}
         isTTSActive={tts.ttsState === 'playing' || tts.ttsState === 'paused' || tts.ttsState === 'loading'}
+        onNavigateToBookmark={(cfi) => {
+          const match = cfi.match(/ch:(\d+)/);
+          if (match) {
+            const chapterIndex = parseInt(match[1]);
+            const chapter = chapters[chapterIndex];
+            if (chapter) readerRef.current?.goTo(chapter.id);
+          }
+        }}
       />
 
       {/* Reader */}

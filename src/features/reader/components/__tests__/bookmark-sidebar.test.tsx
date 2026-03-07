@@ -1,0 +1,43 @@
+import { render, screen, fireEvent } from '@testing-library/react';
+import { BookmarkSidebar } from '../bookmark-sidebar';
+import { useReaderStore } from '../../stores/reader-store';
+
+vi.mock('../../stores/reader-store', () => ({
+  useReaderStore: vi.fn(),
+}));
+
+const mockStore = {
+  bookmarks: [
+    { id: 'bm-1', bookId: 'book-123', cfi: 'ch:0:pg:5', title: '第 1 章', createdAt: new Date('2026-01-01') },
+    { id: 'bm-2', bookId: 'book-123', cfi: 'ch:2:pg:3', title: '第 3 章', createdAt: new Date('2026-01-02') },
+    { id: 'bm-other', bookId: 'other-book', cfi: 'ch:0:pg:1', title: '其他书', createdAt: new Date('2026-01-03') },
+  ],
+  removeBookmark: vi.fn(),
+};
+
+beforeEach(() => {
+  vi.mocked(useReaderStore).mockReturnValue(mockStore as any);
+});
+
+describe('BookmarkSidebar', () => {
+  it('只显示当前书籍的书签', () => {
+    render(<BookmarkSidebar bookId="book-123" onNavigateToBookmark={vi.fn()} />);
+    fireEvent.click(screen.getByRole('button', { name: /书签/i }));
+    expect(screen.getByText('第 1 章')).toBeInTheDocument();
+    expect(screen.getByText('第 3 章')).toBeInTheDocument();
+    expect(screen.queryByText('其他书')).not.toBeInTheDocument();
+  });
+
+  it('书签数量徽章显示正确数量', () => {
+    render(<BookmarkSidebar bookId="book-123" onNavigateToBookmark={vi.fn()} />);
+    expect(screen.getByText('2')).toBeInTheDocument();
+  });
+
+  it('点击书签触发 onNavigateToBookmark', () => {
+    const onNavigate = vi.fn();
+    render(<BookmarkSidebar bookId="book-123" onNavigateToBookmark={onNavigate} />);
+    fireEvent.click(screen.getByRole('button', { name: /书签/i }));
+    fireEvent.click(screen.getByText('第 1 章'));
+    expect(onNavigate).toHaveBeenCalledWith('ch:0:pg:5');
+  });
+});

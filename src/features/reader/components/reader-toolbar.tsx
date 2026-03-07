@@ -6,7 +6,6 @@ import {
   ArrowLeft,
   List,
   Settings,
-  Bookmark,
   ChevronLeft,
   ChevronRight,
   BarChart3,
@@ -17,6 +16,7 @@ import Link from 'next/link';
 import { useReaderStore } from '../stores/reader-store';
 import { useWhispersyncFromBook } from '@/features/audiobook/hooks/use-whispersync';
 import { HighlightSidebar } from './highlight-sidebar';
+import { BookmarkSidebar } from './bookmark-sidebar';
 import { SearchPanel } from './search-panel';
 
 interface ReaderToolbarProps {
@@ -25,6 +25,7 @@ interface ReaderToolbarProps {
   onPrev?: () => void;
   onNext?: () => void;
   onNavigateToHighlight?: (cfi: string) => void;
+  onNavigateToBookmark?: (cfi: string) => void;
   onNavigateToChapter?: (chapterId: string, position?: number) => void;
   onToggleTTS?: () => void;
   isTTSActive?: boolean;
@@ -36,6 +37,7 @@ export function ReaderToolbar({
   onPrev,
   onNext,
   onNavigateToHighlight,
+  onNavigateToBookmark,
   onNavigateToChapter,
   onToggleTTS,
   isTTSActive,
@@ -45,20 +47,9 @@ export function ReaderToolbar({
     toggleToc,
     toggleSettings,
     toggleReadingStats,
-    addBookmark,
   } = useReaderStore();
 
   const { audiobook, hasAudiobook } = useWhispersyncFromBook(bookId);
-
-  const handleAddBookmark = () => {
-    if (position) {
-      addBookmark({
-        bookId,
-        cfi: `ch:${position.chapterIndex}:pg:${position.page}`,
-        title: `第 ${position.chapterIndex + 1} 章`,
-      });
-    }
-  };
 
   return (
     <div className="flex h-14 items-center justify-between border-b bg-background px-4">
@@ -101,9 +92,7 @@ export function ReaderToolbar({
         <Button variant="ghost" size="icon" onClick={toggleToc}>
           <List className="h-5 w-5" />
         </Button>
-        <Button variant="ghost" size="icon" onClick={handleAddBookmark}>
-          <Bookmark className="h-5 w-5" />
-        </Button>
+        <BookmarkSidebar bookId={bookId} onNavigateToBookmark={onNavigateToBookmark} />
         <HighlightSidebar
           bookId={bookId}
           onNavigateToHighlight={onNavigateToHighlight}
