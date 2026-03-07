@@ -16,22 +16,22 @@ export function checkFeatureAccess(
       // (actual book-level check happens at call site with isFree param)
       return isPro
         ? { type: 'allowed' }
-        : { type: 'restricted', feature, message: '升级 Pro 解锁全部书籍' };
+        : { type: 'restricted', feature, message: 'subscription.restricted.bookAccess' };
 
     case 'offlineReading':
       return isPro
         ? { type: 'allowed' }
-        : { type: 'restricted', feature, message: '升级 Pro 开启离线阅读' };
+        : { type: 'restricted', feature, message: 'subscription.restricted.offlineReading' };
 
     case 'cloudTTS':
       return isPro
         ? { type: 'allowed' }
-        : { type: 'restricted', feature, message: '升级 Pro 使用云端语音' };
+        : { type: 'restricted', feature, message: 'subscription.restricted.cloudTTS' };
 
     case 'detailedStats':
       return isPro
         ? { type: 'allowed' }
-        : { type: 'restricted', feature, message: '升级 Pro 查看详细统计' };
+        : { type: 'restricted', feature, message: 'subscription.restricted.detailedStats' };
 
     case 'audiobookPlayback':
       // Free users get 5-min trial per audiobook
@@ -53,7 +53,7 @@ export function checkFeatureAccess(
     case 'unlimitedDownloads':
       return isPro
         ? { type: 'allowed' }
-        : { type: 'restricted', feature, message: '升级 Pro 无限下载' };
+        : { type: 'restricted', feature, message: 'subscription.restricted.unlimitedDownloads' };
 
     default:
       return { type: 'allowed' };

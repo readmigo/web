@@ -8,13 +8,14 @@ export type DownloadStatus =
   | 'completed'
   | 'failed';
 
+// i18n keys for download status labels — use offline.status* keys via useTranslations('offline')
 export const DOWNLOAD_STATUS_LABEL: Record<DownloadStatus, string> = {
-  not_downloaded: '未下载',
-  queued: '排队中',
-  downloading: '下载中',
-  paused: '已暂停',
-  completed: '已下载',
-  failed: '失败',
+  not_downloaded: 'offline.statusNotDownloaded',
+  queued: 'offline.statusQueued',
+  downloading: 'offline.statusDownloading',
+  paused: 'offline.statusPaused',
+  completed: 'offline.statusCompleted',
+  failed: 'offline.statusFailed',
 };
 
 // MARK: - Downloaded Book

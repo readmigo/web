@@ -6,7 +6,14 @@
     "retry": "Réessayer",
     "viewAll": "Voir tout",
     "on": "Activé",
-    "off": "Désactivé"
+    "off": "Désactivé",
+    "justNow": "À l'instant",
+    "minutesAgo": "Il y a {count} minutes",
+    "hoursAgo": "Il y a {count} heures",
+    "daysAgo": "Il y a {count} jours",
+    "weeksAgo": "Il y a {count} semaines",
+    "monthsAgo": "Il y a {count} mois",
+    "yearsAgo": "Il y a {count} ans"
   },
   "nav": {
     "bookstore": "Librairie",
@@ -685,7 +692,24 @@
     "translatedText": "Traduction",
     "translating": "Traduction en cours...",
     "copyTranslation": "Copier la traduction",
-    "translationFailed": "Échec de la traduction, veuillez réessayer"
+    "translationFailed": "Échec de la traduction, veuillez réessayer",
+    "timelineTitle": "Chronologie de l'histoire",
+    "totalProgress": "Progression totale",
+    "sleepOff": "Désactivé",
+    "sleepMinutes": "{count} min",
+    "sleepHour": "1 heure",
+    "sleepEndOfChapter": "Fin du chapitre",
+    "cloudVoicesError": "Échec du chargement des voix cloud",
+    "closeTimeline": "Fermer la chronologie",
+    "guide.step1.title": "Afficher les contrôles",
+    "guide.step1.desc": "Appuyez sur la zone centrale pour afficher ou masquer la barre d'outils",
+    "guide.step2.title": "Tourner les pages",
+    "guide.step2.desc": "Appuyez sur les côtés de l'écran ou utilisez les touches fléchées pour tourner les pages",
+    "guide.step3.title": "Surlignages et notes",
+    "guide.step3.desc": "Appuyez longuement ou sélectionnez du texte pour ajouter des surlignages ou des notes",
+    "guide.skip": "Passer",
+    "guide.next": "Suivant",
+    "guide.start": "Commencer la lecture"
   },
   "bookList": {
     "tragedy": "Tragédie",

@@ -6,7 +6,14 @@
     "retry": "Повторить",
     "viewAll": "Смотреть все",
     "on": "Вкл",
-    "off": "Выкл"
+    "off": "Выкл",
+    "justNow": "Только что",
+    "minutesAgo": "{count} мин. назад",
+    "hoursAgo": "{count} ч. назад",
+    "daysAgo": "{count} дн. назад",
+    "weeksAgo": "{count} нед. назад",
+    "monthsAgo": "{count} мес. назад",
+    "yearsAgo": "{count} г. назад"
   },
   "nav": {
     "bookstore": "Книжный магазин",
@@ -685,7 +692,24 @@
     "translatedText": "Перевод",
     "translating": "Перевод...",
     "copyTranslation": "Копировать перевод",
-    "translationFailed": "Ошибка перевода, пожалуйста, попробуйте снова"
+    "translationFailed": "Ошибка перевода, пожалуйста, попробуйте снова",
+    "timelineTitle": "Хронология истории",
+    "totalProgress": "Общий прогресс",
+    "sleepOff": "Выкл",
+    "sleepMinutes": "{count} мин",
+    "sleepHour": "1 час",
+    "sleepEndOfChapter": "Конец главы",
+    "cloudVoicesError": "Не удалось загрузить голоса из облака",
+    "closeTimeline": "Закрыть хронологию",
+    "guide.step1.title": "Показать элементы управления",
+    "guide.step1.desc": "Нажмите на центральную область, чтобы показать или скрыть панель инструментов",
+    "guide.step2.title": "Перелистывать страницы",
+    "guide.step2.desc": "Нажмите на левую или правую часть экрана или используйте клавиши со стрелками",
+    "guide.step3.title": "Выделения и заметки",
+    "guide.step3.desc": "Удерживайте нажатой или выделите текст, чтобы добавить выделение или заметку",
+    "guide.skip": "Пропустить",
+    "guide.next": "Далее",
+    "guide.start": "Начать чтение"
   },
   "bookList": {
     "tragedy": "Трагедия",

@@ -1,25 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
-
-const GUIDE_STEPS = [
-  {
-    title: '显示控件',
-    description: '点击中央区域可以显示或隐藏阅读工具栏',
-    icon: '👆',
-  },
-  {
-    title: '翻页',
-    description: '左右点击屏幕两侧或按键盘方向键翻页',
-    icon: '📖',
-  },
-  {
-    title: '高亮与笔记',
-    description: '长按或选中文字，可以添加高亮或笔记',
-    icon: '✏️',
-  },
-];
 
 interface ReaderGuideOverlayProps {
   onComplete: () => void;
@@ -27,7 +10,27 @@ interface ReaderGuideOverlayProps {
 }
 
 export function ReaderGuideOverlay({ onComplete, onSkip }: ReaderGuideOverlayProps) {
+  const t = useTranslations('reader');
   const [step, setStep] = useState(0);
+
+  const GUIDE_STEPS = [
+    {
+      title: t('guide.step1.title'),
+      description: t('guide.step1.desc'),
+      icon: '👆',
+    },
+    {
+      title: t('guide.step2.title'),
+      description: t('guide.step2.desc'),
+      icon: '📖',
+    },
+    {
+      title: t('guide.step3.title'),
+      description: t('guide.step3.desc'),
+      icon: '✏️',
+    },
+  ];
+
   const isLast = step === GUIDE_STEPS.length - 1;
   const current = GUIDE_STEPS[step];
 
@@ -56,7 +59,7 @@ export function ReaderGuideOverlay({ onComplete, onSkip }: ReaderGuideOverlayPro
         {/* Actions */}
         <div className="flex gap-2">
           <Button variant="ghost" size="sm" className="flex-1" onClick={onSkip}>
-            跳过
+            {t('guide.skip')}
           </Button>
           <Button
             size="sm"
@@ -69,7 +72,7 @@ export function ReaderGuideOverlay({ onComplete, onSkip }: ReaderGuideOverlayPro
               }
             }}
           >
-            {isLast ? '开始阅读' : '下一步'}
+            {isLast ? t('guide.start') : t('guide.next')}
           </Button>
         </div>
       </div>

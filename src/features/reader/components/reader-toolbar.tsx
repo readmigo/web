@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -48,6 +49,7 @@ export function ReaderToolbar({
   showControls,
   onToggleTimeline,
 }: ReaderToolbarProps) {
+  const t = useTranslations('reader');
   const {
     position,
     toggleToc,
@@ -131,7 +133,7 @@ export function ReaderToolbar({
         <Button variant="ghost" size="icon" onClick={toggleReadingStats} className="md:hidden">
           <BarChart3 className="h-5 w-5" />
         </Button>
-        <Button variant="ghost" size="icon" onClick={onToggleTimeline} title="故事时间线">
+        <Button variant="ghost" size="icon" onClick={onToggleTimeline} title={t('timelineTitle')}>
           <GitBranch className="h-5 w-5" />
         </Button>
         <Button variant="ghost" size="icon" onClick={toggleSettings}>

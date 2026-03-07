@@ -36,7 +36,7 @@ export function VoicePicker({ open, onOpenChange, tts, bookId }: VoicePickerProp
 
   useEffect(() => {
     if (open) {
-      loadCloudVoices(bookId);
+      loadCloudVoices(bookId, t('cloudVoicesError'));
       if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         previewSynthRef.current = window.speechSynthesis;
       }

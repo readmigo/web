@@ -232,7 +232,18 @@ function PostCard({
   post: AgoraPost;
   onLikeToggle: (postId: string, isLiked: boolean) => void;
 }) {
+  const tCommon = useTranslations('common');
   const [expanded, setExpanded] = useState(false);
+
+  const relativeTimeT = {
+    justNow: tCommon('justNow'),
+    minutesAgo: (count: number) => tCommon('minutesAgo', { count }),
+    hoursAgo: (count: number) => tCommon('hoursAgo', { count }),
+    daysAgo: (count: number) => tCommon('daysAgo', { count }),
+    weeksAgo: (count: number) => tCommon('weeksAgo', { count }),
+    monthsAgo: (count: number) => tCommon('monthsAgo', { count }),
+    yearsAgo: (count: number) => tCommon('yearsAgo', { count }),
+  };
 
   // Generate avatar initials from author name
   const initials = post.authorName ? post.authorName.charAt(0).toUpperCase() : '?';
@@ -262,7 +273,7 @@ function PostCard({
             )}
           </div>
           <p className="text-xs text-muted-foreground">
-            {formatRelativeTime(post.createdAt)}
+            {formatRelativeTime(post.createdAt, relativeTimeT)}
           </p>
         </div>
       </div>

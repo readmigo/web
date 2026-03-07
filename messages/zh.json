@@ -6,7 +6,14 @@
     "retry": "重试",
     "viewAll": "View All",
     "on": "开启",
-    "off": "关闭"
+    "off": "关闭",
+    "justNow": "刚刚",
+    "minutesAgo": "{count} 分钟前",
+    "hoursAgo": "{count} 小时前",
+    "daysAgo": "{count} 天前",
+    "weeksAgo": "{count} 周前",
+    "monthsAgo": "{count} 个月前",
+    "yearsAgo": "{count} 年前"
   },
   "nav": {
     "bookstore": "书城",
@@ -693,7 +700,24 @@
     "translatedText": "译文",
     "translating": "翻译中...",
     "copyTranslation": "复制译文",
-    "translationFailed": "翻译失败，请重试"
+    "translationFailed": "翻译失败，请重试",
+    "timelineTitle": "故事时间线",
+    "totalProgress": "总进度",
+    "sleepOff": "关闭",
+    "sleepMinutes": "{count} 分钟",
+    "sleepHour": "1 小时",
+    "sleepEndOfChapter": "章节末尾",
+    "cloudVoicesError": "加载云端声音失败",
+    "closeTimeline": "关闭时间线",
+    "guide.step1.title": "显示控件",
+    "guide.step1.desc": "点击中央区域可以显示或隐藏阅读工具栏",
+    "guide.step2.title": "翻页",
+    "guide.step2.desc": "左右点击屏幕两侧或按键盘方向键翻页",
+    "guide.step3.title": "高亮与笔记",
+    "guide.step3.desc": "长按或选中文字，可以添加高亮或笔记",
+    "guide.skip": "跳过",
+    "guide.next": "下一步",
+    "guide.start": "开始阅读"
   },
   "bookList": {
     "tragedy": "悲剧",

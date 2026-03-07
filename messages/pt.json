@@ -6,7 +6,14 @@
     "retry": "Tentar novamente",
     "viewAll": "Ver tudo",
     "on": "Ativado",
-    "off": "Desativado"
+    "off": "Desativado",
+    "justNow": "Agora mesmo",
+    "minutesAgo": "Há {count} minutos",
+    "hoursAgo": "Há {count} horas",
+    "daysAgo": "Há {count} dias",
+    "weeksAgo": "Há {count} semanas",
+    "monthsAgo": "Há {count} meses",
+    "yearsAgo": "Há {count} anos"
   },
   "nav": {
     "bookstore": "Livraria",
@@ -685,7 +692,24 @@
     "translatedText": "Tradução",
     "translating": "Traduzindo...",
     "copyTranslation": "Copiar tradução",
-    "translationFailed": "Falha na tradução, por favor tente novamente"
+    "translationFailed": "Falha na tradução, por favor tente novamente",
+    "timelineTitle": "Linha do tempo da história",
+    "totalProgress": "Progresso total",
+    "sleepOff": "Desativado",
+    "sleepMinutes": "{count} min",
+    "sleepHour": "1 hora",
+    "sleepEndOfChapter": "Fim do capítulo",
+    "cloudVoicesError": "Falha ao carregar vozes na nuvem",
+    "closeTimeline": "Fechar linha do tempo",
+    "guide.step1.title": "Mostrar controles",
+    "guide.step1.desc": "Toque na área central para mostrar ou ocultar a barra de ferramentas",
+    "guide.step2.title": "Virar páginas",
+    "guide.step2.desc": "Toque nos lados da tela ou use as teclas de seta para virar páginas",
+    "guide.step3.title": "Destaques e notas",
+    "guide.step3.desc": "Pressione ou selecione texto para adicionar destaques ou notas",
+    "guide.skip": "Pular",
+    "guide.next": "Próximo",
+    "guide.start": "Começar a ler"
   },
   "bookList": {
     "tragedy": "Tragédia",

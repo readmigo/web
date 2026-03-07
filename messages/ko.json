@@ -6,7 +6,14 @@
     "retry": "재시도",
     "viewAll": "전체 보기",
     "on": "켜기",
-    "off": "끄기"
+    "off": "끄기",
+    "justNow": "방금",
+    "minutesAgo": "{count}분 전",
+    "hoursAgo": "{count}시간 전",
+    "daysAgo": "{count}일 전",
+    "weeksAgo": "{count}주 전",
+    "monthsAgo": "{count}개월 전",
+    "yearsAgo": "{count}년 전"
   },
   "nav": {
     "bookstore": "서점",
@@ -685,7 +692,24 @@
     "translatedText": "번역",
     "translating": "번역 중...",
     "copyTranslation": "번역 복사",
-    "translationFailed": "번역 실패, 다시 시도해 주세요"
+    "translationFailed": "번역 실패, 다시 시도해 주세요",
+    "timelineTitle": "이야기 타임라인",
+    "totalProgress": "전체 진행도",
+    "sleepOff": "끄기",
+    "sleepMinutes": "{count}분",
+    "sleepHour": "1시간",
+    "sleepEndOfChapter": "챕터 끝",
+    "cloudVoicesError": "클라우드 음성 로드 실패",
+    "closeTimeline": "타임라인 닫기",
+    "guide.step1.title": "컨트롤 표시",
+    "guide.step1.desc": "중앙 영역을 탭하여 읽기 도구 모음을 표시하거나 숨깁니다",
+    "guide.step2.title": "페이지 넘기기",
+    "guide.step2.desc": "화면 좌우를 탭하거나 화살표 키로 페이지를 넘깁니다",
+    "guide.step3.title": "하이라이트 및 메모",
+    "guide.step3.desc": "텍스트를 길게 누르거나 선택하여 하이라이트나 메모를 추가합니다",
+    "guide.skip": "건너뛰기",
+    "guide.next": "다음",
+    "guide.start": "읽기 시작"
   },
   "bookList": {
     "tragedy": "비극",

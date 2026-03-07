@@ -6,7 +6,14 @@
     "retry": "إعادة المحاولة",
     "viewAll": "عرض الكل",
     "on": "تشغيل",
-    "off": "إيقاف"
+    "off": "إيقاف",
+    "justNow": "الآن",
+    "minutesAgo": "منذ {count} دقيقة",
+    "hoursAgo": "منذ {count} ساعة",
+    "daysAgo": "منذ {count} يوم",
+    "weeksAgo": "منذ {count} أسبوع",
+    "monthsAgo": "منذ {count} شهر",
+    "yearsAgo": "منذ {count} سنة"
   },
   "nav": {
     "bookstore": "المكتبة",
@@ -685,7 +692,24 @@
     "translatedText": "الترجمة",
     "translating": "جارٍ الترجمة...",
     "copyTranslation": "نسخ الترجمة",
-    "translationFailed": "فشلت الترجمة، يرجى المحاولة مرة أخرى"
+    "translationFailed": "فشلت الترجمة، يرجى المحاولة مرة أخرى",
+    "timelineTitle": "الجدول الزمني للقصة",
+    "totalProgress": "إجمالي التقدم",
+    "sleepOff": "إيقاف",
+    "sleepMinutes": "{count} دقيقة",
+    "sleepHour": "ساعة واحدة",
+    "sleepEndOfChapter": "نهاية الفصل",
+    "cloudVoicesError": "فشل تحميل الأصوات السحابية",
+    "closeTimeline": "إغلاق الجدول الزمني",
+    "guide.step1.title": "إظهار عناصر التحكم",
+    "guide.step1.desc": "اضغط على المنطقة المركزية لإظهار أو إخفاء شريط أدوات القراءة",
+    "guide.step2.title": "تقليب الصفحات",
+    "guide.step2.desc": "اضغط على جانبي الشاشة أو استخدم مفاتيح الأسهم لتقليب الصفحات",
+    "guide.step3.title": "التمييز والملاحظات",
+    "guide.step3.desc": "اضغط مطولاً أو حدد النص لإضافة تمييز أو ملاحظات",
+    "guide.skip": "تخطي",
+    "guide.next": "التالي",
+    "guide.start": "بدء القراءة"
   },
   "bookList": {
     "tragedy": "مأساة",

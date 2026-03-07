@@ -6,7 +6,14 @@
     "retry": "Retry",
     "viewAll": "View All",
     "on": "On",
-    "off": "Off"
+    "off": "Off",
+    "justNow": "Just now",
+    "minutesAgo": "{count} minutes ago",
+    "hoursAgo": "{count} hours ago",
+    "daysAgo": "{count} days ago",
+    "weeksAgo": "{count} weeks ago",
+    "monthsAgo": "{count} months ago",
+    "yearsAgo": "{count} years ago"
   },
   "nav": {
     "bookstore": "Bookstore",
@@ -693,7 +700,24 @@
     "translatedText": "Translation",
     "translating": "Translating...",
     "copyTranslation": "Copy Translation",
-    "translationFailed": "Translation failed, please try again"
+    "translationFailed": "Translation failed, please try again",
+    "timelineTitle": "Story Timeline",
+    "totalProgress": "Total Progress",
+    "sleepOff": "Off",
+    "sleepMinutes": "{count} min",
+    "sleepHour": "1 hour",
+    "sleepEndOfChapter": "End of chapter",
+    "cloudVoicesError": "Failed to load cloud voices",
+    "closeTimeline": "Close timeline",
+    "guide.step1.title": "Show Controls",
+    "guide.step1.desc": "Tap the center area to show or hide the reading toolbar",
+    "guide.step2.title": "Turn Pages",
+    "guide.step2.desc": "Tap the left or right side of the screen, or use arrow keys to turn pages",
+    "guide.step3.title": "Highlights & Notes",
+    "guide.step3.desc": "Long-press or select text to add highlights or notes",
+    "guide.skip": "Skip",
+    "guide.next": "Next",
+    "guide.start": "Start Reading"
   },
   "bookList": {
     "tragedy": "Tragedy",

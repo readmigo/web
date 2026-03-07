@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { X } from 'lucide-react';
@@ -15,6 +16,7 @@ interface TimelinePanelProps {
 }
 
 export function TimelinePanel({ items, currentChapter, totalProgress, onSelect, onClose }: TimelinePanelProps) {
+  const t = useTranslations('reader');
   const getChapterProgress = (index: number): string | null => {
     if (currentChapter === undefined) return null;
     if (index < currentChapter) return '100%';
@@ -30,8 +32,8 @@ export function TimelinePanel({ items, currentChapter, totalProgress, onSelect, 
   return (
     <div className="fixed inset-y-0 right-0 z-50 w-72 border-l bg-background shadow-lg flex flex-col">
       <div className="flex h-14 shrink-0 items-center justify-between border-b px-4">
-        <h2 className="font-semibold">故事时间线</h2>
-        <Button variant="ghost" size="icon" onClick={onClose} aria-label="关闭时间线">
+        <h2 className="font-semibold">{t('timelineTitle')}</h2>
+        <Button variant="ghost" size="icon" onClick={onClose} aria-label={t('closeTimeline')}>
           <X className="h-5 w-5" />
         </Button>
       </div>
@@ -39,7 +41,7 @@ export function TimelinePanel({ items, currentChapter, totalProgress, onSelect, 
       {/* Overall progress bar */}
       <div className="px-4 py-2 border-b">
         <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
-          <span>总进度</span>
+          <span>{t('totalProgress')}</span>
           <span>{Math.round(totalProgress * 100)}%</span>
         </div>
         <div className="h-1.5 rounded-full bg-muted overflow-hidden">

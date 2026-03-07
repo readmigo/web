@@ -15,16 +15,22 @@ export function formatNumber(num: number): string {
   return num.toString();
 }
 
-export function formatReadTime(minutes: number): string {
-  if (minutes < 60) {
-    return `${minutes} 分钟`;
+export interface ReadTimeTranslations {
+  minutes: (count: number) => string;
+  hours: (count: number) => string;
+  hoursAndMinutes: (hours: number, minutes: number) => string;
+}
+
+export function formatReadTime(mins: number, t: ReadTimeTranslations): string {
+  if (mins < 60) {
+    return t.minutes(mins);
   }
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
+  const hours = Math.floor(mins / 60);
+  const remainingMinutes = mins % 60;
   if (remainingMinutes === 0) {
-    return `${hours} 小时`;
+    return t.hours(hours);
   }
-  return `${hours} 小时 ${remainingMinutes} 分钟`;
+  return t.hoursAndMinutes(hours, remainingMinutes);
 }
 
 export function formatDate(date: Date | string): string {
@@ -36,7 +42,17 @@ export function formatDate(date: Date | string): string {
   });
 }
 
-export function formatRelativeTime(date: Date | string): string {
+export interface RelativeTimeTranslations {
+  justNow: string;
+  minutesAgo: (count: number) => string;
+  hoursAgo: (count: number) => string;
+  daysAgo: (count: number) => string;
+  weeksAgo: (count: number) => string;
+  monthsAgo: (count: number) => string;
+  yearsAgo: (count: number) => string;
+}
+
+export function formatRelativeTime(date: Date | string, t: RelativeTimeTranslations): string {
   const now = new Date();
   const d = new Date(date);
   const diffMs = now.getTime() - d.getTime();
@@ -44,11 +60,11 @@ export function formatRelativeTime(date: Date | string): string {
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
 
-  if (diffMins < 1) return '刚刚';
-  if (diffMins < 60) return `${diffMins} 分钟前`;
-  if (diffHours < 24) return `${diffHours} 小时前`;
-  if (diffDays < 7) return `${diffDays} 天前`;
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)} 周前`;
-  if (diffDays < 365) return `${Math.floor(diffDays / 30)} 个月前`;
-  return `${Math.floor(diffDays / 365)} 年前`;
+  if (diffMins < 1) return t.justNow;
+  if (diffMins < 60) return t.minutesAgo(diffMins);
+  if (diffHours < 24) return t.hoursAgo(diffHours);
+  if (diffDays < 7) return t.daysAgo(diffDays);
+  if (diffDays < 30) return t.weeksAgo(Math.floor(diffDays / 7));
+  if (diffDays < 365) return t.monthsAgo(Math.floor(diffDays / 30));
+  return t.yearsAgo(Math.floor(diffDays / 365));
 }

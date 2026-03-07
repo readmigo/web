@@ -6,7 +6,14 @@
     "retry": "再試行",
     "viewAll": "すべて見る",
     "on": "オン",
-    "off": "オフ"
+    "off": "オフ",
+    "justNow": "たった今",
+    "minutesAgo": "{count}分前",
+    "hoursAgo": "{count}時間前",
+    "daysAgo": "{count}日前",
+    "weeksAgo": "{count}週間前",
+    "monthsAgo": "{count}ヶ月前",
+    "yearsAgo": "{count}年前"
   },
   "nav": {
     "bookstore": "書店",
@@ -685,7 +692,24 @@
     "translatedText": "翻訳",
     "translating": "翻訳中...",
     "copyTranslation": "翻訳をコピー",
-    "translationFailed": "翻訳に失敗しました。もう一度お試しください"
+    "translationFailed": "翻訳に失敗しました。もう一度お試しください",
+    "timelineTitle": "ストーリー年表",
+    "totalProgress": "総進行度",
+    "sleepOff": "オフ",
+    "sleepMinutes": "{count}分",
+    "sleepHour": "1時間",
+    "sleepEndOfChapter": "章の終わり",
+    "cloudVoicesError": "クラウド音声の読み込みに失敗しました",
+    "closeTimeline": "年表を閉じる",
+    "guide.step1.title": "コントロールを表示",
+    "guide.step1.desc": "中央エリアをタップして読書ツールバーを表示または非表示にします",
+    "guide.step2.title": "ページをめくる",
+    "guide.step2.desc": "画面の左右をタップするか、矢印キーでページをめくります",
+    "guide.step3.title": "ハイライトとメモ",
+    "guide.step3.desc": "テキストを長押しまたは選択してハイライトやメモを追加します",
+    "guide.skip": "スキップ",
+    "guide.next": "次へ",
+    "guide.start": "読書を始める"
   },
   "bookList": {
     "tragedy": "悲劇",

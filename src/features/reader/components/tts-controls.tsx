@@ -42,6 +42,18 @@ interface TTSControlsProps {
 export function TTSControls({ tts, onClose, bookId }: TTSControlsProps) {
   const t = useTranslations('reader');
   const [showVoicePicker, setShowVoicePicker] = useState(false);
+
+  // Build translated sleep timer labels here (hook cannot use useTranslations)
+  const sleepTimerLabels: Record<number, string> = {
+    0: t('sleepOff'),
+    5: t('sleepMinutes', { count: 5 }),
+    10: t('sleepMinutes', { count: 10 }),
+    15: t('sleepMinutes', { count: 15 }),
+    30: t('sleepMinutes', { count: 30 }),
+    45: t('sleepMinutes', { count: 45 }),
+    60: t('sleepHour'),
+    [-1]: t('sleepEndOfChapter'),
+  };
   const [showSettings, setShowSettings] = useState(false);
   const [showSleepMenu, setShowSleepMenu] = useState(false);
 
@@ -155,7 +167,7 @@ export function TTSControls({ tts, onClose, bookId }: TTSControlsProps) {
               </button>
               {showSleepMenu && (
                 <div className="absolute bottom-full right-0 mb-2 w-36 rounded-xl border bg-background shadow-lg py-1">
-                  {SLEEP_TIMER_OPTIONS.map(({ value, label }) => {
+                  {SLEEP_TIMER_OPTIONS.map(({ value }) => {
                     const active =
                       value === 0
                         ? settings.sleepTimerMinutes === null
@@ -171,7 +183,7 @@ export function TTSControls({ tts, onClose, bookId }: TTSControlsProps) {
                           active ? 'text-primary font-medium' : 'text-foreground hover:bg-muted'
                         }`}
                       >
-                        {label}
+                        {sleepTimerLabels[value]}
                         {active && <span className="text-primary">✓</span>}
                       </button>
                     );

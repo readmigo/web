@@ -6,7 +6,14 @@
     "retry": "Reintentar",
     "viewAll": "Ver todo",
     "on": "Activado",
-    "off": "Desactivado"
+    "off": "Desactivado",
+    "justNow": "Ahora mismo",
+    "minutesAgo": "Hace {count} minutos",
+    "hoursAgo": "Hace {count} horas",
+    "daysAgo": "Hace {count} días",
+    "weeksAgo": "Hace {count} semanas",
+    "monthsAgo": "Hace {count} meses",
+    "yearsAgo": "Hace {count} años"
   },
   "nav": {
     "bookstore": "Librería",
@@ -685,7 +692,24 @@
     "translatedText": "Traducción",
     "translating": "Traduciendo...",
     "copyTranslation": "Copiar traducción",
-    "translationFailed": "Traducción fallida, por favor inténtalo de nuevo"
+    "translationFailed": "Traducción fallida, por favor inténtalo de nuevo",
+    "timelineTitle": "Cronología de la historia",
+    "totalProgress": "Progreso total",
+    "sleepOff": "Desactivado",
+    "sleepMinutes": "{count} min",
+    "sleepHour": "1 hora",
+    "sleepEndOfChapter": "Fin del capítulo",
+    "cloudVoicesError": "Error al cargar voces en la nube",
+    "closeTimeline": "Cerrar cronología",
+    "guide.step1.title": "Mostrar controles",
+    "guide.step1.desc": "Toca el área central para mostrar u ocultar la barra de herramientas",
+    "guide.step2.title": "Pasar páginas",
+    "guide.step2.desc": "Toca los lados de la pantalla o usa las teclas de flecha para pasar páginas",
+    "guide.step3.title": "Subrayados y notas",
+    "guide.step3.desc": "Mantén presionado o selecciona texto para añadir subrayados o notas",
+    "guide.skip": "Omitir",
+    "guide.next": "Siguiente",
+    "guide.start": "Comenzar a leer"
   },
   "bookList": {
     "tragedy": "Tragedia",

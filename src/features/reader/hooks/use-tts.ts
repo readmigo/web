@@ -74,15 +74,16 @@ export interface TTSProgress {
 
 export type SleepTimerOptionValue = 0 | 5 | 10 | 15 | 30 | 45 | 60 | -1;
 
-export const SLEEP_TIMER_OPTIONS: Array<{ value: SleepTimerOptionValue; label: string }> = [
-  { value: 0, label: '关闭' },
-  { value: 5, label: '5 分钟' },
-  { value: 10, label: '10 分钟' },
-  { value: 15, label: '15 分钟' },
-  { value: 30, label: '30 分钟' },
-  { value: 45, label: '45 分钟' },
-  { value: 60, label: '1 小时' },
-  { value: -1, label: '章节末尾' },
+// Labels are intentionally omitted here — use getSleepTimerLabel() in the component with translations
+export const SLEEP_TIMER_OPTIONS: Array<{ value: SleepTimerOptionValue }> = [
+  { value: 0 },
+  { value: 5 },
+  { value: 10 },
+  { value: 15 },
+  { value: 30 },
+  { value: 45 },
+  { value: 60 },
+  { value: -1 },
 ];
 
 const STORAGE_KEY = 'readmigo_tts_settings_v2';
@@ -436,14 +437,14 @@ export function useTTS() {
     setSettings((s) => ({ ...s, ...partial }));
   }, []);
 
-  const loadCloudVoices = useCallback(async (bookId?: string) => {
+  const loadCloudVoices = useCallback(async (bookId?: string, errorMessage?: string) => {
     setCloudVoicesError(null);
     try {
       const ep = bookId ? `/tts/voices?bookId=${bookId}` : '/tts/voices';
       const res = await apiClient.get<{ voices: CloudVoice[] }>(ep, { noRedirectOn401: true });
       setCloudVoices(res.voices ?? []);
     } catch {
-      setCloudVoicesError('加载云端声音失败');
+      setCloudVoicesError(errorMessage ?? 'Failed to load cloud voices');
     }
   }, []);
 

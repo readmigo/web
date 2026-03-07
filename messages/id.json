@@ -6,7 +6,14 @@
     "retry": "Coba lagi",
     "viewAll": "Lihat semua",
     "on": "Aktif",
-    "off": "Nonaktif"
+    "off": "Nonaktif",
+    "justNow": "Baru saja",
+    "minutesAgo": "{count} menit lalu",
+    "hoursAgo": "{count} jam lalu",
+    "daysAgo": "{count} hari lalu",
+    "weeksAgo": "{count} minggu lalu",
+    "monthsAgo": "{count} bulan lalu",
+    "yearsAgo": "{count} tahun lalu"
   },
   "nav": {
     "bookstore": "Toko buku",
@@ -685,7 +692,24 @@
     "translatedText": "Terjemahan",
     "translating": "Menerjemahkan...",
     "copyTranslation": "Salin Terjemahan",
-    "translationFailed": "Terjemahan gagal, silakan coba lagi"
+    "translationFailed": "Terjemahan gagal, silakan coba lagi",
+    "timelineTitle": "Linimasa cerita",
+    "totalProgress": "Total kemajuan",
+    "sleepOff": "Nonaktif",
+    "sleepMinutes": "{count} menit",
+    "sleepHour": "1 jam",
+    "sleepEndOfChapter": "Akhir bab",
+    "cloudVoicesError": "Gagal memuat suara cloud",
+    "closeTimeline": "Tutup linimasa",
+    "guide.step1.title": "Tampilkan kontrol",
+    "guide.step1.desc": "Ketuk area tengah untuk menampilkan atau menyembunyikan bilah alat membaca",
+    "guide.step2.title": "Balik halaman",
+    "guide.step2.desc": "Ketuk sisi kiri atau kanan layar, atau gunakan tombol panah untuk membalik halaman",
+    "guide.step3.title": "Sorotan dan catatan",
+    "guide.step3.desc": "Tekan lama atau pilih teks untuk menambahkan sorotan atau catatan",
+    "guide.skip": "Lewati",
+    "guide.next": "Berikutnya",
+    "guide.start": "Mulai membaca"
   },
   "bookList": {
     "tragedy": "Tragedi",

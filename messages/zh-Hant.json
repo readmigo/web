@@ -6,7 +6,14 @@
     "retry": "重試",
     "viewAll": "View All",
     "on": "開啟",
-    "off": "關閉"
+    "off": "關閉",
+    "justNow": "剛剛",
+    "minutesAgo": "{count} 分鐘前",
+    "hoursAgo": "{count} 小時前",
+    "daysAgo": "{count} 天前",
+    "weeksAgo": "{count} 週前",
+    "monthsAgo": "{count} 個月前",
+    "yearsAgo": "{count} 年前"
   },
   "nav": {
     "bookstore": "書城",
@@ -685,7 +692,24 @@
     "translatedText": "譯文",
     "translating": "翻譯中...",
     "copyTranslation": "複製譯文",
-    "translationFailed": "翻譯失敗，請重試"
+    "translationFailed": "翻譯失敗，請重試",
+    "timelineTitle": "故事時間線",
+    "totalProgress": "總進度",
+    "sleepOff": "關閉",
+    "sleepMinutes": "{count} 分鐘",
+    "sleepHour": "1 小時",
+    "sleepEndOfChapter": "章節末尾",
+    "cloudVoicesError": "載入雲端聲音失敗",
+    "closeTimeline": "關閉時間線",
+    "guide.step1.title": "顯示控件",
+    "guide.step1.desc": "點擊中央區域可以顯示或隱藏閱讀工具列",
+    "guide.step2.title": "翻頁",
+    "guide.step2.desc": "左右點擊螢幕兩側或按鍵盤方向鍵翻頁",
+    "guide.step3.title": "高亮與筆記",
+    "guide.step3.desc": "長按或選中文字，可以添加高亮或筆記",
+    "guide.skip": "跳過",
+    "guide.next": "下一步",
+    "guide.start": "開始閱讀"
   },
   "bookList": {
     "tragedy": "悲劇",
