@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import {
@@ -29,6 +30,7 @@ interface ReaderToolbarProps {
   onNavigateToChapter?: (chapterId: string, position?: number) => void;
   onToggleTTS?: () => void;
   isTTSActive?: boolean;
+  showControls?: boolean;
 }
 
 export function ReaderToolbar({
@@ -41,6 +43,7 @@ export function ReaderToolbar({
   onNavigateToChapter,
   onToggleTTS,
   isTTSActive,
+  showControls,
 }: ReaderToolbarProps) {
   const {
     position,
@@ -52,7 +55,16 @@ export function ReaderToolbar({
   const { audiobook, hasAudiobook } = useWhispersyncFromBook(bookId);
 
   return (
-    <div className="flex h-14 items-center justify-between border-b bg-background px-4">
+    <div
+      data-testid="reader-toolbar"
+      className={cn(
+        'flex h-14 items-center justify-between border-b bg-background px-4',
+        'transition-all duration-300 ease-in-out',
+        showControls === false
+          ? '-translate-y-full opacity-0 pointer-events-none'
+          : 'translate-y-0 opacity-100'
+      )}
+    >
       {/* Left section */}
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="icon" asChild>

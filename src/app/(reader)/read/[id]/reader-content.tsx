@@ -58,6 +58,9 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     getLastPosition,
   } = useReaderStore();
 
+  const [showControls, setShowControls] = useState(false);
+  const autoHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   // Navigation handlers
   const handlePrev = useCallback(() => {
     readerRef.current?.goPrev();
@@ -65,6 +68,25 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
 
   const handleNext = useCallback(() => {
     readerRef.current?.goNext();
+  }, []);
+
+  const showControlsTemporarily = useCallback(() => {
+    setShowControls(true);
+    if (autoHideTimerRef.current) clearTimeout(autoHideTimerRef.current);
+    autoHideTimerRef.current = setTimeout(() => setShowControls(false), 3000);
+  }, []);
+
+  const toggleControls = useCallback(() => {
+    setShowControls((prev) => {
+      const next = !prev;
+      if (next) {
+        if (autoHideTimerRef.current) clearTimeout(autoHideTimerRef.current);
+        autoHideTimerRef.current = setTimeout(() => setShowControls(false), 3000);
+      } else if (autoHideTimerRef.current) {
+        clearTimeout(autoHideTimerRef.current);
+      }
+      return next;
+    });
   }, []);
 
   // TTS handlers
@@ -193,6 +215,12 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         category: t('tts'),
         action: () => tts.nextSentence(),
       },
+      {
+        key: 'Escape',
+        description: '显示/隐藏控件',
+        category: t('navigation'),
+        action: toggleControls,
+      },
     ],
     [
       handleNext,
@@ -204,6 +232,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       addBookmark,
       handleStartTTS,
       tts,
+      toggleControls,
     ]
   );
 
@@ -276,6 +305,13 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     return () => window.removeEventListener('online', handleOnline);
   }, []);
 
+  // Cleanup auto-hide timer on unmount
+  useEffect(() => {
+    return () => {
+      if (autoHideTimerRef.current) clearTimeout(autoHideTimerRef.current);
+    };
+  }, []);
+
   const handleReaderReady = useCallback(() => {
     setIsReady(true);
   }, []);
@@ -317,6 +353,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         onNext={handleNext}
         onToggleTTS={handleStartTTS}
         isTTSActive={tts.ttsState === 'playing' || tts.ttsState === 'paused' || tts.ttsState === 'loading'}
+        showControls={showControls}
         onNavigateToBookmark={(cfi) => {
           const match = cfi.match(/ch:(\d+)/);
           if (match) {
@@ -328,7 +365,18 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       />
 
       {/* Reader */}
-      <div className="relative flex-1">
+      <div
+        className="relative flex-1"
+        onClick={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const centerStart = rect.width / 3;
+          const centerEnd = (rect.width * 2) / 3;
+          if (x > centerStart && x < centerEnd) {
+            toggleControls();
+          }
+        }}
+      >
         <ChapterReader
           ref={readerRef}
           bookId={bookId}
