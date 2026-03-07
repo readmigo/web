@@ -51,4 +51,36 @@ describe('TimelinePanel', () => {
     fireEvent.click(screen.getByText('Chapter 2'));
     expect(onSelect).toHaveBeenCalledWith('chapter2.xhtml');
   });
+
+  it('已完成的章节显示 100%', () => {
+    // currentChapter=2, so chapter at index 0 and 1 are past → 100%
+    render(
+      <TimelinePanel
+        items={mockTocItems}
+        currentChapter={2}
+        totalProgress={0.9}
+        onSelect={vi.fn()}
+        onClose={vi.fn()}
+      />
+    );
+    const hundredPercentBadges = screen.getAllByText('100%');
+    // indices 0 and 1 are past chapters
+    expect(hundredPercentBadges).toHaveLength(2);
+  });
+
+  it('当前章节显示阅读进度百分比', () => {
+    // 3 chapters, currentChapter=1, totalProgress=0.6
+    // progressInChapter = round(max(0, min(100, (0.6*3 - 1)*100))) = round(80) = 80
+    // overall bar shows 60%, so 80% is unique in the document
+    render(
+      <TimelinePanel
+        items={mockTocItems}
+        currentChapter={1}
+        totalProgress={0.6}
+        onSelect={vi.fn()}
+        onClose={vi.fn()}
+      />
+    );
+    expect(screen.getByText('80%')).toBeInTheDocument();
+  });
 });

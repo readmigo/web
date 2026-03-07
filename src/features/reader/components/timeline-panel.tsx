@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { X } from 'lucide-react';
@@ -15,9 +16,22 @@ interface TimelinePanelProps {
 }
 
 export function TimelinePanel({ items, currentChapter, totalProgress, onSelect, onClose }: TimelinePanelProps) {
+  const t = useTranslations('reader');
   const flatItems = items.flatMap((item) =>
     item.subitems ? [item, ...item.subitems] : [item]
   );
+
+  const getChapterProgress = (index: number): string | null => {
+    if (currentChapter === undefined) return null;
+    if (index < currentChapter) return '100%';
+    if (index === currentChapter) {
+      const progressInChapter = Math.round(
+        Math.max(0, Math.min(100, (totalProgress * flatItems.length - currentChapter) * 100))
+      );
+      return `${progressInChapter}%`;
+    }
+    return null;
+  };
 
   return (
     <div className="fixed inset-y-0 right-0 z-50 w-72 border-l bg-background shadow-lg flex flex-col">
@@ -82,6 +96,13 @@ export function TimelinePanel({ items, currentChapter, totalProgress, onSelect, 
                   )}>
                     {item.label}
                   </span>
+
+                  {/* Per-chapter progress */}
+                  {getChapterProgress(index) && (
+                    <span className="text-xs text-muted-foreground shrink-0">
+                      {getChapterProgress(index)}
+                    </span>
+                  )}
                 </div>
               );
             })}
