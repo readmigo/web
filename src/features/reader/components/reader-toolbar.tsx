@@ -61,8 +61,8 @@ export function ReaderToolbar({
         'flex h-14 items-center justify-between border-b bg-background px-4',
         'transition-all duration-300 ease-in-out',
         showControls === false
-          ? '-translate-y-full opacity-0 pointer-events-none'
-          : 'translate-y-0 opacity-100'
+          ? 'absolute inset-x-0 top-0 -translate-y-full opacity-0 pointer-events-none'
+          : 'relative translate-y-0 opacity-100'
       )}
     >
       {/* Left section */}

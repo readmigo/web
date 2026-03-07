@@ -59,7 +59,13 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   } = useReaderStore();
 
   const [showControls, setShowControls] = useState(false);
+  const showControlsRef = useRef(false);
   const autoHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    showControlsRef.current = showControls;
+  }, [showControls]);
 
   // Navigation handlers
   const handlePrev = useCallback(() => {
@@ -70,23 +76,13 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     readerRef.current?.goNext();
   }, []);
 
-  const showControlsTemporarily = useCallback(() => {
-    setShowControls(true);
-    if (autoHideTimerRef.current) clearTimeout(autoHideTimerRef.current);
-    autoHideTimerRef.current = setTimeout(() => setShowControls(false), 3000);
-  }, []);
-
   const toggleControls = useCallback(() => {
-    setShowControls((prev) => {
-      const next = !prev;
-      if (next) {
-        if (autoHideTimerRef.current) clearTimeout(autoHideTimerRef.current);
-        autoHideTimerRef.current = setTimeout(() => setShowControls(false), 3000);
-      } else if (autoHideTimerRef.current) {
-        clearTimeout(autoHideTimerRef.current);
-      }
-      return next;
-    });
+    const willShow = !showControlsRef.current;
+    setShowControls(willShow);
+    if (autoHideTimerRef.current) clearTimeout(autoHideTimerRef.current);
+    if (willShow) {
+      autoHideTimerRef.current = setTimeout(() => setShowControls(false), 3000);
+    }
   }, []);
 
   // TTS handlers
@@ -344,7 +340,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   const chapters = book?.chapters || [];
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col overflow-hidden">
       {/* Toolbar */}
       <ReaderToolbar
         bookTitle={bookTitle}
