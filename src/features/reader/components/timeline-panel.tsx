@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { X } from 'lucide-react';
@@ -16,7 +15,6 @@ interface TimelinePanelProps {
 }
 
 export function TimelinePanel({ items, currentChapter, totalProgress, onSelect, onClose }: TimelinePanelProps) {
-  const t = useTranslations('reader');
   const flatItems = items.flatMap((item) =>
     item.subitems ? [item, ...item.subitems] : [item]
   );
