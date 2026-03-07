@@ -19,13 +19,26 @@ export function QuoteShareCard({ open, quoteText, bookTitle, authorName, onClose
   const { settings } = useReaderStore();
   const isDark = settings.theme === 'dark' || settings.theme === 'ultraDark';
 
-  const shareText = `"${quoteText}"\n— ${bookTitle}${authorName ? ` · ${authorName}` : ''}`;
+  const attribution = [bookTitle, authorName].filter(Boolean).join(' · ');
+  const shareText = attribution
+    ? `"${quoteText}"\n— ${attribution}`
+    : `"${quoteText}"`;
 
   const handleShare = useCallback(async () => {
     if (navigator.share) {
-      await navigator.share({ text: shareText }).catch(() => {});
+      try {
+        await navigator.share({ text: shareText });
+      } catch (err) {
+        if (err instanceof Error && err.name !== 'AbortError') {
+          console.error('Share failed:', err);
+        }
+      }
     } else {
-      await navigator.clipboard.writeText(shareText).catch(() => {});
+      try {
+        await navigator.clipboard.writeText(shareText);
+      } catch (err) {
+        console.error('Clipboard copy failed:', err);
+      }
     }
   }, [shareText]);
 

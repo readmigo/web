@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { QuoteShareCard } from '../quote-share-card';
 import { useReaderStore } from '../../stores/reader-store';
 
@@ -51,5 +52,25 @@ describe('QuoteShareCard', () => {
       />
     );
     expect(screen.queryByText('作者名')).not.toBeInTheDocument();
+  });
+
+  it('clicking share button calls navigator.share', async () => {
+    const user = userEvent.setup();
+    const mockShare = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'share', { value: mockShare, configurable: true });
+
+    render(<QuoteShareCard open quoteText="Hello world" bookTitle="Test Book" onClose={vi.fn()} />);
+
+    await user.click(screen.getByRole('button', { name: '分享' }));
+    expect(mockShare).toHaveBeenCalledWith(expect.objectContaining({ text: expect.stringContaining('Hello world') }));
+  });
+
+  it('clicking close button calls onClose', async () => {
+    const user = userEvent.setup();
+    const onClose = vi.fn();
+    render(<QuoteShareCard open quoteText="Hello" bookTitle="Book" onClose={onClose} />);
+
+    await user.click(screen.getByRole('button', { name: '关闭' }));
+    expect(onClose).toHaveBeenCalled();
   });
 });
