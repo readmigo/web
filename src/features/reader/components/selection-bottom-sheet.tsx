@@ -122,6 +122,14 @@ export function SelectionBottomSheet({ selection, bookId, bookTitle, authorName,
         onSave={handleSaveNote}
         onClose={() => setShowNoteDialog(false)}
       />
+
+      <QuoteShareCard
+        open={showShareCard}
+        quoteText={selection.text}
+        bookTitle={bookTitle || ''}
+        authorName={authorName}
+        onClose={() => setShowShareCard(false)}
+      />
     </>
   );
 }

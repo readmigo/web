@@ -394,6 +394,8 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           <SelectionBottomSheet
             selection={selectedText}
             bookId={bookId}
+            bookTitle={book?.title}
+            authorName={book?.author}
             onClose={() => setSelectedText(null)}
           />
         )}
