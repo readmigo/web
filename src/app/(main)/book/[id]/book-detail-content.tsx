@@ -16,10 +16,12 @@ import {
   Share2,
   Play,
   FileText,
+  Heart,
 } from 'lucide-react';
 import { useBookDetail } from '@/features/library/hooks/use-books';
 import { useAudiobookByBookId } from '@/features/audiobook/hooks/use-audiobooks';
 import { useReadingGuide, useBookContext } from '@/features/library/hooks/use-book-extras';
+import { useFavoriteBookIds, useToggleFavorite } from '@/features/library/hooks/use-favorites';
 import { DownloadBookButton } from '@/features/offline/components/download-book-button';
 import { ReadingGuideSection } from '@/features/library/components/reading-guide-section';
 import { BookContextSection } from '@/features/library/components/book-context-section';
@@ -52,6 +54,9 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
   const { data: audiobook } = useAudiobookByBookId(bookId);
   const { data: readingGuide, isLoading: isGuideLoading } = useReadingGuide(bookId);
   const { data: bookContext, isLoading: isContextLoading } = useBookContext(bookId);
+  const { favoriteIds, isAuthenticated } = useFavoriteBookIds();
+  const { toggleFavorite, isLoading: isFavoriteLoading } = useToggleFavorite();
+  const isFavorited = favoriteIds.has(bookId);
 
   if (isLoading) {
     return <BookDetailSkeleton />;
@@ -165,8 +170,8 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
       {/* Content */}
       <div className="mx-auto max-w-2xl space-y-6 px-4">
         {/* Action Buttons */}
-        <div className="space-y-3">
-          <Button className="w-full h-12 rounded-xl" size="lg" asChild>
+        <div className="flex gap-3">
+          <Button className="flex-1 h-12 rounded-xl" size="lg" asChild>
             <Link
               href={`/read/${book.id}`}
               className="inline-flex items-center justify-center gap-2"
@@ -176,8 +181,21 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
               开始阅读
             </Link>
           </Button>
-          <DownloadBookButton book={book} />
+          {isAuthenticated && (
+            <button
+              type="button"
+              onClick={() => toggleFavorite(book.id, isFavorited)}
+              disabled={isFavoriteLoading}
+              className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-secondary transition-colors hover:bg-secondary/80 disabled:opacity-50"
+              aria-label={isFavorited ? '取消收藏' : '收藏'}
+            >
+              <Heart
+                className={`h-5 w-5 transition-colors ${isFavorited ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`}
+              />
+            </button>
+          )}
         </div>
+        <DownloadBookButton book={book} />
 
         {/* Audiobook Section */}
         {hasAudiobook && (
