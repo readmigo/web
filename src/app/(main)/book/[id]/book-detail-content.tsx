@@ -90,14 +90,27 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
     <div className="pb-12">
       {/* Header Section - Gradient Background */}
       <div
-        className="relative w-full px-4 pb-8 pt-6"
-        style={{
-          background: 'linear-gradient(to bottom, color-mix(in srgb, var(--brand-gradient-start, #8BB9FF) 10%, transparent), transparent)',
-        }}
+        className="relative w-full overflow-hidden px-4 pb-8 pt-6"
       >
+        {/* Blurred cover background — aligned with iOS BookDetailHeaderImmersive */}
+        {book.coverUrl && (
+          <div
+            className="absolute inset-0 scale-110"
+            style={{
+              backgroundImage: `url(${book.coverUrl})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              filter: 'blur(24px)',
+              opacity: 0.35,
+            }}
+          />
+        )}
+        {/* Gradient overlay for readability */}
         <div
-          className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: 'var(--brand-gradient)' }}
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, var(--background) 90%)',
+          }}
         />
         <div className="relative mx-auto flex max-w-2xl flex-col items-center">
           {/* Back & Share buttons */}
