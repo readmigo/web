@@ -6,6 +6,7 @@ import type { Book } from '../types';
 
 interface InfiniteBooksParams {
   category?: string;
+  categoryId?: string;
   difficulty?: number;
   search?: string;
   limit?: number;
@@ -48,6 +49,7 @@ export function useInfiniteBooks(params?: InfiniteBooksParams) {
     queryFn: async ({ pageParam = 1 }) => {
       const queryParams: Record<string, string> = {};
       if (params?.category) queryParams.category = params.category;
+      if (params?.categoryId) queryParams.categoryId = params.categoryId;
       if (params?.difficulty) queryParams.difficulty = String(params.difficulty);
       if (params?.search) queryParams.search = params.search;
       queryParams.page = String(pageParam);
