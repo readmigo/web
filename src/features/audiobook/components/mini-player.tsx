@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Play, Pause, X, ChevronUp, Loader2 } from 'lucide-react';
+import { Play, Pause, X, ChevronUp, Loader2, RotateCcw, RotateCw } from 'lucide-react';
 import { useAudioPlayerStore } from '../stores/audio-player-store';
 
 interface MiniPlayerProps {
@@ -19,6 +19,8 @@ export function MiniPlayer({ onExpand }: MiniPlayerProps) {
     currentTime,
     duration,
     togglePlay,
+    seekBackward,
+    seekForward,
     unloadAudiobook,
     isVisible,
   } = useAudioPlayerStore();
@@ -70,6 +72,14 @@ export function MiniPlayer({ onExpand }: MiniPlayerProps) {
           <Button
             variant="ghost"
             size="icon"
+            onClick={() => seekBackward(15)}
+          >
+            <RotateCcw className="h-4 w-4" />
+            <span className="absolute text-[9px] font-bold">15</span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={togglePlay}
             disabled={isLoading}
           >
@@ -80,6 +90,14 @@ export function MiniPlayer({ onExpand }: MiniPlayerProps) {
             ) : (
               <Play className="h-5 w-5" />
             )}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => seekForward(30)}
+          >
+            <RotateCw className="h-4 w-4" />
+            <span className="absolute text-[9px] font-bold">30</span>
           </Button>
           <Button
             variant="ghost"

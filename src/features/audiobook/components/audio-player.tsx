@@ -131,10 +131,10 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                   </div>
 
                   {/* Current Chapter */}
-                  <div className="mt-4 text-center">
-                    <p className="text-sm font-medium">
+                  <div className="mt-4 flex flex-col items-center gap-1">
+                    <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
                       {currentChapter?.title || t('chapterNumber', { number: currentChapter?.number ?? 0 })}
-                    </p>
+                    </span>
                     <p className="text-xs text-muted-foreground">
                       {t('chapterOf', { current: chapterIndex + 1, total: audiobook.chapters.length })}
                     </p>
@@ -157,13 +157,13 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                       onPlayPause={togglePlay}
                       onPrevious={previousChapter}
                       onNext={nextChapter}
-                      onSeekBackward={() => seekBackward(15)}
-                      onSeekForward={() => seekForward(15)}
+                      onSeekBackward={() => seekBackward(10)}
+                      onSeekForward={() => seekForward(10)}
                       size="lg"
                     />
                   </div>
 
-                  {/* Secondary Controls */}
+                  {/* Secondary Controls - aligned to iOS order: Speed / Timer / Volume */}
                   <div className="mt-6 flex items-center gap-4">
                     <SpeedSelector
                       speed={playbackSpeed}
@@ -176,7 +176,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                       onSetTimer={setSleepTimer}
                     />
 
-                    <div className="relative">
+                    <div className="relative ml-auto">
                       <Button
                         variant="ghost"
                         size="icon"

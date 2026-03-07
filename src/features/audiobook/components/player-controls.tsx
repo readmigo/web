@@ -56,7 +56,7 @@ export function PlayerControls({
         onClick={onSeekBackward}
       >
         <Rewind className={iconSize} />
-        <span className="absolute text-[10px] font-bold">15</span>
+        <span className="absolute text-[10px] font-bold">10</span>
       </Button>
 
       {/* Play/Pause */}
@@ -84,7 +84,7 @@ export function PlayerControls({
         onClick={onSeekForward}
       >
         <FastForward className={iconSize} />
-        <span className="absolute text-[10px] font-bold">15</span>
+        <span className="absolute text-[10px] font-bold">10</span>
       </Button>
 
       {/* Next Chapter */}

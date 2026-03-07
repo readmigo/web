@@ -34,7 +34,7 @@ export function ProgressSlider({
       />
       <div className="mt-1 flex justify-between text-xs text-muted-foreground">
         <span>{formatTime(currentTime)}</span>
-        <span>{formatTime(duration)}</span>
+        <span>-{formatTime(Math.max(0, duration - currentTime))}</span>
       </div>
     </div>
   );
