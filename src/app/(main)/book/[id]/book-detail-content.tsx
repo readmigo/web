@@ -20,6 +20,7 @@ import {
 import { useBookDetail } from '@/features/library/hooks/use-books';
 import { useAudiobookByBookId } from '@/features/audiobook/hooks/use-audiobooks';
 import { useReadingGuide, useBookContext } from '@/features/library/hooks/use-book-extras';
+import { DownloadBookButton } from '@/features/offline/components/download-book-button';
 import { ReadingGuideSection } from '@/features/library/components/reading-guide-section';
 import { BookContextSection } from '@/features/library/components/book-context-section';
 import { formatDuration } from '@/features/audiobook/stores/audio-player-store';
@@ -162,6 +163,7 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
               开始阅读
             </Link>
           </Button>
+          <DownloadBookButton book={book} />
         </div>
 
         {/* Audiobook Section */}

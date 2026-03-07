@@ -12,6 +12,8 @@ import {
   Globe,
   LogOut,
 } from 'lucide-react';
+import { OfflineDownloadsCard } from '@/features/offline/components/offline-downloads-card';
+import { OfflineSettingsCard } from '@/features/offline/components/offline-settings-card';
 
 export function SettingsContent() {
   const t = useTranslations('settings');
@@ -92,6 +94,12 @@ export function SettingsContent() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Offline Downloads */}
+      <OfflineDownloadsCard />
+
+      {/* Offline Settings */}
+      <OfflineSettingsCard />
 
       {/* Version Info */}
       <div className="text-center text-sm text-muted-foreground">

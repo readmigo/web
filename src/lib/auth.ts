@@ -222,7 +222,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: '/login',
   },
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger, session }) {
+      // Handle session.update() calls (e.g., after avatar upload)
+      if (trigger === 'update' && session?.image !== undefined) {
+        token.picture = session.image;
+        return token;
+      }
+
       // Initial sign in
       if (account && user) {
         // For OAuth providers, authenticate with backend
