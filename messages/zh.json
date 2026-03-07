@@ -452,10 +452,6 @@
   "community": {
     "title": "城邦",
     "description": "分享阅读心得，发现精彩书摘",
-    "loading": "加载中...",
-    "loadFailed": "加载失败",
-    "retryLater": "请稍后重试",
-    "retry": "重试",
     "welcome": "欢迎来到城邦",
     "noActivity": "还没有任何动态",
     "noMore": "已经到底啦"

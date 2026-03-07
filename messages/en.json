@@ -452,10 +452,6 @@
   "community": {
     "title": "Community",
     "description": "Share reading insights and discover great quotes",
-    "loading": "Loading...",
-    "loadFailed": "Loading failed",
-    "retryLater": "Please try again later",
-    "retry": "Retry",
     "welcome": "Welcome to Community",
     "noActivity": "No activity yet",
     "noMore": "You've reached the end"
