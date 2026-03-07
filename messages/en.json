@@ -677,7 +677,15 @@
     "cancel": "Cancel",
     "notePlaceholder": "Write your thoughts...",
     "save": "Save",
-    "toggleControls": "Toggle controls"
+    "toggleControls": "Toggle controls",
+    "shareQuote": "Share Quote",
+    "close": "Close",
+    "translation": "Translation",
+    "originalText": "Original",
+    "translatedText": "Translation",
+    "translating": "Translating...",
+    "copyTranslation": "Copy Translation",
+    "translationFailed": "Translation failed, please try again"
   },
   "bookList": {
     "tragedy": "Tragedy",

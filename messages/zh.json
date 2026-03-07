@@ -677,7 +677,15 @@
     "cancel": "取消",
     "notePlaceholder": "写下你的想法...",
     "save": "保存",
-    "toggleControls": "显示/隐藏控件"
+    "toggleControls": "显示/隐藏控件",
+    "shareQuote": "分享引用",
+    "close": "关闭",
+    "translation": "翻译",
+    "originalText": "原文",
+    "translatedText": "译文",
+    "translating": "翻译中...",
+    "copyTranslation": "复制译文",
+    "translationFailed": "翻译失败，请重试"
   },
   "bookList": {
     "tragedy": "悲剧",

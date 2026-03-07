@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Share2 } from 'lucide-react';
@@ -16,6 +17,7 @@ interface QuoteShareCardProps {
 }
 
 export function QuoteShareCard({ open, quoteText, bookTitle, authorName, onClose }: QuoteShareCardProps) {
+  const t = useTranslations('reader');
   const { settings } = useReaderStore();
   const isDark = settings.theme === 'dark' || settings.theme === 'ultraDark';
 
@@ -33,7 +35,7 @@ export function QuoteShareCard({ open, quoteText, bookTitle, authorName, onClose
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>分享引用</DialogTitle>
+          <DialogTitle>{t('shareQuote')}</DialogTitle>
         </DialogHeader>
 
         {/* Card Preview */}
@@ -58,10 +60,10 @@ export function QuoteShareCard({ open, quoteText, bookTitle, authorName, onClose
         <div className="flex gap-2">
           <Button className="flex-1" onClick={handleShare}>
             <Share2 className="h-4 w-4 mr-2" />
-            分享
+            {t('share')}
           </Button>
           <Button variant="outline" className="flex-1" onClick={onClose}>
-            关闭
+            {t('close')}
           </Button>
         </div>
       </DialogContent>
