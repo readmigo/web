@@ -26,6 +26,10 @@ export interface BookDetail extends Book {
   tags: string[];
   hasAudiobook?: boolean;
   audiobookId?: string;
+  seriesId?: string;
+  seriesName?: string;
+  seriesPosition?: number;
+  seriesBookCount?: number;
 }
 
 export interface Chapter {
