@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -23,6 +24,8 @@ interface VoicePickerProps {
 }
 
 export function VoicePicker({ open, onOpenChange, tts, bookId }: VoicePickerProps) {
+  const t = useTranslations('reader');
+  const tCommon = useTranslations('common');
   const { settings, systemVoices, cloudVoices, cloudVoicesError, setCloudVoice, setSystemVoice, loadCloudVoices } = tts;
   const [genderFilter, setGenderFilter] = useState<GenderFilter>('all');
   const [previewingId, setPreviewingId] = useState<string | null>(null);
@@ -103,25 +106,25 @@ export function VoicePicker({ open, onOpenChange, tts, bookId }: VoicePickerProp
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent side="bottom" className="max-h-[80vh] overflow-y-auto rounded-t-2xl">
           <SheetHeader className="pb-2">
-            <SheetTitle>选择声音</SheetTitle>
+            <SheetTitle>{t('selectVoice')}</SheetTitle>
           </SheetHeader>
 
           {/* Cloud voices */}
           <section className="mb-6">
             <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              云端声音
+              {t('cloudVoices')}
             </h3>
             {cloudVoicesError ? (
               <div className="flex flex-col items-center gap-2 py-8 text-center">
                 <p className="text-sm text-muted-foreground">{cloudVoicesError}</p>
                 <Button variant="outline" size="sm" onClick={() => loadCloudVoices(bookId)}>
-                  重试
+                  {tCommon('retry')}
                 </Button>
               </div>
             ) : cloudVoices.length === 0 ? (
               <div className="flex items-center justify-center gap-2 py-8">
                 <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">加载中…</span>
+                <span className="text-sm text-muted-foreground">{tCommon('loadingText')}</span>
               </div>
             ) : (
               <div className="space-y-1">
@@ -177,7 +180,7 @@ export function VoicePicker({ open, onOpenChange, tts, bookId }: VoicePickerProp
           {/* Device voices */}
           <section>
             <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              设备声音
+              {t('deviceVoices')}
             </h3>
 
             {/* Gender filter chips */}
@@ -192,13 +195,13 @@ export function VoicePicker({ open, onOpenChange, tts, bookId }: VoicePickerProp
                       : 'bg-muted text-muted-foreground hover:bg-muted/80'
                   }`}
                 >
-                  {f === 'all' ? '全部' : f === 'female' ? '女声' : '男声'}
+                  {f === 'all' ? t('voiceAll') : f === 'female' ? t('voiceFemale') : t('voiceMale')}
                 </button>
               ))}
             </div>
 
             {filteredSystemVoices.length === 0 ? (
-              <p className="py-8 text-center text-sm text-muted-foreground">没有匹配的声音</p>
+              <p className="py-8 text-center text-sm text-muted-foreground">{t('noMatchingVoices')}</p>
             ) : (
               <div className="space-y-1">
                 {filteredSystemVoices.map((voice) => {

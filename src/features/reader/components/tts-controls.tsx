@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import {
   Play,
@@ -39,6 +40,7 @@ interface TTSControlsProps {
  *   [exit TTS]
  */
 export function TTSControls({ tts, onClose, bookId }: TTSControlsProps) {
+  const t = useTranslations('reader');
   const [showVoicePicker, setShowVoicePicker] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showSleepMenu, setShowSleepMenu] = useState(false);
@@ -48,7 +50,7 @@ export function TTSControls({ tts, onClose, bookId }: TTSControlsProps) {
   if (!isSupported) {
     return (
       <div className="fixed bottom-0 inset-x-0 z-50 border-t bg-background/80 px-4 py-3 backdrop-blur-sm text-center text-sm text-muted-foreground">
-        您的浏览器不支持语音朗读
+        {t('browserNoTTS')}
       </div>
     );
   }
@@ -61,8 +63,8 @@ export function TTSControls({ tts, onClose, bookId }: TTSControlsProps) {
       const m = Math.ceil(sleepTimerRemaining / 60);
       return `${m}m`;
     }
-    if (settings.sleepTimerMinutes === -1) return '章末';
-    return '定时';
+    if (settings.sleepTimerMinutes === -1) return t('endOfChapterLabel');
+    return t('sleepTimerLabel');
   })();
 
   return (
@@ -185,7 +187,7 @@ export function TTSControls({ tts, onClose, bookId }: TTSControlsProps) {
             >
               <PersonStanding className="h-5 w-5" />
               <span className="text-[10px] text-muted-foreground">
-                {isCloud ? '云端' : '声音'}
+                {isCloud ? t('cloudVoiceLabel') : t('deviceVoiceLabel')}
               </span>
             </button>
 
@@ -195,7 +197,7 @@ export function TTSControls({ tts, onClose, bookId }: TTSControlsProps) {
               className="flex flex-col items-center gap-0.5 px-3 py-1 text-foreground hover:text-primary"
             >
               <Settings className="h-5 w-5" />
-              <span className="text-[10px] text-muted-foreground">设置</span>
+              <span className="text-[10px] text-muted-foreground">{t('ttsSettingsLabel')}</span>
             </button>
           </div>
         </div>
@@ -207,7 +209,7 @@ export function TTSControls({ tts, onClose, bookId }: TTSControlsProps) {
           onClick={onClose}
           className="w-full py-3 text-sm font-medium text-red-500 hover:text-red-600 active:bg-red-50"
         >
-          退出朗读
+          {t('exitReading')}
         </button>
       </div>
 

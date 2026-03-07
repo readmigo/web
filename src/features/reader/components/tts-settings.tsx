@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import {
   Sheet,
   SheetContent,
@@ -10,17 +11,8 @@ import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 import type { UseTTSReturn, TTSReadingMode } from '../hooks/use-tts';
 
-const PAUSE_BETWEEN_SENTENCES = [
-  { value: 0.2, label: '短' },
-  { value: 0.3, label: '正常' },
-  { value: 0.5, label: '长' },
-];
-
-const PAUSE_BETWEEN_PARAGRAPHS = [
-  { value: 0.5, label: '短' },
-  { value: 0.8, label: '正常' },
-  { value: 1.2, label: '长' },
-];
+const PAUSE_BETWEEN_SENTENCES_VALUES = [0.2, 0.3, 0.5] as const;
+const PAUSE_BETWEEN_PARAGRAPHS_VALUES = [0.5, 0.8, 1.2] as const;
 
 const READING_MODES: Array<{ value: TTSReadingMode; label: string; desc: string }> = [
   { value: 'continuous', label: '连续', desc: '朗读全书' },
@@ -35,7 +27,20 @@ interface TTSSettingsProps {
 }
 
 export function TTSSettings({ open, onOpenChange, tts }: TTSSettingsProps) {
+  const t = useTranslations('settings');
   const { settings, updateSettings } = tts;
+
+  const PAUSE_BETWEEN_SENTENCES = [
+    { value: PAUSE_BETWEEN_SENTENCES_VALUES[0], label: t('short') },
+    { value: PAUSE_BETWEEN_SENTENCES_VALUES[1], label: t('normal') },
+    { value: PAUSE_BETWEEN_SENTENCES_VALUES[2], label: t('long') },
+  ];
+
+  const PAUSE_BETWEEN_PARAGRAPHS = [
+    { value: PAUSE_BETWEEN_PARAGRAPHS_VALUES[0], label: t('short') },
+    { value: PAUSE_BETWEEN_PARAGRAPHS_VALUES[1], label: t('normal') },
+    { value: PAUSE_BETWEEN_PARAGRAPHS_VALUES[2], label: t('long') },
+  ];
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>

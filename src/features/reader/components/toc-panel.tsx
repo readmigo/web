@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { X, ChevronRight } from 'lucide-react';
@@ -19,10 +20,11 @@ export function TocPanel({
   onSelect,
   onClose,
 }: TocPanelProps) {
+  const t = useTranslations('reader');
   return (
     <div className="fixed inset-y-0 left-0 z-50 w-80 border-r bg-background shadow-lg">
       <div className="flex h-14 items-center justify-between border-b px-4">
-        <h2 className="font-semibold">目录</h2>
+        <h2 className="font-semibold">{t('toc')}</h2>
         <Button variant="ghost" size="icon" onClick={onClose}>
           <X className="h-5 w-5" />
         </Button>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
@@ -12,12 +13,14 @@ interface ReaderSettingsPanelProps {
 }
 
 export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
+  const t = useTranslations('settings');
+  const tReader = useTranslations('reader');
   const { settings, updateSettings, resetSettings } = useReaderStore();
 
   const fontFamilies = [
-    { value: 'serif', label: '衬线' },
-    { value: 'sans-serif', label: '无衬线' },
-    { value: 'monospace', label: '等宽' },
+    { value: 'serif', label: t('fontSerif') },
+    { value: 'sans-serif', label: t('fontSansSerif') },
+    { value: 'monospace', label: t('fontMonospace') },
   ] as const;
 
   const themes = [
@@ -36,7 +39,7 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
   return (
     <div className="fixed inset-y-0 right-0 z-50 w-80 border-l bg-background shadow-lg flex flex-col">
       <div className="flex h-14 shrink-0 items-center justify-between border-b px-4">
-        <h2 className="font-semibold">阅读设置</h2>
+        <h2 className="font-semibold">{tReader('readingSettings')}</h2>
         <Button variant="ghost" size="icon" onClick={onClose}>
           <X className="h-5 w-5" />
         </Button>

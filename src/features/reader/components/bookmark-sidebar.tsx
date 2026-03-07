@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
@@ -18,6 +19,7 @@ interface BookmarkSidebarProps {
 }
 
 export function BookmarkSidebar({ bookId, onNavigateToBookmark }: BookmarkSidebarProps) {
+  const t = useTranslations('reader');
   const { bookmarks, removeBookmark } = useReaderStore();
   const bookBookmarks = bookmarks
     .filter((b) => b.bookId === bookId)
@@ -26,7 +28,7 @@ export function BookmarkSidebar({ bookId, onNavigateToBookmark }: BookmarkSideba
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative" aria-label="书签">
+        <Button variant="ghost" size="icon" className="relative" aria-label={t('bookmarks')}>
           <Bookmark className="h-5 w-5" />
           {bookBookmarks.length > 0 && (
             <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
@@ -39,15 +41,15 @@ export function BookmarkSidebar({ bookId, onNavigateToBookmark }: BookmarkSideba
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <Bookmark className="h-5 w-5" />
-            书签 ({bookBookmarks.length})
+            {t('bookmarksCount', { count: bookBookmarks.length })}
           </SheetTitle>
         </SheetHeader>
         <ScrollArea className="h-[calc(100vh-100px)] mt-4 pr-4">
           {bookBookmarks.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-40 text-muted-foreground">
               <Bookmark className="h-8 w-8 mb-2 opacity-50" />
-              <p>暂无书签</p>
-              <p className="text-sm">点击工具栏书签图标添加</p>
+              <p>{t('noBookmarks')}</p>
+              <p className="text-sm">{t('addBookmarkHint')}</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -66,7 +68,7 @@ export function BookmarkSidebar({ bookId, onNavigateToBookmark }: BookmarkSideba
                   <Button
                     variant="ghost"
                     size="icon"
-                    aria-label={`删除书签 ${bookmark.title}`}
+                    aria-label={t('deleteBookmark', { title: bookmark.title })}
                     className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive"
                     onClick={(e) => {
                       e.stopPropagation();

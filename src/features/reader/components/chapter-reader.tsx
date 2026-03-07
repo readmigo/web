@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback, forwardRef, useImperativeHandle } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   ChapterRenderer,
   Paginator,
@@ -79,6 +80,7 @@ function mapSettings(
 
 export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>(
   function ChapterReader({ bookId, chapters, initialChapterIndex, onReady, onTextSelect, onTocLoaded }, ref) {
+    const t = useTranslations('reader');
     const containerRef = useRef<HTMLDivElement>(null);
     const rendererRef = useRef<ChapterRenderer | null>(null);
     const paginatorRef = useRef<Paginator | null>(null);
@@ -545,7 +547,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
         setError(null);
       } catch (err) {
         console.error('Failed to load chapter:', err);
-        setError('无法加载章节，请稍后重试');
+        setError(t('chapterLoadError'));
         setIsLoading(false);
       } finally {
         loadingChapterRef.current = false;
@@ -721,7 +723,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/80">
             <div className="flex flex-col items-center gap-4">
               <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-              <p className="text-sm text-muted-foreground">正在加载章节...</p>
+              <p className="text-sm text-muted-foreground">{t('loadingChapter')}</p>
             </div>
           </div>
         )}
