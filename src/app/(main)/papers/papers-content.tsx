@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Search, Grid, List, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,6 +24,7 @@ import {
 } from '@/features/papers';
 
 export function PapersContent() {
+  const t = useTranslations('papers');
   const { viewMode, setViewMode, searchQuery, setSearchQuery } = usePaperStore();
   const { data: papersData, isLoading, error, refetch } = usePapers();
   const deleteMutation = useDeletePaper();
@@ -55,13 +57,13 @@ export function PapersContent() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <p className="text-lg text-destructive">加载失败</p>
+        <p className="text-lg text-destructive">{t('loadError')}</p>
         <p className="mt-2 text-sm text-muted-foreground">
-          {error instanceof Error ? error.message : '请稍后重试'}
+          {error instanceof Error ? error.message : t('retryLater')}
         </p>
         <Button className="mt-4" variant="outline" onClick={() => refetch()}>
           <RefreshCw className="mr-2 h-4 w-4" />
-          重试
+          {t('retry')}
         </Button>
       </div>
     );
@@ -74,7 +76,7 @@ export function PapersContent() {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="搜索论文..."
+            placeholder={t('searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9"
@@ -121,9 +123,9 @@ export function PapersContent() {
         <PaperGrid papers={filteredPapers} onDelete={handleDeleteClick} />
       ) : (
         <div className="flex flex-col items-center justify-center py-20">
-          <p className="text-lg text-muted-foreground">还没有论文</p>
+          <p className="text-lg text-muted-foreground">{t('empty')}</p>
           <p className="mt-2 text-sm text-muted-foreground">
-            公版论文将由系统自动导入
+            {t('emptyHint')}
           </p>
         </div>
       )}
@@ -132,18 +134,18 @@ export function PapersContent() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>确认删除</AlertDialogTitle>
+            <AlertDialogTitle>{t('confirmDelete')}</AlertDialogTitle>
             <AlertDialogDescription>
-              删除后无法恢复，确定要删除这篇论文吗？
+              {t('confirmDeleteDesc')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>取消</AlertDialogCancel>
+            <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteConfirm}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              删除
+              {t('delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

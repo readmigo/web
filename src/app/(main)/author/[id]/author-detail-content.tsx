@@ -24,6 +24,7 @@ import {
   Clock,
   Users,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import {
   useAuthor,
   useFollowAuthor,
@@ -78,14 +79,17 @@ function getEraBorderColor(era?: string): string {
   return 'border-primary';
 }
 
-const timelineCategoryLabels: Record<TimelineCategory, string> = {
-  BIRTH: '出生',
-  EDUCATION: '教育',
-  WORK: '作品',
-  MAJOR_EVENT: '重要事件',
-  AWARD: '荣誉',
-  DEATH: '逝世',
-};
+function useTimelineCategoryLabels(): Record<TimelineCategory, string> {
+  const t = useTranslations('author');
+  return {
+    BIRTH: t('timeline.birth'),
+    EDUCATION: t('timeline.education'),
+    WORK: t('timeline.work'),
+    MAJOR_EVENT: t('timeline.majorEvent'),
+    AWARD: t('timeline.award'),
+    DEATH: t('timeline.death'),
+  };
+}
 
 const timelineCategoryColors: Record<TimelineCategory, string> = {
   BIRTH: 'bg-green-500',
@@ -101,6 +105,7 @@ interface AuthorDetailContentProps {
 }
 
 export function AuthorDetailContent({ authorId }: AuthorDetailContentProps) {
+  const t = useTranslations('author');
   const { data: author, isLoading, error } = useAuthor(authorId);
   const followMutation = useFollowAuthor();
 
@@ -126,7 +131,7 @@ export function AuthorDetailContent({ authorId }: AuthorDetailContentProps) {
     return (
       <div className="container py-12 text-center">
         <p className="text-muted-foreground">
-          {error ? '加载作者详情失败，请稍后重试' : '未找到该作者'}
+          {error ? t('loadError') : t('notFound')}
         </p>
       </div>
     );
@@ -214,12 +219,12 @@ export function AuthorDetailContent({ authorId }: AuthorDetailContentProps) {
               {isFollowing ? (
                 <>
                   <UserCheck className="mr-2 h-4 w-4" />
-                  已关注
+                  {t('following')}
                 </>
               ) : (
                 <>
                   <UserPlus className="mr-2 h-4 w-4" />
-                  关注
+                  {t('follow')}
                 </>
               )}
             </Button>
@@ -229,15 +234,15 @@ export function AuthorDetailContent({ authorId }: AuthorDetailContentProps) {
           <div className="flex justify-center gap-8 pt-1 text-sm">
             <div className="text-center">
               <p className="font-semibold">{author.bookCount}</p>
-              <p className="text-xs text-muted-foreground">作品</p>
+              <p className="text-xs text-muted-foreground">{t('works')}</p>
             </div>
             <div className="text-center">
               <p className="font-semibold">{author.quoteCount}</p>
-              <p className="text-xs text-muted-foreground">名言</p>
+              <p className="text-xs text-muted-foreground">{t('quotes')}</p>
             </div>
             <div className="text-center">
               <p className="font-semibold">{author.followerCount}</p>
-              <p className="text-xs text-muted-foreground">关注</p>
+              <p className="text-xs text-muted-foreground">{t('followers')}</p>
             </div>
           </div>
         </div>
@@ -278,6 +283,7 @@ export function AuthorDetailContent({ authorId }: AuthorDetailContentProps) {
 // --- Section Components ---
 
 function LiteraryProfileCard({ author }: { author: AuthorDetail }) {
+  const t = useTranslations('author');
   const lifespan =
     author.birthYear || author.deathYear
       ? `${author.birthYear ?? '?'} - ${author.deathYear ?? '?'}`
@@ -288,42 +294,42 @@ function LiteraryProfileCard({ author }: { author: AuthorDetail }) {
       <CardContent className="p-4">
         <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
           <Feather className="h-5 w-5 text-primary" />
-          文学档案
+          {t('literaryProfile')}
         </h2>
         <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
           {lifespan && (
             <div>
-              <dt className="text-muted-foreground">生卒年</dt>
+              <dt className="text-muted-foreground">{t('lifespan')}</dt>
               <dd className="font-medium">{lifespan}</dd>
             </div>
           )}
           {author.era && (
             <div>
-              <dt className="text-muted-foreground">时代</dt>
+              <dt className="text-muted-foreground">{t('era')}</dt>
               <dd className="font-medium">{author.era}</dd>
             </div>
           )}
           {author.nationality && (
             <div>
-              <dt className="text-muted-foreground">国籍</dt>
+              <dt className="text-muted-foreground">{t('nationality')}</dt>
               <dd className="font-medium">{author.nationality}</dd>
             </div>
           )}
           {author.birthPlace && (
             <div>
-              <dt className="text-muted-foreground">出生地</dt>
+              <dt className="text-muted-foreground">{t('birthPlace')}</dt>
               <dd className="font-medium">{author.birthPlace}</dd>
             </div>
           )}
           {author.literaryPeriod && (
             <div>
-              <dt className="text-muted-foreground">文学流派</dt>
+              <dt className="text-muted-foreground">{t('literaryPeriod')}</dt>
               <dd className="font-medium">{author.literaryPeriod}</dd>
             </div>
           )}
           {author.writingStyle && (
             <div className="col-span-2">
-              <dt className="text-muted-foreground">写作风格</dt>
+              <dt className="text-muted-foreground">{t('writingStyle')}</dt>
               <dd className="mt-1 flex flex-wrap gap-1.5">
                 {author.writingStyle.split(', ').map((style) => (
                   <Badge key={style} variant="outline" className="text-xs">
@@ -336,7 +342,7 @@ function LiteraryProfileCard({ author }: { author: AuthorDetail }) {
           {author.civilizationMap?.primaryGenres &&
             author.civilizationMap.primaryGenres.length > 0 && (
               <div className="col-span-2">
-                <dt className="text-muted-foreground">主要体裁</dt>
+                <dt className="text-muted-foreground">{t('primaryGenres')}</dt>
                 <dd className="mt-1 flex flex-wrap gap-1.5">
                   {author.civilizationMap.primaryGenres.map((g) => (
                     <Badge key={g} variant="secondary" className="text-xs">
@@ -349,11 +355,11 @@ function LiteraryProfileCard({ author }: { author: AuthorDetail }) {
           {author.civilizationMap?.themes &&
             author.civilizationMap.themes.length > 0 && (
               <div className="col-span-2">
-                <dt className="text-muted-foreground">核心主题</dt>
+                <dt className="text-muted-foreground">{t('themes')}</dt>
                 <dd className="mt-1 flex flex-wrap gap-1.5">
-                  {author.civilizationMap.themes.map((t) => (
-                    <Badge key={t} variant="outline" className="text-xs">
-                      {t}
+                  {author.civilizationMap.themes.map((theme) => (
+                    <Badge key={theme} variant="outline" className="text-xs">
+                      {theme}
                     </Badge>
                   ))}
                 </dd>
@@ -392,11 +398,13 @@ function QuotesSection({
   const [showAll, setShowAll] = useState(false);
   const visibleQuotes = showAll ? quotes : quotes.slice(0, 3);
 
+  const t = useTranslations('author');
+
   return (
     <div>
       <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
         <Quote className="h-5 w-5 text-primary" />
-        名言
+        {t('quotesSection')}
       </h2>
       <div className="space-y-3">
         {visibleQuotes.map((quote) => (
@@ -445,11 +453,11 @@ function QuotesSection({
           >
             {showAll ? (
               <>
-                收起 <ChevronUp className="ml-1 h-4 w-4" />
+                {t('collapseQuotes')} <ChevronUp className="ml-1 h-4 w-4" />
               </>
             ) : (
               <>
-                查看全部 {quotes.length} 条名言 <ChevronDown className="ml-1 h-4 w-4" />
+                {t('viewAllQuotes', { count: quotes.length })} <ChevronDown className="ml-1 h-4 w-4" />
               </>
             )}
           </Button>
@@ -460,6 +468,7 @@ function QuotesSection({
 }
 
 function BioSection({ author }: { author: AuthorDetail }) {
+  const t = useTranslations('author');
   const [expanded, setExpanded] = useState(false);
   const bio = author.bioZh || author.bio;
 
@@ -469,7 +478,7 @@ function BioSection({ author }: { author: AuthorDetail }) {
     <div>
       <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
         <BookOpen className="h-5 w-5 text-primary" />
-        简介
+        {t('bioSection')}
       </h2>
       <Card className="bg-card rounded-xl shadow-sm">
         <CardContent className="p-4">
@@ -489,11 +498,11 @@ function BioSection({ author }: { author: AuthorDetail }) {
             >
               {expanded ? (
                 <>
-                  收起 <ChevronUp className="ml-1 h-4 w-4" />
+                  {t('collapse')} <ChevronUp className="ml-1 h-4 w-4" />
                 </>
               ) : (
                 <>
-                  展开阅读 <ChevronDown className="ml-1 h-4 w-4" />
+                  {t('expandReading')} <ChevronDown className="ml-1 h-4 w-4" />
                 </>
               )}
             </Button>
@@ -521,7 +530,7 @@ function BioSection({ author }: { author: AuthorDetail }) {
                 className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
               >
                 <ExternalLink className="h-3.5 w-3.5" />
-                在 Wikipedia 上了解更多
+                {t('learnMore')}
               </a>
             </div>
           )}
@@ -532,11 +541,12 @@ function BioSection({ author }: { author: AuthorDetail }) {
 }
 
 function WorksSection({ books }: { books: AuthorBook[] }) {
+  const t = useTranslations('author');
   return (
     <div>
       <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
         <BookOpen className="h-5 w-5 text-primary" />
-        代表作品
+        {t('worksSection')}
       </h2>
       <div className="space-y-3">
         {books.map((book) => (
@@ -588,11 +598,13 @@ function TimelineSection({
 }: {
   timeline: AuthorTimelineEvent[];
 }) {
+  const t = useTranslations('author');
+  const timelineCategoryLabels = useTimelineCategoryLabels();
   return (
     <div>
       <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
         <Clock className="h-5 w-5 text-primary" />
-        生平时间线
+        {t('timeline')}
       </h2>
       <Card className="bg-card rounded-xl shadow-sm">
         <CardContent className="p-4">
@@ -639,11 +651,12 @@ function TimelineSection({
 }
 
 function RelatedAuthorsSection({ authors }: { authors: AuthorLinkType[] }) {
+  const t = useTranslations('author');
   return (
     <div>
       <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
         <Users className="h-5 w-5 text-primary" />
-        相关作家
+        {t('relatedAuthors')}
       </h2>
       {/* Horizontal scroll */}
       <div className="-mx-4 px-4">

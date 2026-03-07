@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { ReaderContent } from './reader-content';
 
 interface ReaderPageProps {
@@ -8,11 +9,11 @@ interface ReaderPageProps {
 export async function generateMetadata({
   params,
 }: ReaderPageProps): Promise<Metadata> {
-  const { id } = await params;
-  // TODO: Fetch book data for metadata
+  await params;
+  const t = await getTranslations('metadata');
   return {
-    title: '阅读中',
-    description: '沉浸式阅读体验',
+    title: t('bookDetailTitle'),
+    description: t('bookDetailDescription'),
   };
 }
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { X, Volume2, BookmarkPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -25,6 +26,7 @@ interface WordPopoverProps {
 }
 
 export function WordPopover({ word, position, onClose }: WordPopoverProps) {
+  const t = useTranslations('wordLookup');
   const ref = useRef<HTMLDivElement>(null);
 
   // 查询单词释义
@@ -111,7 +113,7 @@ export function WordPopover({ word, position, onClose }: WordPopoverProps) {
           ))}
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground">暂无释义</p>
+        <p className="text-sm text-muted-foreground">{t('noDefinition')}</p>
       )}
 
       <div className="mt-4 pt-4 border-t">
@@ -122,7 +124,7 @@ export function WordPopover({ word, position, onClose }: WordPopoverProps) {
           onClick={addToVocabulary}
         >
           <BookmarkPlus className="h-4 w-4 mr-2" />
-          添加到词汇本
+          {t('addToVocabulary')}
         </Button>
       </div>
     </Card>

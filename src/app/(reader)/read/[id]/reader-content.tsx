@@ -9,6 +9,7 @@ import { SelectionPopup } from '@/features/reader/components/selection-popup';
 import { ReadingStatsOverlay } from '@/features/reader/components/reading-stats-overlay';
 import { TTSControls, MiniTTSControls } from '@/features/reader/components/tts-controls';
 import { KeyboardShortcutsDialog } from '@/components/shared/keyboard-shortcuts-dialog';
+import { useTranslations } from 'next-intl';
 import { useReaderStore } from '@/features/reader/stores/reader-store';
 import { useBookDetail } from '@/features/library/hooks/use-books';
 import { useTTS } from '@/features/reader/hooks/use-tts';
@@ -31,6 +32,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   const [isReady, setIsReady] = useState(false);
   const [showTTSPanel, setShowTTSPanel] = useState(false);
   const [tocItems, setTocItems] = useState<TocItem[]>([]);
+  const t = useTranslations('reader');
 
   // Initialize TTS
   const tts = useTTS();
@@ -90,55 +92,55 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       // Navigation
       {
         key: 'ArrowRight',
-        description: '下一页',
-        category: '导航',
+        description: t('nextPage'),
+        category: t('navigation'),
         action: handleNext,
       },
       {
         key: 'ArrowLeft',
-        description: '上一页',
-        category: '导航',
+        description: t('prevPage'),
+        category: t('navigation'),
         action: handlePrev,
       },
       {
         key: ' ',
-        description: '下一页',
-        category: '导航',
+        description: t('nextPage'),
+        category: t('navigation'),
         action: handleNext,
       },
       {
         key: ' ',
         shift: true,
-        description: '上一页',
-        category: '导航',
+        description: t('prevPage'),
+        category: t('navigation'),
         action: handlePrev,
       },
       // Panels
       {
         key: 't',
-        description: '切换目录',
-        category: '面板',
+        description: t('toggleToc'),
+        category: t('panels'),
         action: toggleToc,
       },
       {
         key: ',',
         ctrl: true,
-        description: '打开设置',
-        category: '面板',
+        description: t('openSettings'),
+        category: t('panels'),
         action: toggleSettings,
       },
       // Bookmarks
       {
         key: 'd',
         ctrl: true,
-        description: '添加书签',
-        category: '书签',
+        description: t('addBookmark'),
+        category: t('bookmarks'),
         action: () => {
           if (position) {
             addBookmark({
               bookId,
               cfi: `ch:${position.chapterIndex}:pg:${position.page}`,
-              title: `书签 - ${Math.round(position.percentage * 100)}%`,
+              title: t('bookmarkLabel', { percent: Math.round(position.percentage * 100) }),
             });
           }
         },
@@ -147,8 +149,8 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       {
         key: '=',
         ctrl: true,
-        description: '放大字体',
-        category: '显示',
+        description: t('zoomIn'),
+        category: t('display'),
         action: () => {
           const { updateSettings, settings } = useReaderStore.getState();
           updateSettings({ fontSize: Math.min(settings.fontSize + 2, 32) });
@@ -157,8 +159,8 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       {
         key: '-',
         ctrl: true,
-        description: '缩小字体',
-        category: '显示',
+        description: t('zoomOut'),
+        category: t('display'),
         action: () => {
           const { updateSettings, settings } = useReaderStore.getState();
           updateSettings({ fontSize: Math.max(settings.fontSize - 2, 12) });
@@ -167,28 +169,28 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       // TTS
       {
         key: 'r',
-        description: '朗读当前页',
-        category: 'TTS',
+        description: t('readCurrentPage'),
+        category: t('tts'),
         action: handleStartTTS,
       },
       {
         key: 'p',
-        description: '暂停/继续朗读',
-        category: 'TTS',
+        description: t('togglePlayPause'),
+        category: t('tts'),
         action: () => tts.togglePlayPause(),
       },
       {
         key: 's',
         shift: true,
-        description: '停止朗读',
-        category: 'TTS',
+        description: t('stopReading'),
+        category: t('tts'),
         action: () => tts.stop(),
       },
       {
         key: 'ArrowRight',
         shift: true,
-        description: '下一句',
-        category: 'TTS',
+        description: t('nextSentence'),
+        category: t('tts'),
         action: () => tts.nextSentence(),
       },
     ],
@@ -296,7 +298,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       <div className="flex h-full items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-          <p className="text-sm text-muted-foreground">正在加载书籍...</p>
+          <p className="text-sm text-muted-foreground">{t('loading')}</p>
         </div>
       </div>
     );

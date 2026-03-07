@@ -62,6 +62,7 @@ function AudiobookListBookCard({ book }: { book: BookListBook }) {
 }
 
 function AudiobookThemedSection({ list }: { list: BookList }) {
+  const t = useTranslations('common');
   const books = (list.books ?? []).slice(0, 10);
   if (books.length === 0) return null;
 
@@ -78,7 +79,7 @@ function AudiobookThemedSection({ list }: { list: BookList }) {
           href={`/book-list/${list.id}`}
           className="flex items-center gap-0.5 text-xs text-primary"
         >
-          查看全部
+          {t('viewAll')}
           <ChevronRight className="h-3.5 w-3.5" />
         </Link>
       </div>

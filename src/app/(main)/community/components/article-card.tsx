@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
+import { useTranslations } from 'next-intl';
 import { ExternalLink, Share2 } from 'lucide-react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -21,21 +22,20 @@ interface Article {
   source?: { name: string };
 }
 
-const categoryLabels: Record<string, string> = {
-  TECH: '科技',
-  BUSINESS: '商业',
-  CULTURE: '文化',
-  LITERATURE: '文学',
-};
-
-const licenseLabels: Record<string, string> = {
-  CC: '可阅读',
-  PUBLIC_DOMAIN: '可阅读',
-  EDUCATIONAL: '摘要',
-  REDIRECT_ONLY: '跳转',
-};
-
 export function ArticleCard({ article }: { article: Article }) {
+  const t = useTranslations('article');
+  const categoryLabels: Record<string, string> = {
+    TECH: t('category.tech'),
+    BUSINESS: t('category.business'),
+    CULTURE: t('category.culture'),
+    LITERATURE: t('category.literature'),
+  };
+  const licenseLabels: Record<string, string> = {
+    CC: t('license.readable'),
+    PUBLIC_DOMAIN: t('license.readable'),
+    EDUCATIONAL: t('license.summary'),
+    REDIRECT_ONLY: t('license.redirect'),
+  };
   const canReadInSite =
     article.license === 'CC' || article.license === 'PUBLIC_DOMAIN';
 

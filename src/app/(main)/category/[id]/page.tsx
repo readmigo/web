@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { CategoryContent } from './category-content';
 
 interface CategoryPageProps {
@@ -6,10 +7,11 @@ interface CategoryPageProps {
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
-  const { id } = await params;
+  await params;
+  const t = await getTranslations('metadata');
   return {
-    title: `分类浏览 - ${id}`,
-    description: '浏览该分类下的所有书籍',
+    title: t('exploreTitle'),
+    description: t('exploreDescription'),
   };
 }
 

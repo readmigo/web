@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { AudiobookDetailContent } from './audiobook-detail-content';
 
 interface AudiobookPageProps {
@@ -8,10 +9,11 @@ interface AudiobookPageProps {
 export async function generateMetadata({
   params,
 }: AudiobookPageProps): Promise<Metadata> {
-  const { id } = await params;
+  await params;
+  const t = await getTranslations('metadata');
   return {
-    title: '有声书详情',
-    description: '收听有声书',
+    title: t('audiobooksTitle'),
+    description: t('audiobooksDescription'),
   };
 }
 

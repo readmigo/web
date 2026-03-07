@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import DOMPurify from 'isomorphic-dompurify';
+import { useTranslations } from 'next-intl';
 import { ArrowLeft, ExternalLink, Share2, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -30,15 +31,20 @@ interface ArticleReaderProps {
   articleId: string;
 }
 
-const categoryLabels: Record<string, string> = {
-  TECH: '科技',
-  BUSINESS: '商业',
-  CULTURE: '文化',
-  LITERATURE: '文学',
-};
+function useCategoryLabels(): Record<string, string> {
+  const t = useTranslations('article');
+  return {
+    TECH: t('category.tech'),
+    BUSINESS: t('category.business'),
+    CULTURE: t('category.culture'),
+    LITERATURE: t('category.literature'),
+  };
+}
 
 export function ArticleReader({ articleId }: ArticleReaderProps) {
   const router = useRouter();
+  const t = useTranslations('article');
+  const categoryLabels = useCategoryLabels();
   const [selectedWord, setSelectedWord] = useState<{
     word: string;
     position: { x: number; y: number };
@@ -147,9 +153,9 @@ export function ArticleReader({ articleId }: ArticleReaderProps) {
   if (!articleData) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-8 text-center">
-        <p className="text-muted-foreground">文章不存在</p>
+        <p className="text-muted-foreground">{t('notFound')}</p>
         <Link href="/community">
-          <Button variant="link">返回社区</Button>
+          <Button variant="link">{t('backToCommunity')}</Button>
         </Link>
       </div>
     );
@@ -169,7 +175,7 @@ export function ArticleReader({ articleId }: ArticleReaderProps) {
           className="mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          返回
+          {t('back')}
         </Button>
 
         <h1 className="text-2xl font-bold mb-4">{articleData.title}</h1>
@@ -193,12 +199,12 @@ export function ArticleReader({ articleId }: ArticleReaderProps) {
           >
             <Button variant="outline" size="sm">
               <ExternalLink className="h-4 w-4 mr-2" />
-              查看原文
+              {t('viewOriginal')}
             </Button>
           </a>
           <Button variant="outline" size="sm" onClick={handleShare}>
             <Share2 className="h-4 w-4 mr-2" />
-            分享
+            {t('share')}
           </Button>
         </div>
       </div>
@@ -217,7 +223,7 @@ export function ArticleReader({ articleId }: ArticleReaderProps) {
           <div className="flex items-center gap-2 mb-4">
             <BookOpen className="h-5 w-5 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">
-              由于版权限制，仅展示摘要
+              {t('copyrightNotice')}
             </span>
           </div>
           <p className="text-muted-foreground mb-4">{articleData.summary}</p>
@@ -228,7 +234,7 @@ export function ArticleReader({ articleId }: ArticleReaderProps) {
           >
             <Button>
               <ExternalLink className="h-4 w-4 mr-2" />
-              阅读完整文章
+              {t('readFull')}
             </Button>
           </a>
         </div>

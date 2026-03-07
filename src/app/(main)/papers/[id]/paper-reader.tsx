@@ -15,6 +15,7 @@ import {
   Highlighter,
   MessageSquare,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -34,6 +35,7 @@ interface PaperReaderProps {
 
 export function PaperReader({ paperId }: PaperReaderProps) {
   const router = useRouter();
+  const t = useTranslations('papers');
   const { status: authStatus } = useSession();
   const isAuthenticated = authStatus === 'authenticated';
   const {
@@ -96,9 +98,9 @@ export function PaperReader({ paperId }: PaperReaderProps) {
   if (!paper) {
     return (
       <div className="flex h-screen flex-col items-center justify-center">
-        <p className="text-lg text-destructive">论文不存在</p>
+        <p className="text-lg text-destructive">{t('notFound')}</p>
         <Button className="mt-4" variant="outline" onClick={() => router.push('/papers')}>
-          返回论文库
+          {t('backToLibrary')}
         </Button>
       </div>
     );
@@ -202,11 +204,11 @@ export function PaperReader({ paperId }: PaperReaderProps) {
             <TabsList className="mx-4 mt-4 grid w-auto grid-cols-2">
               <TabsTrigger value="highlights" className="gap-2">
                 <Highlighter className="h-4 w-4" />
-                高亮
+                {t('highlights')}
               </TabsTrigger>
               <TabsTrigger value="annotations" className="gap-2">
                 <MessageSquare className="h-4 w-4" />
-                笔记
+                {t('annotations')}
               </TabsTrigger>
             </TabsList>
 
@@ -226,7 +228,7 @@ export function PaperReader({ paperId }: PaperReaderProps) {
                             style={{ backgroundColor: highlight.color }}
                           />
                           <span className="text-xs text-muted-foreground">
-                            第 {highlight.pageNumber} 页
+                            {t('pageNumber', { page: highlight.pageNumber })}
                           </span>
                         </div>
                         <p className="mt-2 text-sm line-clamp-3">{highlight.text}</p>
@@ -236,10 +238,10 @@ export function PaperReader({ paperId }: PaperReaderProps) {
                     <div className="flex flex-col items-center justify-center py-10 text-center">
                       <Highlighter className="h-8 w-8 text-muted-foreground/50" />
                       <p className="mt-2 text-sm text-muted-foreground">
-                        还没有高亮
+                        {t('noHighlights')}
                       </p>
                       <p className="mt-1 text-xs text-muted-foreground">
-                        选中文字即可添加高亮
+                        {t('addHighlightHint')}
                       </p>
                     </div>
                   )}
@@ -258,7 +260,7 @@ export function PaperReader({ paperId }: PaperReaderProps) {
                         onClick={() => handlePageChange(annotation.pageNumber)}
                       >
                         <span className="text-xs text-muted-foreground">
-                          第 {annotation.pageNumber} 页
+                          {t('pageNumber', { page: annotation.pageNumber })}
                         </span>
                         <p className="mt-2 text-sm line-clamp-4">
                           {annotation.content}
@@ -269,10 +271,10 @@ export function PaperReader({ paperId }: PaperReaderProps) {
                     <div className="flex flex-col items-center justify-center py-10 text-center">
                       <MessageSquare className="h-8 w-8 text-muted-foreground/50" />
                       <p className="mt-2 text-sm text-muted-foreground">
-                        还没有笔记
+                        {t('noAnnotations')}
                       </p>
                       <p className="mt-1 text-xs text-muted-foreground">
-                        选中文字后可添加笔记
+                        {t('addAnnotationHint')}
                       </p>
                     </div>
                   )}
