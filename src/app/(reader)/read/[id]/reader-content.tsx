@@ -328,7 +328,9 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   }, []);
 
   const handleGuideComplete = useCallback(() => {
-    localStorage.setItem('hasSeenReaderGuide', 'true');
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('hasSeenReaderGuide', 'true');
+    }
     setShowGuide(false);
   }, []);
 
