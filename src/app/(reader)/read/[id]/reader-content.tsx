@@ -215,7 +215,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       },
       {
         key: 'Escape',
-        description: '显示/隐藏控件',
+        description: t('toggleControls'),
         category: t('navigation'),
         action: toggleControls,
       },

@@ -15,6 +15,7 @@ interface ReaderSettingsPanelProps {
 export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
   const t = useTranslations('settings');
   const tReader = useTranslations('reader');
+  const tCommon = useTranslations('common');
   const { settings, updateSettings, resetSettings } = useReaderStore();
 
   const fontFamilies = [
@@ -24,16 +25,16 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
   ] as const;
 
   const themes = [
-    { value: 'light', label: '亮色', bg: 'bg-white', text: 'text-black' },
-    { value: 'sepia', label: '护眼', bg: 'bg-[#f4ecd8]', text: 'text-[#5b4636]' },
-    { value: 'dark', label: '暗色', bg: 'bg-[#1a1a1a]', text: 'text-[#e0e0e0]' },
-    { value: 'ultraDark', label: '纯黑', bg: 'bg-black', text: 'text-[#e0e0e0]' },
+    { value: 'light', label: t('bright'), bg: 'bg-white', text: 'text-black' },
+    { value: 'sepia', label: t('sepia'), bg: 'bg-[#f4ecd8]', text: 'text-[#5b4636]' },
+    { value: 'dark', label: t('dimmed'), bg: 'bg-[#1a1a1a]', text: 'text-[#e0e0e0]' },
+    { value: 'ultraDark', label: t('pureBlack'), bg: 'bg-black', text: 'text-[#e0e0e0]' },
   ] as const;
 
   const margins = [
-    { value: 'small', label: '窄' },
-    { value: 'medium', label: '中' },
-    { value: 'large', label: '宽' },
+    { value: 'small', label: t('narrow') },
+    { value: 'medium', label: t('medium') },
+    { value: 'large', label: t('wide') },
   ] as const;
 
   return (
@@ -49,7 +50,7 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
         {/* Font Size */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">字体大小</span>
+            <span className="text-sm font-medium">{t('fontSize')}</span>
             <span className="text-sm text-muted-foreground">
               {settings.fontSize}px
             </span>
@@ -89,7 +90,7 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
         {/* Line Height */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">行距</span>
+            <span className="text-sm font-medium">{t('lineHeight')}</span>
             <span className="text-sm text-muted-foreground">
               {settings.lineHeight.toFixed(1)}
             </span>
@@ -107,7 +108,7 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
 
         {/* Font Family */}
         <div className="space-y-3">
-          <span className="text-sm font-medium">字体</span>
+          <span className="text-sm font-medium">{t('font')}</span>
           <div className="flex gap-2">
             {fontFamilies.map((font) => (
               <Button
@@ -127,7 +128,7 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
 
         {/* Theme */}
         <div className="space-y-3">
-          <span className="text-sm font-medium">主题</span>
+          <span className="text-sm font-medium">{t('theme')}</span>
           <div className="flex gap-2">
             {themes.map((theme) => (
               <button
@@ -152,7 +153,7 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
 
         {/* Margin */}
         <div className="space-y-3">
-          <span className="text-sm font-medium">边距</span>
+          <span className="text-sm font-medium">{t('margin')}</span>
           <div className="flex gap-2">
             {margins.map((margin) => (
               <Button
@@ -172,12 +173,12 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
 
         {/* Appearance Mode */}
         <div className="space-y-3">
-          <span className="text-sm font-medium">外观模式</span>
+          <span className="text-sm font-medium">{t('appearanceMode')}</span>
           <div className="flex gap-2">
             {([
-              { value: 'light', label: '浅色' },
-              { value: 'dark', label: '深色' },
-              { value: 'auto', label: '跟随系统' },
+              { value: 'light', label: t('light') },
+              { value: 'dark', label: t('dark') },
+              { value: 'auto', label: t('followSystem') },
             ] as const).map((mode) => (
               <Button
                 key={mode.value}
@@ -196,13 +197,13 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
 
         {/* Text Alignment */}
         <div className="space-y-3">
-          <span className="text-sm font-medium">文本对齐</span>
+          <span className="text-sm font-medium">{t('textAlign')}</span>
           <div className="flex gap-2">
             {([
-              { value: 'left', label: '左对齐' },
-              { value: 'center', label: '居中' },
-              { value: 'right', label: '右对齐' },
-              { value: 'justify', label: '两端' },
+              { value: 'left', label: t('alignLeft') },
+              { value: 'center', label: t('alignCenter') },
+              { value: 'right', label: t('alignRight') },
+              { value: 'justify', label: t('alignJustify') },
             ] as const).map((align) => (
               <Button
                 key={align.value}
@@ -222,13 +223,13 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
         {/* Hyphenation */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">连字符</span>
+            <span className="text-sm font-medium">{t('hyphenation')}</span>
             <Button
               variant={settings.hyphenation ? 'secondary' : 'outline'}
               size="sm"
               onClick={() => updateSettings({ hyphenation: !settings.hyphenation })}
             >
-              {settings.hyphenation ? '开启' : '关闭'}
+              {settings.hyphenation ? tCommon('on') : tCommon('off')}
             </Button>
           </div>
         </div>
@@ -237,14 +238,14 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
 
         {/* Font Weight */}
         <div className="space-y-3">
-          <span className="text-sm font-medium">字重</span>
+          <span className="text-sm font-medium">{t('fontWeight')}</span>
           <div className="flex gap-1">
             {([
-              { value: 'light', label: '细' },
-              { value: 'regular', label: '常规' },
-              { value: 'medium', label: '中' },
-              { value: 'semibold', label: '半粗' },
-              { value: 'bold', label: '粗' },
+              { value: 'light', label: t('weightLight') },
+              { value: 'regular', label: t('weightRegular') },
+              { value: 'medium', label: t('weightMedium') },
+              { value: 'semibold', label: t('weightSemibold') },
+              { value: 'bold', label: t('weightBold') },
             ] as const).map((w) => (
               <Button
                 key={w.value}
@@ -263,7 +264,7 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
 
         {/* Column Count */}
         <div className="space-y-3">
-          <span className="text-sm font-medium">栏数</span>
+          <span className="text-sm font-medium">{t('columnCount')}</span>
           <div className="flex gap-2">
             {([1, 2, 3] as const).map((col) => (
               <Button
@@ -273,7 +274,7 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
                 onClick={() => updateSettings({ columnCount: col })}
                 className="flex-1"
               >
-                {col} 栏
+                {t('columnLabel', { count: col })}
               </Button>
             ))}
           </div>
@@ -284,7 +285,7 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
         {/* Letter Spacing */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">字间距</span>
+            <span className="text-sm font-medium">{t('letterSpacing')}</span>
             <span className="text-sm text-muted-foreground">
               {settings.letterSpacing.toFixed(1)}px
             </span>
@@ -303,7 +304,7 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
         {/* Word Spacing */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">词间距</span>
+            <span className="text-sm font-medium">{t('wordSpacing')}</span>
             <span className="text-sm text-muted-foreground">
               {settings.wordSpacing}px
             </span>
@@ -322,7 +323,7 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
         {/* Paragraph Spacing */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">段间距</span>
+            <span className="text-sm font-medium">{t('paragraphSpacing')}</span>
             <span className="text-sm text-muted-foreground">
               {settings.paragraphSpacing}px
             </span>
@@ -341,7 +342,7 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
         {/* Text Indent */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">首行缩进</span>
+            <span className="text-sm font-medium">{t('textIndent')}</span>
             <span className="text-sm text-muted-foreground">
               {settings.textIndent.toFixed(1)}em
             </span>
@@ -364,7 +365,7 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
           onClick={resetSettings}
         >
           <RotateCcw className="mr-2 h-4 w-4" />
-          重置默认设置
+          {t('resetDefaults')}
         </Button>
       </div>
     </div>

@@ -14,12 +14,6 @@ import type { UseTTSReturn, TTSReadingMode } from '../hooks/use-tts';
 const PAUSE_BETWEEN_SENTENCES_VALUES = [0.2, 0.3, 0.5] as const;
 const PAUSE_BETWEEN_PARAGRAPHS_VALUES = [0.5, 0.8, 1.2] as const;
 
-const READING_MODES: Array<{ value: TTSReadingMode; label: string; desc: string }> = [
-  { value: 'continuous', label: '连续', desc: '朗读全书' },
-  { value: 'chapter', label: '章节', desc: '章节末尾停止' },
-  { value: 'selection', label: '选中', desc: '仅朗读选中文本' },
-];
-
 interface TTSSettingsProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -28,7 +22,14 @@ interface TTSSettingsProps {
 
 export function TTSSettings({ open, onOpenChange, tts }: TTSSettingsProps) {
   const t = useTranslations('settings');
+  const tReader = useTranslations('reader');
   const { settings, updateSettings } = tts;
+
+  const READING_MODES: Array<{ value: TTSReadingMode; label: string; desc: string }> = [
+    { value: 'continuous', label: tReader('readingModeContinuous'), desc: tReader('readingModeContinuousDesc') },
+    { value: 'chapter', label: tReader('readingModeChapter'), desc: tReader('readingModeChapterDesc') },
+    { value: 'selection', label: tReader('readingModeSelection'), desc: tReader('readingModeSelectionDesc') },
+  ];
 
   const PAUSE_BETWEEN_SENTENCES = [
     { value: PAUSE_BETWEEN_SENTENCES_VALUES[0], label: t('short') },
@@ -46,20 +47,20 @@ export function TTSSettings({ open, onOpenChange, tts }: TTSSettingsProps) {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="max-h-[80vh] overflow-y-auto rounded-t-2xl">
         <SheetHeader className="pb-2">
-          <SheetTitle>朗读设置</SheetTitle>
+          <SheetTitle>{tReader('ttsSettings')}</SheetTitle>
         </SheetHeader>
 
         <div className="space-y-6 py-2">
           {/* Pitch */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label className="text-sm font-medium">音调</Label>
+              <Label className="text-sm font-medium">{t('pitch')}</Label>
               <span className="text-sm text-muted-foreground">
                 {settings.pitch.toFixed(1)}
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="w-6 text-xs text-muted-foreground">低</span>
+              <span className="w-6 text-xs text-muted-foreground">{t('low')}</span>
               <Slider
                 value={[settings.pitch]}
                 min={0.5}
@@ -68,13 +69,13 @@ export function TTSSettings({ open, onOpenChange, tts }: TTSSettingsProps) {
                 className="flex-1"
                 onValueChange={([v]) => updateSettings({ pitch: v })}
               />
-              <span className="w-6 text-right text-xs text-muted-foreground">高</span>
+              <span className="w-6 text-right text-xs text-muted-foreground">{t('high')}</span>
             </div>
           </div>
 
           {/* Pause between sentences */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium">句间停顿</Label>
+            <Label className="text-sm font-medium">{t('sentencePause')}</Label>
             <div className="flex gap-2">
               {PAUSE_BETWEEN_SENTENCES.map(({ value, label }) => (
                 <button
@@ -94,7 +95,7 @@ export function TTSSettings({ open, onOpenChange, tts }: TTSSettingsProps) {
 
           {/* Pause between paragraphs */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium">段间停顿</Label>
+            <Label className="text-sm font-medium">{t('paragraphPause')}</Label>
             <div className="flex gap-2">
               {PAUSE_BETWEEN_PARAGRAPHS.map(({ value, label }) => (
                 <button
@@ -114,10 +115,10 @@ export function TTSSettings({ open, onOpenChange, tts }: TTSSettingsProps) {
 
           {/* Auto scroll & page turn */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium">行为</Label>
+            <Label className="text-sm font-medium">{t('behavior')}</Label>
             <div className="space-y-2">
               <label className="flex items-center justify-between rounded-lg bg-muted/50 px-3 py-2.5">
-                <span className="text-sm">自动翻页</span>
+                <span className="text-sm">{t('autoPageTurn')}</span>
                 <input
                   type="checkbox"
                   checked={settings.autoPageTurn}
@@ -126,7 +127,7 @@ export function TTSSettings({ open, onOpenChange, tts }: TTSSettingsProps) {
                 />
               </label>
               <label className="flex items-center justify-between rounded-lg bg-muted/50 px-3 py-2.5">
-                <span className="text-sm">自动滚动</span>
+                <span className="text-sm">{t('autoScroll')}</span>
                 <input
                   type="checkbox"
                   checked={settings.autoScroll}
@@ -139,7 +140,7 @@ export function TTSSettings({ open, onOpenChange, tts }: TTSSettingsProps) {
 
           {/* Reading mode */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium">朗读模式</Label>
+            <Label className="text-sm font-medium">{t('readingMode')}</Label>
             <div className="space-y-1">
               {READING_MODES.map(({ value, label, desc }) => (
                 <button

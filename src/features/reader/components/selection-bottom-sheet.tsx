@@ -1,11 +1,13 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Copy, Share2, X } from 'lucide-react';
 import { useReaderStore } from '../stores/reader-store';
 import { NoteInputDialog } from './note-input-dialog';
+import { QuoteShareCard } from './quote-share-card';
 import { cn } from '@/lib/utils';
 import type { SelectedText, Highlight } from '../types';
 
@@ -21,12 +23,16 @@ const HIGHLIGHT_COLORS: { name: Highlight['color']; class: string }[] = [
 interface SelectionBottomSheetProps {
   selection: SelectedText;
   bookId: string;
+  bookTitle?: string;
+  authorName?: string;
   onClose: () => void;
 }
 
-export function SelectionBottomSheet({ selection, bookId, onClose }: SelectionBottomSheetProps) {
+export function SelectionBottomSheet({ selection, bookId, bookTitle, authorName, onClose }: SelectionBottomSheetProps) {
+  const t = useTranslations('reader');
   const { addHighlight, setSelectedText } = useReaderStore();
   const [showNoteDialog, setShowNoteDialog] = useState(false);
+  const [showShareCard, setShowShareCard] = useState(false);
 
   const dismiss = useCallback(() => {
     setSelectedText(null);
@@ -48,14 +54,9 @@ export function SelectionBottomSheet({ selection, bookId, onClose }: SelectionBo
     dismiss();
   }, [selection.text, dismiss]);
 
-  const handleShare = useCallback(async () => {
-    if (navigator.share) {
-      await navigator.share({ text: selection.text.trim() }).catch(() => {});
-    } else {
-      await navigator.clipboard.writeText(selection.text.trim()).catch(() => {});
-    }
-    dismiss();
-  }, [selection.text, dismiss]);
+  const handleShare = useCallback(() => {
+    setShowShareCard(true);
+  }, []);
 
   return (
     <>
@@ -73,7 +74,7 @@ export function SelectionBottomSheet({ selection, bookId, onClose }: SelectionBo
 
           {/* Highlight color row */}
           <div className="mb-4 flex items-center gap-3">
-            <span className="text-sm text-muted-foreground shrink-0">高亮</span>
+            <span className="text-sm text-muted-foreground shrink-0">{t('highlight')}</span>
             <div className="flex flex-1 items-center gap-2">
               {HIGHLIGHT_COLORS.map((c) => (
                 <button
@@ -93,7 +94,7 @@ export function SelectionBottomSheet({ selection, bookId, onClose }: SelectionBo
               className="text-orange-500 shrink-0"
               onClick={() => setShowNoteDialog(true)}
             >
-              + 笔记
+              + {t('addNote')}
             </Button>
           </div>
 
@@ -101,15 +102,15 @@ export function SelectionBottomSheet({ selection, bookId, onClose }: SelectionBo
           <div className="grid grid-cols-3 gap-2">
             <Button variant="outline" className="flex-col h-16 gap-1" onClick={handleCopy}>
               <Copy className="h-4 w-4" />
-              <span className="text-xs">复制</span>
+              <span className="text-xs">{t('copy')}</span>
             </Button>
             <Button variant="outline" className="flex-col h-16 gap-1" onClick={handleShare}>
               <Share2 className="h-4 w-4" />
-              <span className="text-xs">分享</span>
+              <span className="text-xs">{t('share')}</span>
             </Button>
-            <Button variant="outline" className="flex-col h-16 gap-1" aria-label="取消" onClick={dismiss}>
+            <Button variant="outline" className="flex-col h-16 gap-1" aria-label={t('cancel')} onClick={dismiss}>
               <X className="h-4 w-4" />
-              <span className="text-xs">取消</span>
+              <span className="text-xs">{t('cancel')}</span>
             </Button>
           </div>
         </SheetContent>

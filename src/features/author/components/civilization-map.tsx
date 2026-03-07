@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -13,7 +14,7 @@ import {
   Globe,
   Clock,
 } from 'lucide-react';
-import type { CivilizationMap, AuthorLink, HistoricalEvent } from '../types';
+import type { CivilizationMap, AuthorLink, HistoricalEvent, DomainPosition } from '../types';
 
 interface CivilizationMapSectionProps {
   civilizationMap: CivilizationMap;
@@ -26,6 +27,7 @@ export function CivilizationMapSection({
   authorName,
   authorEra,
 }: CivilizationMapSectionProps) {
+  const t = useTranslations('author');
   const { influences, literaryMovement, historicalPeriod, primaryGenres, themes, domains, historicalContext } = civilizationMap;
 
   return (
@@ -35,20 +37,20 @@ export function CivilizationMapSection({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Globe className="h-5 w-5" />
-            文学坐标
+            {t('literaryCoordinates')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             {literaryMovement && (
               <div>
-                <p className="text-sm text-muted-foreground">文学流派</p>
+                <p className="text-sm text-muted-foreground">{t('literaryGenre')}</p>
                 <p className="font-medium">{literaryMovement}</p>
               </div>
             )}
             {historicalPeriod && (
               <div>
-                <p className="text-sm text-muted-foreground">历史时期</p>
+                <p className="text-sm text-muted-foreground">{t('historicalPeriod')}</p>
                 <p className="font-medium">{historicalPeriod}</p>
               </div>
             )}
@@ -56,7 +58,7 @@ export function CivilizationMapSection({
 
           {primaryGenres && primaryGenres.length > 0 && (
             <div>
-              <p className="mb-2 text-sm text-muted-foreground">主要体裁</p>
+              <p className="mb-2 text-sm text-muted-foreground">{t('primaryGenresLabel')}</p>
               <div className="flex flex-wrap gap-2">
                 {primaryGenres.map((genre) => (
                   <Badge key={genre} variant="secondary">
@@ -69,7 +71,7 @@ export function CivilizationMapSection({
 
           {themes && themes.length > 0 && (
             <div>
-              <p className="mb-2 text-sm text-muted-foreground">核心主题</p>
+              <p className="mb-2 text-sm text-muted-foreground">{t('coreThemes')}</p>
               <div className="flex flex-wrap gap-2">
                 {themes.map((theme) => (
                   <Badge key={theme} variant="outline">
@@ -87,15 +89,15 @@ export function CivilizationMapSection({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
-            影响网络
+            {t('influenceNetwork')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Predecessors - Who influenced this author */}
           {influences.predecessors.length > 0 && (
             <InfluenceSection
-              title="深受影响"
-              subtitle="这些作家塑造了他的创作"
+              title={t('influencedBy')}
+              subtitle={t('influencedByDesc')}
               authors={influences.predecessors}
               icon={<ArrowRight className="h-4 w-4 text-blue-500" />}
               direction="incoming"
@@ -117,8 +119,8 @@ export function CivilizationMapSection({
           {/* Successors - Who this author influenced */}
           {influences.successors.length > 0 && (
             <InfluenceSection
-              title="影响后人"
-              subtitle="他的作品启发了这些作家"
+              title={t('influencedOthers')}
+              subtitle={t('influencedOthersDesc')}
               authors={influences.successors}
               icon={<ArrowLeft className="h-4 w-4 text-green-500" />}
               direction="outgoing"
@@ -128,8 +130,8 @@ export function CivilizationMapSection({
           {/* Contemporaries */}
           {influences.contemporaries.length > 0 && (
             <InfluenceSection
-              title="同时代作家"
-              subtitle="与他同时期活跃的文学家"
+              title={t('contemporaries')}
+              subtitle={t('contemporariesDesc')}
               authors={influences.contemporaries}
               icon={<Users className="h-4 w-4 text-purple-500" />}
               direction="peer"
@@ -139,8 +141,8 @@ export function CivilizationMapSection({
           {/* Mentors */}
           {influences.mentors && influences.mentors.length > 0 && (
             <InfluenceSection
-              title="导师"
-              subtitle="直接指导过他的人"
+              title={t('mentors')}
+              subtitle={t('mentorsDesc')}
               authors={influences.mentors}
               icon={<GraduationCap className="h-4 w-4 text-orange-500" />}
               direction="incoming"
@@ -150,8 +152,8 @@ export function CivilizationMapSection({
           {/* Students */}
           {influences.students && influences.students.length > 0 && (
             <InfluenceSection
-              title="学生"
-              subtitle="他直接教导过的作家"
+              title={t('students')}
+              subtitle={t('studentsDesc')}
               authors={influences.students}
               icon={<BookOpen className="h-4 w-4 text-teal-500" />}
               direction="outgoing"
@@ -164,36 +166,12 @@ export function CivilizationMapSection({
       {domains && domains.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>跨领域贡献</CardTitle>
+            <CardTitle>{t('crossDomainContributions')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {domains.map((domain) => (
-                <div key={domain.domain} className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium capitalize">{domain.domain}</span>
-                    <Badge
-                      variant={
-                        domain.significance === 'major'
-                          ? 'default'
-                          : domain.significance === 'moderate'
-                            ? 'secondary'
-                            : 'outline'
-                      }
-                    >
-                      {domain.significance === 'major'
-                        ? '重大'
-                        : domain.significance === 'moderate'
-                          ? '显著'
-                          : '一般'}
-                    </Badge>
-                  </div>
-                  <ul className="list-inside list-disc text-sm text-muted-foreground">
-                    {domain.contributions.map((contribution, i) => (
-                      <li key={i}>{contribution}</li>
-                    ))}
-                  </ul>
-                </div>
+                <DomainItem key={domain.domain} domain={domain} />
               ))}
             </div>
           </CardContent>
@@ -206,7 +184,7 @@ export function CivilizationMapSection({
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Clock className="h-5 w-5" />
-              历史背景
+              {t('historicalBackground')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -290,13 +268,44 @@ function AuthorLinkCard({ author }: { author: AuthorLink }) {
   );
 }
 
-const eventCategoryLabels: Record<HistoricalEvent['category'], string> = {
-  war: '战争',
-  revolution: '革命',
-  cultural: '文化',
-  political: '政治',
-  scientific: '科学',
-};
+interface DomainItemProps {
+  domain: DomainPosition;
+}
+
+function DomainItem({ domain }: DomainItemProps) {
+  const t = useTranslations('author');
+
+  const significanceLabel =
+    domain.significance === 'major'
+      ? t('significanceMajor')
+      : domain.significance === 'moderate'
+        ? t('significanceModerate')
+        : t('significanceMinor');
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center gap-2">
+        <span className="font-medium capitalize">{domain.domain}</span>
+        <Badge
+          variant={
+            domain.significance === 'major'
+              ? 'default'
+              : domain.significance === 'moderate'
+                ? 'secondary'
+                : 'outline'
+          }
+        >
+          {significanceLabel}
+        </Badge>
+      </div>
+      <ul className="list-inside list-disc text-sm text-muted-foreground">
+        {domain.contributions.map((contribution, i) => (
+          <li key={i}>{contribution}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 const eventCategoryColors: Record<HistoricalEvent['category'], string> = {
   war: 'bg-red-500',
@@ -307,6 +316,16 @@ const eventCategoryColors: Record<HistoricalEvent['category'], string> = {
 };
 
 function HistoricalEventItem({ event }: { event: HistoricalEvent }) {
+  const t = useTranslations('author');
+
+  const categoryLabels: Record<HistoricalEvent['category'], string> = {
+    war: t('eventCategoryWar'),
+    revolution: t('eventCategoryRevolution'),
+    cultural: t('eventCategoryCultural'),
+    political: t('eventCategoryPolitical'),
+    scientific: t('eventCategoryScientific'),
+  };
+
   return (
     <div className="relative pb-6 last:pb-0">
       <div
@@ -316,7 +335,7 @@ function HistoricalEventItem({ event }: { event: HistoricalEvent }) {
         <div className="flex items-center gap-2">
           <span className="font-semibold">{event.year}</span>
           <Badge variant="outline" className="text-xs">
-            {eventCategoryLabels[event.category]}
+            {categoryLabels[event.category]}
           </Badge>
         </div>
         <p className="text-sm">{event.titleZh || event.title}</p>
