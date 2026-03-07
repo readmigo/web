@@ -53,7 +53,7 @@ export function SelectionPopup({
       color: 'yellow',
     });
     setSelectedText(null);
-  }, [addHighlight, bookId, selection, setSelectedText]);
+  }, [addHighlight, bookId, selection.cfiRange, selection.text, setSelectedText]);
 
   const handleThoughts = useCallback(() => {
     setShowNoteDialog(true);
@@ -68,7 +68,7 @@ export function SelectionPopup({
       note,
     });
     setSelectedText(null);
-  }, [addHighlight, bookId, selection, setSelectedText]);
+  }, [addHighlight, bookId, selection.cfiRange, selection.text, setSelectedText]);
 
   const handleShare = useCallback(async () => {
     const shareText = selection.text.trim();
