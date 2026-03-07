@@ -33,7 +33,7 @@ export function QuoteShareCard({ open, quoteText, bookTitle, authorName, onClose
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="w-full h-full max-w-full max-h-screen m-0 rounded-none flex flex-col">
         <DialogHeader>
           <DialogTitle>{t('shareQuote')}</DialogTitle>
         </DialogHeader>
