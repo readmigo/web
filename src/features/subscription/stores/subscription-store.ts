@@ -19,7 +19,7 @@ export const useSubscriptionStore = create<SubscriptionStoreState>()(
   persist(
     (set) => ({
       tier: 'FREE',
-      status: 'expired',
+      status: 'EXPIRED',
       isActive: false,
       expiresAt: undefined,
       willRenew: false,
@@ -39,7 +39,7 @@ export const useSubscriptionStore = create<SubscriptionStoreState>()(
       reset: () =>
         set({
           tier: 'FREE',
-          status: 'expired',
+          status: 'EXPIRED',
           isActive: false,
           expiresAt: undefined,
           willRenew: false,

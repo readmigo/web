@@ -12,8 +12,8 @@ export function useSubscription() {
   const { data, isLoading } = useQuery({
     queryKey: ['subscription', 'status'],
     queryFn: async () => {
-      const res = await apiClient.get<SubscriptionState>('/subscriptions/status');
-      return res as SubscriptionState;
+      const res = await apiClient.get<{ subscription: SubscriptionState }>('/subscriptions/status');
+      return res.subscription;
     },
     staleTime: 5 * 60 * 1000,
     retry: 2,

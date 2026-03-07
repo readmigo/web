@@ -124,6 +124,7 @@ export interface BookListBook {
   rank?: number;
   customDescription?: string;
   difficulty?: number;
+  audiobookId?: string;
 }
 
 export interface BookList {
@@ -145,4 +146,16 @@ export interface BookList {
   books?: BookListBook[];
   createdAt?: string;
   updatedAt?: string;
+}
+
+export type BookstoreTabType = 'recommendation' | 'category';
+
+export interface BookstoreTab {
+  id: string;
+  slug: string;
+  name: string;
+  type: BookstoreTabType;
+  categoryId?: string;
+  icon?: string;
+  sortOrder: number;
 }

@@ -1,6 +1,6 @@
 export type SubscriptionTier = 'FREE' | 'PRO' | 'PREMIUM';
 
-export type SubscriptionStatus = 'active' | 'expired' | 'cancelled' | 'gracePeriod';
+export type SubscriptionStatus = 'ACTIVE' | 'EXPIRED' | 'CANCELLED' | 'GRACE_PERIOD';
 
 export interface SubscriptionState {
   tier: SubscriptionTier;

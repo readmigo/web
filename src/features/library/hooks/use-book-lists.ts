@@ -22,6 +22,29 @@ export function useBookLists() {
   });
 }
 
+export function useAudiobookLists() {
+  return useQuery({
+    queryKey: ['booklists', 'audiobook'],
+    queryFn: async () => {
+      const listResp = await apiClient.get<BookListsResponse>('/booklists', {
+        params: { position: 'AUDIOBOOK', limit: '10' },
+        skipAuth: true,
+      });
+      const lists = listResp.items ?? [];
+
+      const detailed = await Promise.all(
+        lists.map((list) =>
+          apiClient
+            .get<BookList>(`/booklists/${list.id}`, { skipAuth: true })
+            .catch(() => list)
+        )
+      );
+      return detailed.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    },
+    staleTime: 10 * 60 * 1000,
+  });
+}
+
 export function useBookListDetail(id: string) {
   return useQuery({
     queryKey: ['booklist', id],

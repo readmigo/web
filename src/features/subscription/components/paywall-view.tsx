@@ -53,7 +53,7 @@ const PLANS: PlanOption[] = [
     labelKey: 'plans.monthly',
     price: '¥38',
     perMonth: '¥38',
-    hasTrial: false,
+    hasTrial: true,
     isBestValue: false,
   },
   {

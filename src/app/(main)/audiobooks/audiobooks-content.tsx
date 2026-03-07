@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, Headphones } from 'lucide-react';
+import { Search, Headphones, ChevronRight } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTranslations } from 'next-intl';
 import {
@@ -13,6 +13,8 @@ import {
 } from '@/features/audiobook/hooks';
 import { formatDuration } from '@/features/audiobook/stores/audio-player-store';
 import type { AudiobookListItem, AudiobookWithProgress } from '@/features/audiobook/types';
+import { useAudiobookLists } from '@/features/library/hooks/use-book-lists';
+import type { BookList, BookListBook } from '@/features/library/types';
 
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -23,6 +25,104 @@ function useDebounce<T>(value: T, delay: number): T {
   }, [value, delay]);
 
   return debouncedValue;
+}
+
+// ============ Audiobook Themed Lists ============
+
+function AudiobookListBookCard({ book }: { book: BookListBook }) {
+  const href = book.audiobookId ? `/audiobooks/${book.audiobookId}` : `/book/${book.id}`;
+  const rating = book.doubanRating ?? book.goodreadsRating;
+
+  return (
+    <Link href={href} className="flex-shrink-0 w-[100px]">
+      <div className="relative w-[100px] h-[150px] rounded-lg overflow-hidden bg-secondary">
+        {book.coverUrl ? (
+          <Image
+            src={book.coverUrl}
+            alt={book.title}
+            fill
+            className="object-cover"
+            sizes="100px"
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center">
+            <Headphones className="h-8 w-8 text-muted-foreground" />
+          </div>
+        )}
+        <div className="absolute top-1 right-1 h-4 w-4 rounded-full bg-black/50 flex items-center justify-center">
+          <Headphones className="h-2.5 w-2.5 text-white" />
+        </div>
+      </div>
+      <p className="mt-1.5 text-xs font-medium line-clamp-2">{book.title}</p>
+      {rating != null && (
+        <p className="text-[10px] text-muted-foreground mt-0.5">★ {rating.toFixed(1)}</p>
+      )}
+    </Link>
+  );
+}
+
+function AudiobookThemedSection({ list }: { list: BookList }) {
+  const books = (list.books ?? []).slice(0, 10);
+  if (books.length === 0) return null;
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between px-0">
+        <div>
+          <h3 className="text-base font-semibold">{list.name}</h3>
+          {list.subtitle && (
+            <p className="text-xs text-muted-foreground">{list.subtitle}</p>
+          )}
+        </div>
+        <Link
+          href={`/book-list/${list.id}`}
+          className="flex items-center gap-0.5 text-xs text-primary"
+        >
+          查看全部
+          <ChevronRight className="h-3.5 w-3.5" />
+        </Link>
+      </div>
+      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+        {books.map((book) => (
+          <AudiobookListBookCard key={book.id} book={book} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AudiobookThemedSections() {
+  const { data: lists, isLoading } = useAudiobookLists();
+
+  if (isLoading) {
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-5 w-32" />
+          <Skeleton className="h-4 w-12" />
+        </div>
+        <div className="flex gap-3 overflow-hidden">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="flex-shrink-0 w-[100px] space-y-1.5">
+              <Skeleton className="h-[150px] w-[100px] rounded-lg" />
+              <Skeleton className="h-3 w-3/4" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (!lists || lists.length === 0) return null;
+
+  return (
+    <div className="space-y-6">
+      {lists.map((list) => (
+        <AudiobookThemedSection key={list.id} list={list} />
+      ))}
+      <div className="h-2 -mx-4 bg-secondary" />
+    </div>
+  );
 }
 
 // ============ Recently Listened Section ============
@@ -314,6 +414,9 @@ export function AudiobooksContent() {
 
       {/* Recently Listened */}
       <RecentlyListenedSection />
+
+      {/* Audiobook Themed Lists */}
+      <AudiobookThemedSections />
 
       {/* Language Filter */}
       <LanguageFilter
