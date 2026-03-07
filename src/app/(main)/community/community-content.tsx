@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useCallback, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api/client';
 import { formatRelativeTime } from '@/lib/utils';
@@ -46,6 +47,8 @@ const PAGE_SIZE = 20;
 // ---- Component ----
 
 export function CommunityContent() {
+  const tc = useTranslations('common');
+  const t = useTranslations('community');
   const queryClient = useQueryClient();
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -161,7 +164,7 @@ export function CommunityContent() {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-        <p className="mt-3 text-sm text-muted-foreground">加载中...</p>
+        <p className="mt-3 text-sm text-muted-foreground">{tc('loadingText')}</p>
       </div>
     );
   }
@@ -171,12 +174,12 @@ export function CommunityContent() {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <AlertTriangle className="h-10 w-10 text-destructive" />
-        <p className="mt-3 text-lg text-destructive">加载失败</p>
+        <p className="mt-3 text-lg text-destructive">{tc('loadingFailed')}</p>
         <p className="mt-1 text-sm text-muted-foreground">
-          {error instanceof Error ? error.message : '请稍后重试'}
+          {error instanceof Error ? error.message : tc('retryLater')}
         </p>
         <Button className="mt-4" variant="outline" onClick={() => refetch()}>
-          重试
+          {tc('retry')}
         </Button>
       </div>
     );
@@ -187,8 +190,8 @@ export function CommunityContent() {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <MessageSquare className="h-12 w-12 text-muted-foreground" />
-        <p className="mt-4 text-lg font-medium">欢迎来到城邦</p>
-        <p className="mt-1 text-sm text-muted-foreground">还没有任何动态</p>
+        <p className="mt-4 text-lg font-medium">{t('welcome')}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{t('noActivity')}</p>
       </div>
     );
   }
@@ -212,7 +215,7 @@ export function CommunityContent() {
         {!hasNextPage && posts.length > 0 && (
           <div className="flex flex-col items-center text-muted-foreground">
             <CheckCircle className="h-5 w-5" />
-            <p className="mt-1 text-sm">已经到底啦</p>
+            <p className="mt-1 text-sm">{t('noMore')}</p>
           </div>
         )}
       </div>
