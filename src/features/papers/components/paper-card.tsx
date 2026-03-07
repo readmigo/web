@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { FileText, MoreVertical, Trash2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -35,6 +36,7 @@ function formatDate(dateString: string): string {
 }
 
 export function PaperCard({ paper, onDelete, className }: PaperCardProps) {
+  const t = useTranslations('papers');
   return (
     <Card
       className={cn(
@@ -58,7 +60,7 @@ export function PaperCard({ paper, onDelete, className }: PaperCardProps) {
                 </p>
               )}
               <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
-                {paper.pageCount && <span>{paper.pageCount} 页</span>}
+                {paper.pageCount && <span>{t('pages', { count: paper.pageCount })}</span>}
                 <span>{formatFileSize(paper.fileSize)}</span>
                 <span>{formatDate(paper.createdAt)}</span>
               </div>
@@ -89,7 +91,7 @@ export function PaperCard({ paper, onDelete, className }: PaperCardProps) {
                 }}
               >
                 <Trash2 className="mr-2 h-4 w-4" />
-                删除
+                {t('delete')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

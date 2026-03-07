@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { BookCard } from './book-card';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Book, UserBook } from '../types';
@@ -19,6 +20,7 @@ interface BookGridProps {
 }
 
 export function BookGrid({ books, userBooks, isLoading, showProgress }: BookGridProps) {
+  const t = useTranslations('discover');
   if (isLoading) {
     return (
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
@@ -36,9 +38,9 @@ export function BookGrid({ books, userBooks, isLoading, showProgress }: BookGrid
   if (books.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
-        <p className="text-lg text-muted-foreground">暂无书籍</p>
+        <p className="text-lg text-muted-foreground">{t('emptyTitle')}</p>
         <p className="mt-2 text-sm text-muted-foreground">
-          去探索发现更多好书吧
+          {t('exploreMore')}
         </p>
       </div>
     );

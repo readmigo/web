@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Download, CheckCircle2, Pause, Play, Loader2, Trash2 } from 'lucide-react';
@@ -25,6 +26,7 @@ interface DownloadBookButtonProps {
 }
 
 export function DownloadBookButton({ book }: DownloadBookButtonProps) {
+  const t = useTranslations('offline');
   const { requireFeature, showPaywall, dismissPaywall, isPro } = useFeatureGate();
   const {
     downloadedBooks,
@@ -68,7 +70,7 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
     return (
       <Button variant="outline" className="w-full h-12 rounded-xl" onClick={handleDownload}>
         <Download className="mr-2 h-4 w-4" />
-        下载离线阅读
+        {t('downloadForOffline')}
         {!isPro && <span className="ml-2 text-xs opacity-70">Pro</span>}
       </Button>
     );
@@ -81,7 +83,7 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span>
-            下载中 {downloaded?.downloadedChapters}/{downloaded?.totalChapters} 章
+            {t('downloading', { downloaded: downloaded?.downloadedChapters, total: downloaded?.totalChapters })}
           </span>
         </div>
         <Progress value={progress} className="h-1.5" />
@@ -91,7 +93,7 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
           onClick={() => pauseDownload(book.id)}
         >
           <Pause className="mr-2 h-4 w-4" />
-          暂停下载
+          {t('pauseDownload')}
         </Button>
       </div>
     );
@@ -104,7 +106,7 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Pause className="h-4 w-4 text-orange-500" />
           <span>
-            已暂停 {downloaded?.downloadedChapters}/{downloaded?.totalChapters} 章
+            {t('paused', { downloaded: downloaded?.downloadedChapters, total: downloaded?.totalChapters })}
           </span>
         </div>
         <Progress value={progress} className="h-1.5" />
@@ -114,7 +116,7 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
           onClick={() => resumeDownload(book.id)}
         >
           <Play className="mr-2 h-4 w-4" />
-          继续下载
+          {t('resumeDownload')}
         </Button>
       </div>
     );
@@ -126,7 +128,7 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
       <div className="flex items-center gap-2">
         <div className="flex flex-1 items-center gap-2 rounded-xl border bg-muted/50 px-4 py-3">
           <CheckCircle2 className="h-4 w-4 text-green-500" />
-          <span className="text-sm font-medium">已下载离线阅读</span>
+          <span className="text-sm font-medium">{t('downloaded')}</span>
         </div>
         <AlertDialog>
           <AlertDialogTrigger asChild>
@@ -140,18 +142,18 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>删除离线内容？</AlertDialogTitle>
+              <AlertDialogTitle>{t('deleteOfflineContent')}</AlertDialogTitle>
               <AlertDialogDescription>
-                将删除《{book.title}》的离线缓存。阅读进度和书签不会受影响。
+                {t('deleteOfflineDesc', { title: book.title })}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>取消</AlertDialogCancel>
+              <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleDelete}
                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               >
-                删除
+                {t('delete')}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -164,7 +166,7 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
   return (
     <Button variant="outline" className="w-full h-12 rounded-xl" onClick={handleDownload}>
       <Download className="mr-2 h-4 w-4" />
-      重试下载
+      {t('retryDownload')}
     </Button>
   );
 }

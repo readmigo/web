@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -15,6 +16,7 @@ import { Settings2 } from 'lucide-react';
 import { useOfflineStore } from '../stores/offline-store';
 
 export function OfflineSettingsCard() {
+  const t = useTranslations('offline');
   const { settings, updateSettings, initialize, isInitialized } = useOfflineStore();
 
   useEffect(() => {
@@ -26,17 +28,17 @@ export function OfflineSettingsCard() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Settings2 className="h-5 w-5" />
-          离线设置
+          {t('settingsTitle')}
         </CardTitle>
-        <CardDescription>配置自动下载和存储偏好</CardDescription>
+        <CardDescription>{t('settingsDesc')}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Auto Download */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <Label className="text-sm font-medium">自动下载</Label>
-              <p className="text-xs text-muted-foreground">阅读时自动预下载后续章节</p>
+              <Label className="text-sm font-medium">{t('autoDownload')}</Label>
+              <p className="text-xs text-muted-foreground">{t('autoDownloadDesc')}</p>
             </div>
             <Checkbox
               checked={settings.autoDownloadEnabled}
@@ -48,8 +50,8 @@ export function OfflineSettingsCard() {
             <>
               <div className="flex items-center justify-between">
                 <div>
-                  <Label className="text-sm font-medium">仅 Wi-Fi 下载</Label>
-                  <p className="text-xs text-muted-foreground">避免使用移动数据下载</p>
+                  <Label className="text-sm font-medium">{t('wifiOnly')}</Label>
+                  <p className="text-xs text-muted-foreground">{t('wifiOnlyDesc')}</p>
                 </div>
                 <Checkbox
                   checked={settings.downloadOnWifiOnly}
@@ -59,8 +61,8 @@ export function OfflineSettingsCard() {
 
               <div className="flex items-center justify-between">
                 <div>
-                  <Label className="text-sm font-medium">预下载章节数</Label>
-                  <p className="text-xs text-muted-foreground">提前缓存接下来的章节</p>
+                  <Label className="text-sm font-medium">{t('predownloadChapters')}</Label>
+                  <p className="text-xs text-muted-foreground">{t('predownloadDesc')}</p>
                 </div>
                 <Select
                   value={String(settings.predownloadNextChapters)}
@@ -72,7 +74,7 @@ export function OfflineSettingsCard() {
                   <SelectContent>
                     {[1, 2, 3, 5, 10].map((n) => (
                       <SelectItem key={n} value={String(n)}>
-                        {n} 章
+                        {t('chaptersCount', { count: n })}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -87,8 +89,8 @@ export function OfflineSettingsCard() {
         {/* Storage Limit */}
         <div className="flex items-center justify-between">
           <div>
-            <Label className="text-sm font-medium">存储上限</Label>
-            <p className="text-xs text-muted-foreground">离线内容最大占用空间</p>
+            <Label className="text-sm font-medium">{t('storageLimit')}</Label>
+            <p className="text-xs text-muted-foreground">{t('storageLimitDesc')}</p>
           </div>
           <Select
             value={String(settings.maxStorageMB)}
@@ -102,7 +104,7 @@ export function OfflineSettingsCard() {
               <SelectItem value="1000">1 GB</SelectItem>
               <SelectItem value="2000">2 GB</SelectItem>
               <SelectItem value="5000">5 GB</SelectItem>
-              <SelectItem value="0">无限制</SelectItem>
+              <SelectItem value="0">{t('unlimited')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -110,8 +112,8 @@ export function OfflineSettingsCard() {
         {/* Auto Delete */}
         <div className="flex items-center justify-between">
           <div>
-            <Label className="text-sm font-medium">自动删除</Label>
-            <p className="text-xs text-muted-foreground">超出时限后自动删除离线内容</p>
+            <Label className="text-sm font-medium">{t('autoDelete')}</Label>
+            <p className="text-xs text-muted-foreground">{t('autoDeleteDesc')}</p>
           </div>
           <Select
             value={String(settings.autoDeleteAfterDays)}
@@ -121,12 +123,10 @@ export function OfflineSettingsCard() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="0">永不</SelectItem>
-              <SelectItem value="7">7 天</SelectItem>
-              <SelectItem value="14">14 天</SelectItem>
-              <SelectItem value="30">30 天</SelectItem>
-              <SelectItem value="60">60 天</SelectItem>
-              <SelectItem value="90">90 天</SelectItem>
+              <SelectItem value="0">{t('neverDelete')}</SelectItem>
+              {[7, 14, 30, 60, 90].map((n) => (
+                <SelectItem key={n} value={String(n)}>{t('daysCount', { count: n })}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

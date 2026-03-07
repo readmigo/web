@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import {
   Dialog,
   DialogContent,
@@ -25,6 +26,7 @@ export function KeyboardShortcutsDialog({
   onOpenChange,
   shortcuts,
 }: KeyboardShortcutsDialogProps) {
+  const t = useTranslations('settings');
   const groupedShortcuts = groupShortcuts(shortcuts);
 
   return (
@@ -32,8 +34,8 @@ export function KeyboardShortcutsDialog({
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            键盘快捷键
-            <Badge variant="secondary">按 ? 显示/隐藏</Badge>
+            {t('keyboardShortcuts')}
+            <Badge variant="secondary">{t('shortcutsToggleHint')}</Badge>
           </DialogTitle>
         </DialogHeader>
 

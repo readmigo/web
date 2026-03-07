@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -66,6 +67,7 @@ export function SearchResultsDropdown({
   onRemoveHistory,
   onClearHistory,
 }: SearchResultsDropdownProps) {
+  const t = useTranslations('search');
   const router = useRouter();
 
   const handleNavigate = (href: string) => {
@@ -96,7 +98,7 @@ export function SearchResultsDropdown({
             <div>
               <SectionHeader
                 icon={<Clock className="h-3 w-3" />}
-                label="最近搜索"
+                label={t('recentSearches')}
                 action={
                   onClearHistory && (
                     <button
@@ -106,7 +108,7 @@ export function SearchResultsDropdown({
                         onClearHistory();
                       }}
                     >
-                      清除全部
+                      {t('clearAll')}
                     </button>
                   )
                 }
@@ -126,7 +128,7 @@ export function SearchResultsDropdown({
                         e.stopPropagation();
                         onRemoveHistory(term);
                       }}
-                      aria-label={`删除搜索记录: ${term}`}
+                      aria-label={t('deleteSearchTerm', { term })}
                     >
                       <X className="h-3.5 w-3.5 text-muted-foreground" />
                     </button>
@@ -183,7 +185,7 @@ export function SearchResultsDropdown({
         <div className="flex flex-col items-center py-8 text-muted-foreground">
           <Search className="h-8 w-8 opacity-50" />
           <p className="mt-2 text-sm">
-            未找到 &ldquo;{query}&rdquo; 的相关结果
+            {t('noResults', { query })}
           </p>
         </div>
       </DropdownWrapper>
@@ -197,7 +199,7 @@ export function SearchResultsDropdown({
           <div>
             <SectionHeader
               icon={<User className="h-3 w-3" />}
-              label={`作者 (${authors.total})`}
+              label={t('authors', { count: authors.total })}
             />
             {authorItems.map((author) => (
               <button
@@ -227,7 +229,7 @@ export function SearchResultsDropdown({
                   )}
                 </div>
                 <span className="text-xs text-muted-foreground">
-                  {author.bookCount} 本书
+                  {t('booksCount', { count: author.bookCount })}
                 </span>
               </button>
             ))}
@@ -239,7 +241,7 @@ export function SearchResultsDropdown({
             {authorItems.length > 0 && <SectionDivider />}
             <SectionHeader
               icon={<BookOpen className="h-3 w-3" />}
-              label={`书籍 (${books.total})`}
+              label={t('books', { count: books.total })}
             />
             {bookItems.map((book) => (
               <button
@@ -276,7 +278,7 @@ export function SearchResultsDropdown({
             )}
             <SectionHeader
               icon={<Quote className="h-3 w-3" />}
-              label={`名言 (${quotes.total})`}
+              label={t('quotes', { count: quotes.total })}
             />
             {quoteItems.map((quote) => (
               <button

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BookOpen, ChevronDown } from 'lucide-react';
@@ -49,10 +50,11 @@ interface ReadingGuideSectionProps {
 }
 
 export function ReadingGuideSection({ guide }: ReadingGuideSectionProps) {
+  const t = useTranslations('bookDetail');
   const sections = [
-    { title: '阅读提醒', content: guide.readingWarnings },
-    { title: '故事时间线', content: guide.storyTimeline },
-    { title: '快速入门', content: guide.quickStartGuide },
+    { title: t('readingWarnings'), content: guide.readingWarnings },
+    { title: t('storyTimeline'), content: guide.storyTimeline },
+    { title: t('quickStart'), content: guide.quickStartGuide },
   ].filter((s) => s.content);
 
   if (sections.length === 0) return null;
@@ -62,10 +64,10 @@ export function ReadingGuideSection({ guide }: ReadingGuideSectionProps) {
       <CardContent className="p-6">
         <div className="mb-4 flex items-center gap-2">
           <BookOpen className="h-5 w-5 text-primary" />
-          <h2 className="text-lg font-semibold">阅读指南</h2>
+          <h2 className="text-lg font-semibold">{t('readingGuide')}</h2>
           {guide.sourceType === 'AI_GENERATED' && (
             <Badge variant="secondary" className="text-xs">
-              AI 生成
+              {t('aiGenerated')}
             </Badge>
           )}
         </div>

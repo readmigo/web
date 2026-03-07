@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -32,7 +33,7 @@ import {
 } from 'lucide-react';
 import { useOfflineStore } from '../stores/offline-store';
 import type { DownloadedBook } from '../types';
-import { DOWNLOAD_STATUS_LABEL } from '../types';
+import type { DownloadStatus } from '../types';
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return '0 B';
@@ -59,8 +60,18 @@ function StatusIcon({ status }: { status: DownloadedBook['status'] }) {
 }
 
 function DownloadedBookRow({ book }: { book: DownloadedBook }) {
+  const t = useTranslations('offline');
   const { pauseDownload, resumeDownload, deleteBook } = useOfflineStore();
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const statusLabelMap: Record<DownloadStatus, string> = {
+    not_downloaded: t('statusNotDownloaded'),
+    queued: t('statusQueued'),
+    downloading: t('statusDownloading'),
+    paused: t('statusPaused'),
+    completed: t('statusCompleted'),
+    failed: t('statusFailed'),
+  };
 
   const isActive = book.status === 'downloading' || book.status === 'queued';
   const progress = book.totalChapters > 0
@@ -92,7 +103,7 @@ function DownloadedBookRow({ book }: { book: DownloadedBook }) {
         <div className="flex items-center gap-2">
           <StatusIcon status={book.status} />
           <span className="text-xs text-muted-foreground">
-            {DOWNLOAD_STATUS_LABEL[book.status]}
+            {statusLabelMap[book.status]}
           </span>
           {book.downloadedSizeBytes > 0 && (
             <span className="text-xs text-muted-foreground">
@@ -105,7 +116,7 @@ function DownloadedBookRow({ book }: { book: DownloadedBook }) {
         )}
         {isActive && (
           <p className="text-xs text-muted-foreground">
-            {book.downloadedChapters}/{book.totalChapters} 章
+            {t('chaptersProgress', { downloaded: book.downloadedChapters, total: book.totalChapters })}
           </p>
         )}
       </div>
@@ -134,18 +145,18 @@ function DownloadedBookRow({ book }: { book: DownloadedBook }) {
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>删除离线内容？</AlertDialogTitle>
+              <AlertDialogTitle>{t('deleteOfflineContent')}</AlertDialogTitle>
               <AlertDialogDescription>
-                将删除《{book.title}》的离线缓存，需重新下载才能离线阅读。
+                {t('deleteOfflineDescRedownload', { title: book.title })}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>取消</AlertDialogCancel>
+              <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleDelete}
                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               >
-                删除
+                {t('delete')}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -156,6 +167,7 @@ function DownloadedBookRow({ book }: { book: DownloadedBook }) {
 }
 
 export function OfflineDownloadsCard() {
+  const t = useTranslations('offline');
   const {
     downloadedBooks,
     downloadQueue,
@@ -195,15 +207,15 @@ export function OfflineDownloadsCard() {
           <div>
             <CardTitle className="flex items-center gap-2">
               <HardDrive className="h-5 w-5" />
-              离线下载
+              {t('downloadsTitle')}
             </CardTitle>
-            <CardDescription>已下载的书籍，可在无网络时阅读</CardDescription>
+            <CardDescription>{t('downloadsDesc')}</CardDescription>
           </div>
           <Badge variant={isOnline ? 'default' : 'secondary'} className="flex items-center gap-1">
             {isOnline ? (
-              <><Wifi className="h-3 w-3" />在线</>
+              <><Wifi className="h-3 w-3" />{t('online')}</>
             ) : (
-              <><WifiOff className="h-3 w-3" />离线</>
+              <><WifiOff className="h-3 w-3" />{t('offline')}</>
             )}
           </Badge>
         </div>
@@ -214,7 +226,7 @@ export function OfflineDownloadsCard() {
         {storageInfo && (
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">存储空间</span>
+              <span className="text-muted-foreground">{t('storageSpace')}</span>
               <span className="font-medium">
                 {formatBytes(storageInfo.used)} / {formatBytes(storageInfo.quota)}
               </span>
@@ -228,7 +240,7 @@ export function OfflineDownloadsCard() {
           <div className="rounded-lg bg-muted/50 p-3 text-sm">
             <div className="flex items-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
-              <span>{activeQueueItems.length} 个章节下载中...</span>
+              <span>{t('chaptersDownloading', { count: activeQueueItems.length })}</span>
             </div>
           </div>
         )}
@@ -236,7 +248,7 @@ export function OfflineDownloadsCard() {
         {/* Books in progress */}
         {booksInProgress.length > 0 && (
           <div className="space-y-2">
-            <p className="text-sm font-medium text-muted-foreground">下载中</p>
+            <p className="text-sm font-medium text-muted-foreground">{t('inProgress')}</p>
             <div className="space-y-2">
               {booksInProgress.map((book) => (
                 <DownloadedBookRow key={book.bookId} book={book} />
@@ -248,7 +260,7 @@ export function OfflineDownloadsCard() {
         {/* Completed books */}
         {booksCompleted.length > 0 && (
           <div className="space-y-2">
-            <p className="text-sm font-medium text-muted-foreground">已下载</p>
+            <p className="text-sm font-medium text-muted-foreground">{t('completed')}</p>
             <div className="space-y-2">
               {booksCompleted.map((book) => (
                 <DownloadedBookRow key={book.bookId} book={book} />
@@ -261,9 +273,9 @@ export function OfflineDownloadsCard() {
         {downloadedBooks.length === 0 && (
           <div className="flex flex-col items-center gap-2 py-8 text-center">
             <BookOpen className="h-10 w-10 text-muted-foreground" />
-            <p className="font-medium">暂无离线书籍</p>
+            <p className="font-medium">{t('noBooks')}</p>
             <p className="text-sm text-muted-foreground">
-              在书籍详情页点击「下载离线」，即可在无网络时阅读
+              {t('noBooksHint')}
             </p>
           </div>
         )}
@@ -282,23 +294,23 @@ export function OfflineDownloadsCard() {
                 ) : (
                   <Trash2 className="mr-2 h-4 w-4" />
                 )}
-                清除所有离线内容
+                {t('clearAll')}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>清除所有离线内容？</AlertDialogTitle>
+                <AlertDialogTitle>{t('clearAllConfirm')}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  将删除所有已下载的书籍内容。阅读进度和书签不会受影响，但需重新下载才能离线阅读。
+                  {t('clearAllDesc')}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>取消</AlertDialogCancel>
+                <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={handleClearAll}
                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 >
-                  清除全部
+                  {t('clearConfirm')}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import {
   Dialog,
@@ -33,6 +34,7 @@ interface GlobalSearchProps {
 }
 
 export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
+  const t = useTranslations('search');
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -43,29 +45,29 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
       {
         id: 'home',
         type: 'page',
-        title: '首页',
-        description: '返回首页',
+        title: t('home'),
+        description: t('homeDesc'),
         icon: <Compass className="h-4 w-4" />,
         href: '/',
       },
       {
         id: 'explore',
         type: 'page',
-        title: '发现',
-        description: '探索新书籍',
+        title: t('explore'),
+        description: t('exploreDesc'),
         icon: <Compass className="h-4 w-4" />,
         href: '/explore',
       },
       {
         id: 'settings',
         type: 'page',
-        title: '设置',
-        description: '管理应用设置',
+        title: t('settings'),
+        description: t('settingsDesc'),
         icon: <Settings className="h-4 w-4" />,
         href: '/settings',
       },
     ],
-    []
+    [t]
   );
 
   // Filter results based on query
@@ -75,7 +77,7 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
         {
           id: 'recent-header',
           type: 'action' as const,
-          title: '快速导航',
+          title: t('quickNav'),
           icon: <Clock className="h-4 w-4" />,
         },
         ...navigationItems.slice(0, 5),
@@ -162,7 +164,7 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
         <div className="flex items-center border-b px-3">
           <Search className="h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="搜索页面、书籍、词汇..."
+            placeholder={t('placeholder')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -180,8 +182,8 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
             {results.length === 0 ? (
               <div className="py-8 text-center text-muted-foreground">
                 <Search className="mx-auto h-8 w-8 opacity-50" />
-                <p className="mt-2">未找到结果</p>
-                <p className="text-sm">尝试其他关键词</p>
+                <p className="mt-2">{t('empty')}</p>
+                <p className="text-sm">{t('emptyHint')}</p>
               </div>
             ) : (
               <div className="space-y-1">
@@ -233,15 +235,15 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
         {/* Footer */}
         <div className="flex items-center justify-between border-t px-3 py-2 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
-            <span>↑↓ 导航</span>
-            <span>↵ 选择</span>
-            <span>ESC 关闭</span>
+            <span>{t('navHints')}</span>
+            <span>{t('selectHint')}</span>
+            <span>{t('closeHint')}</span>
           </div>
           <div className="flex items-center gap-1">
             <kbd className="rounded bg-muted px-1.5 py-0.5">⌘</kbd>
             <span>+</span>
             <kbd className="rounded bg-muted px-1.5 py-0.5">K</kbd>
-            <span>打开搜索</span>
+            <span>{t('openHint')}</span>
           </div>
         </div>
       </DialogContent>

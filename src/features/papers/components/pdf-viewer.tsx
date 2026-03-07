@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -28,6 +29,7 @@ export function PdfViewer({
   onDocumentLoad,
   className,
 }: PdfViewerProps) {
+  const t = useTranslations('papers');
   const [numPages, setNumPages] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,7 +47,7 @@ export function PdfViewer({
   const handleDocumentLoadError = useCallback((err: Error) => {
     console.error('PDF load error:', err);
     setIsLoading(false);
-    setError('无法加载 PDF 文件');
+    setError(t('pdfLoadError'));
   }, []);
 
   const handlePageClick = useCallback(

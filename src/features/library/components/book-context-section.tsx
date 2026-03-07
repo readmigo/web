@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BookText, ChevronDown, ExternalLink } from 'lucide-react';
@@ -44,12 +45,11 @@ function CollapsibleSection({
   );
 }
 
-const sourceLabels: Record<string, string> = {
+const SOURCE_LABELS_STATIC: Record<string, string> = {
   WIKIPEDIA: 'Wikipedia',
   STANDARD_EBOOKS: 'Standard Ebooks',
   OPEN_LIBRARY: 'Open Library',
   WIKIDATA: 'Wikidata',
-  MANUAL: '人工编辑',
 };
 
 interface BookContextSectionProps {
@@ -57,11 +57,16 @@ interface BookContextSectionProps {
 }
 
 export function BookContextSection({ context }: BookContextSectionProps) {
+  const t = useTranslations('bookDetail');
+  const sourceLabels: Record<string, string> = {
+    ...SOURCE_LABELS_STATIC,
+    MANUAL: t('manual'),
+  };
   const sections = [
-    { title: '创作背景', content: context.creationBackground },
-    { title: '历史背景', content: context.historicalContext },
-    { title: '主题', content: context.themes },
-    { title: '文学风格', content: context.literaryStyle },
+    { title: t('creationBackground'), content: context.creationBackground },
+    { title: t('historicalContext'), content: context.historicalContext },
+    { title: t('themes'), content: context.themes },
+    { title: t('literaryStyle'), content: context.literaryStyle },
   ].filter((s) => s.content);
 
   if (sections.length === 0) return null;
@@ -71,7 +76,7 @@ export function BookContextSection({ context }: BookContextSectionProps) {
       <CardContent className="p-6">
         <div className="mb-4 flex items-center gap-2">
           <BookText className="h-5 w-5 text-primary" />
-          <h2 className="text-lg font-semibold">图书背景</h2>
+          <h2 className="text-lg font-semibold">{t('bookContext')}</h2>
           <Badge variant="secondary" className="text-xs">
             {sourceLabels[context.sourceType] || context.sourceType}
           </Badge>
@@ -100,7 +105,7 @@ export function BookContextSection({ context }: BookContextSectionProps) {
               className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-primary"
             >
               <ExternalLink className="h-3 w-3" />
-              <span>查看来源</span>
+              <span>{t('viewSource')}</span>
             </a>
           </div>
         )}

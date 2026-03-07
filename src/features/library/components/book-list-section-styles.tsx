@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Star, ChevronRight } from 'lucide-react';
@@ -438,7 +439,8 @@ export function DarkMysterySection({ books }: { books: BookListBook[] }) {
 // Phone: 75px  Pad: 90px  Desktop: 110px
 
 export function RoyalTheaterSection({ books }: { books: BookListBook[] }) {
-  // Split into two groups: first 4 as "悲剧", rest as "喜剧"
+  const t = useTranslations('bookList');
+  // Split into two groups: first 4 as tragedy, rest as comedy
   const tragedies = books.slice(0, 4);
   const comedies = books.slice(4, 10);
 
@@ -464,7 +466,7 @@ export function RoyalTheaterSection({ books }: { books: BookListBook[] }) {
       {tragedies.length > 0 && (
         <div>
           <span className="mb-2 inline-block rounded-full bg-red-500/80 px-2.5 py-0.5 text-[11px] font-medium text-white">
-            悲剧
+            {t('tragedy')}
           </span>
           {renderRow(tragedies)}
         </div>
@@ -472,7 +474,7 @@ export function RoyalTheaterSection({ books }: { books: BookListBook[] }) {
       {comedies.length > 0 && (
         <div>
           <span className="mb-2 inline-block rounded-full bg-blue-500/80 px-2.5 py-0.5 text-[11px] font-medium text-white">
-            喜剧
+            {t('comedy')}
           </span>
           {renderRow(comedies)}
         </div>
