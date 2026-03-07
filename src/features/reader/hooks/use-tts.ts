@@ -1,359 +1,473 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-export interface TTSVoice {
-  name: string;
-  lang: string;
-  default: boolean;
-  localService: boolean;
-  voiceURI: string;
-}
+import { apiClient } from '@/lib/api/client';
+
+// ─── Types (aligned with iOS TTS.swift) ──────────────────────────────────────
+
+export type TTSHighlightMode = 'none' | 'word' | 'sentence' | 'paragraph';
+export type TTSReadingMode = 'continuous' | 'chapter' | 'selection';
+export type TTSState = 'idle' | 'playing' | 'paused' | 'loading';
+export type TTSAudioSource = 'system' | { cloud: string };
 
 export interface TTSSettings {
-  rate: number;      // 0.1 - 10, default 1
-  pitch: number;     // 0 - 2, default 1
-  volume: number;    // 0 - 1, default 1
-  voiceURI: string | null;
-}
-
-export interface TTSState {
-  isPlaying: boolean;
-  isPaused: boolean;
-  isSpeaking: boolean;
-  currentSentenceIndex: number;
-  totalSentences: number;
-  currentText: string;
-  progress: number;
+  rate: number;                       // 0.5–2.0, default 1.0
+  pitch: number;                      // 0.5–2.0, default 1.0
+  volume: number;                     // 0.0–1.0, default 1.0
+  voiceURI: string | null;            // system voice identifier
+  language: string;                   // e.g. "en-US"
+  highlightMode: TTSHighlightMode;
+  autoScroll: boolean;
+  autoPageTurn: boolean;
+  sleepTimerMinutes: number | null;   // null = off, -1 = end of chapter
+  readingMode: TTSReadingMode;
+  pauseBetweenSentences: number;      // seconds: 0.2 / 0.3 / 0.5
+  pauseBetweenParagraphs: number;     // seconds: 0.5 / 0.8 / 1.2
+  audioSource: TTSAudioSource;
 }
 
 const DEFAULT_SETTINGS: TTSSettings = {
-  rate: 1,
-  pitch: 1,
-  volume: 1,
+  rate: 1.0,
+  pitch: 1.0,
+  volume: 1.0,
   voiceURI: null,
+  language: 'en-US',
+  highlightMode: 'sentence',
+  autoScroll: true,
+  autoPageTurn: true,
+  sleepTimerMinutes: null,
+  readingMode: 'continuous',
+  pauseBetweenSentences: 0.3,
+  pauseBetweenParagraphs: 0.8,
+  audioSource: 'system',
 };
 
-const STORAGE_KEY = 'readmigo_tts_settings';
+export interface SystemVoice {
+  id: string;         // voiceURI
+  name: string;
+  language: string;
+  quality: 'default' | 'enhanced';
+  gender: 'male' | 'female' | 'neutral';
+  voiceURI: string;
+}
 
-/**
- * Split text into sentences for TTS
- */
+export interface CloudVoice {
+  voiceId: string;
+  displayName: string;
+  gender: string;
+  accent: string;
+  quality: string;
+  minPlan: string;
+  provider: string;
+  sampleUrl: string | null;
+  available: boolean;
+}
+
+export interface TTSProgress {
+  sentenceIndex: number;
+  totalSentences: number;
+  paragraphIndex: number;
+  totalParagraphs: number;
+  currentText: string;
+  percentage: number;
+}
+
+export type SleepTimerOptionValue = 0 | 5 | 10 | 15 | 30 | 45 | 60 | -1;
+
+export const SLEEP_TIMER_OPTIONS: Array<{ value: SleepTimerOptionValue; label: string }> = [
+  { value: 0, label: '关闭' },
+  { value: 5, label: '5 分钟' },
+  { value: 10, label: '10 分钟' },
+  { value: 15, label: '15 分钟' },
+  { value: 30, label: '30 分钟' },
+  { value: 45, label: '45 分钟' },
+  { value: 60, label: '1 小时' },
+  { value: -1, label: '章节末尾' },
+];
+
+const STORAGE_KEY = 'readmigo_tts_settings_v2';
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
+function splitIntoParagraphs(text: string): string[] {
+  return text
+    .split(/\n{2,}|\n(?=\S)/)
+    .map((p) => p.replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim())
+    .filter((p) => p.length > 2);
+}
+
 function splitIntoSentences(text: string): string[] {
-  // Clean up the text first
-  const cleaned = text
-    .replace(/\n+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-
-  // Split by sentence-ending punctuation, keeping Chinese punctuation
-  const sentences = cleaned
+  return text
     .split(/(?<=[.!?。！？])\s*/)
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
-
-  return sentences;
 }
 
-/**
- * Hook for Text-to-Speech functionality using Web Speech API
- */
-export function useTTS() {
-  const [state, setState] = useState<TTSState>({
-    isPlaying: false,
-    isPaused: false,
-    isSpeaking: false,
-    currentSentenceIndex: 0,
-    totalSentences: 0,
-    currentText: '',
-    progress: 0,
-  });
+// Novelty/effect voices not suitable for reading (mirrors iOS TTSVoice.noveltyVoiceIDs)
+const NOVELTY_VOICES = new Set([
+  'com.apple.speech.synthesis.voice.Albert',
+  'com.apple.speech.synthesis.voice.BadNews',
+  'com.apple.speech.synthesis.voice.Bahh',
+  'com.apple.speech.synthesis.voice.Bells',
+  'com.apple.speech.synthesis.voice.Boing',
+  'com.apple.speech.synthesis.voice.Bubbles',
+  'com.apple.speech.synthesis.voice.Cellos',
+  'com.apple.speech.synthesis.voice.Deranged',
+  'com.apple.speech.synthesis.voice.GoodNews',
+  'com.apple.speech.synthesis.voice.Hysterical',
+  'com.apple.speech.synthesis.voice.Junior',
+  'com.apple.speech.synthesis.voice.Kathy',
+  'com.apple.speech.synthesis.voice.Organ',
+  'com.apple.speech.synthesis.voice.Princess',
+  'com.apple.speech.synthesis.voice.Ralph',
+  'com.apple.speech.synthesis.voice.Trinoids',
+  'com.apple.speech.synthesis.voice.Whisper',
+  'com.apple.speech.synthesis.voice.Zarvox',
+]);
 
+function guessGender(name: string): 'male' | 'female' | 'neutral' {
+  const n = name.toLowerCase();
+  const female = ['samantha', 'karen', 'moira', 'tessa', 'fiona', 'veena', 'alice', 'alva', 'amelie', 'anna', 'carmit', 'damayanti', 'ellen', 'ioana', 'joana', 'kanya', 'kyoko', 'laila', 'laura', 'lekha', 'luciana', 'mariska', 'melina', 'milena', 'nora', 'paulina', 'sara', 'satu', 'sinji', 'tina', 'yuna', 'yelda', 'zosia', 'zuzana', 'female', 'woman', 'mei-jia'];
+  const male = ['alex', 'daniel', 'diego', 'fred', 'jorge', 'juan', 'lee', 'male', 'man', 'oliver', 'thomas', 'tom', 'xander', 'yuri'];
+  for (const w of female) if (n.includes(w)) return 'female';
+  for (const w of male) if (n.includes(w)) return 'male';
+  return 'neutral';
+}
+
+// ─── Hook ─────────────────────────────────────────────────────────────────────
+
+export function useTTS() {
+  const [ttsState, setTtsState] = useState<TTSState>('idle');
   const [settings, setSettings] = useState<TTSSettings>(DEFAULT_SETTINGS);
-  const [voices, setVoices] = useState<TTSVoice[]>([]);
+  const [systemVoices, setSystemVoices] = useState<SystemVoice[]>([]);
+  const [cloudVoices, setCloudVoices] = useState<CloudVoice[]>([]);
+  const [cloudVoicesError, setCloudVoicesError] = useState<string | null>(null);
+  const [progress, setProgress] = useState<TTSProgress | null>(null);
+  const [sleepTimerRemaining, setSleepTimerRemaining] = useState<number | null>(null);
   const [isSupported, setIsSupported] = useState(true);
 
+  // Refs for imperative playback (no re-render needed)
   const synthRef = useRef<SpeechSynthesis | null>(null);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const sentencesRef = useRef<string[]>([]);
-  const currentIndexRef = useRef(0);
-  const isPlayingRef = useRef(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const settingsRef = useRef(settings);
+  const sleepIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const sleepRemainingRef = useRef<number | null>(null);
 
-  // Initialize speech synthesis
+  // All mutable playback state in one ref
+  const pbRef = useRef({
+    isActive: false,
+    paragraphs: [] as string[],
+    paraIndex: 0,
+    sentences: [] as string[],
+    sentIndex: 0,
+  });
+
+  // Keep settingsRef current
+  useEffect(() => { settingsRef.current = settings; }, [settings]);
+
+  // Initialize Web Speech API
   useEffect(() => {
-    if (typeof window === 'undefined') {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
       setIsSupported(false);
       return;
     }
-
-    if (!('speechSynthesis' in window)) {
-      setIsSupported(false);
-      return;
-    }
-
     synthRef.current = window.speechSynthesis;
 
-    // Load saved settings
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        setSettings({ ...DEFAULT_SETTINGS, ...parsed });
-      }
-    } catch {
-      // Ignore parsing errors
-    }
+      if (saved) setSettings((p) => ({ ...p, ...JSON.parse(saved) }));
+    } catch { /* ignore */ }
 
-    // Load voices
     const loadVoices = () => {
-      const availableVoices = synthRef.current?.getVoices() || [];
-      const mapped: TTSVoice[] = availableVoices.map((v) => ({
-        name: v.name,
-        lang: v.lang,
-        default: v.default,
-        localService: v.localService,
-        voiceURI: v.voiceURI,
-      }));
-      setVoices(mapped);
+      const avail = synthRef.current?.getVoices() || [];
+      setSystemVoices(
+        avail
+          .filter((v) => !NOVELTY_VOICES.has(v.voiceURI))
+          .map((v) => ({
+            id: v.voiceURI,
+            name: v.name,
+            language: v.lang,
+            quality: /enhanced|premium/i.test(v.name) ? 'enhanced' as const : 'default' as const,
+            gender: guessGender(v.name),
+            voiceURI: v.voiceURI,
+          }))
+      );
     };
-
-    // Voices may load asynchronously
     loadVoices();
-    if (synthRef.current) {
-      synthRef.current.onvoiceschanged = loadVoices;
-    }
+    synthRef.current.onvoiceschanged = loadVoices;
 
     return () => {
-      if (synthRef.current) {
-        synthRef.current.cancel();
-      }
+      synthRef.current?.cancel();
+      clearSleepTimer();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Save settings when they change
+  // Persist settings
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
     }
   }, [settings]);
 
-  // Get voice object by URI
-  const getVoice = useCallback((voiceURI: string | null): SpeechSynthesisVoice | null => {
-    if (!voiceURI || !synthRef.current) return null;
-    const availableVoices = synthRef.current.getVoices();
-    return availableVoices.find((v) => v.voiceURI === voiceURI) || null;
+  // ─── Sleep timer ────────────────────────────────────────────────────────────
+
+  const clearSleepTimer = () => {
+    if (sleepIntervalRef.current) clearInterval(sleepIntervalRef.current);
+    sleepIntervalRef.current = null;
+    sleepRemainingRef.current = null;
+    setSleepTimerRemaining(null);
+  };
+
+  const startSleepTimer = (minutes: number) => {
+    clearSleepTimer();
+    if (minutes <= 0) return;
+    const secs = minutes * 60;
+    sleepRemainingRef.current = secs;
+    setSleepTimerRemaining(secs);
+    sleepIntervalRef.current = setInterval(() => {
+      const rem = (sleepRemainingRef.current ?? 1) - 1;
+      sleepRemainingRef.current = rem;
+      setSleepTimerRemaining(rem);
+      if (rem <= 0) {
+        clearSleepTimer();
+        doStop();
+      }
+    }, 1000);
+  };
+
+  // ─── Core stop ──────────────────────────────────────────────────────────────
+
+  const doStop = useCallback(() => {
+    pbRef.current.isActive = false;
+    synthRef.current?.cancel();
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+      audioRef.current = null;
+    }
+    clearSleepTimer();
+    setTtsState('idle');
+    setProgress(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Speak a single sentence
-  const speakSentence = useCallback((text: string, onEnd?: () => void) => {
-    if (!synthRef.current || !text) return;
+  // ─── Advance engine (assigned on every render to stay fresh) ────────────────
 
-    // Cancel any ongoing speech
-    synthRef.current.cancel();
+  const advanceRef = useRef<() => Promise<void>>(async () => {});
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = settings.rate;
-    utterance.pitch = settings.pitch;
-    utterance.volume = settings.volume;
+  advanceRef.current = async () => {
+    const pb = pbRef.current;
+    if (!pb.isActive) return;
+    const s = settingsRef.current;
 
-    const voice = getVoice(settings.voiceURI);
-    if (voice) {
-      utterance.voice = voice;
-    }
-
-    utterance.onstart = () => {
-      setState((prev) => ({
-        ...prev,
-        isSpeaking: true,
-        currentText: text,
-      }));
-    };
-
-    utterance.onend = () => {
-      setState((prev) => ({
-        ...prev,
-        isSpeaking: false,
-      }));
-      onEnd?.();
-    };
-
-    utterance.onerror = (event) => {
-      console.error('TTS error:', event.error);
-      setState((prev) => ({
-        ...prev,
-        isSpeaking: false,
-        isPlaying: false,
-      }));
-    };
-
-    utteranceRef.current = utterance;
-    synthRef.current.speak(utterance);
-  }, [settings, getVoice]);
-
-  // Speak next sentence in sequence
-  const speakNextSentence = useCallback(() => {
-    if (!isPlayingRef.current) return;
-
-    const sentences = sentencesRef.current;
-    const index = currentIndexRef.current;
-
-    if (index >= sentences.length) {
-      // Finished all sentences
-      setState((prev) => ({
-        ...prev,
-        isPlaying: false,
-        isSpeaking: false,
-        progress: 100,
-      }));
-      isPlayingRef.current = false;
+    // End of paragraph?
+    if (pb.sentIndex >= pb.sentences.length) {
+      const nextPara = pb.paraIndex + 1;
+      if (nextPara >= pb.paragraphs.length) {
+        pb.isActive = false;
+        setTtsState('idle');
+        setProgress(null);
+        clearSleepTimer();
+        return;
+      }
+      pb.paraIndex = nextPara;
+      pb.sentences = splitIntoSentences(pb.paragraphs[nextPara]);
+      pb.sentIndex = 0;
+      await sleep(s.pauseBetweenParagraphs * 1000);
+      if (pb.isActive) await advanceRef.current();
       return;
     }
 
-    const sentence = sentences[index];
-    currentIndexRef.current = index + 1;
+    const sentence = pb.sentences[pb.sentIndex];
+    pb.sentIndex += 1;
 
-    setState((prev) => ({
-      ...prev,
-      currentSentenceIndex: index,
-      progress: (index / sentences.length) * 100,
-    }));
-
-    speakSentence(sentence, speakNextSentence);
-  }, [speakSentence]);
-
-  // Start speaking text
-  const speak = useCallback((text: string, startFromIndex = 0) => {
-    if (!synthRef.current || !text) return;
-
-    // Split into sentences
-    const sentences = splitIntoSentences(text);
-    if (sentences.length === 0) return;
-
-    sentencesRef.current = sentences;
-    currentIndexRef.current = startFromIndex;
-    isPlayingRef.current = true;
-
-    setState((prev) => ({
-      ...prev,
-      isPlaying: true,
-      isPaused: false,
-      totalSentences: sentences.length,
-      currentSentenceIndex: startFromIndex,
-      progress: (startFromIndex / sentences.length) * 100,
-    }));
-
-    speakNextSentence();
-  }, [speakNextSentence]);
-
-  // Pause speech
-  const pause = useCallback(() => {
-    if (!synthRef.current) return;
-
-    synthRef.current.pause();
-    isPlayingRef.current = false;
-
-    setState((prev) => ({
-      ...prev,
-      isPlaying: false,
-      isPaused: true,
-    }));
-  }, []);
-
-  // Resume speech
-  const resume = useCallback(() => {
-    if (!synthRef.current) return;
-
-    synthRef.current.resume();
-    isPlayingRef.current = true;
-
-    setState((prev) => ({
-      ...prev,
-      isPlaying: true,
-      isPaused: false,
-    }));
-  }, []);
-
-  // Stop speech
-  const stop = useCallback(() => {
-    if (!synthRef.current) return;
-
-    synthRef.current.cancel();
-    isPlayingRef.current = false;
-    currentIndexRef.current = 0;
-    sentencesRef.current = [];
-
-    setState({
-      isPlaying: false,
-      isPaused: false,
-      isSpeaking: false,
-      currentSentenceIndex: 0,
-      totalSentences: 0,
-      currentText: '',
-      progress: 0,
+    setProgress({
+      sentenceIndex: pb.sentIndex - 1,
+      totalSentences: pb.sentences.length,
+      paragraphIndex: pb.paraIndex,
+      totalParagraphs: pb.paragraphs.length,
+      currentText: sentence,
+      percentage:
+        ((pb.paraIndex + (pb.sentIndex - 1) / Math.max(pb.sentences.length, 1)) /
+          Math.max(pb.paragraphs.length, 1)) *
+        100,
     });
 
+    const afterSentence = async () => {
+      await sleep(s.pauseBetweenSentences * 1000);
+      if (pb.isActive) await advanceRef.current();
+    };
+
+    if (typeof s.audioSource !== 'string') {
+      // Cloud TTS
+      try {
+        setTtsState('loading');
+        const res = await apiClient.post<{ audioUrl: string }>('/tts/generate', {
+          text: sentence,
+          voiceId: s.audioSource.cloud,
+          speed: s.rate,
+          includeTimestamps: false,
+        });
+        if (!pb.isActive) return;
+        setTtsState('playing');
+        await new Promise<void>((resolve, reject) => {
+          const audio = new Audio(res.audioUrl);
+          audioRef.current = audio;
+          audio.volume = s.volume;
+          audio.onended = () => { audioRef.current = null; resolve(); };
+          audio.onerror = () => reject(new Error('Audio error'));
+          audio.play().catch(reject);
+        });
+        if (pb.isActive) await afterSentence();
+      } catch {
+        pb.isActive = false;
+        setTtsState('idle');
+      }
+    } else {
+      // System TTS (Web Speech API)
+      await new Promise<void>((resolve) => {
+        if (!synthRef.current) { resolve(); return; }
+        synthRef.current.cancel();
+        const utt = new SpeechSynthesisUtterance(sentence);
+        utt.rate = s.rate;
+        utt.pitch = s.pitch;
+        utt.volume = s.volume;
+        if (s.voiceURI) {
+          const voice = synthRef.current.getVoices().find((v) => v.voiceURI === s.voiceURI);
+          if (voice) utt.voice = voice;
+        }
+        utt.onend = () => resolve();
+        utt.onerror = () => resolve();
+        synthRef.current.speak(utt);
+      });
+      if (pb.isActive) await afterSentence();
+    }
+  };
+
+  // ─── Public controls ────────────────────────────────────────────────────────
+
+  const speak = useCallback((text: string) => {
+    const paragraphs = splitIntoParagraphs(text);
+    if (paragraphs.length === 0) return;
+
+    doStop();
+    const pb = pbRef.current;
+    pb.paragraphs = paragraphs;
+    pb.paraIndex = 0;
+    pb.sentences = splitIntoSentences(paragraphs[0]);
+    pb.sentIndex = 0;
+    pb.isActive = true;
+
+    setTtsState('playing');
+
+    const { sleepTimerMinutes } = settingsRef.current;
+    if (sleepTimerMinutes && sleepTimerMinutes > 0) startSleepTimer(sleepTimerMinutes);
+
+    void advanceRef.current();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [doStop]);
+
+  const pause = useCallback(() => {
+    pbRef.current.isActive = false;
+    synthRef.current?.pause();
+    audioRef.current?.pause();
+    setTtsState('paused');
   }, []);
 
-  // Toggle play/pause
+  const resume = useCallback(() => {
+    pbRef.current.isActive = true;
+    setTtsState('playing');
+    const s = settingsRef.current;
+    if (typeof s.audioSource !== 'string') {
+      if (audioRef.current?.paused && audioRef.current.src) {
+        void audioRef.current.play();
+      } else {
+        void advanceRef.current(); // between cloud sentences
+      }
+    } else {
+      if (synthRef.current?.paused) {
+        synthRef.current.resume();
+      } else {
+        void advanceRef.current(); // between system sentences
+      }
+    }
+  }, []);
+
   const togglePlayPause = useCallback(() => {
-    if (state.isPaused) {
-      resume();
-    } else if (state.isPlaying) {
-      pause();
-    }
-  }, [state.isPlaying, state.isPaused, pause, resume]);
+    if (ttsState === 'playing' || ttsState === 'loading') pause();
+    else if (ttsState === 'paused') resume();
+  }, [ttsState, pause, resume]);
 
-  // Skip to next sentence
   const nextSentence = useCallback(() => {
-    if (!synthRef.current) return;
+    if (ttsState === 'idle') return;
+    synthRef.current?.cancel();
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+    pbRef.current.isActive = true;
+    setTtsState('playing');
+    void advanceRef.current();
+  }, [ttsState]);
 
-    synthRef.current.cancel();
-
-    if (currentIndexRef.current < sentencesRef.current.length) {
-      speakNextSentence();
+  const setSleepTimer = useCallback((option: SleepTimerOptionValue) => {
+    setSettings((s) => ({ ...s, sleepTimerMinutes: option === 0 ? null : option }));
+    if (option === 0) {
+      clearSleepTimer();
+    } else if (ttsState === 'playing' && option > 0) {
+      startSleepTimer(option);
     }
-  }, [speakNextSentence]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ttsState]);
 
-  // Skip to previous sentence
-  const previousSentence = useCallback(() => {
-    if (!synthRef.current) return;
-
-    synthRef.current.cancel();
-
-    const newIndex = Math.max(0, currentIndexRef.current - 2);
-    currentIndexRef.current = newIndex;
-
-    if (isPlayingRef.current) {
-      speakNextSentence();
-    }
-  }, [speakNextSentence]);
-
-  // Update settings
-  const updateSettings = useCallback((newSettings: Partial<TTSSettings>) => {
-    setSettings((prev) => ({ ...prev, ...newSettings }));
+  const setRate = useCallback((rate: number) => {
+    setSettings((s) => ({ ...s, rate }));
   }, []);
 
-  // Get voices for a specific language
-  const getVoicesForLanguage = useCallback((langPrefix: string): TTSVoice[] => {
-    return voices.filter((v) => v.lang.startsWith(langPrefix));
-  }, [voices]);
+  const setCloudVoice = useCallback((voiceId: string) => {
+    setSettings((s) => ({ ...s, audioSource: { cloud: voiceId } }));
+  }, []);
+
+  const setSystemVoice = useCallback((voiceURI: string | null) => {
+    setSettings((s) => ({ ...s, audioSource: 'system', voiceURI }));
+  }, []);
+
+  const updateSettings = useCallback((partial: Partial<TTSSettings>) => {
+    setSettings((s) => ({ ...s, ...partial }));
+  }, []);
+
+  const loadCloudVoices = useCallback(async (bookId?: string) => {
+    setCloudVoicesError(null);
+    try {
+      const ep = bookId ? `/tts/voices?bookId=${bookId}` : '/tts/voices';
+      const res = await apiClient.get<{ voices: CloudVoice[] }>(ep, { noRedirectOn401: true });
+      setCloudVoices(res.voices ?? []);
+    } catch {
+      setCloudVoicesError('加载云端声音失败');
+    }
+  }, []);
 
   return {
-    // State
-    state,
+    ttsState,
     settings,
-    voices,
+    systemVoices,
+    cloudVoices,
+    cloudVoicesError,
+    progress,
+    sleepTimerRemaining,
     isSupported,
-
-    // Actions
     speak,
     pause,
     resume,
-    stop,
+    stop: doStop,
     togglePlayPause,
     nextSentence,
-    previousSentence,
+    setSleepTimer,
+    setRate,
+    setCloudVoice,
+    setSystemVoice,
     updateSettings,
-    getVoicesForLanguage,
+    loadCloudVoices,
   };
 }
 

@@ -21,6 +21,7 @@ export interface ChapterReaderHandle {
   goTo: (chapterId: string) => void;
   goNext: () => void;
   goPrev: () => void;
+  getCurrentPageText: () => string;
 }
 
 interface ChapterReaderProps {
@@ -582,6 +583,15 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
         } else if (currentIndexRef.current > 0) {
           void loadChapter(currentIndexRef.current - 1, true);
         }
+      },
+      getCurrentPageText: () => {
+        if (!containerRef.current) return '';
+        // Collect text from all visible paragraph-like elements
+        const nodes = containerRef.current.querySelectorAll('p, blockquote, figcaption, h1, h2, h3, h4');
+        return Array.from(nodes)
+          .map((n) => (n as HTMLElement).innerText || n.textContent || '')
+          .filter((t) => t.trim().length > 0)
+          .join('\n\n');
       },
     }), [chapters, emitPosition, loadChapter]);
 

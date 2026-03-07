@@ -67,9 +67,14 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
 
   // TTS handlers
   const handleStartTTS = useCallback(() => {
-    // TODO: Get text from current page for TTS
+    if (tts.ttsState === 'idle') {
+      const text = readerRef.current?.getCurrentPageText() ?? '';
+      if (text.trim()) {
+        tts.speak(text);
+      }
+    }
     setShowTTSPanel(true);
-  }, []);
+  }, [tts]);
 
   const handleToggleTTSPanel = useCallback(() => {
     setShowTTSPanel((prev) => !prev);
@@ -178,6 +183,13 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         description: '停止朗读',
         category: 'TTS',
         action: () => tts.stop(),
+      },
+      {
+        key: 'ArrowRight',
+        shift: true,
+        description: '下一句',
+        category: 'TTS',
+        action: () => tts.nextSentence(),
       },
     ],
     [
@@ -302,7 +314,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         onPrev={handlePrev}
         onNext={handleNext}
         onToggleTTS={handleStartTTS}
-        isTTSActive={tts.state.isPlaying || tts.state.isPaused}
+        isTTSActive={tts.ttsState === 'playing' || tts.ttsState === 'paused' || tts.ttsState === 'loading'}
       />
 
       {/* Reader */}
@@ -365,15 +377,13 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         bookTitle={bookTitle}
       />
 
-      {/* TTS Controls */}
+      {/* TTS Controls — full bottom bar */}
       {showTTSPanel && (
-        <div className="fixed bottom-4 right-4 z-50 w-80">
-          <TTSControls tts={tts} onClose={handleCloseTTSPanel} />
-        </div>
+        <TTSControls tts={tts} onClose={handleCloseTTSPanel} bookId={bookId} />
       )}
 
-      {/* Mini TTS Controls - show when TTS is active but panel is hidden */}
-      {!showTTSPanel && (tts.state.isPlaying || tts.state.isPaused) && (
+      {/* Mini TTS pill — shown when active but panel is hidden */}
+      {!showTTSPanel && (tts.ttsState === 'playing' || tts.ttsState === 'paused' || tts.ttsState === 'loading') && (
         <div className="fixed bottom-4 right-4 z-50">
           <MiniTTSControls tts={tts} onExpand={handleToggleTTSPanel} />
         </div>
