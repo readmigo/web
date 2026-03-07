@@ -25,6 +25,7 @@ import { useFavoriteBookIds, useToggleFavorite } from '@/features/library/hooks/
 import { DownloadBookButton } from '@/features/offline/components/download-book-button';
 import { ReadingGuideSection } from '@/features/library/components/reading-guide-section';
 import { BookContextSection } from '@/features/library/components/book-context-section';
+import { SeriesSection } from '@/features/library/components/series-section';
 import { formatDuration } from '@/features/audiobook/stores/audio-player-store';
 function formatWordCount(count: number): string {
   if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
@@ -256,6 +257,18 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
               <ChevronRight className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
             </Link>
           </div>
+        )}
+
+        {/* Series Section — aligned with iOS SeriesSection */}
+        {book.seriesId && book.seriesName && (
+          <SeriesSection
+            series={{
+              id: book.seriesId,
+              name: book.seriesName,
+              bookCount: book.seriesBookCount ?? 0,
+              authorName: book.author,
+            }}
+          />
         )}
 
         {/* Description Section */}
