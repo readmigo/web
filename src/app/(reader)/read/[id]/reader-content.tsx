@@ -5,7 +5,7 @@ import { ChapterReader, type ChapterReaderHandle } from '@/features/reader/compo
 import { ReaderToolbar } from '@/features/reader/components/reader-toolbar';
 import { ReaderSettingsPanel } from '@/features/reader/components/reader-settings-panel';
 import { TocPanel } from '@/features/reader/components/toc-panel';
-import { SelectionPopup } from '@/features/reader/components/selection-popup';
+import { SelectionBottomSheet } from '@/features/reader/components/selection-bottom-sheet';
 import { ReadingStatsOverlay } from '@/features/reader/components/reading-stats-overlay';
 import { TTSControls, MiniTTSControls } from '@/features/reader/components/tts-controls';
 import { KeyboardShortcutsDialog } from '@/components/shared/keyboard-shortcuts-dialog';
@@ -338,11 +338,12 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           onTocLoaded={setTocItems}
         />
 
-        {/* Selection Popup */}
+        {/* Selection Bottom Sheet */}
         {selectedText && (
-          <SelectionPopup
+          <SelectionBottomSheet
             selection={selectedText}
             bookId={bookId}
+            onClose={() => setSelectedText(null)}
           />
         )}
       </div>
