@@ -8,6 +8,7 @@ import { TocPanel } from '@/features/reader/components/toc-panel';
 import { SelectionBottomSheet } from '@/features/reader/components/selection-bottom-sheet';
 import { TranslationSheet } from '@/features/reader/components/translation-sheet';
 import { ReadingStatsOverlay } from '@/features/reader/components/reading-stats-overlay';
+import { ReaderGuideOverlay } from '@/features/reader/components/reader-guide-overlay';
 import { TTSControls, MiniTTSControls } from '@/features/reader/components/tts-controls';
 import { TimelinePanel } from '@/features/reader/components/timeline-panel';
 import { KeyboardShortcutsDialog } from '@/components/shared/keyboard-shortcuts-dialog';
@@ -60,6 +61,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     getLastPosition,
   } = useReaderStore();
 
+  const [showGuide, setShowGuide] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
   const [translationText, setTranslationText] = useState<string | null>(null);
@@ -268,6 +270,15 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     };
   }, [bookId, isReady, startReadingSession, endReadingSession, getLastPosition]);
 
+  // Show guide for first-time readers
+  useEffect(() => {
+    if (!isReady) return;
+    const hasSeen = localStorage.getItem('hasSeenReaderGuide');
+    if (!hasSeen) {
+      setShowGuide(true);
+    }
+  }, [isReady]);
+
   // Update reading activity periodically (every 30 seconds)
   useEffect(() => {
     if (!isReady) return;
@@ -314,6 +325,11 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
 
   const handleReaderReady = useCallback(() => {
     setIsReady(true);
+  }, []);
+
+  const handleGuideComplete = useCallback(() => {
+    localStorage.setItem('hasSeenReaderGuide', 'true');
+    setShowGuide(false);
   }, []);
 
   const handleTextSelect = useCallback(
@@ -475,6 +491,14 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         <div className="fixed bottom-4 right-4 z-50">
           <MiniTTSControls tts={tts} onExpand={handleToggleTTSPanel} />
         </div>
+      )}
+
+      {/* First-time reader guide */}
+      {showGuide && (
+        <ReaderGuideOverlay
+          onComplete={handleGuideComplete}
+          onSkip={handleGuideComplete}
+        />
       )}
     </div>
   );
