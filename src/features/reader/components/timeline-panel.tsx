@@ -15,16 +15,12 @@ interface TimelinePanelProps {
 }
 
 export function TimelinePanel({ items, currentChapter, totalProgress, onSelect, onClose }: TimelinePanelProps) {
-  const flatItems = items.flatMap((item) =>
-    item.subitems ? [item, ...item.subitems] : [item]
-  );
-
   const getChapterProgress = (index: number): string | null => {
     if (currentChapter === undefined) return null;
     if (index < currentChapter) return '100%';
     if (index === currentChapter) {
       const progressInChapter = Math.round(
-        Math.max(0, Math.min(100, (totalProgress * flatItems.length - currentChapter) * 100))
+        Math.max(0, Math.min(100, (totalProgress * items.length - currentChapter) * 100))
       );
       return `${progressInChapter}%`;
     }
@@ -35,7 +31,7 @@ export function TimelinePanel({ items, currentChapter, totalProgress, onSelect, 
     <div className="fixed inset-y-0 right-0 z-50 w-72 border-l bg-background shadow-lg flex flex-col">
       <div className="flex h-14 shrink-0 items-center justify-between border-b px-4">
         <h2 className="font-semibold">故事时间线</h2>
-        <Button variant="ghost" size="icon" onClick={onClose}>
+        <Button variant="ghost" size="icon" onClick={onClose} aria-label="关闭时间线">
           <X className="h-5 w-5" />
         </Button>
       </div>
@@ -60,9 +56,10 @@ export function TimelinePanel({ items, currentChapter, totalProgress, onSelect, 
           <div className="absolute left-[28px] top-4 bottom-4 w-0.5 bg-border" />
 
           <div className="space-y-1">
-            {flatItems.map((item, index) => {
+            {items.map((item, index) => {
               const isActive = index === currentChapter;
               const isPast = currentChapter !== undefined && index < currentChapter;
+              const progress = getChapterProgress(index);
 
               return (
                 <div
@@ -96,10 +93,8 @@ export function TimelinePanel({ items, currentChapter, totalProgress, onSelect, 
                   </span>
 
                   {/* Per-chapter progress */}
-                  {getChapterProgress(index) && (
-                    <span className="text-xs text-muted-foreground shrink-0">
-                      {getChapterProgress(index)}
-                    </span>
+                  {progress && (
+                    <span className="text-xs text-muted-foreground shrink-0">{progress}</span>
                   )}
                 </div>
               );
