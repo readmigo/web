@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 import { useFavoriteBookIds, useToggleFavorite } from '../hooks/use-favorites';
 import { getDifficultyLevel, difficultyLabels, difficultyColors } from '../utils/difficulty';
 import type { Book, UserBook } from '../types';
@@ -18,6 +19,8 @@ interface BookCardProps {
 }
 
 export function BookCard({ book, userBook, className }: BookCardProps) {
+  const tf = useTranslations('favorites');
+  const tb = useTranslations('book');
   const { favoriteIds, isAuthenticated } = useFavoriteBookIds();
   const { toggleFavorite } = useToggleFavorite();
   const isFavorited = favoriteIds.has(book.id);
@@ -77,7 +80,7 @@ export function BookCard({ book, userBook, className }: BookCardProps) {
                   // Always visible on touch devices and when favorited
                   isFavorited && 'opacity-100'
                 )}
-                aria-label={isFavorited ? '取消收藏' : '收藏'}
+                aria-label={isFavorited ? tf('remove') : tf('add')}
               >
                 <Heart
                   className={cn(
@@ -103,7 +106,7 @@ export function BookCard({ book, userBook, className }: BookCardProps) {
               <div className="mt-2">
                 <Progress value={userBook.progress} className="h-1" />
                 <p className="mt-1 text-xs text-muted-foreground">
-                  {userBook.progress}% 已读
+                  {tb('progressRead', { progress: userBook.progress })}
                 </p>
               </div>
             )}
