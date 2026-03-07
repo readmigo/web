@@ -40,4 +40,25 @@ describe('BookmarkSidebar', () => {
     fireEvent.click(screen.getByText('第 1 章'));
     expect(onNavigate).toHaveBeenCalledWith('ch:0:pg:5');
   });
+
+  it('点击删除按钮调用 removeBookmark 且不触发导航', () => {
+    const onNavigate = vi.fn();
+    const removeBookmark = vi.fn();
+    vi.mocked(useReaderStore).mockReturnValue({
+      ...mockStore,
+      removeBookmark,
+    } as any);
+
+    render(<BookmarkSidebar bookId="book-123" onNavigateToBookmark={onNavigate} />);
+    fireEvent.click(screen.getByRole('button', { name: /书签/i }));
+
+    // Find the row containing "第 1 章" and click its delete button
+    const bookmark1Title = screen.getByText('第 1 章');
+    const bookmark1Row = bookmark1Title.closest('div[class*="flex items-center justify-between"]') as HTMLElement;
+    const deleteButton = bookmark1Row.querySelector('button') as HTMLElement;
+    fireEvent.click(deleteButton);
+
+    expect(removeBookmark).toHaveBeenCalledWith('bm-1', 'book-123');
+    expect(onNavigate).not.toHaveBeenCalled();
+  });
 });
