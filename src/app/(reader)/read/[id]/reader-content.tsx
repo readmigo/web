@@ -325,6 +325,10 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     readerRef.current?.goTo(href);
   }, []);
 
+  const handleParagraphClick = useCallback((text: string) => {
+    setTranslationText(text);
+  }, []);
+
 
   // Loading state
   if (isLoadingBook) {
@@ -382,7 +386,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           onReady={handleReaderReady}
           onTextSelect={handleTextSelect}
           onTocLoaded={setTocItems}
-          onParagraphClick={(text) => setTranslationText(text)}
+          onParagraphClick={handleParagraphClick}
         />
 
         {/* Selection Bottom Sheet */}

@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { TranslationSheet } from '../translation-sheet';
+import { apiClient } from '@/lib/api/client';
 
 // Mock apiClient
 vi.mock('@/lib/api/client', () => ({
@@ -35,6 +36,9 @@ describe('TranslationSheet', () => {
   });
 
   it('显示时显示 loading 状态', () => {
+    // Override: 返回永不 resolve 的 Promise，确保 loading 状态持续
+    vi.mocked(apiClient.post).mockImplementationOnce(() => new Promise(() => {}));
+
     render(
       <TranslationSheet
         open={true}
