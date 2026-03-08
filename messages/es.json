@@ -78,7 +78,7 @@
     "close": "Cerrar"
   },
   "category": {
-    "backToExplore": "Volver a explorar",
+    "backToBookstore": "Volver a la librería",
     "booksCount": "{count} libros",
     "category": "Categoría",
     "subcategories": "Subcategorías",
@@ -289,8 +289,8 @@
     "homeTitle": "Readmigo - Aprende inglés a través de historias",
     "homeDescription": "Aprende idiomas leyendo libros originales en inglés. Readmigo combina tecnología de IA para ofrecer experiencias inmersivas de aprendizaje de idiomas.",
     "homeKeywords": "aprendizaje de inglés, lectura original, IA, ebooks, audiolibros, aprendizaje de idiomas",
-    "exploreTitle": "Librería",
-    "exploreDescription": "Descubre más de 100.000 libros originales en inglés gratuitos",
+    "bookstoreTitle": "Librería",
+    "bookstoreDescription": "Descubre más de 100.000 libros originales en inglés gratuitos",
     "libraryTitle": "Mi estantería",
     "libraryDescription": "Gestiona tus libros de lectura",
     "librarySubtitle": "Gestiona tus libros y progreso de lectura",
@@ -783,10 +783,8 @@
     "selectHint": "↵ seleccionar",
     "closeHint": "ESC cerrar",
     "openHint": "Abrir búsqueda",
-    "home": "Inicio",
-    "homeDesc": "Ir a la página de inicio",
-    "explore": "Explorar",
-    "exploreDesc": "Descubrir nuevos libros",
+    "bookstore": "Librería",
+    "bookstoreDesc": "Descubrir nuevos libros",
     "settings": "Configuración",
     "settingsDesc": "Gestionar configuración de la app"
   },

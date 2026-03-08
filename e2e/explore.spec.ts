@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Explore / Bookstore Page', () => {
+test.describe('Bookstore Page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/explore');
+    await page.goto('/');
   });
 
   test('renders search input', async ({ page }) => {

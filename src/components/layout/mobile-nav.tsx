@@ -15,13 +15,13 @@ export function MobileNav() {
   const t = useTranslations('nav');
 
   const navigation = [
-    { name: t('bookstore'), href: '/explore', icon: Store },
+    { name: t('bookstore'), href: '/', icon: Store },
     { name: t('audiobooks'), href: '/audiobooks', icon: Headphones },
     { name: t('me'), href: '/me', icon: UserCircle },
   ];
 
   const isActive = (href: string) =>
-    pathname === href || (href === '/explore' && pathname === '/');
+    pathname === href;
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 md:hidden">

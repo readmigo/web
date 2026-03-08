@@ -78,7 +78,7 @@
     "close": "閉じる"
   },
   "category": {
-    "backToExplore": "探索に戻る",
+    "backToBookstore": "書店に戻る",
     "booksCount": "{count} 冊",
     "category": "カテゴリー",
     "subcategories": "サブカテゴリー",
@@ -289,8 +289,8 @@
     "homeTitle": "Readmigo - ストーリーで英語を学ぼう",
     "homeDescription": "英語の原書を読んで言語を学びましょう。ReadmigoはAI技術を組み合わせ、没入型の言語学習体験を提供します。",
     "homeKeywords": "英語学習、原書読書、AI、電子書籍、オーディオブック、言語学習",
-    "exploreTitle": "書店",
-    "exploreDescription": "10万冊以上の無料英語原書を発見",
+    "bookstoreTitle": "書店",
+    "bookstoreDescription": "10万冊以上の無料英語原書を発見",
     "libraryTitle": "マイ本棚",
     "libraryDescription": "読書中の書籍を管理",
     "librarySubtitle": "読書中の書籍と進捗を管理",
@@ -783,10 +783,8 @@
     "selectHint": "↵ 選択",
     "closeHint": "ESC 閉じる",
     "openHint": "検索を開く",
-    "home": "ホーム",
-    "homeDesc": "ホームページへ移動",
-    "explore": "探索",
-    "exploreDesc": "新しい書籍を発見",
+    "bookstore": "書店",
+    "bookstoreDesc": "新しい書籍を発見",
     "settings": "設定",
     "settingsDesc": "アプリの設定を管理"
   },

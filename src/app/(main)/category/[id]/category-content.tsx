@@ -98,11 +98,11 @@ export function CategoryContent({ categoryId }: CategoryContentProps) {
     <div className="space-y-6">
       {/* Back link */}
       <Link
-        href="/explore"
+        href="/"
         className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
         <ArrowLeft className="mr-1 h-4 w-4" />
-        {t('backToExplore')}
+        {t('backToBookstore')}
       </Link>
 
       {/* Category header */}
@@ -170,7 +170,7 @@ export function CategoryContent({ categoryId }: CategoryContentProps) {
           <p className="mt-2 text-sm text-muted-foreground">
             {t('tryOther')}
           </p>
-          <Link href="/explore">
+          <Link href="/">
             <Button className="mt-4" variant="outline">
               {t('exploreMore')}
             </Button>

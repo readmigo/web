@@ -78,11 +78,11 @@ export function BookListDetailContent({ listId }: BookListDetailContentProps) {
       <div className={cn('bg-gradient-to-r px-6 py-8 text-white md:px-8 md:py-12', gradient)}>
         <div className="container">
           <Link
-            href="/explore"
+            href="/"
             className="mb-4 inline-flex items-center gap-1 text-sm text-white/70 transition-colors hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Explore
+            Back to Bookstore
           </Link>
 
           <div className="mt-4 flex items-start gap-4">

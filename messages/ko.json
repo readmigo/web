@@ -78,7 +78,7 @@
     "close": "닫기"
   },
   "category": {
-    "backToExplore": "탐색으로 돌아가기",
+    "backToBookstore": "서점으로 돌아가기",
     "booksCount": "{count}권",
     "category": "카테고리",
     "subcategories": "하위 카테고리",
@@ -289,8 +289,8 @@
     "homeTitle": "Readmigo - 스토리로 영어를 배우세요",
     "homeDescription": "영어 원서를 읽으며 언어를 배우세요. Readmigo는 AI 기술을 결합하여 몰입형 언어 학습 경험을 제공합니다.",
     "homeKeywords": "영어 학습, 원서 읽기, AI, 전자책, 오디오북, 언어 학습",
-    "exploreTitle": "서점",
-    "exploreDescription": "10만 권 이상의 무료 영어 원서 발견",
+    "bookstoreTitle": "서점",
+    "bookstoreDescription": "10만 권 이상의 무료 영어 원서 발견",
     "libraryTitle": "나의 책장",
     "libraryDescription": "독서 중인 책 관리",
     "librarySubtitle": "독서 중인 책과 진행률 관리",
@@ -783,10 +783,8 @@
     "selectHint": "↵ 선택",
     "closeHint": "ESC 닫기",
     "openHint": "검색 열기",
-    "home": "홈",
-    "homeDesc": "홈 페이지로 이동",
-    "explore": "탐색",
-    "exploreDesc": "새 책 발견",
+    "bookstore": "서점",
+    "bookstoreDesc": "새 책 발견",
     "settings": "설정",
     "settingsDesc": "앱 설정 관리"
   },

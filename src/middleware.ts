@@ -18,7 +18,6 @@ function detectRegion(req: NextRequest): 'cn' | 'global' {
 
 // Public routes that don't require authentication
 const publicPaths = [
-  '/explore',
   '/book/',
   '/read/',
   '/author/',
@@ -71,15 +70,6 @@ export async function middleware(req: NextRequest) {
   // Detect region and set cookie if not already set
   const region = detectRegion(req);
   const hasRegionCookie = req.cookies.has(REGION_COOKIE);
-
-  // Rewrite root to /explore so the bookstore tab shows directly (no redirect)
-  if (pathname === '/') {
-    const response = NextResponse.rewrite(new URL('/explore', req.url));
-    if (!hasRegionCookie) {
-      response.cookies.set(REGION_COOKIE, region, { path: '/', maxAge: 365 * 24 * 60 * 60, sameSite: 'lax' });
-    }
-    return response;
-  }
 
   // Allow public paths without authentication
   if (isPublicPath(pathname)) {

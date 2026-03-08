@@ -39,7 +39,7 @@ export default function Error({
           {error.message || t('description')}
         </p>
         <div className="flex items-center justify-center gap-3">
-          <Button variant="outline" onClick={() => router.push('/explore')}>
+          <Button variant="outline" onClick={() => router.push('/')}>
             {t('backHome')}
           </Button>
           <Button onClick={() => reset()}>

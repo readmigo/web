@@ -78,7 +78,7 @@
     "close": "Close"
   },
   "category": {
-    "backToExplore": "Back to Explore",
+    "backToBookstore": "Back to Bookstore",
     "booksCount": "{count} books",
     "category": "Category",
     "subcategories": "Subcategories",
@@ -297,8 +297,8 @@
     "homeTitle": "Readmigo - Learn English through Stories",
     "homeDescription": "Learn languages through reading original English books. Readmigo combines AI technology to provide immersive language learning experiences.",
     "homeKeywords": "English learning, original reading, AI, ebooks, audiobooks, language learning",
-    "exploreTitle": "Bookstore",
-    "exploreDescription": "Discover over 100,000 free English original books",
+    "bookstoreTitle": "Bookstore",
+    "bookstoreDescription": "Discover over 100,000 free English original books",
     "libraryTitle": "My Bookshelf",
     "libraryDescription": "Manage your reading books",
     "librarySubtitle": "Manage your reading books and progress",
@@ -794,10 +794,8 @@
     "selectHint": "↵ select",
     "closeHint": "ESC close",
     "openHint": "Open search",
-    "home": "Home",
-    "homeDesc": "Go to home page",
-    "explore": "Explore",
-    "exploreDesc": "Discover new books",
+    "bookstore": "Bookstore",
+    "bookstoreDesc": "Discover new books",
     "settings": "Settings",
     "settingsDesc": "Manage app settings"
   },

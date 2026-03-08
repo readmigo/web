@@ -140,7 +140,7 @@ function EmptyState() {
         {t('emptySubtitle')}
       </p>
       <Button className="mt-6" asChild>
-        <Link href="/explore">{t('goToBookstore')}</Link>
+        <Link href="/">{t('goToBookstore')}</Link>
       </Button>
     </div>
   );

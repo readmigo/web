@@ -78,7 +78,7 @@
     "close": "Tutup"
   },
   "category": {
-    "backToExplore": "Kembali ke Jelajahi",
+    "backToBookstore": "Kembali ke Toko Buku",
     "booksCount": "{count} buku",
     "category": "Kategori",
     "subcategories": "Subkategori",
@@ -289,8 +289,8 @@
     "homeTitle": "Readmigo - Belajar Bahasa Inggris Melalui Cerita",
     "homeDescription": "Belajar bahasa melalui membaca buku bahasa Inggris asli. Readmigo menggabungkan teknologi AI untuk memberikan pengalaman belajar bahasa yang imersif.",
     "homeKeywords": "belajar bahasa Inggris, membaca asli, AI, ebook, buku audio, belajar bahasa",
-    "exploreTitle": "Toko Buku",
-    "exploreDescription": "Temukan lebih dari 100.000 buku bahasa Inggris asli gratis",
+    "bookstoreTitle": "Toko Buku",
+    "bookstoreDescription": "Temukan lebih dari 100.000 buku bahasa Inggris asli gratis",
     "libraryTitle": "Rak Buku Saya",
     "libraryDescription": "Kelola buku bacaan Anda",
     "librarySubtitle": "Kelola buku bacaan dan kemajuan Anda",
@@ -783,10 +783,8 @@
     "selectHint": "↵ pilih",
     "closeHint": "ESC tutup",
     "openHint": "Buka pencarian",
-    "home": "Beranda",
-    "homeDesc": "Pergi ke halaman beranda",
-    "explore": "Jelajahi",
-    "exploreDesc": "Temukan buku baru",
+    "bookstore": "Toko Buku",
+    "bookstoreDesc": "Temukan buku baru",
     "settings": "Pengaturan",
     "settingsDesc": "Kelola pengaturan aplikasi"
   },

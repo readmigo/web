@@ -43,20 +43,12 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
   const navigationItems: SearchResult[] = useMemo(
     () => [
       {
-        id: 'home',
+        id: 'bookstore',
         type: 'page',
-        title: t('home'),
-        description: t('homeDesc'),
+        title: t('bookstore'),
+        description: t('bookstoreDesc'),
         icon: <Compass className="h-4 w-4" />,
         href: '/',
-      },
-      {
-        id: 'explore',
-        type: 'page',
-        title: t('explore'),
-        description: t('exploreDesc'),
-        icon: <Compass className="h-4 w-4" />,
-        href: '/explore',
       },
       {
         id: 'settings',

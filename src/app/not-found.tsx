@@ -30,7 +30,7 @@ export default async function NotFound() {
           {t('description')}
         </p>
         <Button asChild>
-          <Link href="/explore">{t('backHome')}</Link>
+          <Link href="/">{t('backHome')}</Link>
         </Button>
       </div>
     </div>

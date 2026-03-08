@@ -73,7 +73,7 @@ function BookListCard({ list, locale }: { list: BookList; locale: string }) {
 }
 
 export function BookListsContent() {
-  const t = useTranslations('explore');
+  const t = useTranslations('discover');
   const locale = useLocale();
   const { data: bookLists, isLoading } = useBookLists();
   const activeLists = (bookLists || []).filter((list) => list.bookCount > 0);
@@ -82,7 +82,7 @@ export function BookListsContent() {
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <Link
-          href="/explore"
+          href="/"
           className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />

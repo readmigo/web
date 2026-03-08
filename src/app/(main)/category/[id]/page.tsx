@@ -10,8 +10,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   await params;
   const t = await getTranslations('metadata');
   return {
-    title: t('exploreTitle'),
-    description: t('exploreDescription'),
+    title: t('bookstoreTitle'),
+    description: t('bookstoreDescription'),
   };
 }
 

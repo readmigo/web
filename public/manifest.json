@@ -85,10 +85,10 @@
       "icons": [{ "src": "/icons/shortcut-read.png", "sizes": "96x96" }]
     },
     {
-      "name": "Explore Books",
-      "short_name": "Explore",
+      "name": "Bookstore",
+      "short_name": "Bookstore",
       "description": "Discover new books",
-      "url": "/explore",
+      "url": "/",
       "icons": [{ "src": "/icons/shortcut-explore.png", "sizes": "96x96" }]
     }
   ],

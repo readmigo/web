@@ -78,7 +78,7 @@
     "close": "إغلاق"
   },
   "category": {
-    "backToExplore": "العودة إلى الاستكشاف",
+    "backToBookstore": "العودة إلى المكتبة",
     "booksCount": "{count} كتب",
     "category": "الفئة",
     "subcategories": "الفئات الفرعية",
@@ -289,8 +289,8 @@
     "homeTitle": "Readmigo - تعلّم الإنجليزية من خلال القصص",
     "homeDescription": "تعلّم اللغات من خلال قراءة الكتب الإنجليزية الأصلية. يجمع Readmigo تقنية الذكاء الاصطناعي لتوفير تجارب تعلّم لغوية غامرة.",
     "homeKeywords": "تعلّم الإنجليزية، القراءة الأصلية، الذكاء الاصطناعي، الكتب الإلكترونية، الكتب الصوتية، تعلّم اللغات",
-    "exploreTitle": "المكتبة",
-    "exploreDescription": "اكتشف أكثر من 100,000 كتاب إنجليزي أصلي مجاني",
+    "bookstoreTitle": "المكتبة",
+    "bookstoreDescription": "اكتشف أكثر من 100,000 كتاب إنجليزي أصلي مجاني",
     "libraryTitle": "رفّي",
     "libraryDescription": "إدارة كتبك المقروءة",
     "librarySubtitle": "إدارة كتبك المقروءة وتقدّمك",
@@ -783,10 +783,8 @@
     "selectHint": "↵ للاختيار",
     "closeHint": "ESC للإغلاق",
     "openHint": "فتح البحث",
-    "home": "الرئيسية",
-    "homeDesc": "الانتقال إلى الصفحة الرئيسية",
-    "explore": "استكشاف",
-    "exploreDesc": "اكتشف كتبًا جديدة",
+    "bookstore": "المكتبة",
+    "bookstoreDesc": "اكتشف كتبًا جديدة",
     "settings": "الإعدادات",
     "settingsDesc": "إدارة إعدادات التطبيق"
   },

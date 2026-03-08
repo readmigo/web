@@ -59,7 +59,7 @@ function getCategoryIcon(category: Category): LucideIcon {
   return SLUG_ICON_MAP[category.slug] ?? ICON_URL_MAP[category.iconUrl ?? ''] ?? Folder;
 }
 
-export function ExploreContent() {
+export function BookstoreContent() {
   const router = useRouter();
   const t = useTranslations('discover');
   const tc = useTranslations('common');

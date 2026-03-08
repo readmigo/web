@@ -1,19 +1,5 @@
-import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
-import { ExploreContent } from './explore-content';
-
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('metadata');
-  return {
-    title: t('exploreTitle'),
-    description: t('exploreDescription'),
-  };
-}
+import { redirect } from 'next/navigation';
 
 export default function ExplorePage() {
-  return (
-    <div className="container py-6">
-      <ExploreContent />
-    </div>
-  );
+  redirect('/');
 }

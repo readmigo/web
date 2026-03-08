@@ -78,7 +78,7 @@
     "close": "關閉"
   },
   "category": {
-    "backToExplore": "返回探索",
+    "backToBookstore": "返回書城",
     "booksCount": "共 {count} 本書籍",
     "category": "分類",
     "subcategories": "子分類",
@@ -289,8 +289,8 @@
     "homeTitle": "Readmigo - 在故事中學英語",
     "homeDescription": "透過閱讀英文原版書籍，在故事中學習語言。Readmigo 結合 AI 技術，為你提供沉浸式的語言學習體驗。",
     "homeKeywords": "英語學習, 原版閱讀, AI, 電子書, 有聲書, 語言學習",
-    "exploreTitle": "書城",
-    "exploreDescription": "發現超過 100,000 本免費英文原版書籍",
+    "bookstoreTitle": "書城",
+    "bookstoreDescription": "發現超過 100,000 本免費英文原版書籍",
     "libraryTitle": "我的書架",
     "libraryDescription": "管理你的閱讀書籍",
     "librarySubtitle": "管理你的閱讀書籍和進度",
@@ -783,10 +783,8 @@
     "selectHint": "↵ 選擇",
     "closeHint": "ESC 關閉",
     "openHint": "打開搜尋",
-    "home": "首頁",
-    "homeDesc": "返回首頁",
-    "explore": "發現",
-    "exploreDesc": "探索新書籍",
+    "bookstore": "書城",
+    "bookstoreDesc": "探索新書籍",
     "settings": "設定",
     "settingsDesc": "管理應用設定"
   },
