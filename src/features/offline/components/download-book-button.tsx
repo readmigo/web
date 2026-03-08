@@ -83,7 +83,7 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span>
-            {t('downloading', { downloaded: downloaded?.downloadedChapters, total: downloaded?.totalChapters })}
+            {t('downloading', { downloaded: downloaded?.downloadedChapters ?? 0, total: downloaded?.totalChapters ?? 0 })}
           </span>
         </div>
         <Progress value={progress} className="h-1.5" />
@@ -106,7 +106,7 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Pause className="h-4 w-4 text-orange-500" />
           <span>
-            {t('paused', { downloaded: downloaded?.downloadedChapters, total: downloaded?.totalChapters })}
+            {t('paused', { downloaded: downloaded?.downloadedChapters ?? 0, total: downloaded?.totalChapters ?? 0 })}
           </span>
         </div>
         <Progress value={progress} className="h-1.5" />

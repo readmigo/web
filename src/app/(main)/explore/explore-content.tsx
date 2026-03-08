@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -20,10 +20,8 @@ import { useSearch } from '@/features/search/hooks/use-search';
 import { useSearchHistory } from '@/features/search/hooks/use-search-history';
 import { SearchResultsDropdown } from '@/features/search/components/search-results-dropdown';
 import { useBookLists } from '@/features/library/hooks/use-book-lists';
-import { useBookstoreTabs } from '@/features/library/hooks/use-bookstore-tabs';
 import { HeroBanner } from '@/features/library/components/hero-banner';
 import { BookListSection, BookListSectionSkeleton } from '@/features/library/components/book-list-section';
-import { BookstoreTabBar } from '@/features/library/components/bookstore-tab-bar';
 import { ContinueReadingCard } from '@/features/library/components/continue-reading-card';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
@@ -65,7 +63,6 @@ export function ExploreContent() {
   const tc = useTranslations('common');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedTabId, setSelectedTabId] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [debouncedDropdownQuery, setDebouncedDropdownQuery] = useState('');
@@ -73,7 +70,7 @@ export function ExploreContent() {
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   // Debounce search query for book list filtering
-  useMemo(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
     }, 300);
@@ -97,28 +94,12 @@ export function ExploreContent() {
   // Search history
   const { history: searchHistory, addSearch, removeSearch, clearHistory } = useSearchHistory();
 
-  // Bookstore tabs
-  const { data: tabsData } = useBookstoreTabs();
-  const tabs = tabsData ?? [];
-
-  // Auto-select first tab when tabs load
-  useEffect(() => {
-    if (tabs.length > 0 && !selectedTabId) {
-      setSelectedTabId(tabs[0].id);
-    }
-  }, [tabs, selectedTabId]);
-
-  const selectedTab = tabs.find((t) => t.id === selectedTabId);
-  const isRecommendationTab = !selectedTab || selectedTab.type === 'recommendation';
-
   // Book lists for hero banner and sections
   const { data: bookListsData, isLoading: bookListsLoading } = useBookLists();
   const activeBookLists = (bookListsData || []).filter(
     (list) => list.bookCount > 0
   );
-  // All book lists shown together with iOS-style backgrounds (by index)
   const allBookLists = activeBookLists;
-  // Keep hero banner lists separate (for HeroBanner component)
   const featuredBookLists = activeBookLists.filter((list) => list.type !== 'RANKING');
 
   // Close dropdown on click outside
@@ -149,7 +130,6 @@ export function ExploreContent() {
     isFetchingNextPage,
   } = useInfiniteBooks({
     category: selectedCategory || undefined,
-    categoryId: (!isRecommendationTab && selectedTab?.categoryId) ? selectedTab.categoryId : undefined,
     search: debouncedSearch || undefined,
   });
 
@@ -223,15 +203,6 @@ export function ExploreContent() {
         )}
       </div>
 
-      {/* Bookstore Tab Bar (iOS: BookstoreTabBar) */}
-      {tabs.length > 0 && (
-        <BookstoreTabBar
-          tabs={tabs}
-          selectedTabId={selectedTabId}
-          onTabSelect={setSelectedTabId}
-        />
-      )}
-
       {error ? (
         <div className="flex flex-col items-center justify-center py-20">
           <p className="text-lg text-destructive">{tc('loadingFailed')}</p>
@@ -244,9 +215,6 @@ export function ExploreContent() {
           </Button>
         </div>
       ) : (
-      <>
-      {/* Recommendation tab: Hero Banner + categories + book lists */}
-      {isRecommendationTab && (
       <>
       {/* Hero Banner */}
       <HeroBanner bookLists={featuredBookLists} isLoading={bookListsLoading} />
@@ -325,19 +293,14 @@ export function ExploreContent() {
         </Link>
       )}
 
-      </>
-      )}
+      {/* "全部书籍" divider */}
+      <div className="flex items-center gap-3">
+        <div className="flex-1 border-t" />
+        <span className="text-sm text-muted-foreground">{t('allBooks')}</span>
+        <div className="flex-1 border-t" />
+      </div>
 
-      {/* "全部书籍" divider — only on recommendation tab */}
-      {isRecommendationTab && (
-        <div className="flex items-center gap-3">
-          <div className="flex-1 border-t" />
-          <span className="text-sm text-muted-foreground">{t('allBooks')}</span>
-          <div className="flex-1 border-t" />
-        </div>
-      )}
-
-      {/* Books list (vertical rows) — all tabs */}
+      {/* Books list (vertical rows) */}
       {isLoading ? (
         <div className="space-y-3">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -383,4 +346,3 @@ export function ExploreContent() {
     </div>
   );
 }
-
