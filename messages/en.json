@@ -335,12 +335,14 @@
     "inProgress": "In Progress",
     "allBadges": "All Badges",
     "empty": "No badges yet",
-    "categories.all": "All",
-    "categories.reading": "Reading",
-    "categories.vocabulary": "Vocabulary",
-    "categories.streak": "Streak",
-    "categories.milestone": "Milestone",
-    "categories.social": "Social"
+    "categories": {
+      "all": "All",
+      "reading": "Reading",
+      "vocabulary": "Vocabulary",
+      "streak": "Streak",
+      "milestone": "Milestone",
+      "social": "Social"
+    }
   },
   "quotes": {
     "dailyQuote": "Daily Quote",
@@ -359,9 +361,11 @@
     "avgPerDay": "Avg {minutes}min/day",
     "currentlyReading": "Currently Reading",
     "recentSessions": "Recent Sessions",
-    "locked.title": "Detailed Statistics",
-    "locked.desc": "Upgrade to Pro to see full reading analytics",
-    "locked.upgrade": "Upgrade to Pro"
+    "locked": {
+      "title": "Detailed Statistics",
+      "desc": "Upgrade to Pro to see full reading analytics",
+      "upgrade": "Upgrade to Pro"
+    }
   },
   "subscription": {
     "title": "Upgrade to Readmigo Pro",
@@ -377,15 +381,19 @@
     "restore": "Restore Purchases",
     "terms": "Terms of Use",
     "privacy": "Privacy Policy",
-    "plans.weekly": "Weekly",
-    "plans.monthly": "Monthly",
-    "plans.yearly": "Yearly",
-    "features.allBooks": "All Books",
-    "features.audiobooks": "Unlimited Audiobooks",
-    "features.cloudTTS": "Cloud TTS Voices",
-    "features.offline": "Offline Downloads",
-    "features.stats": "Detailed Stats",
-    "features.templates": "Premium Templates"
+    "plans": {
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "features": {
+      "allBooks": "All Books",
+      "audiobooks": "Unlimited Audiobooks",
+      "cloudTTS": "Cloud TTS Voices",
+      "offline": "Offline Downloads",
+      "stats": "Detailed Stats",
+      "templates": "Premium Templates"
+    }
   },
   "onboarding": {
     "skip": "Skip",
@@ -465,20 +473,26 @@
     "pagesRead": "Pages Read",
     "completionRate": "Completion Rate",
     "highlights": "Highlights",
-    "highlight.longestDay": "Longest Reading Day",
-    "highlight.latestNight": "Latest Night Reading",
-    "highlight.mostNotes": "Most Notes Day",
-    "highlight.mostComments": "Most Comments Day",
+    "highlight": {
+      "longestDay": "Longest Reading Day",
+      "latestNight": "Latest Night Reading",
+      "mostNotes": "Most Notes Day",
+      "mostComments": "Most Comments Day"
+    },
     "socialRanking": "Social Ranking",
-    "ranking.readingTime": "Reading Time",
-    "ranking.booksRead": "Books Read",
-    "ranking.vocabulary": "Vocabulary",
+    "ranking": {
+      "readingTime": "Reading Time",
+      "booksRead": "Books Read",
+      "vocabulary": "Vocabulary"
+    },
     "topPercent": "Top {value}%",
     "yourPreferences": "Your Preferences",
-    "pref.early_bird": "Early Bird",
-    "pref.night_owl": "Night Owl",
-    "pref.flexible": "Flexible Reader",
-    "pref.balanced": "Balanced Reader",
+    "pref": {
+      "early_bird": "Early Bird",
+      "night_owl": "Night Owl",
+      "flexible": "Flexible Reader",
+      "balanced": "Balanced Reader"
+    },
     "avgSession": "Average {min} min per session",
     "favoriteGenres": "Favorite Genres",
     "yourTitle": "Your Title",
@@ -567,16 +581,17 @@
     "expandReading": "Expand",
     "learnMore": "Learn more on Wikipedia",
     "worksSection": "Notable Works",
-    "timeline": "Timeline",
+    "timeline": {
+      "birth": "Birth",
+      "education": "Education",
+      "work": "Work",
+      "majorEvent": "Major Event",
+      "award": "Award",
+      "death": "Death"
+    },
     "relatedAuthors": "Related Authors",
     "loadError": "Failed to load author details. Please try again later.",
     "notFound": "Author not found",
-    "timeline.birth": "Birth",
-    "timeline.education": "Education",
-    "timeline.work": "Work",
-    "timeline.majorEvent": "Major Event",
-    "timeline.award": "Award",
-    "timeline.death": "Death",
     "literaryCoordinates": "Literary Map",
     "literaryGenre": "Literary Genre",
     "historicalPeriod": "Historical Period",
@@ -616,13 +631,17 @@
     "readFull": "Read Full Article",
     "notFound": "Article not found",
     "backToCommunity": "Back to Community",
-    "category.tech": "Tech",
-    "category.business": "Business",
-    "category.culture": "Culture",
-    "category.literature": "Literature",
-    "license.readable": "Readable",
-    "license.summary": "Summary",
-    "license.redirect": "External"
+    "category": {
+      "tech": "Tech",
+      "business": "Business",
+      "culture": "Culture",
+      "literature": "Literature"
+    },
+    "license": {
+      "readable": "Readable",
+      "summary": "Summary",
+      "redirect": "External"
+    }
   },
   "papers": {
     "notFound": "Paper not found",
@@ -719,15 +738,23 @@
     "sleepEndOfChapter": "End of chapter",
     "cloudVoicesError": "Failed to load cloud voices",
     "closeTimeline": "Close timeline",
-    "guide.step1.title": "Show Controls",
-    "guide.step1.desc": "Tap the center area to show or hide the reading toolbar",
-    "guide.step2.title": "Turn Pages",
-    "guide.step2.desc": "Tap the left or right side of the screen, or use arrow keys to turn pages",
-    "guide.step3.title": "Highlights & Notes",
-    "guide.step3.desc": "Long-press or select text to add highlights or notes",
-    "guide.skip": "Skip",
-    "guide.next": "Next",
-    "guide.start": "Start Reading"
+    "guide": {
+      "step1": {
+        "title": "Show Controls",
+        "desc": "Tap the center area to show or hide the reading toolbar"
+      },
+      "step2": {
+        "title": "Turn Pages",
+        "desc": "Tap the left or right side of the screen, or use arrow keys to turn pages"
+      },
+      "step3": {
+        "title": "Highlights & Notes",
+        "desc": "Long-press or select text to add highlights or notes"
+      },
+      "skip": "Skip",
+      "next": "Next",
+      "start": "Start Reading"
+    }
   },
   "bookList": {
     "tragedy": "Tragedy",

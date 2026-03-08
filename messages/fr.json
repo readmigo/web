@@ -327,12 +327,14 @@
     "inProgress": "En cours",
     "allBadges": "Tous les badges",
     "empty": "Aucun badge pour l'instant",
-    "categories.all": "Tous",
-    "categories.reading": "Lecture",
-    "categories.vocabulary": "Vocabulaire",
-    "categories.streak": "Série",
-    "categories.milestone": "Étape",
-    "categories.social": "Social"
+    "categories": {
+      "all": "Tous",
+      "reading": "Lecture",
+      "vocabulary": "Vocabulaire",
+      "streak": "Série",
+      "milestone": "Étape",
+      "social": "Social"
+    }
   },
   "quotes": {
     "dailyQuote": "Citation du jour",
@@ -351,9 +353,11 @@
     "avgPerDay": "Moy {minutes}min/jour",
     "currentlyReading": "En cours de lecture",
     "recentSessions": "Sessions récentes",
-    "locked.title": "Statistiques détaillées",
-    "locked.desc": "Passez à Pro pour voir l'analyse complète de lecture",
-    "locked.upgrade": "Passer à Pro"
+    "locked": {
+      "title": "Statistiques détaillées",
+      "desc": "Passez à Pro pour voir l'analyse complète de lecture",
+      "upgrade": "Passer à Pro"
+    }
   },
   "subscription": {
     "title": "Passer à Readmigo Pro",
@@ -369,15 +373,19 @@
     "restore": "Restaurer les achats",
     "terms": "Conditions d'utilisation",
     "privacy": "Politique de confidentialité",
-    "plans.weekly": "Hebdomadaire",
-    "plans.monthly": "Mensuel",
-    "plans.yearly": "Annuel",
-    "features.allBooks": "Tous les livres",
-    "features.audiobooks": "Livres audio illimités",
-    "features.cloudTTS": "Voix TTS en nuage",
-    "features.offline": "Téléchargements hors ligne",
-    "features.stats": "Statistiques détaillées",
-    "features.templates": "Modèles premium"
+    "plans": {
+      "weekly": "Hebdomadaire",
+      "monthly": "Mensuel",
+      "yearly": "Annuel"
+    },
+    "features": {
+      "allBooks": "Tous les livres",
+      "audiobooks": "Livres audio illimités",
+      "cloudTTS": "Voix TTS en nuage",
+      "offline": "Téléchargements hors ligne",
+      "stats": "Statistiques détaillées",
+      "templates": "Modèles premium"
+    }
   },
   "onboarding": {
     "skip": "Passer",
@@ -457,20 +465,26 @@
     "pagesRead": "Pages lues",
     "completionRate": "Taux d'achèvement",
     "highlights": "Points forts",
-    "highlight.longestDay": "Journée de lecture la plus longue",
-    "highlight.latestNight": "Nuit de lecture la plus tardive",
-    "highlight.mostNotes": "Jour avec le plus de notes",
-    "highlight.mostComments": "Jour avec le plus de commentaires",
+    "highlight": {
+      "longestDay": "Journée de lecture la plus longue",
+      "latestNight": "Nuit de lecture la plus tardive",
+      "mostNotes": "Jour avec le plus de notes",
+      "mostComments": "Jour avec le plus de commentaires"
+    },
     "socialRanking": "Classement social",
-    "ranking.readingTime": "Temps de lecture",
-    "ranking.booksRead": "Livres lus",
-    "ranking.vocabulary": "Vocabulaire",
+    "ranking": {
+      "readingTime": "Temps de lecture",
+      "booksRead": "Livres lus",
+      "vocabulary": "Vocabulaire"
+    },
     "topPercent": "Top {value}%",
     "yourPreferences": "Vos préférences",
-    "pref.early_bird": "Lève-tôt",
-    "pref.night_owl": "Couche-tard",
-    "pref.flexible": "Lecteur flexible",
-    "pref.balanced": "Lecteur équilibré",
+    "pref": {
+      "early_bird": "Lève-tôt",
+      "night_owl": "Couche-tard",
+      "flexible": "Lecteur flexible",
+      "balanced": "Lecteur équilibré"
+    },
     "avgSession": "Moyenne de {min} min par session",
     "favoriteGenres": "Genres préférés",
     "yourTitle": "Votre titre",
@@ -559,16 +573,17 @@
     "expandReading": "Développer",
     "learnMore": "En savoir plus sur Wikipedia",
     "worksSection": "Œuvres notables",
-    "timeline": "Chronologie",
+    "timeline": {
+      "birth": "Naissance",
+      "education": "Éducation",
+      "work": "Œuvre",
+      "majorEvent": "Événement majeur",
+      "award": "Prix",
+      "death": "Décès"
+    },
     "relatedAuthors": "Auteurs associés",
     "loadError": "Échec du chargement des détails de l'auteur. Veuillez réessayer plus tard.",
     "notFound": "Auteur introuvable",
-    "timeline.birth": "Naissance",
-    "timeline.education": "Éducation",
-    "timeline.work": "Œuvre",
-    "timeline.majorEvent": "Événement majeur",
-    "timeline.award": "Prix",
-    "timeline.death": "Décès",
     "literaryCoordinates": "Carte littéraire",
     "literaryGenre": "Genre littéraire",
     "historicalPeriod": "Période historique",
@@ -608,13 +623,17 @@
     "readFull": "Lire l'article complet",
     "notFound": "Article introuvable",
     "backToCommunity": "Retour à la communauté",
-    "category.tech": "Technologie",
-    "category.business": "Affaires",
-    "category.culture": "Culture",
-    "category.literature": "Littérature",
-    "license.readable": "Lisible",
-    "license.summary": "Résumé",
-    "license.redirect": "Externe"
+    "category": {
+      "tech": "Technologie",
+      "business": "Affaires",
+      "culture": "Culture",
+      "literature": "Littérature"
+    },
+    "license": {
+      "readable": "Lisible",
+      "summary": "Résumé",
+      "redirect": "Externe"
+    }
   },
   "papers": {
     "notFound": "Article introuvable",
@@ -711,15 +730,23 @@
     "sleepEndOfChapter": "Fin du chapitre",
     "cloudVoicesError": "Échec du chargement des voix cloud",
     "closeTimeline": "Fermer la chronologie",
-    "guide.step1.title": "Afficher les contrôles",
-    "guide.step1.desc": "Appuyez sur la zone centrale pour afficher ou masquer la barre d'outils",
-    "guide.step2.title": "Tourner les pages",
-    "guide.step2.desc": "Appuyez sur les côtés de l'écran ou utilisez les touches fléchées pour tourner les pages",
-    "guide.step3.title": "Surlignages et notes",
-    "guide.step3.desc": "Appuyez longuement ou sélectionnez du texte pour ajouter des surlignages ou des notes",
-    "guide.skip": "Passer",
-    "guide.next": "Suivant",
-    "guide.start": "Commencer la lecture"
+    "guide": {
+      "step1": {
+        "title": "Afficher les contrôles",
+        "desc": "Appuyez sur la zone centrale pour afficher ou masquer la barre d'outils"
+      },
+      "step2": {
+        "title": "Tourner les pages",
+        "desc": "Appuyez sur les côtés de l'écran ou utilisez les touches fléchées pour tourner les pages"
+      },
+      "step3": {
+        "title": "Surlignages et notes",
+        "desc": "Appuyez longuement ou sélectionnez du texte pour ajouter des surlignages ou des notes"
+      },
+      "skip": "Passer",
+      "next": "Suivant",
+      "start": "Commencer la lecture"
+    }
   },
   "bookList": {
     "tragedy": "Tragédie",

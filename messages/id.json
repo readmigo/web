@@ -327,12 +327,14 @@
     "inProgress": "Sedang Berlangsung",
     "allBadges": "Semua Lencana",
     "empty": "Belum ada lencana",
-    "categories.all": "Semua",
-    "categories.reading": "Membaca",
-    "categories.vocabulary": "Kosakata",
-    "categories.streak": "Berturut-turut",
-    "categories.milestone": "Pencapaian",
-    "categories.social": "Sosial"
+    "categories": {
+      "all": "Semua",
+      "reading": "Membaca",
+      "vocabulary": "Kosakata",
+      "streak": "Berturut-turut",
+      "milestone": "Pencapaian",
+      "social": "Sosial"
+    }
   },
   "quotes": {
     "dailyQuote": "Kutipan Harian",
@@ -351,9 +353,11 @@
     "avgPerDay": "Rata-rata {minutes}mnt/hari",
     "currentlyReading": "Sedang Dibaca",
     "recentSessions": "Sesi Terbaru",
-    "locked.title": "Statistik Terperinci",
-    "locked.desc": "Upgrade ke Pro untuk melihat analitik membaca lengkap",
-    "locked.upgrade": "Upgrade ke Pro"
+    "locked": {
+      "title": "Statistik Terperinci",
+      "desc": "Upgrade ke Pro untuk melihat analitik membaca lengkap",
+      "upgrade": "Upgrade ke Pro"
+    }
   },
   "subscription": {
     "title": "Upgrade ke Readmigo Pro",
@@ -369,15 +373,19 @@
     "restore": "Pulihkan Pembelian",
     "terms": "Syarat Penggunaan",
     "privacy": "Kebijakan Privasi",
-    "plans.weekly": "Mingguan",
-    "plans.monthly": "Bulanan",
-    "plans.yearly": "Tahunan",
-    "features.allBooks": "Semua Buku",
-    "features.audiobooks": "Buku Audio Tanpa Batas",
-    "features.cloudTTS": "Suara TTS Cloud",
-    "features.offline": "Unduhan Offline",
-    "features.stats": "Statistik Terperinci",
-    "features.templates": "Template Premium"
+    "plans": {
+      "weekly": "Mingguan",
+      "monthly": "Bulanan",
+      "yearly": "Tahunan"
+    },
+    "features": {
+      "allBooks": "Semua Buku",
+      "audiobooks": "Buku Audio Tanpa Batas",
+      "cloudTTS": "Suara TTS Cloud",
+      "offline": "Unduhan Offline",
+      "stats": "Statistik Terperinci",
+      "templates": "Template Premium"
+    }
   },
   "onboarding": {
     "skip": "Lewati",
@@ -457,20 +465,26 @@
     "pagesRead": "Halaman Dibaca",
     "completionRate": "Tingkat Penyelesaian",
     "highlights": "Sorotan",
-    "highlight.longestDay": "Hari Membaca Terlama",
-    "highlight.latestNight": "Malam Membaca Terlambat",
-    "highlight.mostNotes": "Hari Catatan Terbanyak",
-    "highlight.mostComments": "Hari Komentar Terbanyak",
+    "highlight": {
+      "longestDay": "Hari Membaca Terlama",
+      "latestNight": "Malam Membaca Terlambat",
+      "mostNotes": "Hari Catatan Terbanyak",
+      "mostComments": "Hari Komentar Terbanyak"
+    },
     "socialRanking": "Peringkat Sosial",
-    "ranking.readingTime": "Waktu Membaca",
-    "ranking.booksRead": "Buku Dibaca",
-    "ranking.vocabulary": "Kosakata",
+    "ranking": {
+      "readingTime": "Waktu Membaca",
+      "booksRead": "Buku Dibaca",
+      "vocabulary": "Kosakata"
+    },
     "topPercent": "Top {value}%",
     "yourPreferences": "Preferensi Anda",
-    "pref.early_bird": "Orang Pagi",
-    "pref.night_owl": "Orang Malam",
-    "pref.flexible": "Pembaca Fleksibel",
-    "pref.balanced": "Pembaca Seimbang",
+    "pref": {
+      "early_bird": "Orang Pagi",
+      "night_owl": "Orang Malam",
+      "flexible": "Pembaca Fleksibel",
+      "balanced": "Pembaca Seimbang"
+    },
     "avgSession": "Rata-rata {min} menit per sesi",
     "favoriteGenres": "Genre Favorit",
     "yourTitle": "Gelar Anda",
@@ -559,16 +573,17 @@
     "expandReading": "Perluas",
     "learnMore": "Pelajari lebih lanjut di Wikipedia",
     "worksSection": "Karya Terkenal",
-    "timeline": "Linimasa",
+    "timeline": {
+      "birth": "Kelahiran",
+      "education": "Pendidikan",
+      "work": "Pekerjaan",
+      "majorEvent": "Peristiwa Besar",
+      "award": "Penghargaan",
+      "death": "Kematian"
+    },
     "relatedAuthors": "Penulis Terkait",
     "loadError": "Gagal memuat detail penulis. Silakan coba lagi nanti.",
     "notFound": "Penulis tidak ditemukan",
-    "timeline.birth": "Kelahiran",
-    "timeline.education": "Pendidikan",
-    "timeline.work": "Pekerjaan",
-    "timeline.majorEvent": "Peristiwa Besar",
-    "timeline.award": "Penghargaan",
-    "timeline.death": "Kematian",
     "literaryCoordinates": "Peta Sastra",
     "literaryGenre": "Genre Sastra",
     "historicalPeriod": "Periode Sejarah",
@@ -608,13 +623,17 @@
     "readFull": "Baca Artikel Lengkap",
     "notFound": "Artikel tidak ditemukan",
     "backToCommunity": "Kembali ke Komunitas",
-    "category.tech": "Teknologi",
-    "category.business": "Bisnis",
-    "category.culture": "Budaya",
-    "category.literature": "Sastra",
-    "license.readable": "Dapat Dibaca",
-    "license.summary": "Ringkasan",
-    "license.redirect": "Eksternal"
+    "category": {
+      "tech": "Teknologi",
+      "business": "Bisnis",
+      "culture": "Budaya",
+      "literature": "Sastra"
+    },
+    "license": {
+      "readable": "Dapat Dibaca",
+      "summary": "Ringkasan",
+      "redirect": "Eksternal"
+    }
   },
   "papers": {
     "notFound": "Makalah tidak ditemukan",
@@ -711,15 +730,23 @@
     "sleepEndOfChapter": "Akhir bab",
     "cloudVoicesError": "Gagal memuat suara cloud",
     "closeTimeline": "Tutup linimasa",
-    "guide.step1.title": "Tampilkan kontrol",
-    "guide.step1.desc": "Ketuk area tengah untuk menampilkan atau menyembunyikan bilah alat membaca",
-    "guide.step2.title": "Balik halaman",
-    "guide.step2.desc": "Ketuk sisi kiri atau kanan layar, atau gunakan tombol panah untuk membalik halaman",
-    "guide.step3.title": "Sorotan dan catatan",
-    "guide.step3.desc": "Tekan lama atau pilih teks untuk menambahkan sorotan atau catatan",
-    "guide.skip": "Lewati",
-    "guide.next": "Berikutnya",
-    "guide.start": "Mulai membaca"
+    "guide": {
+      "step1": {
+        "title": "Tampilkan kontrol",
+        "desc": "Ketuk area tengah untuk menampilkan atau menyembunyikan bilah alat membaca"
+      },
+      "step2": {
+        "title": "Balik halaman",
+        "desc": "Ketuk sisi kiri atau kanan layar, atau gunakan tombol panah untuk membalik halaman"
+      },
+      "step3": {
+        "title": "Sorotan dan catatan",
+        "desc": "Tekan lama atau pilih teks untuk menambahkan sorotan atau catatan"
+      },
+      "skip": "Lewati",
+      "next": "Berikutnya",
+      "start": "Mulai membaca"
+    }
   },
   "bookList": {
     "tragedy": "Tragedi",

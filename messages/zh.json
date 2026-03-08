@@ -335,12 +335,14 @@
     "inProgress": "进行中",
     "allBadges": "全部徽章",
     "empty": "暂无徽章",
-    "categories.all": "全部",
-    "categories.reading": "阅读",
-    "categories.vocabulary": "词汇",
-    "categories.streak": "连续",
-    "categories.milestone": "里程碑",
-    "categories.social": "社交"
+    "categories": {
+      "all": "全部",
+      "reading": "阅读",
+      "vocabulary": "词汇",
+      "streak": "连续",
+      "milestone": "里程碑",
+      "social": "社交"
+    }
   },
   "quotes": {
     "dailyQuote": "每日名言",
@@ -359,9 +361,11 @@
     "avgPerDay": "日均 {minutes} 分钟",
     "currentlyReading": "正在阅读",
     "recentSessions": "最近阅读",
-    "locked.title": "详细统计",
-    "locked.desc": "升级 Pro 查看完整阅读数据分析",
-    "locked.upgrade": "升级 Pro"
+    "locked": {
+      "title": "详细统计",
+      "desc": "升级 Pro 查看完整阅读数据分析",
+      "upgrade": "升级 Pro"
+    }
   },
   "subscription": {
     "title": "升级 Readmigo Pro",
@@ -377,15 +381,19 @@
     "restore": "恢复购买",
     "terms": "服务条款",
     "privacy": "隐私政策",
-    "plans.weekly": "周",
-    "plans.monthly": "月",
-    "plans.yearly": "年",
-    "features.allBooks": "全部书籍",
-    "features.audiobooks": "无限有声书",
-    "features.cloudTTS": "云端语音",
-    "features.offline": "离线下载",
-    "features.stats": "详细统计",
-    "features.templates": "高级模板"
+    "plans": {
+      "weekly": "周",
+      "monthly": "月",
+      "yearly": "年"
+    },
+    "features": {
+      "allBooks": "全部书籍",
+      "audiobooks": "无限有声书",
+      "cloudTTS": "云端语音",
+      "offline": "离线下载",
+      "stats": "详细统计",
+      "templates": "高级模板"
+    }
   },
   "onboarding": {
     "skip": "跳过",
@@ -465,20 +473,26 @@
     "pagesRead": "阅读页数",
     "completionRate": "完成率",
     "highlights": "高光时刻",
-    "highlight.longestDay": "最长阅读日",
-    "highlight.latestNight": "最晚夜读",
-    "highlight.mostNotes": "最多笔记日",
-    "highlight.mostComments": "最多评论日",
+    "highlight": {
+      "longestDay": "最长阅读日",
+      "latestNight": "最晚夜读",
+      "mostNotes": "最多笔记日",
+      "mostComments": "最多评论日"
+    },
     "socialRanking": "社交排名",
-    "ranking.readingTime": "阅读时长",
-    "ranking.booksRead": "阅读数量",
-    "ranking.vocabulary": "词汇量",
+    "ranking": {
+      "readingTime": "阅读时长",
+      "booksRead": "阅读数量",
+      "vocabulary": "词汇量"
+    },
     "topPercent": "Top {value}%",
     "yourPreferences": "阅读偏好",
-    "pref.early_bird": "早起鸟",
-    "pref.night_owl": "夜猫子",
-    "pref.flexible": "灵活阅读",
-    "pref.balanced": "均衡阅读",
+    "pref": {
+      "early_bird": "早起鸟",
+      "night_owl": "夜猫子",
+      "flexible": "灵活阅读",
+      "balanced": "均衡阅读"
+    },
     "avgSession": "平均每次 {min} 分钟",
     "favoriteGenres": "最爱类型",
     "yourTitle": "你的称号",
@@ -567,16 +581,17 @@
     "expandReading": "展开阅读",
     "learnMore": "在 Wikipedia 上了解更多",
     "worksSection": "代表作品",
-    "timeline": "生平时间线",
+    "timeline": {
+      "birth": "出生",
+      "education": "教育",
+      "work": "作品",
+      "majorEvent": "重要事件",
+      "award": "荣誉",
+      "death": "逝世"
+    },
     "relatedAuthors": "相关作家",
     "loadError": "加载作者详情失败，请稍后重试",
     "notFound": "未找到该作者",
-    "timeline.birth": "出生",
-    "timeline.education": "教育",
-    "timeline.work": "作品",
-    "timeline.majorEvent": "重要事件",
-    "timeline.award": "荣誉",
-    "timeline.death": "逝世",
     "literaryCoordinates": "文学坐标",
     "literaryGenre": "文学流派",
     "historicalPeriod": "历史时期",
@@ -616,13 +631,17 @@
     "readFull": "阅读完整文章",
     "notFound": "文章不存在",
     "backToCommunity": "返回社区",
-    "category.tech": "科技",
-    "category.business": "商业",
-    "category.culture": "文化",
-    "category.literature": "文学",
-    "license.readable": "可阅读",
-    "license.summary": "摘要",
-    "license.redirect": "跳转"
+    "category": {
+      "tech": "科技",
+      "business": "商业",
+      "culture": "文化",
+      "literature": "文学"
+    },
+    "license": {
+      "readable": "可阅读",
+      "summary": "摘要",
+      "redirect": "跳转"
+    }
   },
   "papers": {
     "notFound": "论文不存在",
@@ -719,15 +738,23 @@
     "sleepEndOfChapter": "章节末尾",
     "cloudVoicesError": "加载云端声音失败",
     "closeTimeline": "关闭时间线",
-    "guide.step1.title": "显示控件",
-    "guide.step1.desc": "点击中央区域可以显示或隐藏阅读工具栏",
-    "guide.step2.title": "翻页",
-    "guide.step2.desc": "左右点击屏幕两侧或按键盘方向键翻页",
-    "guide.step3.title": "高亮与笔记",
-    "guide.step3.desc": "长按或选中文字，可以添加高亮或笔记",
-    "guide.skip": "跳过",
-    "guide.next": "下一步",
-    "guide.start": "开始阅读"
+    "guide": {
+      "step1": {
+        "title": "显示控件",
+        "desc": "点击中央区域可以显示或隐藏阅读工具栏"
+      },
+      "step2": {
+        "title": "翻页",
+        "desc": "左右点击屏幕两侧或按键盘方向键翻页"
+      },
+      "step3": {
+        "title": "高亮与笔记",
+        "desc": "长按或选中文字，可以添加高亮或笔记"
+      },
+      "skip": "跳过",
+      "next": "下一步",
+      "start": "开始阅读"
+    }
   },
   "bookList": {
     "tragedy": "悲剧",

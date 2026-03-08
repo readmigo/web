@@ -30,8 +30,10 @@ function getSnapshot(): BrowsingHistoryItem[] {
   }
 }
 
+const EMPTY_ARRAY: BrowsingHistoryItem[] = [];
+
 function getServerSnapshot(): BrowsingHistoryItem[] {
-  return [];
+  return EMPTY_ARRAY;
 }
 
 function subscribe(listener: () => void) {

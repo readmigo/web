@@ -327,12 +327,14 @@
     "inProgress": "進行中",
     "allBadges": "すべてのバッジ",
     "empty": "バッジはまだありません",
-    "categories.all": "すべて",
-    "categories.reading": "読書",
-    "categories.vocabulary": "単語",
-    "categories.streak": "連続",
-    "categories.milestone": "マイルストーン",
-    "categories.social": "ソーシャル"
+    "categories": {
+      "all": "すべて",
+      "reading": "読書",
+      "vocabulary": "単語",
+      "streak": "連続",
+      "milestone": "マイルストーン",
+      "social": "ソーシャル"
+    }
   },
   "quotes": {
     "dailyQuote": "今日の名言",
@@ -351,9 +353,11 @@
     "avgPerDay": "平均 {minutes}分/日",
     "currentlyReading": "読書中",
     "recentSessions": "最近のセッション",
-    "locked.title": "詳細統計",
-    "locked.desc": "Proにアップグレードして完全な読書分析を見る",
-    "locked.upgrade": "Proにアップグレード"
+    "locked": {
+      "title": "詳細統計",
+      "desc": "Proにアップグレードして完全な読書分析を見る",
+      "upgrade": "Proにアップグレード"
+    }
   },
   "subscription": {
     "title": "Readmigo Pro にアップグレード",
@@ -369,15 +373,19 @@
     "restore": "購入を復元",
     "terms": "利用規約",
     "privacy": "プライバシーポリシー",
-    "plans.weekly": "週払い",
-    "plans.monthly": "月払い",
-    "plans.yearly": "年払い",
-    "features.allBooks": "すべての書籍",
-    "features.audiobooks": "無制限オーディオブック",
-    "features.cloudTTS": "クラウドTTS音声",
-    "features.offline": "オフラインダウンロード",
-    "features.stats": "詳細統計",
-    "features.templates": "プレミアムテンプレート"
+    "plans": {
+      "weekly": "週払い",
+      "monthly": "月払い",
+      "yearly": "年払い"
+    },
+    "features": {
+      "allBooks": "すべての書籍",
+      "audiobooks": "無制限オーディオブック",
+      "cloudTTS": "クラウドTTS音声",
+      "offline": "オフラインダウンロード",
+      "stats": "詳細統計",
+      "templates": "プレミアムテンプレート"
+    }
   },
   "onboarding": {
     "skip": "スキップ",
@@ -457,20 +465,26 @@
     "pagesRead": "読んだページ数",
     "completionRate": "完了率",
     "highlights": "ハイライト",
-    "highlight.longestDay": "最も長く読んだ日",
-    "highlight.latestNight": "最も遅くまで読んだ夜",
-    "highlight.mostNotes": "最もメモが多かった日",
-    "highlight.mostComments": "最もコメントが多かった日",
+    "highlight": {
+      "longestDay": "最も長く読んだ日",
+      "latestNight": "最も遅くまで読んだ夜",
+      "mostNotes": "最もメモが多かった日",
+      "mostComments": "最もコメントが多かった日"
+    },
     "socialRanking": "ソーシャルランキング",
-    "ranking.readingTime": "読書時間",
-    "ranking.booksRead": "読んだ冊数",
-    "ranking.vocabulary": "単語",
+    "ranking": {
+      "readingTime": "読書時間",
+      "booksRead": "読んだ冊数",
+      "vocabulary": "単語"
+    },
     "topPercent": "上位 {value}%",
     "yourPreferences": "あなたの好み",
-    "pref.early_bird": "早起き読書家",
-    "pref.night_owl": "夜更かし読書家",
-    "pref.flexible": "柔軟な読書家",
-    "pref.balanced": "バランス型読書家",
+    "pref": {
+      "early_bird": "早起き読書家",
+      "night_owl": "夜更かし読書家",
+      "flexible": "柔軟な読書家",
+      "balanced": "バランス型読書家"
+    },
     "avgSession": "1セッション平均 {min} 分",
     "favoriteGenres": "お気に入りジャンル",
     "yourTitle": "あなたの称号",
@@ -559,16 +573,17 @@
     "expandReading": "展開",
     "learnMore": "Wikipediaでもっと詳しく",
     "worksSection": "主な作品",
-    "timeline": "タイムライン",
+    "timeline": {
+      "birth": "誕生",
+      "education": "教育",
+      "work": "作品",
+      "majorEvent": "主要出来事",
+      "award": "受賞",
+      "death": "逝去"
+    },
     "relatedAuthors": "関連著者",
     "loadError": "著者の詳細の読み込みに失敗しました。しばらくしてからお試しください。",
     "notFound": "著者が見つかりません",
-    "timeline.birth": "誕生",
-    "timeline.education": "教育",
-    "timeline.work": "作品",
-    "timeline.majorEvent": "主要出来事",
-    "timeline.award": "受賞",
-    "timeline.death": "逝去",
     "literaryCoordinates": "文学マップ",
     "literaryGenre": "文学ジャンル",
     "historicalPeriod": "歴史的時代",
@@ -608,13 +623,17 @@
     "readFull": "全文を読む",
     "notFound": "記事が見つかりません",
     "backToCommunity": "コミュニティに戻る",
-    "category.tech": "テクノロジー",
-    "category.business": "ビジネス",
-    "category.culture": "文化",
-    "category.literature": "文学",
-    "license.readable": "閲覧可能",
-    "license.summary": "概要",
-    "license.redirect": "外部リンク"
+    "category": {
+      "tech": "テクノロジー",
+      "business": "ビジネス",
+      "culture": "文化",
+      "literature": "文学"
+    },
+    "license": {
+      "readable": "閲覧可能",
+      "summary": "概要",
+      "redirect": "外部リンク"
+    }
   },
   "papers": {
     "notFound": "論文が見つかりません",
@@ -711,15 +730,23 @@
     "sleepEndOfChapter": "章の終わり",
     "cloudVoicesError": "クラウド音声の読み込みに失敗しました",
     "closeTimeline": "年表を閉じる",
-    "guide.step1.title": "コントロールを表示",
-    "guide.step1.desc": "中央エリアをタップして読書ツールバーを表示または非表示にします",
-    "guide.step2.title": "ページをめくる",
-    "guide.step2.desc": "画面の左右をタップするか、矢印キーでページをめくります",
-    "guide.step3.title": "ハイライトとメモ",
-    "guide.step3.desc": "テキストを長押しまたは選択してハイライトやメモを追加します",
-    "guide.skip": "スキップ",
-    "guide.next": "次へ",
-    "guide.start": "読書を始める"
+    "guide": {
+      "step1": {
+        "title": "コントロールを表示",
+        "desc": "中央エリアをタップして読書ツールバーを表示または非表示にします"
+      },
+      "step2": {
+        "title": "ページをめくる",
+        "desc": "画面の左右をタップするか、矢印キーでページをめくります"
+      },
+      "step3": {
+        "title": "ハイライトとメモ",
+        "desc": "テキストを長押しまたは選択してハイライトやメモを追加します"
+      },
+      "skip": "スキップ",
+      "next": "次へ",
+      "start": "読書を始める"
+    }
   },
   "bookList": {
     "tragedy": "悲劇",

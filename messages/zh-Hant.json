@@ -327,12 +327,14 @@
     "inProgress": "進行中",
     "allBadges": "全部徽章",
     "empty": "暫無徽章",
-    "categories.all": "全部",
-    "categories.reading": "閱讀",
-    "categories.vocabulary": "詞彙",
-    "categories.streak": "連續",
-    "categories.milestone": "里程碑",
-    "categories.social": "社交"
+    "categories": {
+      "all": "全部",
+      "reading": "閱讀",
+      "vocabulary": "詞彙",
+      "streak": "連續",
+      "milestone": "里程碑",
+      "social": "社交"
+    }
   },
   "quotes": {
     "dailyQuote": "每日名言",
@@ -351,9 +353,11 @@
     "avgPerDay": "日均 {minutes} 分鐘",
     "currentlyReading": "正在閱讀",
     "recentSessions": "最近閱讀",
-    "locked.title": "詳細統計",
-    "locked.desc": "升級 Pro 查看完整閱讀數據分析",
-    "locked.upgrade": "升級 Pro"
+    "locked": {
+      "title": "詳細統計",
+      "desc": "升級 Pro 查看完整閱讀數據分析",
+      "upgrade": "升級 Pro"
+    }
   },
   "subscription": {
     "title": "升級 Readmigo Pro",
@@ -369,15 +373,19 @@
     "restore": "恢復購買",
     "terms": "服務條款",
     "privacy": "隱私政策",
-    "plans.weekly": "週",
-    "plans.monthly": "月",
-    "plans.yearly": "年",
-    "features.allBooks": "全部書籍",
-    "features.audiobooks": "無限有聲書",
-    "features.cloudTTS": "雲端語音",
-    "features.offline": "離線下載",
-    "features.stats": "詳細統計",
-    "features.templates": "高級模板"
+    "plans": {
+      "weekly": "週",
+      "monthly": "月",
+      "yearly": "年"
+    },
+    "features": {
+      "allBooks": "全部書籍",
+      "audiobooks": "無限有聲書",
+      "cloudTTS": "雲端語音",
+      "offline": "離線下載",
+      "stats": "詳細統計",
+      "templates": "高級模板"
+    }
   },
   "onboarding": {
     "skip": "跳過",
@@ -457,20 +465,26 @@
     "pagesRead": "閱讀頁數",
     "completionRate": "完成率",
     "highlights": "高光時刻",
-    "highlight.longestDay": "最長閱讀日",
-    "highlight.latestNight": "最晚夜讀",
-    "highlight.mostNotes": "最多筆記日",
-    "highlight.mostComments": "最多評論日",
+    "highlight": {
+      "longestDay": "最長閱讀日",
+      "latestNight": "最晚夜讀",
+      "mostNotes": "最多筆記日",
+      "mostComments": "最多評論日"
+    },
     "socialRanking": "社交排名",
-    "ranking.readingTime": "閱讀時長",
-    "ranking.booksRead": "閱讀數量",
-    "ranking.vocabulary": "詞彙量",
+    "ranking": {
+      "readingTime": "閱讀時長",
+      "booksRead": "閱讀數量",
+      "vocabulary": "詞彙量"
+    },
     "topPercent": "Top {value}%",
     "yourPreferences": "閱讀偏好",
-    "pref.early_bird": "早起鳥",
-    "pref.night_owl": "夜貓子",
-    "pref.flexible": "靈活閱讀",
-    "pref.balanced": "均衡閱讀",
+    "pref": {
+      "early_bird": "早起鳥",
+      "night_owl": "夜貓子",
+      "flexible": "靈活閱讀",
+      "balanced": "均衡閱讀"
+    },
     "avgSession": "平均每次 {min} 分鐘",
     "favoriteGenres": "最愛類型",
     "yourTitle": "你的稱號",
@@ -559,16 +573,17 @@
     "expandReading": "展開閱讀",
     "learnMore": "在 Wikipedia 上了解更多",
     "worksSection": "代表作品",
-    "timeline": "生平時間線",
+    "timeline": {
+      "birth": "出生",
+      "education": "教育",
+      "work": "作品",
+      "majorEvent": "重要事件",
+      "award": "榮譽",
+      "death": "逝世"
+    },
     "relatedAuthors": "相關作家",
     "loadError": "載入作者詳情失敗，請稍後重試",
     "notFound": "未找到該作者",
-    "timeline.birth": "出生",
-    "timeline.education": "教育",
-    "timeline.work": "作品",
-    "timeline.majorEvent": "重要事件",
-    "timeline.award": "榮譽",
-    "timeline.death": "逝世",
     "literaryCoordinates": "文學座標",
     "literaryGenre": "文學流派",
     "historicalPeriod": "歷史時期",
@@ -608,13 +623,17 @@
     "readFull": "閱讀完整文章",
     "notFound": "文章不存在",
     "backToCommunity": "返回社區",
-    "category.tech": "科技",
-    "category.business": "商業",
-    "category.culture": "文化",
-    "category.literature": "文學",
-    "license.readable": "可閱讀",
-    "license.summary": "摘要",
-    "license.redirect": "跳轉"
+    "category": {
+      "tech": "科技",
+      "business": "商業",
+      "culture": "文化",
+      "literature": "文學"
+    },
+    "license": {
+      "readable": "可閱讀",
+      "summary": "摘要",
+      "redirect": "跳轉"
+    }
   },
   "papers": {
     "notFound": "論文不存在",
@@ -711,15 +730,23 @@
     "sleepEndOfChapter": "章節末尾",
     "cloudVoicesError": "載入雲端聲音失敗",
     "closeTimeline": "關閉時間線",
-    "guide.step1.title": "顯示控件",
-    "guide.step1.desc": "點擊中央區域可以顯示或隱藏閱讀工具列",
-    "guide.step2.title": "翻頁",
-    "guide.step2.desc": "左右點擊螢幕兩側或按鍵盤方向鍵翻頁",
-    "guide.step3.title": "高亮與筆記",
-    "guide.step3.desc": "長按或選中文字，可以添加高亮或筆記",
-    "guide.skip": "跳過",
-    "guide.next": "下一步",
-    "guide.start": "開始閱讀"
+    "guide": {
+      "step1": {
+        "title": "顯示控件",
+        "desc": "點擊中央區域可以顯示或隱藏閱讀工具列"
+      },
+      "step2": {
+        "title": "翻頁",
+        "desc": "左右點擊螢幕兩側或按鍵盤方向鍵翻頁"
+      },
+      "step3": {
+        "title": "高亮與筆記",
+        "desc": "長按或選中文字，可以添加高亮或筆記"
+      },
+      "skip": "跳過",
+      "next": "下一步",
+      "start": "開始閱讀"
+    }
   },
   "bookList": {
     "tragedy": "悲劇",

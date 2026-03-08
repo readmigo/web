@@ -327,12 +327,14 @@
     "inProgress": "В процессе",
     "allBadges": "Все значки",
     "empty": "Значков пока нет",
-    "categories.all": "Все",
-    "categories.reading": "Чтение",
-    "categories.vocabulary": "Словарь",
-    "categories.streak": "Серия",
-    "categories.milestone": "Вехи",
-    "categories.social": "Социальное"
+    "categories": {
+      "all": "Все",
+      "reading": "Чтение",
+      "vocabulary": "Словарь",
+      "streak": "Серия",
+      "milestone": "Вехи",
+      "social": "Социальное"
+    }
   },
   "quotes": {
     "dailyQuote": "Цитата дня",
@@ -351,9 +353,11 @@
     "avgPerDay": "Avg {minutes}мин/день",
     "currentlyReading": "Читаю сейчас",
     "recentSessions": "Последние сессии",
-    "locked.title": "Подробная статистика",
-    "locked.desc": "Перейдите на Pro для просмотра полной аналитики чтения",
-    "locked.upgrade": "Перейти на Pro"
+    "locked": {
+      "title": "Подробная статистика",
+      "desc": "Перейдите на Pro для просмотра полной аналитики чтения",
+      "upgrade": "Перейти на Pro"
+    }
   },
   "subscription": {
     "title": "Перейти на Readmigo Pro",
@@ -369,15 +373,19 @@
     "restore": "Восстановить покупки",
     "terms": "Условия использования",
     "privacy": "Политика конфиденциальности",
-    "plans.weekly": "Еженедельно",
-    "plans.monthly": "Ежемесячно",
-    "plans.yearly": "Ежегодно",
-    "features.allBooks": "Все книги",
-    "features.audiobooks": "Неограниченные аудиокниги",
-    "features.cloudTTS": "Облачные голоса TTS",
-    "features.offline": "Загрузки для офлайна",
-    "features.stats": "Подробная статистика",
-    "features.templates": "Премиум-шаблоны"
+    "plans": {
+      "weekly": "Еженедельно",
+      "monthly": "Ежемесячно",
+      "yearly": "Ежегодно"
+    },
+    "features": {
+      "allBooks": "Все книги",
+      "audiobooks": "Неограниченные аудиокниги",
+      "cloudTTS": "Облачные голоса TTS",
+      "offline": "Загрузки для офлайна",
+      "stats": "Подробная статистика",
+      "templates": "Премиум-шаблоны"
+    }
   },
   "onboarding": {
     "skip": "Пропустить",
@@ -457,20 +465,26 @@
     "pagesRead": "Прочитано страниц",
     "completionRate": "Процент завершения",
     "highlights": "Лучшие моменты",
-    "highlight.longestDay": "Самый длинный день чтения",
-    "highlight.latestNight": "Самая поздняя ночь чтения",
-    "highlight.mostNotes": "День с наибольшим количеством заметок",
-    "highlight.mostComments": "День с наибольшим количеством комментариев",
+    "highlight": {
+      "longestDay": "Самый длинный день чтения",
+      "latestNight": "Самая поздняя ночь чтения",
+      "mostNotes": "День с наибольшим количеством заметок",
+      "mostComments": "День с наибольшим количеством комментариев"
+    },
     "socialRanking": "Социальный рейтинг",
-    "ranking.readingTime": "Время чтения",
-    "ranking.booksRead": "Прочитанных книг",
-    "ranking.vocabulary": "Словарный запас",
+    "ranking": {
+      "readingTime": "Время чтения",
+      "booksRead": "Прочитанных книг",
+      "vocabulary": "Словарный запас"
+    },
     "topPercent": "Топ {value}%",
     "yourPreferences": "Ваши предпочтения",
-    "pref.early_bird": "Ранняя пташка",
-    "pref.night_owl": "Ночная сова",
-    "pref.flexible": "Гибкий читатель",
-    "pref.balanced": "Сбалансированный читатель",
+    "pref": {
+      "early_bird": "Ранняя пташка",
+      "night_owl": "Ночная сова",
+      "flexible": "Гибкий читатель",
+      "balanced": "Сбалансированный читатель"
+    },
     "avgSession": "В среднем {min} мин за сессию",
     "favoriteGenres": "Любимые жанры",
     "yourTitle": "Ваш титул",
@@ -559,16 +573,17 @@
     "expandReading": "Развернуть",
     "learnMore": "Подробнее в Wikipedia",
     "worksSection": "Известные произведения",
-    "timeline": "Хронология",
+    "timeline": {
+      "birth": "Рождение",
+      "education": "Образование",
+      "work": "Работа",
+      "majorEvent": "Важное событие",
+      "award": "Награда",
+      "death": "Смерть"
+    },
     "relatedAuthors": "Связанные авторы",
     "loadError": "Не удалось загрузить сведения об авторе. Пожалуйста, попробуйте позже.",
     "notFound": "Автор не найден",
-    "timeline.birth": "Рождение",
-    "timeline.education": "Образование",
-    "timeline.work": "Работа",
-    "timeline.majorEvent": "Важное событие",
-    "timeline.award": "Награда",
-    "timeline.death": "Смерть",
     "literaryCoordinates": "Литературная карта",
     "literaryGenre": "Литературный жанр",
     "historicalPeriod": "Исторический период",
@@ -608,13 +623,17 @@
     "readFull": "Читать полную статью",
     "notFound": "Статья не найдена",
     "backToCommunity": "Вернуться в сообщество",
-    "category.tech": "Технологии",
-    "category.business": "Бизнес",
-    "category.culture": "Культура",
-    "category.literature": "Литература",
-    "license.readable": "Доступно для чтения",
-    "license.summary": "Краткое содержание",
-    "license.redirect": "Внешний источник"
+    "category": {
+      "tech": "Технологии",
+      "business": "Бизнес",
+      "culture": "Культура",
+      "literature": "Литература"
+    },
+    "license": {
+      "readable": "Доступно для чтения",
+      "summary": "Краткое содержание",
+      "redirect": "Внешний источник"
+    }
   },
   "papers": {
     "notFound": "Статья не найдена",
@@ -711,15 +730,23 @@
     "sleepEndOfChapter": "Конец главы",
     "cloudVoicesError": "Не удалось загрузить голоса из облака",
     "closeTimeline": "Закрыть хронологию",
-    "guide.step1.title": "Показать элементы управления",
-    "guide.step1.desc": "Нажмите на центральную область, чтобы показать или скрыть панель инструментов",
-    "guide.step2.title": "Перелистывать страницы",
-    "guide.step2.desc": "Нажмите на левую или правую часть экрана или используйте клавиши со стрелками",
-    "guide.step3.title": "Выделения и заметки",
-    "guide.step3.desc": "Удерживайте нажатой или выделите текст, чтобы добавить выделение или заметку",
-    "guide.skip": "Пропустить",
-    "guide.next": "Далее",
-    "guide.start": "Начать чтение"
+    "guide": {
+      "step1": {
+        "title": "Показать элементы управления",
+        "desc": "Нажмите на центральную область, чтобы показать или скрыть панель инструментов"
+      },
+      "step2": {
+        "title": "Перелистывать страницы",
+        "desc": "Нажмите на левую или правую часть экрана или используйте клавиши со стрелками"
+      },
+      "step3": {
+        "title": "Выделения и заметки",
+        "desc": "Удерживайте нажатой или выделите текст, чтобы добавить выделение или заметку"
+      },
+      "skip": "Пропустить",
+      "next": "Далее",
+      "start": "Начать чтение"
+    }
   },
   "bookList": {
     "tragedy": "Трагедия",

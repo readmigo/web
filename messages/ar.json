@@ -327,12 +327,14 @@
     "inProgress": "قيد التقدّم",
     "allBadges": "جميع الشارات",
     "empty": "لا توجد شارات بعد",
-    "categories.all": "الكل",
-    "categories.reading": "القراءة",
-    "categories.vocabulary": "المفردات",
-    "categories.streak": "التسلسل",
-    "categories.milestone": "الإنجاز",
-    "categories.social": "اجتماعي"
+    "categories": {
+      "all": "الكل",
+      "reading": "القراءة",
+      "vocabulary": "المفردات",
+      "streak": "التسلسل",
+      "milestone": "الإنجاز",
+      "social": "اجتماعي"
+    }
   },
   "quotes": {
     "dailyQuote": "اقتباس اليوم",
@@ -351,9 +353,11 @@
     "avgPerDay": "متوسط {minutes} دقيقة/يوم",
     "currentlyReading": "يُقرأ حاليًا",
     "recentSessions": "الجلسات الأخيرة",
-    "locked.title": "إحصائيات مفصّلة",
-    "locked.desc": "قم بالترقية إلى Pro لعرض تحليلات القراءة الكاملة",
-    "locked.upgrade": "الترقية إلى Pro"
+    "locked": {
+      "title": "إحصائيات مفصّلة",
+      "desc": "قم بالترقية إلى Pro لعرض تحليلات القراءة الكاملة",
+      "upgrade": "الترقية إلى Pro"
+    }
   },
   "subscription": {
     "title": "الترقية إلى Readmigo Pro",
@@ -369,15 +373,19 @@
     "restore": "استعادة المشتريات",
     "terms": "شروط الاستخدام",
     "privacy": "سياسة الخصوصية",
-    "plans.weekly": "أسبوعي",
-    "plans.monthly": "شهري",
-    "plans.yearly": "سنوي",
-    "features.allBooks": "جميع الكتب",
-    "features.audiobooks": "كتب صوتية غير محدودة",
-    "features.cloudTTS": "أصوات TTS السحابية",
-    "features.offline": "التنزيل للاستخدام دون اتصال",
-    "features.stats": "إحصائيات مفصّلة",
-    "features.templates": "قوالب مميّزة"
+    "plans": {
+      "weekly": "أسبوعي",
+      "monthly": "شهري",
+      "yearly": "سنوي"
+    },
+    "features": {
+      "allBooks": "جميع الكتب",
+      "audiobooks": "كتب صوتية غير محدودة",
+      "cloudTTS": "أصوات TTS السحابية",
+      "offline": "التنزيل للاستخدام دون اتصال",
+      "stats": "إحصائيات مفصّلة",
+      "templates": "قوالب مميّزة"
+    }
   },
   "onboarding": {
     "skip": "تخطّي",
@@ -457,20 +465,26 @@
     "pagesRead": "الصفحات المقروءة",
     "completionRate": "معدل الإتمام",
     "highlights": "أبرز اللحظات",
-    "highlight.longestDay": "أطول يوم قراءة",
-    "highlight.latestNight": "أحدث ليلة قراءة",
-    "highlight.mostNotes": "يوم الملاحظات الأكثر",
-    "highlight.mostComments": "يوم التعليقات الأكثر",
+    "highlight": {
+      "longestDay": "أطول يوم قراءة",
+      "latestNight": "أحدث ليلة قراءة",
+      "mostNotes": "يوم الملاحظات الأكثر",
+      "mostComments": "يوم التعليقات الأكثر"
+    },
     "socialRanking": "الترتيب الاجتماعي",
-    "ranking.readingTime": "وقت القراءة",
-    "ranking.booksRead": "الكتب المقروءة",
-    "ranking.vocabulary": "المفردات",
+    "ranking": {
+      "readingTime": "وقت القراءة",
+      "booksRead": "الكتب المقروءة",
+      "vocabulary": "المفردات"
+    },
     "topPercent": "أعلى {value}%",
     "yourPreferences": "تفضيلاتك",
-    "pref.early_bird": "صاحب الباكر",
-    "pref.night_owl": "بومة الليل",
-    "pref.flexible": "قارئ مرن",
-    "pref.balanced": "قارئ متوازن",
+    "pref": {
+      "early_bird": "صاحب الباكر",
+      "night_owl": "بومة الليل",
+      "flexible": "قارئ مرن",
+      "balanced": "قارئ متوازن"
+    },
     "avgSession": "متوسط {min} دقيقة لكل جلسة",
     "favoriteGenres": "الأنواع المفضّلة",
     "yourTitle": "لقبك",
@@ -559,16 +573,17 @@
     "expandReading": "توسيع",
     "learnMore": "اعرف المزيد على Wikipedia",
     "worksSection": "الأعمال البارزة",
-    "timeline": "الجدول الزمني",
+    "timeline": {
+      "birth": "الولادة",
+      "education": "التعليم",
+      "work": "العمل",
+      "majorEvent": "حدث رئيسي",
+      "award": "جائزة",
+      "death": "الوفاة"
+    },
     "relatedAuthors": "المؤلفون ذوو الصلة",
     "loadError": "فشل تحميل تفاصيل المؤلف. يرجى المحاولة لاحقًا.",
     "notFound": "المؤلف غير موجود",
-    "timeline.birth": "الولادة",
-    "timeline.education": "التعليم",
-    "timeline.work": "العمل",
-    "timeline.majorEvent": "حدث رئيسي",
-    "timeline.award": "جائزة",
-    "timeline.death": "الوفاة",
     "literaryCoordinates": "الخريطة الأدبية",
     "literaryGenre": "النوع الأدبي",
     "historicalPeriod": "الحقبة التاريخية",
@@ -608,13 +623,17 @@
     "readFull": "قراءة المقالة كاملة",
     "notFound": "المقالة غير موجودة",
     "backToCommunity": "العودة إلى المجتمع",
-    "category.tech": "تقنية",
-    "category.business": "أعمال",
-    "category.culture": "ثقافة",
-    "category.literature": "أدب",
-    "license.readable": "قابل للقراءة",
-    "license.summary": "ملخص",
-    "license.redirect": "خارجي"
+    "category": {
+      "tech": "تقنية",
+      "business": "أعمال",
+      "culture": "ثقافة",
+      "literature": "أدب"
+    },
+    "license": {
+      "readable": "قابل للقراءة",
+      "summary": "ملخص",
+      "redirect": "خارجي"
+    }
   },
   "papers": {
     "notFound": "الورقة البحثية غير موجودة",
@@ -711,15 +730,23 @@
     "sleepEndOfChapter": "نهاية الفصل",
     "cloudVoicesError": "فشل تحميل الأصوات السحابية",
     "closeTimeline": "إغلاق الجدول الزمني",
-    "guide.step1.title": "إظهار عناصر التحكم",
-    "guide.step1.desc": "اضغط على المنطقة المركزية لإظهار أو إخفاء شريط أدوات القراءة",
-    "guide.step2.title": "تقليب الصفحات",
-    "guide.step2.desc": "اضغط على جانبي الشاشة أو استخدم مفاتيح الأسهم لتقليب الصفحات",
-    "guide.step3.title": "التمييز والملاحظات",
-    "guide.step3.desc": "اضغط مطولاً أو حدد النص لإضافة تمييز أو ملاحظات",
-    "guide.skip": "تخطي",
-    "guide.next": "التالي",
-    "guide.start": "بدء القراءة"
+    "guide": {
+      "step1": {
+        "title": "إظهار عناصر التحكم",
+        "desc": "اضغط على المنطقة المركزية لإظهار أو إخفاء شريط أدوات القراءة"
+      },
+      "step2": {
+        "title": "تقليب الصفحات",
+        "desc": "اضغط على جانبي الشاشة أو استخدم مفاتيح الأسهم لتقليب الصفحات"
+      },
+      "step3": {
+        "title": "التمييز والملاحظات",
+        "desc": "اضغط مطولاً أو حدد النص لإضافة تمييز أو ملاحظات"
+      },
+      "skip": "تخطي",
+      "next": "التالي",
+      "start": "بدء القراءة"
+    }
   },
   "bookList": {
     "tragedy": "مأساة",

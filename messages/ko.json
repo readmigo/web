@@ -327,12 +327,14 @@
     "inProgress": "진행 중",
     "allBadges": "모든 배지",
     "empty": "아직 배지가 없습니다",
-    "categories.all": "전체",
-    "categories.reading": "독서",
-    "categories.vocabulary": "어휘",
-    "categories.streak": "연속",
-    "categories.milestone": "마일스톤",
-    "categories.social": "소셜"
+    "categories": {
+      "all": "전체",
+      "reading": "독서",
+      "vocabulary": "어휘",
+      "streak": "연속",
+      "milestone": "마일스톤",
+      "social": "소셜"
+    }
   },
   "quotes": {
     "dailyQuote": "오늘의 명언",
@@ -351,9 +353,11 @@
     "avgPerDay": "평균 {minutes}분/일",
     "currentlyReading": "현재 읽는 중",
     "recentSessions": "최근 세션",
-    "locked.title": "상세 통계",
-    "locked.desc": "Pro로 업그레이드하여 전체 독서 분석 보기",
-    "locked.upgrade": "Pro로 업그레이드"
+    "locked": {
+      "title": "상세 통계",
+      "desc": "Pro로 업그레이드하여 전체 독서 분석 보기",
+      "upgrade": "Pro로 업그레이드"
+    }
   },
   "subscription": {
     "title": "Readmigo Pro로 업그레이드",
@@ -369,15 +373,19 @@
     "restore": "구매 복원",
     "terms": "이용약관",
     "privacy": "개인정보 처리방침",
-    "plans.weekly": "주간",
-    "plans.monthly": "월간",
-    "plans.yearly": "연간",
-    "features.allBooks": "모든 도서",
-    "features.audiobooks": "무제한 오디오북",
-    "features.cloudTTS": "클라우드 TTS 음성",
-    "features.offline": "오프라인 다운로드",
-    "features.stats": "상세 통계",
-    "features.templates": "프리미엄 템플릿"
+    "plans": {
+      "weekly": "주간",
+      "monthly": "월간",
+      "yearly": "연간"
+    },
+    "features": {
+      "allBooks": "모든 도서",
+      "audiobooks": "무제한 오디오북",
+      "cloudTTS": "클라우드 TTS 음성",
+      "offline": "오프라인 다운로드",
+      "stats": "상세 통계",
+      "templates": "프리미엄 템플릿"
+    }
   },
   "onboarding": {
     "skip": "건너뛰기",
@@ -457,20 +465,26 @@
     "pagesRead": "읽은 페이지 수",
     "completionRate": "완료율",
     "highlights": "하이라이트",
-    "highlight.longestDay": "가장 오래 읽은 날",
-    "highlight.latestNight": "가장 늦게까지 읽은 밤",
-    "highlight.mostNotes": "메모가 가장 많은 날",
-    "highlight.mostComments": "댓글이 가장 많은 날",
+    "highlight": {
+      "longestDay": "가장 오래 읽은 날",
+      "latestNight": "가장 늦게까지 읽은 밤",
+      "mostNotes": "메모가 가장 많은 날",
+      "mostComments": "댓글이 가장 많은 날"
+    },
     "socialRanking": "소셜 랭킹",
-    "ranking.readingTime": "독서 시간",
-    "ranking.booksRead": "읽은 책 수",
-    "ranking.vocabulary": "어휘",
+    "ranking": {
+      "readingTime": "독서 시간",
+      "booksRead": "읽은 책 수",
+      "vocabulary": "어휘"
+    },
     "topPercent": "상위 {value}%",
     "yourPreferences": "나의 취향",
-    "pref.early_bird": "얼리버드 독서가",
-    "pref.night_owl": "올빼미 독서가",
-    "pref.flexible": "유연한 독서가",
-    "pref.balanced": "균형 잡힌 독서가",
+    "pref": {
+      "early_bird": "얼리버드 독서가",
+      "night_owl": "올빼미 독서가",
+      "flexible": "유연한 독서가",
+      "balanced": "균형 잡힌 독서가"
+    },
     "avgSession": "세션 평균 {min}분",
     "favoriteGenres": "즐겨찾는 장르",
     "yourTitle": "나의 칭호",
@@ -559,16 +573,17 @@
     "expandReading": "펼치기",
     "learnMore": "Wikipedia에서 더 알아보기",
     "worksSection": "주요 작품",
-    "timeline": "타임라인",
+    "timeline": {
+      "birth": "출생",
+      "education": "교육",
+      "work": "작품",
+      "majorEvent": "주요 사건",
+      "award": "수상",
+      "death": "사망"
+    },
     "relatedAuthors": "관련 저자",
     "loadError": "저자 상세 정보 로딩 실패. 잠시 후 다시 시도해 주세요.",
     "notFound": "저자를 찾을 수 없습니다",
-    "timeline.birth": "출생",
-    "timeline.education": "교육",
-    "timeline.work": "작품",
-    "timeline.majorEvent": "주요 사건",
-    "timeline.award": "수상",
-    "timeline.death": "사망",
     "literaryCoordinates": "문학 지도",
     "literaryGenre": "문학 장르",
     "historicalPeriod": "역사적 시대",
@@ -608,13 +623,17 @@
     "readFull": "전문 읽기",
     "notFound": "기사를 찾을 수 없습니다",
     "backToCommunity": "커뮤니티로 돌아가기",
-    "category.tech": "기술",
-    "category.business": "비즈니스",
-    "category.culture": "문화",
-    "category.literature": "문학",
-    "license.readable": "읽기 가능",
-    "license.summary": "요약",
-    "license.redirect": "외부 링크"
+    "category": {
+      "tech": "기술",
+      "business": "비즈니스",
+      "culture": "문화",
+      "literature": "문학"
+    },
+    "license": {
+      "readable": "읽기 가능",
+      "summary": "요약",
+      "redirect": "외부 링크"
+    }
   },
   "papers": {
     "notFound": "논문을 찾을 수 없습니다",
@@ -711,15 +730,23 @@
     "sleepEndOfChapter": "챕터 끝",
     "cloudVoicesError": "클라우드 음성 로드 실패",
     "closeTimeline": "타임라인 닫기",
-    "guide.step1.title": "컨트롤 표시",
-    "guide.step1.desc": "중앙 영역을 탭하여 읽기 도구 모음을 표시하거나 숨깁니다",
-    "guide.step2.title": "페이지 넘기기",
-    "guide.step2.desc": "화면 좌우를 탭하거나 화살표 키로 페이지를 넘깁니다",
-    "guide.step3.title": "하이라이트 및 메모",
-    "guide.step3.desc": "텍스트를 길게 누르거나 선택하여 하이라이트나 메모를 추가합니다",
-    "guide.skip": "건너뛰기",
-    "guide.next": "다음",
-    "guide.start": "읽기 시작"
+    "guide": {
+      "step1": {
+        "title": "컨트롤 표시",
+        "desc": "중앙 영역을 탭하여 읽기 도구 모음을 표시하거나 숨깁니다"
+      },
+      "step2": {
+        "title": "페이지 넘기기",
+        "desc": "화면 좌우를 탭하거나 화살표 키로 페이지를 넘깁니다"
+      },
+      "step3": {
+        "title": "하이라이트 및 메모",
+        "desc": "텍스트를 길게 누르거나 선택하여 하이라이트나 메모를 추가합니다"
+      },
+      "skip": "건너뛰기",
+      "next": "다음",
+      "start": "읽기 시작"
+    }
   },
   "bookList": {
     "tragedy": "비극",
