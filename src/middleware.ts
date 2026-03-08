@@ -1,6 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
+const REGION_COOKIE = 'readmigo-region';
+
+function detectRegion(req: NextRequest): 'cn' | 'global' {
+  const cookieRegion = req.cookies.get(REGION_COOKIE)?.value;
+  if (cookieRegion === 'cn' || cookieRegion === 'global') return cookieRegion;
+
+  const cfCountry = req.headers.get('cf-ipcountry');
+  if (cfCountry === 'CN') return 'cn';
+
+  const vercelCountry = req.headers.get('x-vercel-ip-country');
+  if (vercelCountry === 'CN') return 'cn';
+
+  return 'global';
+}
+
 // Public routes that don't require authentication
 const publicPaths = [
   '/explore',
@@ -53,14 +68,26 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Detect region and set cookie if not already set
+  const region = detectRegion(req);
+  const hasRegionCookie = req.cookies.has(REGION_COOKIE);
+
   // Rewrite root to /explore so the bookstore tab shows directly (no redirect)
   if (pathname === '/') {
-    return NextResponse.rewrite(new URL('/explore', req.url));
+    const response = NextResponse.rewrite(new URL('/explore', req.url));
+    if (!hasRegionCookie) {
+      response.cookies.set(REGION_COOKIE, region, { path: '/', maxAge: 365 * 24 * 60 * 60, sameSite: 'lax' });
+    }
+    return response;
   }
 
   // Allow public paths without authentication
   if (isPublicPath(pathname)) {
-    return NextResponse.next();
+    const response = NextResponse.next();
+    if (!hasRegionCookie) {
+      response.cookies.set(REGION_COOKIE, region, { path: '/', maxAge: 365 * 24 * 60 * 60, sameSite: 'lax' });
+    }
+    return response;
   }
 
   // For protected routes, check for a valid session
@@ -73,7 +100,11 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+  if (!hasRegionCookie) {
+    response.cookies.set(REGION_COOKIE, region, { path: '/', maxAge: 365 * 24 * 60 * 60, sameSite: 'lax' });
+  }
+  return response;
 }
 
 export const config = {

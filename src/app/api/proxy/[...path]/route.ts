@@ -4,6 +4,13 @@ import { rateLimit } from '@/lib/rate-limit';
 import { validateProxyPath } from '@/lib/validation';
 
 const API_BASE_URL = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
+const API_BASE_URL_CN = process.env.API_URL_CN || 'https://api.readmigo.cn/api/v1';
+const REGION_COOKIE = 'readmigo-region';
+
+function getApiBaseUrl(req: NextRequest): string {
+  const region = req.cookies.get(REGION_COOKIE)?.value;
+  return region === 'cn' ? API_BASE_URL_CN : API_BASE_URL;
+}
 
 // Rate limiter configurations (module-level, shared across requests)
 const GENERAL_LIMIT = 100;
@@ -54,7 +61,8 @@ async function proxyRequest(req: NextRequest) {
       }
     );
   }
-  const targetUrl = `${API_BASE_URL}${safePath}${url.search}`;
+  const apiBase = getApiBaseUrl(req);
+  const targetUrl = `${apiBase}${safePath}${url.search}`;
 
   // Read the JWT from the NextAuth session cookie (server-side only)
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
