@@ -9,44 +9,58 @@ import { useBookListDetail } from '../hooks/use-book-lists';
 import type { BookList } from '../types';
 import {
   GoldRankingSection,
-  StepLadderSection,
+  FreshStartSection,
   NeonSciFiSection,
-  AdventureMapSection,
+  AdventureScrollSection,
   ColorfulBubbleSection,
-  MinimalStoneSection,
-  DarkMysterySection,
-  RoyalTheaterSection,
+  PhilosophyScrollSection,
+  MysteryScrollSection,
+  RomanceScrollSection,
   BookSpineSection,
-  DifficultyLadderSection,
+  LearnerScrollSection,
+  SeriesShowcaseSection,
+  RoyalTheaterSection,
 } from './book-list-section-styles';
 
-/** iOS-matching background gradients for each ranking section */
-const SECTION_GRADIENTS = [
-  'linear-gradient(to bottom, rgba(249,115,22,0.08), transparent)', // 0: orange (金榜排行)
-  'linear-gradient(to bottom, rgba(59,130,246,0.06), transparent)',  // 1: blue (渐进阶梯)
-  'linear-gradient(to right, rgba(168,85,247,0.08), rgba(99,102,241,0.06))', // 2: purple→indigo (霓虹科幻)
-  'linear-gradient(to bottom, rgba(180,83,9,0.08), transparent)',   // 3: brown (地图探险)
-  'linear-gradient(to right, rgba(236,72,153,0.06), rgba(52,211,153,0.06), rgba(34,211,238,0.06))', // 4: pink→mint→cyan (彩色气泡)
-  'linear-gradient(to bottom, rgba(107,114,128,0.06), transparent)', // 5: gray (极简石刻)
-  'linear-gradient(135deg, rgba(217,226,237,0.6), rgba(224,232,242,0.4))', // 6: blue-gray (悬疑推理)
-  'linear-gradient(to bottom, rgba(168,85,247,0.06), rgba(234,179,8,0.04))', // 7: purple→yellow (皇家剧院)
-  'linear-gradient(to top, rgba(180,83,9,0.06), transparent)',      // 8: brown (书脊堆叠)
-  'linear-gradient(to bottom, rgba(34,197,94,0.06), transparent)',  // 9: green (难度阶梯)
-];
+/**
+ * iOS-matching background gradients keyed by styleIndex.
+ * Maps to BookListStyleDispatcher in iOS BookListSectionStyles.swift
+ */
+const SECTION_GRADIENTS: Record<number, string> = {
+  0: 'linear-gradient(to bottom, rgba(249,115,22,0.08), transparent)',   // orange (金榜排行)
+  1: 'linear-gradient(to bottom, rgba(34,197,94,0.08), rgba(52,211,153,0.05), transparent)', // green→mint (清新入门)
+  2: 'linear-gradient(to right, rgba(168,85,247,0.08), rgba(99,102,241,0.06))',              // purple→indigo (霓虹科幻)
+  3: 'linear-gradient(135deg, rgba(180,83,9,0.10), rgba(249,115,22,0.06), transparent)',     // brown→orange (暖调探险)
+  4: 'linear-gradient(to right, rgba(236,72,153,0.06), rgba(52,211,153,0.06), rgba(34,211,238,0.06))', // pink→mint→cyan (彩色气泡)
+  5: 'linear-gradient(to bottom, rgba(107,114,128,0.08), rgba(156,163,175,0.05), transparent)', // gray (极简雅致)
+  6: 'linear-gradient(135deg, rgba(51,61,80,0.10), rgba(64,71,90,0.06), transparent)',       // dark blue (暗色悬疑)
+  7: 'linear-gradient(to bottom, rgba(236,72,153,0.08), rgba(239,68,68,0.05), transparent)', // pink→red (浪漫爱情)
+  8: 'linear-gradient(to bottom, rgba(180,83,9,0.08), rgba(180,83,9,0.03), transparent)',    // brown (鸿篇巨制)
+  9: 'linear-gradient(to right, rgba(34,197,94,0.06), rgba(59,130,246,0.06), transparent)',  // green→blue (学习进阶)
+  10: 'linear-gradient(to bottom, rgba(140,90,43,0.10), rgba(165,115,65,0.06), transparent)', // brown→tan (系列书展)
+  18: 'linear-gradient(to bottom, rgba(168,85,247,0.08), rgba(217,191,140,0.06), rgba(168,85,247,0.04))', // purple→gold→purple (皇家剧院)
+};
 
-/** Style dispatcher: maps styleIndex to the corresponding section component */
-const STYLE_COMPONENTS = [
-  GoldRankingSection,     // 0: 金榜排行
-  StepLadderSection,      // 1: 渐进阶梯
-  NeonSciFiSection,       // 2: 霓虹科幻
-  AdventureMapSection,    // 3: 地图探险
-  ColorfulBubbleSection,  // 4: 彩色气泡
-  MinimalStoneSection,    // 5: 极简石刻
-  DarkMysterySection,     // 6: 悬疑推理
-  RoyalTheaterSection,    // 7: 皇家剧院
-  BookSpineSection,       // 8: 书脊堆叠
-  DifficultyLadderSection, // 9: 难度阶梯
-];
+/**
+ * Style dispatcher: maps styleIndex to section component.
+ * Matches iOS BookListStyleDispatcher case mapping exactly.
+ */
+const STYLE_COMPONENTS: Record<number, React.ComponentType<{ books: import('../types').BookListBook[] }>> = {
+  0: GoldRankingSection,       // 金榜排行
+  1: FreshStartSection,        // 清新入门
+  2: NeonSciFiSection,         // 霓虹科幻
+  3: AdventureScrollSection,   // 暖调探险
+  4: ColorfulBubbleSection,    // 彩色气泡
+  5: PhilosophyScrollSection,  // 极简雅致
+  6: MysteryScrollSection,     // 暗色悬疑
+  7: RomanceScrollSection,     // 浪漫爱情
+  8: BookSpineSection,         // 鸿篇巨制
+  9: LearnerScrollSection,     // 学习进阶
+  10: SeriesShowcaseSection,   // 系列书展
+  18: RoyalTheaterSection,     // 皇家剧院
+};
+
+const DEFAULT_STYLE = GoldRankingSection;
 
 interface BookListSectionProps {
   bookList: BookList;
@@ -72,9 +86,10 @@ export function BookListSection({ bookList, styleIndex }: BookListSectionProps) 
     return null;
   }
 
+  // Use sortOrder-based styleIndex (iOS: (list.sortOrder ?? 1) - 1), fallback to prop
   const idx = styleIndex ?? 0;
-  const gradient = SECTION_GRADIENTS[idx % SECTION_GRADIENTS.length];
-  const StyleComponent = STYLE_COMPONENTS[idx % STYLE_COMPONENTS.length];
+  const gradient = SECTION_GRADIENTS[idx] || SECTION_GRADIENTS[0];
+  const StyleComponent = STYLE_COMPONENTS[idx] || DEFAULT_STYLE;
 
   return (
     <div

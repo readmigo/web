@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Star, ChevronRight } from 'lucide-react';
@@ -36,51 +35,18 @@ function getDifficultyLabel(score: number | undefined | null): string {
   return 'Expert';
 }
 
-/**
- * Responsive BookCover using Tailwind classes for Phone / Pad / Desktop.
- * `sizeClass` should contain responsive w-/h- classes, e.g. "w-[100px] h-[150px] md:w-[120px] md:h-[180px] lg:w-[140px] lg:h-[210px]"
- */
-function BookCover({
-  book,
-  sizeClass,
-  className,
-  sizes,
-}: {
-  book: BookListBook;
-  sizeClass: string;
-  className?: string;
-  sizes?: string;
-}) {
-  const url = book.coverThumbUrl || book.coverUrl;
+function RatingDisplay({ rating }: { rating: number | undefined }) {
+  if (!rating) return null;
   return (
-    <div
-      className={cn(
-        'relative overflow-hidden rounded-lg bg-muted flex-shrink-0',
-        sizeClass,
-        className
-      )}
-    >
-      {url ? (
-        <Image
-          src={url}
-          alt={book.title}
-          fill
-          className="object-cover"
-          sizes={sizes || '140px'}
-        />
-      ) : (
-        <div className="flex h-full items-center justify-center">
-          <span className="text-lg text-muted-foreground/40">
-            {book.title.charAt(0)}
-          </span>
-        </div>
-      )}
-    </div>
+    <span className="inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
+      <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+      {rating.toFixed(1)}
+    </span>
   );
 }
 
 /**
- * Responsive carousel cover with aspect-ratio 2/3 and optional overlay children.
+ * Carousel cover with aspect-ratio 2/3.
  */
 function CarouselCover({
   book,
@@ -122,22 +88,51 @@ function CarouselCover({
   );
 }
 
-function RatingDisplay({ rating }: { rating: number | undefined }) {
-  if (!rating) return null;
+function BookCover({
+  book,
+  sizeClass,
+  className,
+  sizes,
+}: {
+  book: BookListBook;
+  sizeClass: string;
+  className?: string;
+  sizes?: string;
+}) {
+  const url = book.coverThumbUrl || book.coverUrl;
   return (
-    <span className="inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
-      <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-      {rating.toFixed(1)}
-    </span>
+    <div
+      className={cn(
+        'relative overflow-hidden rounded-lg bg-muted flex-shrink-0',
+        sizeClass,
+        className
+      )}
+    >
+      {url ? (
+        <Image
+          src={url}
+          alt={book.title}
+          fill
+          className="object-cover"
+          sizes={sizes || '140px'}
+        />
+      ) : (
+        <div className="flex h-full items-center justify-center">
+          <span className="text-lg text-muted-foreground/40">
+            {book.title.charAt(0)}
+          </span>
+        </div>
+      )}
+    </div>
   );
 }
 
 // ============ Style 0: 金榜排行 (GoldRankingSection) ============
-// Phone: 100px  Pad: 120px  Desktop: 140px
+// iOS: horizontal carousel, rank badges (orange top3, gray rest), title, author, rating
 
 export function GoldRankingSection({ books }: { books: BookListBook[] }) {
   return (
-    <div className="scrollbar-hide -mx-1 flex gap-3 overflow-x-auto px-1 pb-2">
+    <div className="scrollbar-hide -mx-1 flex gap-3.5 overflow-x-auto px-1 pb-2">
       {books.map((book, i) => {
         const rank = i + 1;
         const isTop3 = rank <= 3;
@@ -150,19 +145,19 @@ export function GoldRankingSection({ books }: { books: BookListBook[] }) {
                 widthClass="w-[100px] md:w-[120px] lg:w-[140px]"
                 sizes="(min-width: 1024px) 140px, (min-width: 768px) 120px, 100px"
               >
-                {/* Rank badge */}
+                {/* Rank badge - rounded rect like iOS */}
                 <div
                   className={cn(
-                    'absolute -left-0.5 -top-0.5 flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold text-white',
-                    isTop3 ? 'bg-orange-500' : 'bg-gray-400'
+                    'absolute -left-1 -top-1 flex h-6 w-6 items-center justify-center rounded-md text-xs font-bold text-white',
+                    isTop3 ? 'bg-orange-500' : 'bg-gray-400/70'
                   )}
                 >
                   {rank}
                 </div>
               </CarouselCover>
-              {rating && <RatingDisplay rating={rating} />}
               <p className="line-clamp-1 text-xs font-medium leading-tight">{book.title}</p>
               <p className="line-clamp-1 text-[11px] text-muted-foreground">{book.author}</p>
+              {rating && <RatingDisplay rating={rating} />}
             </div>
           </Link>
         );
@@ -171,45 +166,31 @@ export function GoldRankingSection({ books }: { books: BookListBook[] }) {
   );
 }
 
-// ============ Style 1: 渐进阶梯 (StepLadderSection) ============
-// Phone: 50×75  Pad: 60×90  Desktop: 70×105
+// ============ Style 1: 清新入门 (FreshStartSection) ============
+// iOS: horizontal carousel, green numbered circles, title, author, rating
 
-export function StepLadderSection({ books }: { books: BookListBook[] }) {
-  const display = books.slice(0, 5);
+export function FreshStartSection({ books }: { books: BookListBook[] }) {
   return (
-    <div className="rounded-xl bg-secondary/50 p-3">
-      {display.map((book, i) => {
+    <div className="scrollbar-hide -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
+      {books.map((book, i) => {
         const rating = getRating(book);
         return (
-          <Link key={book.id} href={`/book/${book.id}`} className="group block">
-            <div className={cn(
-              'flex items-center gap-3 py-2.5',
-              i < display.length - 1 && 'border-b'
-            )}>
-              <BookCover
+          <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
+            <div className="w-[100px] md:w-[120px] lg:w-[140px] space-y-1.5">
+              <CarouselCover
                 book={book}
-                sizeClass="w-[50px] h-[75px] md:w-[60px] md:h-[90px] lg:w-[70px] lg:h-[105px]"
-                className="rounded-md"
-                sizes="(min-width: 1024px) 70px, (min-width: 768px) 60px, 50px"
-              />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium line-clamp-1">{book.title}</p>
-                <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{book.author}</p>
-              </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
-                {rating && <RatingDisplay rating={rating} />}
-                {book.wordCount && book.wordCount > 0 && (
-                  <span className="text-[11px] text-muted-foreground">
-                    {formatWordCount(book.wordCount)}
-                  </span>
-                )}
-                <div
-                  className={cn(
-                    'h-2 w-2 rounded-full',
-                    getDifficultyColor(book.difficultyScore)
-                  )}
-                />
-              </div>
+                widthClass="w-[100px] md:w-[120px] lg:w-[140px]"
+                className="shadow-[0_4px_6px_rgba(34,197,94,0.2)]"
+                sizes="(min-width: 1024px) 140px, (min-width: 768px) 120px, 100px"
+              >
+                {/* Green numbered circle */}
+                <div className="absolute -left-1 -top-1 flex h-[22px] w-[22px] items-center justify-center rounded-full bg-green-500/85 text-[11px] font-bold text-white">
+                  {i + 1}
+                </div>
+              </CarouselCover>
+              <p className="line-clamp-1 text-xs font-medium leading-tight">{book.title}</p>
+              <p className="line-clamp-1 text-[11px] text-muted-foreground">{book.author}</p>
+              {rating && <RatingDisplay rating={rating} />}
             </div>
           </Link>
         );
@@ -219,11 +200,11 @@ export function StepLadderSection({ books }: { books: BookListBook[] }) {
 }
 
 // ============ Style 2: 霓虹科幻 (NeonSciFiSection) ============
-// Phone: 90px  Pad: 110px  Desktop: 130px
+// iOS: horizontal carousel, purple shadow, 90×135, title, rating
 
 export function NeonSciFiSection({ books }: { books: BookListBook[] }) {
   return (
-    <div className="scrollbar-hide -mx-1 flex gap-3 overflow-x-auto px-1 pb-2">
+    <div className="scrollbar-hide -mx-1 flex gap-3.5 overflow-x-auto px-1 pb-2">
       {books.map((book) => {
         const rating = getRating(book);
         return (
@@ -236,6 +217,7 @@ export function NeonSciFiSection({ books }: { books: BookListBook[] }) {
                 sizes="(min-width: 1024px) 130px, (min-width: 768px) 110px, 90px"
               />
               <p className="line-clamp-1 text-xs font-medium leading-tight">{book.title}</p>
+              <p className="line-clamp-1 text-[11px] text-muted-foreground">{book.author}</p>
               {rating && <RatingDisplay rating={rating} />}
             </div>
           </Link>
@@ -245,64 +227,40 @@ export function NeonSciFiSection({ books }: { books: BookListBook[] }) {
   );
 }
 
-// ============ Style 3: 地图探险 (AdventureMapSection) ============
-// Featured: Phone 130px  Pad 150px  Desktop 170px
-// Secondary: Phone 45×68  Pad 55×82  Desktop 65×98
+// ============ Style 3: 暖调探险 (AdventureScrollSection) ============
+// iOS: horizontal carousel, 3D rotation, brown shadow, title, author, rating
 
-export function AdventureMapSection({ books }: { books: BookListBook[] }) {
-  if (books.length === 0) return null;
-  const featured = books[0];
-  const secondary = books.slice(1, 4);
-
+export function AdventureScrollSection({ books }: { books: BookListBook[] }) {
   return (
-    <div className="flex gap-4">
-      {/* Featured large book */}
-      <Link href={`/book/${featured.id}`} className="group flex-shrink-0">
-        <div className="w-[130px] md:w-[150px] lg:w-[170px] space-y-1.5">
-          <CarouselCover
-            book={featured}
-            widthClass="w-[130px] md:w-[150px] lg:w-[170px]"
-            className="shadow-md"
-            sizes="(min-width: 1024px) 170px, (min-width: 768px) 150px, 130px"
-          />
-          <p className="line-clamp-2 text-sm font-medium leading-tight">{featured.title}</p>
-          <p className="text-xs text-muted-foreground line-clamp-1">{featured.author}</p>
-        </div>
-      </Link>
-
-      {/* Secondary stacked list */}
-      <div className="flex-1 flex flex-col justify-center min-w-0">
-        {secondary.map((book, i) => (
-          <Link key={book.id} href={`/book/${book.id}`} className="group block">
-            <div className={cn(
-              'flex items-center gap-2.5 py-2.5',
-              i < secondary.length - 1 && 'border-b'
-            )}>
-              <BookCover
-                book={book}
-                sizeClass="w-[45px] h-[68px] md:w-[55px] md:h-[82px] lg:w-[65px] lg:h-[98px]"
-                className="rounded-md"
-                sizes="(min-width: 1024px) 65px, (min-width: 768px) 55px, 45px"
-              />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium line-clamp-1">{book.title}</p>
-                <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{book.author}</p>
+    <div className="scrollbar-hide -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
+      {books.map((book) => {
+        const rating = getRating(book);
+        return (
+          <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
+            <div className="w-[100px] md:w-[120px] lg:w-[140px] space-y-1.5">
+              <div
+                style={{ transform: 'perspective(400px) rotateY(2deg)' }}
+              >
+                <CarouselCover
+                  book={book}
+                  widthClass="w-[100px] md:w-[120px] lg:w-[140px]"
+                  className="shadow-[3px_5px_8px_rgba(139,90,43,0.35)]"
+                  sizes="(min-width: 1024px) 140px, (min-width: 768px) 120px, 100px"
+                />
               </div>
-              {book.wordCount && book.wordCount > 0 && (
-                <span className="text-[11px] text-orange-500 flex-shrink-0">
-                  {formatWordCount(book.wordCount)}
-                </span>
-              )}
+              <p className="line-clamp-1 text-xs font-semibold leading-tight">{book.title}</p>
+              <p className="line-clamp-1 text-[11px] text-muted-foreground">{book.author}</p>
+              {rating && <RatingDisplay rating={rating} />}
             </div>
           </Link>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 }
 
 // ============ Style 4: 彩色气泡 (ColorfulBubbleSection) ============
-// Phone: 90px  Pad: 110px  Desktop: 130px
+// iOS: horizontal carousel, pastel shadows per book, rounded-2xl, title, rating
 
 const BUBBLE_COLORS = [
   'rgba(236,72,153,0.3)',   // pink
@@ -317,7 +275,7 @@ const BUBBLE_COLORS = [
 
 export function ColorfulBubbleSection({ books }: { books: BookListBook[] }) {
   return (
-    <div className="scrollbar-hide -mx-1 flex gap-3 overflow-x-auto px-1 pb-2">
+    <div className="scrollbar-hide -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
       {books.map((book, i) => {
         const rating = getRating(book);
         const shadowColor = BUBBLE_COLORS[i % BUBBLE_COLORS.length];
@@ -347,6 +305,7 @@ export function ColorfulBubbleSection({ books }: { books: BookListBook[] }) {
                 )}
               </div>
               <p className="line-clamp-1 text-xs font-medium leading-tight">{book.title}</p>
+              <p className="line-clamp-1 text-[11px] text-muted-foreground">{book.author}</p>
               {rating && <RatingDisplay rating={rating} />}
             </div>
           </Link>
@@ -356,34 +315,31 @@ export function ColorfulBubbleSection({ books }: { books: BookListBook[] }) {
   );
 }
 
-// ============ Style 5: 极简石刻 (MinimalStoneSection) ============
-// No covers
+// ============ Style 5: 极简雅致 (PhilosophyScrollSection) ============
+// iOS: horizontal carousel, border overlay on covers, serif italic author with em-dash
 
-export function MinimalStoneSection({ books }: { books: BookListBook[] }) {
-  const display = books.slice(0, 4);
+export function PhilosophyScrollSection({ books }: { books: BookListBook[] }) {
   return (
-    <div className="rounded-xl border border-border/50 p-3">
-      {display.map((book, i) => {
+    <div className="scrollbar-hide -mx-1 flex gap-[18px] overflow-x-auto px-1 pb-2">
+      {books.map((book) => {
         const rating = getRating(book);
         return (
-          <Link key={book.id} href={`/book/${book.id}`} className="group block">
-            <div className={cn(
-              'flex items-center gap-3 py-2.5',
-              i < display.length - 1 && 'border-b'
-            )}>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium line-clamp-1">{book.title}</p>
-                <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{book.author}</p>
-              </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
-                {rating && <RatingDisplay rating={rating} />}
-                {book.wordCount && book.wordCount > 0 && (
-                  <span className="text-[11px] text-muted-foreground">
-                    {formatWordCount(book.wordCount)}
-                  </span>
-                )}
-                <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
-              </div>
+          <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
+            <div className="w-[100px] md:w-[120px] lg:w-[140px] space-y-2">
+              <CarouselCover
+                book={book}
+                widthClass="w-[100px] md:w-[120px] lg:w-[140px]"
+                sizes="(min-width: 1024px) 140px, (min-width: 768px) 120px, 100px"
+              >
+                {/* Border overlay like iOS */}
+                <div className="absolute inset-0 rounded-lg ring-1 ring-inset ring-border/50" />
+              </CarouselCover>
+              <p className="line-clamp-1 text-xs font-medium leading-tight">{book.title}</p>
+              {/* Quote-style author with em-dash, serif italic */}
+              <p className="line-clamp-1 text-[10px] italic text-muted-foreground" style={{ fontFamily: 'Georgia, serif' }}>
+                — {book.author}
+              </p>
+              {rating && <RatingDisplay rating={rating} />}
             </div>
           </Link>
         );
@@ -392,41 +348,99 @@ export function MinimalStoneSection({ books }: { books: BookListBook[] }) {
   );
 }
 
-// ============ Style 6: 悬疑推理 (DarkMysterySection) ============
-// Phone: 45×68  Pad: 55×82  Desktop: 65×98
+// ============ Style 6: 暗色悬疑 (MysteryScrollSection) ============
+// iOS: horizontal carousel, dark vignette overlay at bottom, dark shadow
 
-export function DarkMysterySection({ books }: { books: BookListBook[] }) {
-  const display = books.slice(0, 5);
+export function MysteryScrollSection({ books }: { books: BookListBook[] }) {
   return (
-    <div>
-      {display.map((book, i) => {
-        const rank = i + 1;
+    <div className="scrollbar-hide -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
+      {books.map((book) => {
+        const rating = getRating(book);
+        return (
+          <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
+            <div className="w-[100px] md:w-[120px] lg:w-[140px] space-y-1.5">
+              <CarouselCover
+                book={book}
+                widthClass="w-[100px] md:w-[120px] lg:w-[140px]"
+                className="shadow-[0_5px_8px_rgba(38,46,64,0.4)]"
+                sizes="(min-width: 1024px) 140px, (min-width: 768px) 120px, 100px"
+              >
+                {/* Dark vignette overlay at bottom */}
+                <div
+                  className="absolute inset-x-0 bottom-0 h-[60px] rounded-b-lg"
+                  style={{ background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.4))' }}
+                />
+              </CarouselCover>
+              <p className="line-clamp-1 text-xs font-medium leading-tight">{book.title}</p>
+              <p className="line-clamp-1 text-[11px] text-muted-foreground">{book.author}</p>
+              {rating && <RatingDisplay rating={rating} />}
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============ Style 7: 浪漫爱情 (RomanceScrollSection) ============
+// iOS: horizontal carousel, pink shadow, title, author, rating
+
+export function RomanceScrollSection({ books }: { books: BookListBook[] }) {
+  return (
+    <div className="scrollbar-hide -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
+      {books.map((book) => {
+        const rating = getRating(book);
+        return (
+          <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
+            <div className="w-[100px] md:w-[120px] lg:w-[140px] space-y-1.5">
+              <CarouselCover
+                book={book}
+                widthClass="w-[100px] md:w-[120px] lg:w-[140px]"
+                className="shadow-[0_4px_6px_rgba(236,72,153,0.25)]"
+                sizes="(min-width: 1024px) 140px, (min-width: 768px) 120px, 100px"
+              />
+              <p className="line-clamp-1 text-xs font-medium leading-tight">{book.title}</p>
+              <p className="line-clamp-1 text-[11px] text-muted-foreground">{book.author}</p>
+              {rating && <RatingDisplay rating={rating} />}
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============ Style 8: 鸿篇巨制 (BookSpineSection) ============
+// iOS: 2-column grid, epic horizontal cards with cover + title + author + description + rating + word count
+
+export function BookSpineSection({ books }: { books: BookListBook[] }) {
+  const display = books.slice(0, 6);
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 px-0.5">
+      {display.map((book) => {
         const rating = getRating(book);
         return (
           <Link key={book.id} href={`/book/${book.id}`} className="group block">
-            <div className={cn(
-              'flex items-center gap-3 py-2.5',
-              i < display.length - 1 && 'border-b'
-            )}>
-              {/* Rank number */}
-              <span className="w-7 text-center text-lg font-bold text-orange-500 flex-shrink-0">
-                {rank}
-              </span>
+            <div className="flex gap-2.5 rounded-xl bg-secondary/60 p-2.5">
               <BookCover
                 book={book}
-                sizeClass="w-[45px] h-[68px] md:w-[55px] md:h-[82px] lg:w-[65px] lg:h-[98px]"
-                className="rounded-md"
-                sizes="(min-width: 1024px) 65px, (min-width: 768px) 55px, 45px"
+                sizeClass="w-[80px] h-[120px]"
+                className="rounded-md shadow-sm"
+                sizes="80px"
               />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium line-clamp-1">{book.title}</p>
-                <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{book.author}</p>
+              <div className="flex-1 min-w-0 flex flex-col gap-1">
+                <p className="text-sm font-semibold line-clamp-2 leading-tight">{book.title}</p>
+                <p className="text-xs text-muted-foreground line-clamp-1">{book.author}</p>
+                {book.description && (
+                  <p className="text-[11px] text-muted-foreground/80 line-clamp-2 mt-0.5">{book.description}</p>
+                )}
+                {rating && <RatingDisplay rating={rating} />}
+                {book.wordCount && book.wordCount > 0 && (
+                  <span className="inline-flex items-center gap-1 text-[11px] text-amber-800 dark:text-amber-400">
+                    📖 {formatWordCount(book.wordCount)} words
+                  </span>
+                )}
               </div>
-              {rating && (
-                <div className="flex-shrink-0">
-                  <RatingDisplay rating={rating} />
-                </div>
-              )}
             </div>
           </Link>
         );
@@ -435,166 +449,243 @@ export function DarkMysterySection({ books }: { books: BookListBook[] }) {
   );
 }
 
-// ============ Style 7: 皇家剧院 (RoyalTheaterSection) ============
-// Phone: 75px  Pad: 90px  Desktop: 110px
+// ============ Style 9: 学习进阶 (LearnerScrollSection) ============
+// iOS: horizontal carousel, difficulty badge at top-right, colored dots, title, author, rating
 
-export function RoyalTheaterSection({ books }: { books: BookListBook[] }) {
-  const t = useTranslations('bookList');
-  // Split into two groups: first 4 as tragedy, rest as comedy
-  const tragedies = books.slice(0, 4);
-  const comedies = books.slice(4, 10);
+export function LearnerScrollSection({ books }: { books: BookListBook[] }) {
+  return (
+    <div className="scrollbar-hide -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
+      {books.map((book) => {
+        const rating = getRating(book);
+        return (
+          <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
+            <div className="w-[100px] md:w-[120px] lg:w-[140px] space-y-1.5">
+              <CarouselCover
+                book={book}
+                widthClass="w-[100px] md:w-[120px] lg:w-[140px]"
+                className="shadow-[0_3px_5px_rgba(59,130,246,0.15)]"
+                sizes="(min-width: 1024px) 140px, (min-width: 768px) 120px, 100px"
+              >
+                {/* Difficulty badge at top-right */}
+                {book.difficultyScore != null && (
+                  <div className="absolute -right-1 -top-1 flex items-center gap-1 rounded-full bg-black/55 px-1.5 py-0.5">
+                    <div className={cn('h-[7px] w-[7px] rounded-full', getDifficultyColor(book.difficultyScore))} />
+                    <span className="text-[9px] font-bold text-white">
+                      {getDifficultyLabel(book.difficultyScore)}
+                    </span>
+                  </div>
+                )}
+              </CarouselCover>
+              <p className="line-clamp-1 text-xs font-medium leading-tight">{book.title}</p>
+              <p className="line-clamp-1 text-[11px] text-muted-foreground">{book.author}</p>
+              {rating && <RatingDisplay rating={rating} />}
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
 
-  const renderRow = (items: BookListBook[]) => (
-    <div className="scrollbar-hide -mx-1 flex gap-3 overflow-x-auto px-1 pb-2">
-      {items.map((book) => (
-        <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
-          <div className="w-[75px] md:w-[90px] lg:w-[110px] space-y-1">
-            <CarouselCover
-              book={book}
-              widthClass="w-[75px] md:w-[90px] lg:w-[110px]"
-              sizes="(min-width: 1024px) 110px, (min-width: 768px) 90px, 75px"
-            />
-            <p className="line-clamp-1 text-[11px] font-medium leading-tight">{book.title}</p>
+// ============ Style 10: 系列书展 (SeriesShowcaseSection) ============
+// iOS: fanned 3D book covers grouped by series, series name, author, book count badge
+
+interface SeriesGroup {
+  id: string;
+  name: string;
+  bookCount: number;
+  books: BookListBook[];
+}
+
+function parseSeriesGroups(books: BookListBook[]): SeriesGroup[] {
+  const groupMap: Record<string, { name: string; count: number; books: BookListBook[] }> = {};
+  const order: string[] = [];
+
+  for (const book of books) {
+    if (!book.customDescription) continue;
+    const parts = book.customDescription.split('::');
+    if (parts.length !== 3) continue;
+    const bookCount = parseInt(parts[2], 10);
+    if (isNaN(bookCount)) continue;
+
+    const seriesId = parts[0];
+    const seriesName = parts[1];
+
+    if (!groupMap[seriesId]) {
+      groupMap[seriesId] = { name: seriesName, count: bookCount, books: [book] };
+      order.push(seriesId);
+    } else {
+      groupMap[seriesId].books.push(book);
+    }
+  }
+
+  return order
+    .map((id) => {
+      const g = groupMap[id];
+      return g ? { id, name: g.name, bookCount: g.count, books: g.books } : null;
+    })
+    .filter((g): g is SeriesGroup => g !== null);
+}
+
+export function SeriesShowcaseSection({ books }: { books: BookListBook[] }) {
+  const groups = parseSeriesGroups(books);
+
+  if (groups.length === 0) {
+    // Fallback: render as simple carousel if no series grouping
+    return (
+      <div className="scrollbar-hide -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
+        {books.map((book) => (
+          <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
+            <div className="w-[100px] md:w-[120px] lg:w-[140px] space-y-1.5">
+              <CarouselCover
+                book={book}
+                widthClass="w-[100px] md:w-[120px] lg:w-[140px]"
+                sizes="(min-width: 1024px) 140px, (min-width: 768px) 120px, 100px"
+              />
+              <p className="line-clamp-1 text-xs font-medium leading-tight">{book.title}</p>
+              <p className="line-clamp-1 text-[11px] text-muted-foreground">{book.author}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="scrollbar-hide -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
+      {groups.map((group) => (
+        <div key={group.id} className="flex-shrink-0 w-[150px] space-y-2.5 py-2">
+          {/* Fanned book covers */}
+          <div className="relative h-[130px] flex items-end justify-center">
+            <div className="relative">
+              {[...group.books].reverse().map((book, reverseIndex) => {
+                const index = group.books.length - 1 - reverseIndex;
+                const url = book.coverThumbUrl || book.coverUrl;
+                return (
+                  <div
+                    key={book.id}
+                    className="absolute bottom-0 left-1/2 w-[80px] h-[120px] overflow-hidden rounded-md bg-muted"
+                    style={{
+                      transform: `translateX(-50%) rotate(${index * 8}deg) translateX(${index * 12}px) translateY(${-index * 2}px)`,
+                      transformOrigin: 'bottom center',
+                      zIndex: group.books.length - reverseIndex,
+                      boxShadow: `2px 3px ${4 + index}px rgba(0,0,0,${0.2 - index * 0.05})`,
+                    }}
+                  >
+                    {url ? (
+                      <Image src={url} alt={book.title} fill className="object-cover" sizes="80px" />
+                    ) : (
+                      <div className="flex h-full items-center justify-center">
+                        <span className="text-lg text-muted-foreground/40">{book.title.charAt(0)}</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            {/* Book count badge */}
+            <div className="absolute -bottom-1 -right-1 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">
+              {group.bookCount} books
+            </div>
           </div>
-        </Link>
+          {/* Series name & author */}
+          <div className="text-center">
+            <p className="text-sm font-semibold line-clamp-2">{group.name}</p>
+            {group.books[0]?.author && (
+              <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{group.books[0].author}</p>
+            )}
+          </div>
+        </div>
       ))}
     </div>
   );
-
-  return (
-    <div className="space-y-3">
-      {tragedies.length > 0 && (
-        <div>
-          <span className="mb-2 inline-block rounded-full bg-red-500/80 px-2.5 py-0.5 text-[11px] font-medium text-white">
-            {t('tragedy')}
-          </span>
-          {renderRow(tragedies)}
-        </div>
-      )}
-      {comedies.length > 0 && (
-        <div>
-          <span className="mb-2 inline-block rounded-full bg-blue-500/80 px-2.5 py-0.5 text-[11px] font-medium text-white">
-            {t('comedy')}
-          </span>
-          {renderRow(comedies)}
-        </div>
-      )}
-    </div>
-  );
 }
 
-// ============ Style 8: 书脊堆叠 (BookSpineSection) ============
-// Phone: h140 w30-80  Pad: h160 w35-90  Desktop: h180 w40-100
+// ============ Style 18: 皇家剧院 (RoyalTheaterSection) ============
+// iOS: genre categories (tragedy/comedy/history), theater dividers, Shakespeare quotes
 
-const SPINE_COLORS = [
-  'from-amber-800 to-amber-700',   // brown
-  'from-red-700 to-red-600',       // red
-  'from-blue-700 to-blue-600',     // blue
-  'from-green-700 to-green-600',   // green
-  'from-purple-700 to-purple-600', // purple
-  'from-orange-700 to-orange-600', // orange
+const THEATER_QUOTES = [
+  { quote: 'All the world\'s a stage, and all the men and women merely players.', source: 'As You Like It' },
+  { quote: 'To be, or not to be, that is the question.', source: 'Hamlet' },
+  { quote: 'The course of true love never did run smooth.', source: 'A Midsummer Night\'s Dream' },
 ];
 
-export function BookSpineSection({ books }: { books: BookListBook[] }) {
-  const isPad = useMediaQuery('(min-width: 768px)');
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
+export function RoyalTheaterSection({ books }: { books: BookListBook[] }) {
+  // Group by customDescription: tragedy / comedy / history
+  const tragedyBooks = books.filter((b) => b.customDescription === 'tragedy');
+  const comedyBooks = books.filter((b) => b.customDescription === 'comedy');
+  const historyBooks = books.filter((b) => b.customDescription === 'history');
 
-  const spineHeight = isDesktop ? 180 : isPad ? 160 : 140;
-  const minWidth = isDesktop ? 40 : isPad ? 35 : 30;
-  const maxWidth = isDesktop ? 100 : isPad ? 90 : 80;
-  const maxTextHeight = spineHeight - 20;
+  // If no customDescription grouping, fall back to first-half / second-half
+  const hasGrouping = tragedyBooks.length > 0 || comedyBooks.length > 0 || historyBooks.length > 0;
 
-  const maxWordCount = Math.max(...books.map((b) => b.wordCount || 0), 1);
+  const categories = hasGrouping
+    ? [
+        { key: 'tragedy', label: 'Tragedy', dotColor: 'bg-red-500', labelColor: 'text-red-500/80', books: tragedyBooks },
+        { key: 'comedy', label: 'Comedy', dotColor: 'bg-blue-500', labelColor: 'text-blue-500/80', books: comedyBooks },
+        { key: 'history', label: 'History', dotColor: 'bg-orange-500', labelColor: 'text-orange-500/80', books: historyBooks },
+      ].filter((c) => c.books.length > 0)
+    : [
+        { key: 'tragedy', label: 'Tragedy', dotColor: 'bg-red-500', labelColor: 'text-red-500/80', books: books.slice(0, 4) },
+        { key: 'comedy', label: 'Comedy', dotColor: 'bg-blue-500', labelColor: 'text-blue-500/80', books: books.slice(4, 10) },
+      ].filter((c) => c.books.length > 0);
 
-  return (
-    <div className="scrollbar-hide -mx-1 flex items-end gap-1 overflow-x-auto px-1 pb-2">
-      {books.map((book, i) => {
-        const ratio = (book.wordCount || 0) / maxWordCount;
-        const width = Math.max(minWidth, Math.round(ratio * maxWidth));
-        const colorClass = SPINE_COLORS[i % SPINE_COLORS.length];
+  // Stable quote selection
+  const quoteIndex = Math.abs(books.length) % THEATER_QUOTES.length;
+  const quote = THEATER_QUOTES[quoteIndex];
 
+  const renderRow = (items: BookListBook[]) => (
+    <div className="scrollbar-hide -mx-1 flex gap-3.5 overflow-x-auto px-1 pb-2">
+      {items.map((book) => {
+        const rating = getRating(book);
         return (
           <Link key={book.id} href={`/book/${book.id}`} className="group flex-shrink-0">
-            <div className="flex flex-col items-center gap-1">
-              <div
-                className={cn(
-                  'rounded-sm bg-gradient-to-b flex items-center justify-center overflow-hidden',
-                  colorClass
-                )}
-                style={{ width, height: spineHeight }}
-              >
-                <span
-                  className="text-[10px] font-medium text-white/90 leading-tight"
-                  style={{
-                    writingMode: 'vertical-rl',
-                    textOrientation: 'mixed',
-                    maxHeight: maxTextHeight,
-                    overflow: 'hidden',
-                  }}
-                >
-                  {book.title}
-                </span>
-              </div>
-              {book.wordCount && book.wordCount > 0 && (
-                <span className="text-[10px] text-muted-foreground">
-                  {formatWordCount(book.wordCount)}
-                </span>
-              )}
+            <div className="w-[100px] md:w-[120px] lg:w-[140px] space-y-1">
+              <CarouselCover
+                book={book}
+                widthClass="w-[100px] md:w-[120px] lg:w-[140px]"
+                className="shadow-[0_3px_4px_rgba(0,0,0,0.15)]"
+                sizes="(min-width: 1024px) 140px, (min-width: 768px) 120px, 100px"
+              />
+              <p className="line-clamp-1 text-[11px] font-medium leading-tight">{book.title}</p>
+              {rating && <RatingDisplay rating={rating} />}
             </div>
           </Link>
         );
       })}
     </div>
   );
-}
-
-// ============ Style 9: 难度阶梯 (DifficultyLadderSection) ============
-// Phone: 45×68  Pad: 55×82  Desktop: 65×98
-
-export function DifficultyLadderSection({ books }: { books: BookListBook[] }) {
-  // Sort by difficulty ascending
-  const sorted = [...books]
-    .sort((a, b) => (a.difficultyScore || 0) - (b.difficultyScore || 0))
-    .slice(0, 6);
 
   return (
-    <div className="rounded-xl bg-secondary/50 p-3">
-      {sorted.map((book, i) => {
-        const rating = getRating(book);
-        return (
-          <Link key={book.id} href={`/book/${book.id}`} className="group block">
-            <div className={cn(
-              'flex items-center gap-3 py-2.5',
-              i < sorted.length - 1 && 'border-b'
-            )}>
-              <BookCover
-                book={book}
-                sizeClass="w-[45px] h-[68px] md:w-[55px] md:h-[82px] lg:w-[65px] lg:h-[98px]"
-                className="rounded-md"
-                sizes="(min-width: 1024px) 65px, (min-width: 768px) 55px, 45px"
-              />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium line-clamp-1">{book.title}</p>
-                <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{book.author}</p>
-              </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
-                {rating && <RatingDisplay rating={rating} />}
-                <div className="flex items-center gap-1">
-                  <div
-                    className={cn(
-                      'h-2 w-2 rounded-full',
-                      getDifficultyColor(book.difficultyScore)
-                    )}
-                  />
-                  <span className="text-[11px] text-muted-foreground">
-                    {getDifficultyLabel(book.difficultyScore)}
-                  </span>
-                </div>
-              </div>
+    <div className="space-y-4">
+      {categories.map((cat, catIndex) => (
+        <div key={cat.key}>
+          {/* Theater divider between categories */}
+          {catIndex > 0 && (
+            <div className="flex items-center gap-2 px-1 py-2">
+              <div className="flex-1 h-px bg-purple-500/15" />
+              <span className="text-[10px] text-purple-500/30">🎭</span>
+              <div className="flex-1 h-px bg-purple-500/15" />
             </div>
-          </Link>
-        );
-      })}
+          )}
+          {/* Genre label */}
+          <div className="flex items-center gap-1.5 mb-2 px-1">
+            <div className={cn('h-2 w-2 rounded-full', cat.dotColor)} />
+            <span className={cn('text-sm font-bold', cat.labelColor)}>{cat.label}</span>
+          </div>
+          {renderRow(cat.books)}
+        </div>
+      ))}
+
+      {/* Shakespeare quote */}
+      <div className="text-center px-6 pt-1">
+        <p className="text-xs italic text-foreground/60">
+          &ldquo;{quote.quote}&rdquo;
+        </p>
+        <p className="text-[11px] text-muted-foreground/50 mt-1">
+          — William Shakespeare, {quote.source}
+        </p>
+      </div>
     </div>
   );
 }

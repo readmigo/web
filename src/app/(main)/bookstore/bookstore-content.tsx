@@ -287,7 +287,7 @@ export function BookstoreContent() {
           <div className="divide-y">
             {allBookLists.map((list, index) => (
               <div key={list.id} className={index > 0 ? 'pt-6' : ''}>
-                <BookListSection bookList={list} styleIndex={index} />
+                <BookListSection bookList={list} styleIndex={(list.sortOrder ?? 1) - 1} />
               </div>
             ))}
           </div>
