@@ -13,27 +13,33 @@ const STORAGE_KEY = 'readmigo-browsing-history';
 const MAX_ITEMS = 20;
 
 let listeners: Array<() => void> = [];
+let cachedSnapshot: BrowsingHistoryItem[] = [];
+let cachedRaw: string | null = null;
 
 function emitChange() {
+  // Invalidate cache so next getSnapshot returns fresh data
+  cachedRaw = null;
   for (const listener of listeners) {
     listener();
   }
 }
 
 function getSnapshot(): BrowsingHistoryItem[] {
-  if (typeof window === 'undefined') return [];
+  if (typeof window === 'undefined') return cachedSnapshot;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    if (raw !== cachedRaw) {
+      cachedRaw = raw;
+      cachedSnapshot = raw ? JSON.parse(raw) : [];
+    }
+    return cachedSnapshot;
   } catch {
-    return [];
+    return cachedSnapshot;
   }
 }
 
-const EMPTY_ARRAY: BrowsingHistoryItem[] = [];
-
 function getServerSnapshot(): BrowsingHistoryItem[] {
-  return EMPTY_ARRAY;
+  return cachedSnapshot;
 }
 
 function subscribe(listener: () => void) {
