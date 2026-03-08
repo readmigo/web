@@ -18,6 +18,8 @@ import type { LucideIcon } from 'lucide-react';
 import type { Category } from '@/features/library/types';
 import { useSearch } from '@/features/search/hooks/use-search';
 import { useSearchHistory } from '@/features/search/hooks/use-search-history';
+import { useSearchSuggestions } from '@/features/search/hooks/use-search-suggestions';
+import { usePopularSearches, useTrendingSearches } from '@/features/search/hooks/use-popular-searches';
 import { SearchResultsDropdown } from '@/features/search/components/search-results-dropdown';
 import { useBookLists } from '@/features/library/hooks/use-book-lists';
 import { HeroBanner } from '@/features/library/components/hero-banner';
@@ -93,6 +95,13 @@ export function ExploreContent() {
 
   // Search history
   const { history: searchHistory, addSearch, removeSearch, clearHistory } = useSearchHistory();
+
+  // Search suggestions (iOS: autocomplete while typing)
+  const { data: suggestions, isLoading: suggestionsLoading } = useSearchSuggestions(debouncedDropdownQuery);
+
+  // Popular & trending searches (iOS: shown when search input is empty)
+  const { data: popularSearches } = usePopularSearches();
+  const { data: trendingSearches } = useTrendingSearches();
 
   // Book lists for hero banner and sections
   const { data: bookListsData, isLoading: bookListsLoading } = useBookLists();
@@ -199,6 +208,10 @@ export function ExploreContent() {
             searchHistory={searchHistory}
             onRemoveHistory={removeSearch}
             onClearHistory={clearHistory}
+            suggestions={suggestions}
+            suggestionsLoading={suggestionsLoading}
+            popularSearches={popularSearches}
+            trendingSearches={trendingSearches}
           />
         )}
       </div>

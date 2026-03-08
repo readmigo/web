@@ -11,8 +11,11 @@ import {
   Search,
   Clock,
   X,
+  TrendingUp,
+  Flame,
+  Sparkles,
 } from 'lucide-react';
-import type { SearchResponse } from '../types';
+import type { SearchResponse, SearchSuggestion, PopularSearch } from '../types';
 
 interface SearchResultsDropdownProps {
   data: SearchResponse | undefined;
@@ -23,6 +26,10 @@ interface SearchResultsDropdownProps {
   searchHistory?: string[];
   onRemoveHistory?: (query: string) => void;
   onClearHistory?: () => void;
+  suggestions?: SearchSuggestion[];
+  suggestionsLoading?: boolean;
+  popularSearches?: PopularSearch[];
+  trendingSearches?: PopularSearch[];
 }
 
 function DropdownWrapper({ children }: { children: React.ReactNode }) {
@@ -57,6 +64,17 @@ function SectionDivider() {
   return <div className="mx-2 my-1 border-t" />;
 }
 
+function SuggestionIcon({ type }: { type: SearchSuggestion['type'] }) {
+  switch (type) {
+    case 'author':
+      return <User className="h-4 w-4 shrink-0 text-purple-500" />;
+    case 'book':
+      return <BookOpen className="h-4 w-4 shrink-0 text-blue-500" />;
+    case 'popular':
+      return <TrendingUp className="h-4 w-4 shrink-0 text-orange-500" />;
+  }
+}
+
 export function SearchResultsDropdown({
   data,
   isLoading,
@@ -66,6 +84,10 @@ export function SearchResultsDropdown({
   searchHistory,
   onRemoveHistory,
   onClearHistory,
+  suggestions,
+  suggestionsLoading,
+  popularSearches,
+  trendingSearches,
 }: SearchResultsDropdownProps) {
   const t = useTranslations('search');
   const router = useRouter();
@@ -82,12 +104,14 @@ export function SearchResultsDropdown({
   const trimmedQuery = query.trim();
 
   // ──────────────────────────────────────────
-  // State A: Empty query — show history only
+  // State A: Empty query — show history + popular + trending
   // ──────────────────────────────────────────
   if (trimmedQuery.length < 2) {
     const hasHistory = searchHistory && searchHistory.length > 0;
+    const hasPopular = popularSearches && popularSearches.length > 0;
+    const hasTrending = trendingSearches && trendingSearches.length > 0;
 
-    if (!hasHistory) {
+    if (!hasHistory && !hasPopular && !hasTrending) {
       return null;
     }
 
@@ -137,15 +161,84 @@ export function SearchResultsDropdown({
               ))}
             </div>
           )}
+
+          {hasTrending && (
+            <div>
+              {hasHistory && <SectionDivider />}
+              <SectionHeader
+                icon={<Flame className="h-3 w-3" />}
+                label={t('trendingSearches')}
+              />
+              <div className="flex flex-wrap gap-1.5 px-2 pb-1">
+                {trendingSearches.map((item) => (
+                  <button
+                    key={item.term}
+                    className="rounded-full bg-secondary px-3 py-1 text-xs transition-colors hover:bg-secondary/80"
+                    onClick={() => handleSelectQuery(item.term)}
+                  >
+                    {item.term}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {hasPopular && (
+            <div>
+              {(hasHistory || hasTrending) && <SectionDivider />}
+              <SectionHeader
+                icon={<Sparkles className="h-3 w-3" />}
+                label={t('popularSearches')}
+              />
+              <div className="flex flex-wrap gap-1.5 px-2 pb-1">
+                {popularSearches.map((item) => (
+                  <button
+                    key={item.term}
+                    className="rounded-full bg-secondary px-3 py-1 text-xs transition-colors hover:bg-secondary/80"
+                    onClick={() => handleSelectQuery(item.term)}
+                  >
+                    {item.term}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </DropdownWrapper>
     );
   }
 
   // ──────────────────────────────────────────
-  // State B: Results loading
+  // State B: Typing (≥2 chars) — show suggestions if available
   // ──────────────────────────────────────────
-  if (isLoading) {
+  if (suggestions && suggestions.length > 0) {
+    return (
+      <DropdownWrapper>
+        <div className="p-2">
+          <SectionHeader
+            icon={<Search className="h-3 w-3" />}
+            label={t('suggestions')}
+          />
+          {suggestions.map((suggestion, index) => (
+            <button
+              key={`${suggestion.type}-${suggestion.text}-${index}`}
+              className="flex w-full items-center gap-3 rounded-md px-2 py-2 text-left transition-colors hover:bg-accent"
+              onClick={() => handleSelectQuery(suggestion.text)}
+            >
+              <SuggestionIcon type={suggestion.type} />
+              <span className="flex-1 truncate text-sm">{suggestion.text}</span>
+              <span className="text-[10px] text-muted-foreground capitalize">{suggestion.type}</span>
+            </button>
+          ))}
+        </div>
+      </DropdownWrapper>
+    );
+  }
+
+  // ──────────────────────────────────────────
+  // State C: Loading (suggestions or results)
+  // ──────────────────────────────────────────
+  if (isLoading || suggestionsLoading) {
     return (
       <DropdownWrapper>
         <div className="p-3 space-y-3">
@@ -166,7 +259,7 @@ export function SearchResultsDropdown({
   if (!data) return null;
 
   // ──────────────────────────────────────────
-  // State C: Results loaded — authors, books, quotes
+  // State D: Results loaded — authors, books, quotes
   // ──────────────────────────────────────────
   const authors = data.authors ?? { items: [], total: 0, hasMore: false };
   const books = data.books ?? { items: [], total: 0, hasMore: false };

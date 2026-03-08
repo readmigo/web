@@ -37,3 +37,16 @@ export interface SearchResponse {
   books: SearchResultSection<SearchBookItem>;
   quotes: SearchResultSection<SearchQuoteItem>;
 }
+
+export type SearchSuggestionType = 'author' | 'book' | 'popular';
+
+export interface SearchSuggestion {
+  text: string;
+  type: SearchSuggestionType;
+  icon?: string;
+}
+
+export interface PopularSearch {
+  term: string;
+  count: number;
+}
