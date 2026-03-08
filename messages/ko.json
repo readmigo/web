@@ -383,31 +383,41 @@
     "skip": "건너뛰기",
     "next": "다음",
     "start": "시작하기",
-    "bookstore.title": "디지털 도서관",
-    "bookstore.subtitle": "1,200권 이상의 영어 클래식 탐색",
-    "bookstore.f1": "풍부한 디지털 도서 컬렉션",
-    "bookstore.f2": "평점 및 추천",
-    "bookstore.f3": "한 번의 탭으로 다운로드 및 읽기",
-    "reader.title": "몰입형 독서",
-    "reader.subtitle": "언어 학습자를 위해 설계된 독서 경험",
-    "reader.f1": "단락 번역",
-    "reader.f2": "텍스트 주석 및 메모",
-    "reader.f3": "텍스트 음성 변환 지원",
-    "audiobooks.title": "오디오북 라이브러리",
-    "audiobooks.subtitle": "언제 어디서나 듣고 배우세요",
-    "audiobooks.f1": "전문적인 오디오 재생",
-    "audiobooks.f2": "이중 언어 학습 모드",
-    "audiobooks.f3": "재생 속도 조절 가능",
-    "progress.title": "진행률 추적",
-    "progress.subtitle": "성장의 모든 단계를 추적하세요",
-    "progress.f1": "독서 연속 기록",
-    "progress.f2": "일일 목표 설정",
-    "progress.f3": "성취 배지",
-    "crossPlatform.title": "크로스 플랫폼",
-    "crossPlatform.subtitle": "기기 간 원활하게 전환",
-    "crossPlatform.f1": "Apple 생태계 완전 지원",
-    "crossPlatform.f2": "iPhone / iPad 원활한 전환",
-    "crossPlatform.f3": "언제든 웹 접속"
+    "bookstore": {
+      "title": "디지털 도서관",
+      "subtitle": "1,200권 이상의 영어 클래식 탐색",
+      "f1": "풍부한 디지털 도서 컬렉션",
+      "f2": "평점 및 추천",
+      "f3": "한 번의 탭으로 다운로드 및 읽기"
+    },
+    "reader": {
+      "title": "몰입형 독서",
+      "subtitle": "언어 학습자를 위해 설계된 독서 경험",
+      "f1": "단락 번역",
+      "f2": "텍스트 주석 및 메모",
+      "f3": "텍스트 음성 변환 지원"
+    },
+    "audiobooks": {
+      "title": "오디오북 라이브러리",
+      "subtitle": "언제 어디서나 듣고 배우세요",
+      "f1": "전문적인 오디오 재생",
+      "f2": "이중 언어 학습 모드",
+      "f3": "재생 속도 조절 가능"
+    },
+    "progress": {
+      "title": "진행률 추적",
+      "subtitle": "성장의 모든 단계를 추적하세요",
+      "f1": "독서 연속 기록",
+      "f2": "일일 목표 설정",
+      "f3": "성취 배지"
+    },
+    "crossPlatform": {
+      "title": "크로스 플랫폼",
+      "subtitle": "기기 간 원활하게 전환",
+      "f1": "Apple 생태계 완전 지원",
+      "f2": "iPhone / iPad 원활한 전환",
+      "f3": "언제든 웹 접속"
+    }
   },
   "postcards": {
     "empty": "아직 엽서가 없습니다",

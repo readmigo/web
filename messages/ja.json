@@ -383,31 +383,41 @@
     "skip": "スキップ",
     "next": "次へ",
     "start": "始める",
-    "bookstore.title": "デジタルライブラリー",
-    "bookstore.subtitle": "1,200冊以上の英語クラシックを探索",
-    "bookstore.f1": "豊富なデジタル書籍コレクション",
-    "bookstore.f2": "評価とおすすめ",
-    "bookstore.f3": "ワンタップでダウンロード・読書",
-    "reader.title": "没入型読書",
-    "reader.subtitle": "言語学習者向けに設計された読書体験",
-    "reader.f1": "段落翻訳",
-    "reader.f2": "テキスト注釈とメモ",
-    "reader.f3": "テキスト読み上げ対応",
-    "audiobooks.title": "オーディオブックライブラリー",
-    "audiobooks.subtitle": "いつでもどこでも聴いて学ぼう",
-    "audiobooks.f1": "プロフェッショナルな音声再生",
-    "audiobooks.f2": "バイリンガル学習モード",
-    "audiobooks.f3": "再生速度調整可能",
-    "progress.title": "進捗追跡",
-    "progress.subtitle": "あなたの成長の一歩一歩を記録",
-    "progress.f1": "読書連続記録",
-    "progress.f2": "1日の目標設定",
-    "progress.f3": "達成バッジ",
-    "crossPlatform.title": "クロスプラットフォーム",
-    "crossPlatform.subtitle": "デバイス間をシームレスに切り替え",
-    "crossPlatform.f1": "Apple エコシステム完全対応",
-    "crossPlatform.f2": "iPhone / iPad シームレス切り替え",
-    "crossPlatform.f3": "いつでもウェブアクセス"
+    "bookstore": {
+      "title": "デジタルライブラリー",
+      "subtitle": "1,200冊以上の英語クラシックを探索",
+      "f1": "豊富なデジタル書籍コレクション",
+      "f2": "評価とおすすめ",
+      "f3": "ワンタップでダウンロード・読書"
+    },
+    "reader": {
+      "title": "没入型読書",
+      "subtitle": "言語学習者向けに設計された読書体験",
+      "f1": "段落翻訳",
+      "f2": "テキスト注釈とメモ",
+      "f3": "テキスト読み上げ対応"
+    },
+    "audiobooks": {
+      "title": "オーディオブックライブラリー",
+      "subtitle": "いつでもどこでも聴いて学ぼう",
+      "f1": "プロフェッショナルな音声再生",
+      "f2": "バイリンガル学習モード",
+      "f3": "再生速度調整可能"
+    },
+    "progress": {
+      "title": "進捗追跡",
+      "subtitle": "あなたの成長の一歩一歩を記録",
+      "f1": "読書連続記録",
+      "f2": "1日の目標設定",
+      "f3": "達成バッジ"
+    },
+    "crossPlatform": {
+      "title": "クロスプラットフォーム",
+      "subtitle": "デバイス間をシームレスに切り替え",
+      "f1": "Apple エコシステム完全対応",
+      "f2": "iPhone / iPad シームレス切り替え",
+      "f3": "いつでもウェブアクセス"
+    }
   },
   "postcards": {
     "empty": "ポストカードはまだありません",

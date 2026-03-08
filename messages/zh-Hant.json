@@ -383,31 +383,41 @@
     "skip": "跳過",
     "next": "下一步",
     "start": "開始使用",
-    "bookstore.title": "海量書城",
-    "bookstore.subtitle": "探索 1200+ 本英文經典原著",
-    "bookstore.f1": "豐富的數位圖書館",
-    "bookstore.f2": "評分與推薦系統",
-    "bookstore.f3": "一鍵下載閱讀",
-    "reader.title": "沉浸閱讀",
-    "reader.subtitle": "專為英語學習者設計的閱讀體驗",
-    "reader.f1": "段落翻譯對照",
-    "reader.f2": "文字標注與筆記",
-    "reader.f3": "TTS 朗讀功能",
-    "audiobooks.title": "有聲書庫",
-    "audiobooks.subtitle": "邊聽邊學，隨時隨地",
-    "audiobooks.f1": "專業音訊播放",
-    "audiobooks.f2": "雙語學習模式",
-    "audiobooks.f3": "倍速播放調節",
-    "progress.title": "進度追蹤",
-    "progress.subtitle": "記錄每一步成長",
-    "progress.f1": "閱讀連續打卡",
-    "progress.f2": "每日目標設定",
-    "progress.f3": "成就徽章系統",
-    "crossPlatform.title": "多端同步",
-    "crossPlatform.subtitle": "隨時切換，無縫銜接",
-    "crossPlatform.f1": "支援 Apple 全平台",
-    "crossPlatform.f2": "手機 / iPad 無縫切換",
-    "crossPlatform.f3": "Web 端隨時訪問"
+    "bookstore": {
+      "title": "海量書城",
+      "subtitle": "探索 1200+ 本英文經典原著",
+      "f1": "豐富的數位圖書館",
+      "f2": "評分與推薦系統",
+      "f3": "一鍵下載閱讀"
+    },
+    "reader": {
+      "title": "沉浸閱讀",
+      "subtitle": "專為英語學習者設計的閱讀體驗",
+      "f1": "段落翻譯對照",
+      "f2": "文字標注與筆記",
+      "f3": "TTS 朗讀功能"
+    },
+    "audiobooks": {
+      "title": "有聲書庫",
+      "subtitle": "邊聽邊學，隨時隨地",
+      "f1": "專業音訊播放",
+      "f2": "雙語學習模式",
+      "f3": "倍速播放調節"
+    },
+    "progress": {
+      "title": "進度追蹤",
+      "subtitle": "記錄每一步成長",
+      "f1": "閱讀連續打卡",
+      "f2": "每日目標設定",
+      "f3": "成就徽章系統"
+    },
+    "crossPlatform": {
+      "title": "多端同步",
+      "subtitle": "隨時切換，無縫銜接",
+      "f1": "支援 Apple 全平台",
+      "f2": "手機 / iPad 無縫切換",
+      "f3": "Web 端隨時訪問"
+    }
   },
   "postcards": {
     "empty": "還沒有卡片",

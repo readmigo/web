@@ -383,31 +383,41 @@
     "skip": "Passer",
     "next": "Suivant",
     "start": "Commencer",
-    "bookstore.title": "Bibliothèque numérique",
-    "bookstore.subtitle": "Explorez plus de 1 200 livres classiques en anglais",
-    "bookstore.f1": "Riche collection de livres numériques",
-    "bookstore.f2": "Évaluations et recommandations",
-    "bookstore.f3": "Téléchargez et lisez en un clic",
-    "reader.title": "Lecture immersive",
-    "reader.subtitle": "Expérience de lecture conçue pour les apprenants en langues",
-    "reader.f1": "Traduction par paragraphes",
-    "reader.f2": "Annotations et notes de texte",
-    "reader.f3": "Prise en charge de la synthèse vocale",
-    "audiobooks.title": "Bibliothèque de livres audio",
-    "audiobooks.subtitle": "Écoutez et apprenez, n'importe où, n'importe quand",
-    "audiobooks.f1": "Lecture audio professionnelle",
-    "audiobooks.f2": "Mode d'étude bilingue",
-    "audiobooks.f3": "Vitesse de lecture ajustable",
-    "progress.title": "Suivi de la progression",
-    "progress.subtitle": "Suivez chaque étape de votre progression",
-    "progress.f1": "Séries de lecture",
-    "progress.f2": "Définition d'objectifs quotidiens",
-    "progress.f3": "Badges de réussite",
-    "crossPlatform.title": "Multi-plateforme",
-    "crossPlatform.subtitle": "Passez facilement d'un appareil à l'autre",
-    "crossPlatform.f1": "Prise en charge complète de l'écosystème Apple",
-    "crossPlatform.f2": "Passage fluide entre iPhone / iPad",
-    "crossPlatform.f3": "Accès web à tout moment"
+    "bookstore": {
+      "title": "Bibliothèque numérique",
+      "subtitle": "Explorez plus de 1 200 livres classiques en anglais",
+      "f1": "Riche collection de livres numériques",
+      "f2": "Évaluations et recommandations",
+      "f3": "Téléchargez et lisez en un clic"
+    },
+    "reader": {
+      "title": "Lecture immersive",
+      "subtitle": "Expérience de lecture conçue pour les apprenants en langues",
+      "f1": "Traduction par paragraphes",
+      "f2": "Annotations et notes de texte",
+      "f3": "Prise en charge de la synthèse vocale"
+    },
+    "audiobooks": {
+      "title": "Bibliothèque de livres audio",
+      "subtitle": "Écoutez et apprenez, n'importe où, n'importe quand",
+      "f1": "Lecture audio professionnelle",
+      "f2": "Mode d'étude bilingue",
+      "f3": "Vitesse de lecture ajustable"
+    },
+    "progress": {
+      "title": "Suivi de la progression",
+      "subtitle": "Suivez chaque étape de votre progression",
+      "f1": "Séries de lecture",
+      "f2": "Définition d'objectifs quotidiens",
+      "f3": "Badges de réussite"
+    },
+    "crossPlatform": {
+      "title": "Multi-plateforme",
+      "subtitle": "Passez facilement d'un appareil à l'autre",
+      "f1": "Prise en charge complète de l'écosystème Apple",
+      "f2": "Passage fluide entre iPhone / iPad",
+      "f3": "Accès web à tout moment"
+    }
   },
   "postcards": {
     "empty": "Aucune carte postale pour l'instant",

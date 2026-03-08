@@ -383,31 +383,41 @@
     "skip": "Pular",
     "next": "Próximo",
     "start": "Começar",
-    "bookstore.title": "Biblioteca digital",
-    "bookstore.subtitle": "Explore mais de 1.200 livros clássicos em inglês",
-    "bookstore.f1": "Rica coleção de livros digitais",
-    "bookstore.f2": "Avaliações e recomendações",
-    "bookstore.f3": "Baixe e leia com um toque",
-    "reader.title": "Leitura imersiva",
-    "reader.subtitle": "Experiência de leitura projetada para estudantes de idiomas",
-    "reader.f1": "Tradução por parágrafos",
-    "reader.f2": "Anotações e notas de texto",
-    "reader.f3": "Suporte a texto em voz",
-    "audiobooks.title": "Biblioteca de audiolivros",
-    "audiobooks.subtitle": "Ouça e aprenda, em qualquer hora e lugar",
-    "audiobooks.f1": "Reprodução de áudio profissional",
-    "audiobooks.f2": "Modo de estudo bilíngue",
-    "audiobooks.f3": "Velocidade de reprodução ajustável",
-    "progress.title": "Acompanhamento de progresso",
-    "progress.subtitle": "Acompanhe cada etapa do seu crescimento",
-    "progress.f1": "Sequências de leitura",
-    "progress.f2": "Definição de metas diárias",
-    "progress.f3": "Emblemas de conquista",
-    "crossPlatform.title": "Multiplataforma",
-    "crossPlatform.subtitle": "Mude facilmente entre dispositivos",
-    "crossPlatform.f1": "Suporte completo ao ecossistema Apple",
-    "crossPlatform.f2": "Troca fluida entre iPhone / iPad",
-    "crossPlatform.f3": "Acesso web a qualquer momento"
+    "bookstore": {
+      "title": "Biblioteca digital",
+      "subtitle": "Explore mais de 1.200 livros clássicos em inglês",
+      "f1": "Rica coleção de livros digitais",
+      "f2": "Avaliações e recomendações",
+      "f3": "Baixe e leia com um toque"
+    },
+    "reader": {
+      "title": "Leitura imersiva",
+      "subtitle": "Experiência de leitura projetada para estudantes de idiomas",
+      "f1": "Tradução por parágrafos",
+      "f2": "Anotações e notas de texto",
+      "f3": "Suporte a texto em voz"
+    },
+    "audiobooks": {
+      "title": "Biblioteca de audiolivros",
+      "subtitle": "Ouça e aprenda, em qualquer hora e lugar",
+      "f1": "Reprodução de áudio profissional",
+      "f2": "Modo de estudo bilíngue",
+      "f3": "Velocidade de reprodução ajustável"
+    },
+    "progress": {
+      "title": "Acompanhamento de progresso",
+      "subtitle": "Acompanhe cada etapa do seu crescimento",
+      "f1": "Sequências de leitura",
+      "f2": "Definição de metas diárias",
+      "f3": "Emblemas de conquista"
+    },
+    "crossPlatform": {
+      "title": "Multiplataforma",
+      "subtitle": "Mude facilmente entre dispositivos",
+      "f1": "Suporte completo ao ecossistema Apple",
+      "f2": "Troca fluida entre iPhone / iPad",
+      "f3": "Acesso web a qualquer momento"
+    }
   },
   "postcards": {
     "empty": "Nenhum cartão postal ainda",

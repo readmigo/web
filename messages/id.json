@@ -383,31 +383,41 @@
     "skip": "Lewati",
     "next": "Berikutnya",
     "start": "Mulai",
-    "bookstore.title": "Perpustakaan Digital",
-    "bookstore.subtitle": "Jelajahi 1.200+ buku bahasa Inggris klasik",
-    "bookstore.f1": "Koleksi buku digital yang kaya",
-    "bookstore.f2": "Penilaian dan rekomendasi",
-    "bookstore.f3": "Unduh dan baca dengan satu ketukan",
-    "reader.title": "Membaca Imersif",
-    "reader.subtitle": "Pengalaman membaca yang dirancang untuk pelajar bahasa",
-    "reader.f1": "Terjemahan paragraf",
-    "reader.f2": "Anotasi dan catatan teks",
-    "reader.f3": "Dukungan teks-ke-suara",
-    "audiobooks.title": "Perpustakaan Buku Audio",
-    "audiobooks.subtitle": "Dengarkan dan belajar, kapan saja, di mana saja",
-    "audiobooks.f1": "Pemutaran audio profesional",
-    "audiobooks.f2": "Mode belajar bilingual",
-    "audiobooks.f3": "Kecepatan putar yang dapat disesuaikan",
-    "progress.title": "Pelacakan Kemajuan",
-    "progress.subtitle": "Lacak setiap langkah pertumbuhan Anda",
-    "progress.f1": "Streak membaca",
-    "progress.f2": "Penetapan tujuan harian",
-    "progress.f3": "Lencana pencapaian",
-    "crossPlatform.title": "Lintas Platform",
-    "crossPlatform.subtitle": "Beralih dengan mulus antar perangkat",
-    "crossPlatform.f1": "Dukungan penuh ekosistem Apple",
-    "crossPlatform.f2": "Perpindahan mulus iPhone / iPad",
-    "crossPlatform.f3": "Akses web kapan saja"
+    "bookstore": {
+      "title": "Perpustakaan Digital",
+      "subtitle": "Jelajahi 1.200+ buku bahasa Inggris klasik",
+      "f1": "Koleksi buku digital yang kaya",
+      "f2": "Penilaian dan rekomendasi",
+      "f3": "Unduh dan baca dengan satu ketukan"
+    },
+    "reader": {
+      "title": "Membaca Imersif",
+      "subtitle": "Pengalaman membaca yang dirancang untuk pelajar bahasa",
+      "f1": "Terjemahan paragraf",
+      "f2": "Anotasi dan catatan teks",
+      "f3": "Dukungan teks-ke-suara"
+    },
+    "audiobooks": {
+      "title": "Perpustakaan Buku Audio",
+      "subtitle": "Dengarkan dan belajar, kapan saja, di mana saja",
+      "f1": "Pemutaran audio profesional",
+      "f2": "Mode belajar bilingual",
+      "f3": "Kecepatan putar yang dapat disesuaikan"
+    },
+    "progress": {
+      "title": "Pelacakan Kemajuan",
+      "subtitle": "Lacak setiap langkah pertumbuhan Anda",
+      "f1": "Streak membaca",
+      "f2": "Penetapan tujuan harian",
+      "f3": "Lencana pencapaian"
+    },
+    "crossPlatform": {
+      "title": "Lintas Platform",
+      "subtitle": "Beralih dengan mulus antar perangkat",
+      "f1": "Dukungan penuh ekosistem Apple",
+      "f2": "Perpindahan mulus iPhone / iPad",
+      "f3": "Akses web kapan saja"
+    }
   },
   "postcards": {
     "empty": "Belum ada kartu pos",

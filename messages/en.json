@@ -391,31 +391,41 @@
     "skip": "Skip",
     "next": "Next",
     "start": "Get Started",
-    "bookstore.title": "Digital Library",
-    "bookstore.subtitle": "Explore 1,200+ classic English books",
-    "bookstore.f1": "Rich digital book collection",
-    "bookstore.f2": "Ratings and recommendations",
-    "bookstore.f3": "One-tap download and read",
-    "reader.title": "Immersive Reading",
-    "reader.subtitle": "Reading experience designed for language learners",
-    "reader.f1": "Paragraph translation",
-    "reader.f2": "Text annotations and notes",
-    "reader.f3": "Text-to-Speech support",
-    "audiobooks.title": "Audiobook Library",
-    "audiobooks.subtitle": "Listen and learn, anytime, anywhere",
-    "audiobooks.f1": "Professional audio playback",
-    "audiobooks.f2": "Bilingual study mode",
-    "audiobooks.f3": "Adjustable playback speed",
-    "progress.title": "Progress Tracking",
-    "progress.subtitle": "Track every step of your growth",
-    "progress.f1": "Reading streaks",
-    "progress.f2": "Daily goal setting",
-    "progress.f3": "Achievement badges",
-    "crossPlatform.title": "Cross-Platform",
-    "crossPlatform.subtitle": "Switch seamlessly across devices",
-    "crossPlatform.f1": "Full Apple ecosystem support",
-    "crossPlatform.f2": "iPhone / iPad seamless switching",
-    "crossPlatform.f3": "Web access anytime"
+    "bookstore": {
+      "title": "Digital Library",
+      "subtitle": "Explore 1,200+ classic English books",
+      "f1": "Rich digital book collection",
+      "f2": "Ratings and recommendations",
+      "f3": "One-tap download and read"
+    },
+    "reader": {
+      "title": "Immersive Reading",
+      "subtitle": "Reading experience designed for language learners",
+      "f1": "Paragraph translation",
+      "f2": "Text annotations and notes",
+      "f3": "Text-to-Speech support"
+    },
+    "audiobooks": {
+      "title": "Audiobook Library",
+      "subtitle": "Listen and learn, anytime, anywhere",
+      "f1": "Professional audio playback",
+      "f2": "Bilingual study mode",
+      "f3": "Adjustable playback speed"
+    },
+    "progress": {
+      "title": "Progress Tracking",
+      "subtitle": "Track every step of your growth",
+      "f1": "Reading streaks",
+      "f2": "Daily goal setting",
+      "f3": "Achievement badges"
+    },
+    "crossPlatform": {
+      "title": "Cross-Platform",
+      "subtitle": "Switch seamlessly across devices",
+      "f1": "Full Apple ecosystem support",
+      "f2": "iPhone / iPad seamless switching",
+      "f3": "Web access anytime"
+    }
   },
   "postcards": {
     "empty": "No postcards yet",

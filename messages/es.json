@@ -383,31 +383,41 @@
     "skip": "Omitir",
     "next": "Siguiente",
     "start": "Empezar",
-    "bookstore.title": "Biblioteca digital",
-    "bookstore.subtitle": "Explora más de 1.200 libros clásicos en inglés",
-    "bookstore.f1": "Rica colección de libros digitales",
-    "bookstore.f2": "Valoraciones y recomendaciones",
-    "bookstore.f3": "Descarga y lee con un toque",
-    "reader.title": "Lectura inmersiva",
-    "reader.subtitle": "Experiencia de lectura diseñada para estudiantes de idiomas",
-    "reader.f1": "Traducción por párrafos",
-    "reader.f2": "Anotaciones y notas de texto",
-    "reader.f3": "Compatibilidad con texto a voz",
-    "audiobooks.title": "Biblioteca de audiolibros",
-    "audiobooks.subtitle": "Escucha y aprende, en cualquier momento y lugar",
-    "audiobooks.f1": "Reproducción de audio profesional",
-    "audiobooks.f2": "Modo de estudio bilingüe",
-    "audiobooks.f3": "Velocidad de reproducción ajustable",
-    "progress.title": "Seguimiento del progreso",
-    "progress.subtitle": "Sigue cada paso de tu crecimiento",
-    "progress.f1": "Rachas de lectura",
-    "progress.f2": "Establecimiento de metas diarias",
-    "progress.f3": "Insignias de logros",
-    "crossPlatform.title": "Multiplataforma",
-    "crossPlatform.subtitle": "Cambia sin problemas entre dispositivos",
-    "crossPlatform.f1": "Compatibilidad completa con el ecosistema Apple",
-    "crossPlatform.f2": "Cambio fluido entre iPhone / iPad",
-    "crossPlatform.f3": "Acceso web en cualquier momento"
+    "bookstore": {
+      "title": "Biblioteca digital",
+      "subtitle": "Explora más de 1.200 libros clásicos en inglés",
+      "f1": "Rica colección de libros digitales",
+      "f2": "Valoraciones y recomendaciones",
+      "f3": "Descarga y lee con un toque"
+    },
+    "reader": {
+      "title": "Lectura inmersiva",
+      "subtitle": "Experiencia de lectura diseñada para estudiantes de idiomas",
+      "f1": "Traducción por párrafos",
+      "f2": "Anotaciones y notas de texto",
+      "f3": "Compatibilidad con texto a voz"
+    },
+    "audiobooks": {
+      "title": "Biblioteca de audiolibros",
+      "subtitle": "Escucha y aprende, en cualquier momento y lugar",
+      "f1": "Reproducción de audio profesional",
+      "f2": "Modo de estudio bilingüe",
+      "f3": "Velocidad de reproducción ajustable"
+    },
+    "progress": {
+      "title": "Seguimiento del progreso",
+      "subtitle": "Sigue cada paso de tu crecimiento",
+      "f1": "Rachas de lectura",
+      "f2": "Establecimiento de metas diarias",
+      "f3": "Insignias de logros"
+    },
+    "crossPlatform": {
+      "title": "Multiplataforma",
+      "subtitle": "Cambia sin problemas entre dispositivos",
+      "f1": "Compatibilidad completa con el ecosistema Apple",
+      "f2": "Cambio fluido entre iPhone / iPad",
+      "f3": "Acceso web en cualquier momento"
+    }
   },
   "postcards": {
     "empty": "Sin postales aún",
