@@ -11,5 +11,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function ExplorePage() {
-  return <ExploreContent />;
+  return (
+    <div className="container py-6">
+      <ExploreContent />
+    </div>
+  );
 }
