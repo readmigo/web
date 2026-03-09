@@ -14,7 +14,6 @@ import { TimelinePanel } from '@/features/reader/components/timeline-panel';
 import { KeyboardShortcutsDialog } from '@/components/shared/keyboard-shortcuts-dialog';
 import { useTranslations } from 'next-intl';
 import { useReaderStore } from '@/features/reader/stores/reader-store';
-import { useAudioPlayerStore } from '@/features/audiobook/stores/audio-player-store';
 import { useBookDetail } from '@/features/library/hooks/use-books';
 import { useTTS } from '@/features/reader/hooks/use-tts';
 import { processOfflineQueue } from '@/features/reader/hooks/use-highlights';
@@ -25,6 +24,7 @@ import {
 import { usePositionSync } from '@/features/reader/hooks/use-position-sync';
 import type { SelectedText, TocItem } from '@/features/reader/types';
 import { trackEvent } from '@/lib/analytics';
+import { savePendingSession } from '@/features/reader/lib/pending-sessions';
 
 interface ReaderContentProps {
   bookId: string;
@@ -61,7 +61,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     endReadingSession,
     updateReadingActivity,
     getLastPosition,
-    switchSessionType,
+    flushPendingSessions,
   } = useReaderStore();
 
   const [showGuide, setShowGuide] = useState(false);
@@ -70,41 +70,11 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   const [translationText, setTranslationText] = useState<string | null>(null);
   const showControlsRef = useRef(false);
   const autoHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // Rule 2: track whether audiobook was playing when reader mounted
-  const wasAudioPlayingRef = useRef(false);
 
   // Keep ref in sync with state
   useEffect(() => {
     showControlsRef.current = showControls;
   }, [showControls]);
-
-  // Rule 2: READING ↔ AUDIOBOOK mutual exclusion
-  // Pause audiobook when entering the reader; resume it when leaving
-  useEffect(() => {
-    const audioState = useAudioPlayerStore.getState();
-    if (audioState.isPlaying) {
-      wasAudioPlayingRef.current = true;
-      audioState.pause();
-    }
-
-    return () => {
-      if (wasAudioPlayingRef.current) {
-        useAudioPlayerStore.getState().play();
-      }
-    };
-    // Run only on mount/unmount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Rule 1: READING ↔ TTS session switching
-  // When TTS transitions to/from playing, switch the session type in the store
-  useEffect(() => {
-    if (tts.ttsState === 'playing' || tts.ttsState === 'loading') {
-      switchSessionType('TTS');
-    } else if (tts.ttsState === 'idle' || tts.ttsState === 'paused') {
-      switchSessionType('READING');
-    }
-  }, [tts.ttsState, switchSessionType]);
 
   // Navigation handlers
   const handlePrev = useCallback(() => {
@@ -348,6 +318,52 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
 
     window.addEventListener('online', handleOnline);
     return () => window.removeEventListener('online', handleOnline);
+  }, []);
+
+  // Flush any pending sessions saved from previous visits on mount,
+  // and again whenever network connectivity is restored
+  useEffect(() => {
+    flushPendingSessions();
+
+    const handleOnlineFlush = () => {
+      flushPendingSessions();
+    };
+
+    window.addEventListener('online', handleOnlineFlush);
+    return () => window.removeEventListener('online', handleOnlineFlush);
+  }, [flushPendingSessions]);
+
+  // Save session to localStorage on page close / unload for crash recovery
+  // sendBeacon cannot carry auth headers, so we rely on localStorage + flush-on-mount
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const state = useReaderStore.getState();
+      if (!state.currentSession) return;
+
+      const durationSeconds = Math.floor(
+        (Date.now() - state.currentSession.startTime) / 1000
+      );
+      if (durationSeconds < 10) return;
+
+      // Use the existing snapshotRecordId so the pending entry is idempotent
+      const sessionId = state.snapshotRecordId || crypto.randomUUID();
+      savePendingSession({
+        id: sessionId,
+        payload: {
+          bookId: state.currentSession.bookId,
+          durationSeconds,
+          sessionType: state.currentSessionType || 'READING',
+          deviceId: localStorage.getItem('readmigo_device_id') || 'unknown',
+          clientVersion: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
+        },
+        endpoint: '/reading/sessions',
+        createdAt: Date.now(),
+        retryCount: 0,
+      });
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
 
   // Cleanup auto-hide timer on unmount
