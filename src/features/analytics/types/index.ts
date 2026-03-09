@@ -40,7 +40,7 @@ export interface BookProgress {
 export interface RecentSession {
   bookId: string;
   bookTitle: string;
-  durationMinutes: number;
+  durationSeconds: number;
   wordsRead: number;
   readAt: string;
 }

@@ -214,7 +214,7 @@ export function StatsDashboard() {
               <div key={i} className="flex items-center justify-between text-sm">
                 <span className="truncate flex-1">{session.bookTitle}</span>
                 <span className="text-xs text-muted-foreground shrink-0 ml-2">
-                  {formatMinutes(session.durationMinutes)}
+                  {formatMinutes(Math.round(session.durationSeconds / 60))}
                 </span>
               </div>
             ))}

@@ -5,6 +5,17 @@ import { apiClient } from '@/lib/api/client';
 import { addToOfflineQueue } from '../hooks/use-highlights';
 import { buildParagraphKey } from '../utils/translation-hash';
 import { trackEvent } from '@/lib/analytics';
+
+function getDeviceId(): string {
+  const key = 'readmigo_device_id';
+  let deviceId = localStorage.getItem(key);
+  if (!deviceId) {
+    deviceId = crypto.randomUUID();
+    localStorage.setItem(key, deviceId);
+  }
+  return deviceId;
+}
+
 // Reading session for tracking time and progress
 interface ReadingSession {
   bookId: string;
@@ -164,7 +175,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
       bookmarks: [],
       highlights: [],
       currentSession: null,
-      currentSessionType: 'READING',
+      currentSessionType: 'READING' as const,
       bookStats: {},
       isSyncing: false,
       lastSyncedAt: null,
@@ -532,8 +543,11 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
           apiClient
             .post('/reading/sessions', {
               bookId: currentSession.bookId,
-              durationMinutes: Math.max(1, Math.round(sessionDuration / 60)),
+              durationSeconds: sessionDuration,
               pagesRead: currentSession.pagesRead,
+              sessionType: get().currentSessionType || 'READING',
+              deviceId: getDeviceId(),
+              clientVersion: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
             })
             .catch((error) => {
               console.error('Failed to submit reading session:', error);
@@ -560,7 +574,6 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
         const { currentSessionType, currentSession, bookStats, position } = get();
         if (currentSessionType === newType) return;
 
-        // End the current session inline (mirrors endReadingSession logic)
         if (currentSession) {
           const now = Date.now();
           const sessionDuration = Math.floor((now - currentSession.startTime) / 1000);
@@ -602,15 +615,17 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
             apiClient
               .post('/reading/sessions', {
                 bookId: currentSession.bookId,
-                durationMinutes: Math.max(1, Math.round(sessionDuration / 60)),
+                durationSeconds: sessionDuration,
                 pagesRead: currentSession.pagesRead,
+                sessionType: currentSessionType,
+                deviceId: getDeviceId(),
+                clientVersion: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
               })
               .catch((error) => {
                 console.error('Failed to submit reading session on switch:', error);
               });
           }
 
-          // Start new session immediately with the same bookId
           const newStartTime = Date.now();
           set({
             currentSession: {
