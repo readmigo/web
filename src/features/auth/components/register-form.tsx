@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { trackEvent } from '@/lib/analytics';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -79,6 +80,7 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
       }
 
       // Auto sign in after registration
+      trackEvent('user_signed_up', { method: 'email' });
       await signIn('credentials', {
         email,
         password,
@@ -92,6 +94,7 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
   };
 
   const handleOAuthSignIn = (provider: 'apple' | 'google' | 'line' | 'kakao') => {
+    trackEvent('user_signed_up', { method: provider });
     signIn(provider, { callbackUrl });
   };
 

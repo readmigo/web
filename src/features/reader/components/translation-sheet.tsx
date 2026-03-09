@@ -6,6 +6,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Button } from '@/components/ui/button';
 import { Copy, Loader2 } from 'lucide-react';
 import { apiClient } from '@/lib/api/client';
+import { trackEvent } from '@/lib/analytics';
 
 interface TranslationSheetProps {
   open: boolean;
@@ -21,6 +22,7 @@ export function TranslationSheet({ open, originalText, bookId, onClose }: Transl
 
   useEffect(() => {
     if (!open || !originalText.trim()) return;
+    trackEvent('ai_translation_viewed', { book_id: bookId });
     setTranslation(null);
     setIsLoading(true);
 

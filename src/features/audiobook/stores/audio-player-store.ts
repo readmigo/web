@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { getAudioManager } from '../lib/audio-manager';
 import { apiClient } from '@/lib/api/client';
+import { trackEvent } from '@/lib/analytics';
 import type {
   Audiobook,
   AudiobookChapter,
@@ -25,6 +26,14 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
 
         audioManager.on('play', () => {
           set({ isPlaying: true, isLoading: false });
+          const { audiobook, chapterIndex } = get();
+          if (audiobook) {
+            trackEvent('audiobook_play_started', {
+              audiobook_id: audiobook.id,
+              audiobook_title: audiobook.title,
+              chapter_index: chapterIndex,
+            });
+          }
         });
 
         audioManager.on('pause', () => {
@@ -32,6 +41,14 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
         });
 
         audioManager.on('ended', () => {
+          const { audiobook, chapterIndex, currentTime } = get();
+          if (audiobook) {
+            trackEvent('audiobook_play_ended', {
+              audiobook_id: audiobook.id,
+              chapter_index: chapterIndex,
+              position_seconds: Math.floor(currentTime),
+            });
+          }
           const { nextChapter } = get();
           nextChapter();
         });

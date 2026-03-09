@@ -4,6 +4,7 @@ import type { ReaderSettings, ReaderPosition, Highlight, Bookmark, SelectedText 
 import { apiClient } from '@/lib/api/client';
 import { addToOfflineQueue } from '../hooks/use-highlights';
 import { buildParagraphKey } from '../utils/translation-hash';
+import { trackEvent } from '@/lib/analytics';
 // Reading session for tracking time and progress
 interface ReadingSession {
   bookId: string;
@@ -274,6 +275,8 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
           createdAt: new Date(),
         };
 
+        trackEvent('bookmark_created', { book_id: bookmark.bookId });
+
         // Optimistic update - add to local state immediately
         set((state) => ({
           bookmarks: [...state.bookmarks, newBookmark],
@@ -339,6 +342,12 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
           id: crypto.randomUUID(),
           createdAt: new Date(),
         };
+
+        trackEvent(highlight.note ? 'annotation_created' : 'highlight_created', {
+          book_id: highlight.bookId,
+          color: highlight.color,
+          text_length: highlight.text.length,
+        });
 
         // Optimistic update - add to local state immediately
         set((state) => ({
@@ -453,6 +462,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
             startPercentage: currentPercentage,
           },
         });
+        trackEvent('reading_started', { book_id: bookId, source: 'library' });
       },
 
       updateReadingActivity: (wordsRead?: number) => {
@@ -505,6 +515,13 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
               averageWpm,
             },
           },
+        });
+
+        trackEvent('reading_session_ended', {
+          book_id: currentSession.bookId,
+          duration_seconds: sessionDuration,
+          pages_read: currentSession.pagesRead,
+          chapter_index: position?.chapterIndex,
         });
 
         // Sync reading progress to backend

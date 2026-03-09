@@ -23,6 +23,7 @@ import {
 } from '@/lib/hooks/use-keyboard-shortcuts';
 import { usePositionSync } from '@/features/reader/hooks/use-position-sync';
 import type { SelectedText, TocItem } from '@/features/reader/types';
+import { trackEvent } from '@/lib/analytics';
 
 interface ReaderContentProps {
   bookId: string;
@@ -96,11 +97,12 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     if (tts.ttsState === 'idle') {
       const text = readerRef.current?.getCurrentPageText() ?? '';
       if (text.trim()) {
+        trackEvent('tts_started', { book_id: bookId, book_title: book?.title });
         tts.speak(text);
       }
     }
     setShowTTSPanel(true);
-  }, [tts]);
+  }, [tts, bookId, book?.title]);
 
   const handleToggleTTSPanel = useCallback(() => {
     setShowTTSPanel((prev) => !prev);

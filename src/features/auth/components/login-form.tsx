@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import { trackEvent } from '@/lib/analytics';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -69,6 +70,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
       if (result?.error) {
         setError(t('invalidCredentials'));
       } else if (result?.url) {
+        trackEvent('user_logged_in', { method: 'email', platform: 'web' });
         window.location.href = result.url;
       }
     } catch {
@@ -79,6 +81,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
   };
 
   const handleOAuthSignIn = (provider: 'apple' | 'google' | 'line' | 'kakao') => {
+    trackEvent('user_logged_in', { method: provider, platform: 'web' });
     signIn(provider, { callbackUrl });
   };
 

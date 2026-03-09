@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api/client';
+import { trackEvent } from '@/lib/analytics';
 import type { SearchResponse } from '../types';
 
 export function useSearch(query: string, limit = 5) {
@@ -11,6 +12,10 @@ export function useSearch(query: string, limit = 5) {
       const response = await apiClient.get<SearchResponse>('/search', {
         params: { q: query, limit: String(limit) },
         skipAuth: true,
+      });
+      trackEvent('library_search_performed', {
+        query,
+        results_count: response.books?.items?.length ?? 0,
       });
       return response;
     },

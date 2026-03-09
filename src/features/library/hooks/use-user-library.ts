@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api/client';
+import { trackEvent } from '@/lib/analytics';
 import type { UserBook } from '../types';
 
 export function useUserLibrary() {
@@ -22,6 +23,7 @@ export function useAddToLibrary() {
 
   return useMutation({
     mutationFn: async (bookId: string) => {
+      trackEvent('library_book_added', { book_id: bookId });
       return apiClient.post('/reading/library', { bookId });
     },
     onSuccess: () => {
@@ -35,6 +37,7 @@ export function useRemoveFromLibrary() {
 
   return useMutation({
     mutationFn: async (bookId: string) => {
+      trackEvent('library_book_removed', { book_id: bookId });
       return apiClient.delete(`/reading/library/${bookId}`);
     },
     onSuccess: () => {
