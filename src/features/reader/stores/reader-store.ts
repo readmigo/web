@@ -50,6 +50,7 @@ interface ReaderState {
 
   // Reading session tracking
   currentSession: ReadingSession | null;
+  currentSessionType: 'READING' | 'TTS';
   bookStats: Record<string, BookReadingStats>;
 
   // System appearance (runtime only, not persisted)
@@ -114,6 +115,7 @@ interface ReaderActions {
   startReadingSession: (bookId: string, currentPercentage: number) => void;
   updateReadingActivity: (wordsRead?: number) => void;
   endReadingSession: () => void;
+  switchSessionType: (newType: 'READING' | 'TTS') => void;
   getBookStats: (bookId: string) => BookReadingStats | null;
   getLastPosition: (bookId: string) => ReaderPosition | null;
   getCurrentSessionDuration: () => number;
@@ -162,6 +164,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
       bookmarks: [],
       highlights: [],
       currentSession: null,
+      currentSessionType: 'READING',
       bookStats: {},
       isSyncing: false,
       lastSyncedAt: null,
@@ -550,6 +553,82 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
             .catch((error) => {
               console.error('Failed to sync reading progress:', error);
             });
+        }
+      },
+
+      switchSessionType: (newType: 'READING' | 'TTS') => {
+        const { currentSessionType, currentSession, bookStats, position } = get();
+        if (currentSessionType === newType) return;
+
+        // End the current session inline (mirrors endReadingSession logic)
+        if (currentSession) {
+          const now = Date.now();
+          const sessionDuration = Math.floor((now - currentSession.startTime) / 1000);
+          const existingStats = bookStats[currentSession.bookId];
+
+          const progressMade = position
+            ? Math.max(0, position.percentage - currentSession.startPercentage)
+            : 0;
+          const estimatedWordsRead = Math.floor(progressMade * 25000);
+          const totalWordsRead = (existingStats?.totalWordsRead || 0) + estimatedWordsRead;
+          const totalTime = (existingStats?.totalReadingTime || 0) + sessionDuration;
+          const sessionsCount = (existingStats?.sessionsCount || 0) + 1;
+          const averageWpm = totalTime > 0 ? Math.round((totalWordsRead / totalTime) * 60) : 0;
+
+          set({
+            bookStats: {
+              ...bookStats,
+              [currentSession.bookId]: {
+                bookId: currentSession.bookId,
+                totalReadingTime: totalTime,
+                totalWordsRead,
+                lastReadAt: now,
+                lastPosition: position,
+                sessionsCount,
+                averageWpm,
+              },
+            },
+          });
+
+          trackEvent('reading_session_ended', {
+            book_id: currentSession.bookId,
+            duration_seconds: sessionDuration,
+            pages_read: currentSession.pagesRead,
+            chapter_index: position?.chapterIndex,
+            session_type: currentSessionType,
+          });
+
+          if (sessionDuration >= 10) {
+            apiClient
+              .post('/reading/sessions', {
+                bookId: currentSession.bookId,
+                durationMinutes: Math.max(1, Math.round(sessionDuration / 60)),
+                pagesRead: currentSession.pagesRead,
+              })
+              .catch((error) => {
+                console.error('Failed to submit reading session on switch:', error);
+              });
+          }
+
+          // Start new session immediately with the same bookId
+          const newStartTime = Date.now();
+          set({
+            currentSession: {
+              bookId: currentSession.bookId,
+              startTime: newStartTime,
+              lastActiveTime: newStartTime,
+              wordsRead: 0,
+              pagesRead: 0,
+              startPercentage: position?.percentage || currentSession.startPercentage,
+            },
+            currentSessionType: newType,
+          });
+
+          trackEvent(newType === 'TTS' ? 'tts_session_started' : 'reading_session_started', {
+            book_id: currentSession.bookId,
+          });
+        } else {
+          set({ currentSessionType: newType });
         }
       },
 
