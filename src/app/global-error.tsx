@@ -1,5 +1,8 @@
 'use client';
 
+import * as Sentry from '@sentry/nextjs';
+import { useEffect } from 'react';
+
 const translations = {
   zh: {
     title: '应用发生严重错误',
@@ -24,11 +27,16 @@ function getLocale(): 'zh' | 'en' {
 }
 
 export default function GlobalError({
+  error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  useEffect(() => {
+    Sentry.captureException(error);
+  }, [error]);
+
   const locale = getLocale();
   const t = translations[locale];
 

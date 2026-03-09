@@ -112,6 +112,5 @@ const nextConfig: NextConfig = {
 export default withSentryConfig(withNextIntl(withSerwist(nextConfig)), {
   silent: true,
   widenClientFileUpload: true,
-  disableLogger: true,
   sourcemaps: { disable: true },
 });
