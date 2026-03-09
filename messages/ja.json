@@ -20,7 +20,8 @@
     "library": "本棚",
     "audiobooks": "オーディオブック",
     "me": "マイページ",
-    "downloadApp": "アプリをダウンロード"
+    "downloadApp": "アプリをダウンロード",
+    "stats": "統計"
   },
   "discover": {
     "search": {

@@ -20,7 +20,8 @@
     "library": "书架",
     "audiobooks": "有声书",
     "me": "我的",
-    "downloadApp": "下载 App"
+    "downloadApp": "下载 App",
+    "stats": "统计"
   },
   "discover": {
     "search": {

@@ -20,7 +20,8 @@
     "library": "서재",
     "audiobooks": "오디오북",
     "me": "내 정보",
-    "downloadApp": "앱 다운로드"
+    "downloadApp": "앱 다운로드",
+    "stats": "통계"
   },
   "discover": {
     "search": {

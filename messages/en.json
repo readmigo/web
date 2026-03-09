@@ -20,7 +20,8 @@
     "library": "Library",
     "audiobooks": "Audiobooks",
     "me": "Me",
-    "downloadApp": "Download App"
+    "downloadApp": "Download App",
+    "stats": "Stats"
   },
   "discover": {
     "search": {
