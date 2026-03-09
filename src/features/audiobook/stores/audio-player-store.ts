@@ -3,6 +3,10 @@ import { persist } from 'zustand/middleware';
 import { getAudioManager } from '../lib/audio-manager';
 import { apiClient } from '@/lib/api/client';
 import { trackEvent } from '@/lib/analytics';
+import {
+  savePendingSession,
+  removePendingSession,
+} from '@/features/reader/lib/pending-sessions';
 import type {
   Audiobook,
   AudiobookChapter,
@@ -386,7 +390,7 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
           }
         },
 
-        // Audiobook session submission
+        // Audiobook session submission — localStorage first, then API
         submitAudiobookSession: async () => {
           const {
             audiobook,
@@ -408,19 +412,33 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
           // Reset session tracking state
           set({ sessionStartTime: null, sessionStartPosition: 0 });
 
+          const sessionId = crypto.randomUUID();
+          const payload = {
+            audiobookId: audiobook.id,
+            chapterIndex,
+            startSeconds,
+            endSeconds,
+            durationSeconds,
+            playbackSpeed,
+            deviceId: getDeviceId(),
+            clientVersion: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
+          };
+
+          // Persist locally first so it survives crashes and network failures
+          savePendingSession({
+            id: sessionId,
+            payload,
+            endpoint: '/reading/audiobook-sessions',
+            createdAt: Date.now(),
+            retryCount: 0,
+          });
+
           try {
-            await apiClient.post('/reading/audiobook-sessions', {
-              audiobookId: audiobook.id,
-              chapterIndex,
-              startSeconds,
-              endSeconds,
-              durationSeconds,
-              playbackSpeed,
-              deviceId: getDeviceId(),
-              clientVersion: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
-            });
+            await apiClient.post('/reading/audiobook-sessions', payload);
+            removePendingSession(sessionId);
           } catch (error) {
             console.error('Failed to submit audiobook session:', error);
+            // Session stays in localStorage for retry on next flush
           }
         },
       };

@@ -5,6 +5,11 @@ import { apiClient } from '@/lib/api/client';
 import { addToOfflineQueue } from '../hooks/use-highlights';
 import { buildParagraphKey } from '../utils/translation-hash';
 import { trackEvent } from '@/lib/analytics';
+import {
+  savePendingSession,
+  removePendingSession,
+  flushPendingSessions as flushPendingSessionsUtil,
+} from '../lib/pending-sessions';
 
 function getDeviceId(): string {
   const key = 'readmigo_device_id';
@@ -63,6 +68,10 @@ interface ReaderState {
   currentSession: ReadingSession | null;
   currentSessionType: 'READING' | 'TTS';
   bookStats: Record<string, BookReadingStats>;
+
+  // Snapshot tracking — interval ID and shared session record ID
+  snapshotIntervalId: ReturnType<typeof setInterval> | null;
+  snapshotRecordId: string | null;
 
   // System appearance (runtime only, not persisted)
   systemIsDark: boolean;
@@ -131,6 +140,9 @@ interface ReaderActions {
   getLastPosition: (bookId: string) => ReaderPosition | null;
   getCurrentSessionDuration: () => number;
 
+  // Pending session flush
+  flushPendingSessions: () => Promise<void>;
+
   // System appearance
   setSystemIsDark: (isDark: boolean) => void;
 
@@ -177,6 +189,8 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
       currentSession: null,
       currentSessionType: 'READING' as const,
       bookStats: {},
+      snapshotIntervalId: null,
+      snapshotRecordId: null,
       isSyncing: false,
       lastSyncedAt: null,
       pendingSync: new Set<string>(),
@@ -465,7 +479,15 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
 
       // Reading session tracking
       startReadingSession: (bookId: string, currentPercentage: number) => {
+        // Clear any previous snapshot interval before starting a new session
+        const { snapshotIntervalId } = get();
+        if (snapshotIntervalId) {
+          clearInterval(snapshotIntervalId);
+        }
+
         const now = Date.now();
+        const snapshotId = crypto.randomUUID();
+
         set({
           currentSession: {
             bookId,
@@ -475,8 +497,35 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
             pagesRead: 0,
             startPercentage: currentPercentage,
           },
+          snapshotRecordId: snapshotId,
         });
+
         trackEvent('reading_started', { book_id: bookId, source: 'library' });
+
+        // Periodic snapshot — saves progress to localStorage every 5 minutes
+        // Uses snapshotId so each write replaces the previous snapshot for this session
+        const intervalId = setInterval(() => {
+          const state = get();
+          if (!state.currentSession) return;
+          const durationSeconds = Math.floor((Date.now() - state.currentSession.startTime) / 1000);
+          if (durationSeconds < 10) return;
+
+          savePendingSession({
+            id: state.snapshotRecordId!,
+            payload: {
+              bookId: state.currentSession.bookId,
+              durationSeconds,
+              sessionType: state.currentSessionType || 'READING',
+              deviceId: getDeviceId(),
+              clientVersion: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
+            },
+            endpoint: '/reading/sessions',
+            createdAt: Date.now(),
+            retryCount: 0,
+          });
+        }, 5 * 60 * 1000); // every 5 minutes
+
+        set({ snapshotIntervalId: intervalId });
       },
 
       updateReadingActivity: (wordsRead?: number) => {
@@ -493,8 +542,13 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
       },
 
       endReadingSession: () => {
-        const { currentSession, bookStats, position } = get();
+        const { currentSession, bookStats, position, snapshotIntervalId, snapshotRecordId } = get();
         if (!currentSession) return;
+
+        // Stop snapshot interval
+        if (snapshotIntervalId) {
+          clearInterval(snapshotIntervalId);
+        }
 
         const now = Date.now();
         const sessionDuration = Math.floor((now - currentSession.startTime) / 1000);
@@ -517,6 +571,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
 
         set({
           currentSession: null,
+          snapshotIntervalId: null,
           bookStats: {
             ...bookStats,
             [currentSession.bookId]: {
@@ -538,19 +593,35 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
           chapter_index: position?.chapterIndex,
         });
 
-        // Submit reading session to backend
+        // Submit reading session to backend — localStorage first, then API
         if (sessionDuration >= 10) {
+          const sessionId = snapshotRecordId || crypto.randomUUID();
+          const payload = {
+            bookId: currentSession.bookId,
+            durationSeconds: sessionDuration,
+            pagesRead: currentSession.pagesRead,
+            sessionType: get().currentSessionType || 'READING',
+            deviceId: getDeviceId(),
+            clientVersion: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
+          };
+
+          // Persist locally first so it survives crashes and network failures
+          savePendingSession({
+            id: sessionId,
+            payload,
+            endpoint: '/reading/sessions',
+            createdAt: now,
+            retryCount: 0,
+          });
+
           apiClient
-            .post('/reading/sessions', {
-              bookId: currentSession.bookId,
-              durationSeconds: sessionDuration,
-              pagesRead: currentSession.pagesRead,
-              sessionType: get().currentSessionType || 'READING',
-              deviceId: getDeviceId(),
-              clientVersion: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
+            .post('/reading/sessions', payload)
+            .then(() => {
+              removePendingSession(sessionId);
             })
             .catch((error) => {
               console.error('Failed to submit reading session:', error);
+              // Session stays in localStorage for retry on next flush
             });
         }
 
@@ -571,7 +642,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
       },
 
       switchSessionType: (newType: 'READING' | 'TTS') => {
-        const { currentSessionType, currentSession, bookStats, position } = get();
+        const { currentSessionType, currentSession, bookStats, position, snapshotIntervalId, snapshotRecordId } = get();
         if (currentSessionType === newType) return;
 
         if (currentSession) {
@@ -612,21 +683,65 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
           });
 
           if (sessionDuration >= 10) {
+            // Stop previous snapshot interval
+            if (snapshotIntervalId) {
+              clearInterval(snapshotIntervalId);
+            }
+
+            const sessionId = snapshotRecordId || crypto.randomUUID();
+            const payload = {
+              bookId: currentSession.bookId,
+              durationSeconds: sessionDuration,
+              pagesRead: currentSession.pagesRead,
+              sessionType: currentSessionType,
+              deviceId: getDeviceId(),
+              clientVersion: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
+            };
+
+            // Persist locally first
+            savePendingSession({
+              id: sessionId,
+              payload,
+              endpoint: '/reading/sessions',
+              createdAt: now,
+              retryCount: 0,
+            });
+
             apiClient
-              .post('/reading/sessions', {
-                bookId: currentSession.bookId,
-                durationSeconds: sessionDuration,
-                pagesRead: currentSession.pagesRead,
-                sessionType: currentSessionType,
-                deviceId: getDeviceId(),
-                clientVersion: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
+              .post('/reading/sessions', payload)
+              .then(() => {
+                removePendingSession(sessionId);
               })
               .catch((error) => {
                 console.error('Failed to submit reading session on switch:', error);
+                // Session stays in localStorage for retry
               });
           }
 
+          // Start a fresh snapshot tracking for the new session type
+          const newSnapshotId = crypto.randomUUID();
           const newStartTime = Date.now();
+          const newIntervalId = setInterval(() => {
+            const state = get();
+            if (!state.currentSession) return;
+            const durationSeconds = Math.floor((Date.now() - state.currentSession.startTime) / 1000);
+            if (durationSeconds < 10) return;
+
+            savePendingSession({
+              id: state.snapshotRecordId!,
+              payload: {
+                bookId: state.currentSession.bookId,
+                durationSeconds,
+                sessionType: newType,
+                deviceId: getDeviceId(),
+                clientVersion: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
+              },
+              endpoint: '/reading/sessions',
+              createdAt: Date.now(),
+              retryCount: 0,
+            });
+          }, 5 * 60 * 1000);
+
           set({
             currentSession: {
               bookId: currentSession.bookId,
@@ -637,6 +752,8 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
               startPercentage: position?.percentage || currentSession.startPercentage,
             },
             currentSessionType: newType,
+            snapshotRecordId: newSnapshotId,
+            snapshotIntervalId: newIntervalId,
           });
 
           trackEvent(newType === 'TTS' ? 'tts_session_started' : 'reading_session_started', {
@@ -659,6 +776,11 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
         const { currentSession } = get();
         if (!currentSession) return 0;
         return Math.floor((Date.now() - currentSession.startTime) / 1000);
+      },
+
+      // Flush pending sessions to backend (called on mount and network recovery)
+      flushPendingSessions: async () => {
+        await flushPendingSessionsUtil();
       },
 
       // System appearance
