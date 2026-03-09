@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { apiClient } from '@/lib/api/client';
+import { useAudioPlayerStore } from '@/features/audiobook/stores/audio-player-store';
 
 // ─── Types (aligned with iOS TTS.swift) ──────────────────────────────────────
 
@@ -353,6 +354,12 @@ export function useTTS() {
   const speak = useCallback((text: string) => {
     const paragraphs = splitIntoParagraphs(text);
     if (paragraphs.length === 0) return;
+
+    // Rule 3: TTS ↔ Audiobook mutual exclusion — pause audiobook before TTS starts
+    const audioPlayerState = useAudioPlayerStore.getState();
+    if (audioPlayerState.isPlaying) {
+      audioPlayerState.pause();
+    }
 
     doStop();
     const pb = pbRef.current;

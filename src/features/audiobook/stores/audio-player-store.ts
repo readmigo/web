@@ -114,6 +114,11 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
 
         // Playback controls
         play: async () => {
+          // Rule 3: Audiobook ↔ TTS mutual exclusion — stop any active TTS before playing
+          if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+          }
+
           const audioManager = getAudioManager();
           try {
             await audioManager.play();
