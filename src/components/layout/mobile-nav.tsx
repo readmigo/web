@@ -8,6 +8,7 @@ import {
   Store,
   Headphones,
   UserCircle,
+  BarChart3,
 } from 'lucide-react';
 
 export function MobileNav() {
@@ -17,6 +18,7 @@ export function MobileNav() {
   const navigation = [
     { name: t('bookstore'), href: '/', icon: Store },
     { name: t('audiobooks'), href: '/audiobooks', icon: Headphones },
+    { name: t('stats'), href: '/stats', icon: BarChart3 },
     { name: t('me'), href: '/me', icon: UserCircle },
   ];
 
