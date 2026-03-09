@@ -524,6 +524,19 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
           chapter_index: position?.chapterIndex,
         });
 
+        // Submit reading session to backend
+        if (sessionDuration >= 10) {
+          apiClient
+            .post('/reading/sessions', {
+              bookId: currentSession.bookId,
+              durationMinutes: Math.max(1, Math.round(sessionDuration / 60)),
+              pagesRead: currentSession.pagesRead,
+            })
+            .catch((error) => {
+              console.error('Failed to submit reading session:', error);
+            });
+        }
+
         // Sync reading progress to backend
         if (position) {
           apiClient
