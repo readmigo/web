@@ -107,6 +107,10 @@ export interface AudioPlayerState {
   sleepTimer: SleepTimerOption | null;
   sleepTimerEndTime: number | null; // timestamp
 
+  // Listening session tracking
+  sessionStartTime: number | null; // Date.now() when playback began
+  sessionStartPosition: number; // position in seconds when session started
+
   // Error
   error: string | null;
 }
@@ -146,6 +150,9 @@ export interface AudioPlayerActions {
 
   // Progress sync
   syncProgress: () => Promise<void>;
+
+  // Audiobook session submission
+  submitAudiobookSession: () => Promise<void>;
 }
 
 // API request/response types

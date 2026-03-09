@@ -14,6 +14,16 @@ import type {
 
 interface AudioPlayerStore extends AudioPlayerState, AudioPlayerActions {}
 
+function getDeviceId(): string {
+  const key = 'readmigo_device_id';
+  let deviceId = localStorage.getItem(key);
+  if (!deviceId) {
+    deviceId = crypto.randomUUID();
+    localStorage.setItem(key, deviceId);
+  }
+  return deviceId;
+}
+
 // Progress sync debounce
 let progressSyncTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -49,6 +59,8 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
               position_seconds: Math.floor(currentTime),
             });
           }
+          // Submit session for completed chapter
+          get().submitAudiobookSession();
           const { nextChapter } = get();
           nextChapter();
         });
@@ -110,6 +122,8 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
         isVisible: false,
         sleepTimer: null,
         sleepTimerEndTime: null,
+        sessionStartTime: null,
+        sessionStartPosition: 0,
         error: null,
 
         // Playback controls
@@ -121,6 +135,11 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
 
           const audioManager = getAudioManager();
           try {
+            // Record session start if not already tracking
+            const { sessionStartTime, currentTime } = get();
+            if (!sessionStartTime) {
+              set({ sessionStartTime: Date.now(), sessionStartPosition: currentTime });
+            }
             await audioManager.play();
           } catch (error) {
             set({ error: (error as Error).message });
@@ -130,6 +149,8 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
         pause: () => {
           const audioManager = getAudioManager();
           audioManager.pause();
+          // Submit session on pause if duration >= 10s
+          get().submitAudiobookSession();
         },
 
         togglePlay: async () => {
@@ -320,7 +341,8 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
           const audioManager = getAudioManager();
           audioManager.pause();
 
-          // Sync final progress before unloading
+          // Submit listening session and sync progress before unloading
+          get().submitAudiobookSession();
           get().syncProgress();
 
           set({
@@ -336,6 +358,8 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
             isMinimized: false,
             sleepTimer: null,
             sleepTimerEndTime: null,
+            sessionStartTime: null,
+            sessionStartPosition: 0,
             error: null,
           });
         },
@@ -359,6 +383,44 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
             });
           } catch (error) {
             console.error('Failed to sync audiobook progress:', error);
+          }
+        },
+
+        // Audiobook session submission
+        submitAudiobookSession: async () => {
+          const {
+            audiobook,
+            chapterIndex,
+            currentTime,
+            playbackSpeed,
+            sessionStartTime,
+            sessionStartPosition,
+          } = get();
+
+          if (!audiobook || !sessionStartTime) return;
+
+          const endSeconds = Math.floor(currentTime);
+          const startSeconds = Math.floor(sessionStartPosition);
+          const durationSeconds = Math.max(0, Math.floor((Date.now() - sessionStartTime) / 1000));
+
+          if (durationSeconds < 10) return;
+
+          // Reset session tracking state
+          set({ sessionStartTime: null, sessionStartPosition: 0 });
+
+          try {
+            await apiClient.post('/reading/audiobook-sessions', {
+              audiobookId: audiobook.id,
+              chapterIndex,
+              startSeconds,
+              endSeconds,
+              durationSeconds,
+              playbackSpeed,
+              deviceId: getDeviceId(),
+              clientVersion: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
+            });
+          } catch (error) {
+            console.error('Failed to submit audiobook session:', error);
           }
         },
       };
