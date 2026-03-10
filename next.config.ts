@@ -110,7 +110,12 @@ const nextConfig: NextConfig = {
 };
 
 export default withSentryConfig(withNextIntl(withSerwist(nextConfig)), {
-  silent: true,
+  org: "readmigo",
+  project: "readmigo-web",
+  silent: !process.env.CI,
   widenClientFileUpload: true,
-  sourcemaps: { disable: true },
+  sourcemaps: {
+    deleteSourcemapsAfterUpload: true,
+  },
+  authToken: process.env.SENTRY_AUTH_TOKEN,
 });
