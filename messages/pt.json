@@ -362,7 +362,7 @@
   },
   "subscription": {
     "title": "Atualizar para Readmigo Pro",
-    "subtitle": "Desbloqueie todos os recursos e aproveite a leitura ilimitada",
+    "subtitle": "Sincronize seus dispositivos e aproveite áudio ilimitado",
     "users": "usuários",
     "bestValue": "Melhor custo-benefício",
     "month": "mês",
@@ -380,10 +380,9 @@
       "yearly": "Anual"
     },
     "features": {
-      "allBooks": "Todos os livros",
-      "audiobooks": "Audiolivros ilimitados",
-      "cloudTTS": "Vozes TTS na nuvem",
-      "offline": "Downloads offline",
+      "dataSync": "Sincronização entre dispositivos",
+      "cloudBackup": "Backup na nuvem",
+      "unlimitedAudio": "Áudio ilimitado",
       "stats": "Estatísticas detalhadas",
       "templates": "Templates premium"
     }
