@@ -370,7 +370,7 @@
   },
   "subscription": {
     "title": "Upgrade to Readmigo Pro",
-    "subtitle": "Unlock all features and enjoy unlimited reading",
+    "subtitle": "Sync across devices and enjoy unlimited audio",
     "users": "users",
     "bestValue": "Best Value",
     "month": "mo",
@@ -388,10 +388,9 @@
       "yearly": "Yearly"
     },
     "features": {
-      "allBooks": "All Books",
-      "audiobooks": "Unlimited Audiobooks",
-      "cloudTTS": "Cloud TTS Voices",
-      "offline": "Offline Downloads",
+      "dataSync": "Cross-Device Sync",
+      "cloudBackup": "Cloud Backup",
+      "unlimitedAudio": "Unlimited Audio",
       "stats": "Detailed Stats",
       "templates": "Premium Templates"
     }

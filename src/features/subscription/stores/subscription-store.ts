@@ -2,6 +2,12 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { SubscriptionTier, SubscriptionStatus, SubscriptionState } from '../types';
 
+export const FREE_DAILY_AUDIO_LIMIT_SECONDS = 30 * 60;
+
+function todayISO(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
 interface SubscriptionStoreState {
   tier: SubscriptionTier;
   status: SubscriptionStatus;
@@ -9,9 +15,13 @@ interface SubscriptionStoreState {
   expiresAt?: string;
   willRenew: boolean;
   isLoading: boolean;
+  dailyAudioSeconds: number;
+  dailyAudioDate: string;
 
   setSubscription: (state: SubscriptionState) => void;
   setLoading: (loading: boolean) => void;
+  setDailyAudioUsage: (seconds: number, date: string) => void;
+  resetDailyAudioUsage: () => void;
   reset: () => void;
 }
 
@@ -24,6 +34,8 @@ export const useSubscriptionStore = create<SubscriptionStoreState>()(
       expiresAt: undefined,
       willRenew: false,
       isLoading: false,
+      dailyAudioSeconds: 0,
+      dailyAudioDate: todayISO(),
 
       setSubscription: (state) =>
         set({
@@ -36,6 +48,12 @@ export const useSubscriptionStore = create<SubscriptionStoreState>()(
 
       setLoading: (loading) => set({ isLoading: loading }),
 
+      setDailyAudioUsage: (seconds, date) =>
+        set({ dailyAudioSeconds: seconds, dailyAudioDate: date }),
+
+      resetDailyAudioUsage: () =>
+        set({ dailyAudioSeconds: 0, dailyAudioDate: todayISO() }),
+
       reset: () =>
         set({
           tier: 'FREE',
@@ -43,6 +61,8 @@ export const useSubscriptionStore = create<SubscriptionStoreState>()(
           isActive: false,
           expiresAt: undefined,
           willRenew: false,
+          dailyAudioSeconds: 0,
+          dailyAudioDate: todayISO(),
         }),
     }),
     {
@@ -53,6 +73,8 @@ export const useSubscriptionStore = create<SubscriptionStoreState>()(
         isActive: state.isActive,
         expiresAt: state.expiresAt,
         willRenew: state.willRenew,
+        dailyAudioSeconds: state.dailyAudioSeconds,
+        dailyAudioDate: state.dailyAudioDate,
       }),
     },
   ),

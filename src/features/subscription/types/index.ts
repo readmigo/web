@@ -31,8 +31,10 @@ export type GatedFeature =
   | 'detailedStats'
   | 'cloudTTS'
   | 'audiobookPlayback'
-  | 'audiobookChapters'
-  | 'unlimitedDownloads';
+  | 'unlimitedDownloads'
+  | 'dataSync'
+  | 'cloudBackup'
+  | 'unlimitedAudio';
 
 export type FeatureAccessResult =
   | { type: 'allowed' }
