@@ -7,6 +7,7 @@ import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 import { Suspense } from 'react';
 import { Providers } from '@/lib/providers';
 import { PostHogPageView } from '@/lib/posthog';
+import { SWRegister } from '@/components/shared/sw-register';
 import './globals.css';
 
 export const viewport: Viewport = {
@@ -90,6 +91,7 @@ export default async function RootLayout({
             {children}
           </Providers>
         </NextIntlClientProvider>
+        <SWRegister />
         <Analytics />
         <SpeedInsights />
       </body>
