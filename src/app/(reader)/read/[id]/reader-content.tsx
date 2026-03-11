@@ -6,6 +6,7 @@ import { ReaderToolbar } from '@/features/reader/components/reader-toolbar';
 import { ReaderSettingsPanel } from '@/features/reader/components/reader-settings-panel';
 import { TocPanel } from '@/features/reader/components/toc-panel';
 import { SelectionBottomSheet } from '@/features/reader/components/selection-bottom-sheet';
+import { HighlightOverlay } from '@/features/reader/components/highlight-overlay';
 import { TranslationSheet } from '@/features/reader/components/translation-sheet';
 import { ReadingStatsOverlay } from '@/features/reader/components/reading-stats-overlay';
 import { ReaderGuideOverlay } from '@/features/reader/components/reader-guide-overlay';
@@ -51,16 +52,21 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     selectedText,
     position,
     settings,
+    highlights,
     toggleToc,
     toggleSettings,
     setSelectedText,
     addBookmark,
+    removeHighlight,
+    updateHighlightColor,
+    updateHighlightPosition,
     syncHighlightsFromBackend,
     syncBookmarksFromBackend,
     startReadingSession,
     endReadingSession,
     updateReadingActivity,
     getLastPosition,
+    getHighlightsForBook,
     flushPendingSessions,
   } = useReaderStore();
 
@@ -68,6 +74,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   const [showControls, setShowControls] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
   const [translationText, setTranslationText] = useState<string | null>(null);
+  const [contentElement, setContentElement] = useState<HTMLElement | null>(null);
   const showControlsRef = useRef(false);
   const autoHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -375,6 +382,8 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
 
   const handleReaderReady = useCallback(() => {
     setIsReady(true);
+    // Capture content element for highlight overlay
+    setContentElement(readerRef.current?.getContentElement() ?? null);
   }, []);
 
   const handleGuideComplete = useCallback(() => {
@@ -398,6 +407,40 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   const handleParagraphClick = useCallback((text: string) => {
     setTranslationText(text);
   }, []);
+
+  // Get highlights for the current book, filtered for HighlightOverlay
+  const bookHighlights = useMemo(
+    () => getHighlightsForBook(bookId).map((h) => ({
+      id: h.id,
+      text: h.text,
+      color: h.color,
+      paragraphIndex: h.paragraphIndex,
+      charOffset: h.charOffset,
+      charLength: h.charLength,
+    })),
+    [bookId, highlights, getHighlightsForBook],
+  );
+
+  const handleHighlightUpdate = useCallback(
+    (highlightId: string, data: { text: string; paragraphIndex: number; charOffset: number; charLength: number; startOffset: number; endOffset: number }) => {
+      updateHighlightPosition(highlightId, bookId, data);
+    },
+    [bookId, updateHighlightPosition],
+  );
+
+  const handleHighlightDelete = useCallback(
+    (highlightId: string) => {
+      removeHighlight(highlightId, bookId);
+    },
+    [bookId, removeHighlight],
+  );
+
+  // Re-capture contentElement on chapter navigation
+  useEffect(() => {
+    if (isReady && readerRef.current) {
+      setContentElement(readerRef.current.getContentElement() ?? null);
+    }
+  }, [isReady, position?.chapterIndex]);
 
 
   // Loading state
@@ -458,6 +501,14 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           onTextSelect={handleTextSelect}
           onTocLoaded={setTocItems}
           onParagraphClick={handleParagraphClick}
+        />
+
+        {/* Highlight overlay with drag handles */}
+        <HighlightOverlay
+          contentElement={contentElement}
+          highlights={bookHighlights}
+          onHighlightUpdate={handleHighlightUpdate}
+          onHighlightDelete={handleHighlightDelete}
         />
 
         {/* Selection Bottom Sheet */}

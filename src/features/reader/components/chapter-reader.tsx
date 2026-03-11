@@ -17,12 +17,15 @@ import type { Chapter } from '@/features/library/types';
 import { apiClient } from '@/lib/api/client';
 import { normalizeParagraphText, hashText } from '../utils/translation-hash';
 import { sanitizeHtml } from '@/lib/sanitize';
+import { getPositionFromSelection } from '../utils/highlight-dom';
 
 export interface ChapterReaderHandle {
   goTo: (chapterId: string) => void;
   goNext: () => void;
   goPrev: () => void;
   getCurrentPageText: () => string;
+  getContentElement: () => HTMLElement | null;
+  getCurrentChapterId: () => string | undefined;
 }
 
 interface ChapterReaderProps {
@@ -626,6 +629,12 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
           .filter((t) => t.trim().length > 0)
           .join('\n\n');
       },
+      getContentElement: () => {
+        return rendererRef.current?.contentElement ?? null;
+      },
+      getCurrentChapterId: () => {
+        return chapters[currentIndexRef.current]?.id;
+      },
     }), [chapters, emitPosition, loadChapter]);
 
     // Initialize: load first chapter and emit TOC
@@ -695,16 +704,28 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
         if (!selection || !selection.toString().trim()) return;
         const range = selection.getRangeAt(0);
         const rect = range.getBoundingClientRect();
+
+        // Capture position data from selection
+        const contentEl = rendererRef.current?.contentElement;
+        const posData = contentEl ? getPositionFromSelection(contentEl) : null;
+        const chapter = chapters[currentIndexRef.current];
+
         onTextSelectRef.current?.({
           text: selection.toString(),
           rect,
           source: 'selection',
+          chapterId: chapter?.id,
+          paragraphIndex: posData?.paragraphIndex,
+          charOffset: posData?.charOffset,
+          charLength: posData?.charLength,
+          startOffset: posData?.startOffset,
+          endOffset: posData?.endOffset,
         });
       };
 
       document.addEventListener('mouseup', handleSelectionUp);
       return () => document.removeEventListener('mouseup', handleSelectionUp);
-    }, []);
+    }, [chapters]);
 
     // Keyboard navigation
     useEffect(() => {

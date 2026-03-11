@@ -40,14 +40,37 @@ export function SelectionBottomSheet({ selection, bookId, bookTitle, authorName,
   }, [setSelectedText, onClose]);
 
   const handleHighlight = useCallback((color: Highlight['color']) => {
-    addHighlight({ bookId, cfiRange: selection.cfiRange || '', text: selection.text, color });
+    addHighlight({
+      bookId,
+      cfiRange: selection.cfiRange || '',
+      text: selection.text,
+      color,
+      chapterId: selection.chapterId,
+      paragraphIndex: selection.paragraphIndex,
+      charOffset: selection.charOffset,
+      charLength: selection.charLength,
+      startOffset: selection.startOffset,
+      endOffset: selection.endOffset,
+    });
     dismiss();
-  }, [addHighlight, bookId, selection.cfiRange, selection.text, dismiss]);
+  }, [addHighlight, bookId, selection, dismiss]);
 
   const handleSaveNote = useCallback((note: string) => {
-    addHighlight({ bookId, cfiRange: selection.cfiRange || '', text: selection.text, color: 'yellow', note });
+    addHighlight({
+      bookId,
+      cfiRange: selection.cfiRange || '',
+      text: selection.text,
+      color: 'yellow',
+      note,
+      chapterId: selection.chapterId,
+      paragraphIndex: selection.paragraphIndex,
+      charOffset: selection.charOffset,
+      charLength: selection.charLength,
+      startOffset: selection.startOffset,
+      endOffset: selection.endOffset,
+    });
     dismiss();
-  }, [addHighlight, bookId, selection.cfiRange, selection.text, dismiss]);
+  }, [addHighlight, bookId, selection, dismiss]);
 
   const handleCopy = useCallback(async () => {
     await navigator.clipboard.writeText(selection.text.trim()).catch(() => {});

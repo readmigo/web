@@ -24,10 +24,16 @@ export interface ReaderPosition {
 export interface Highlight {
   id: string;
   bookId: string;
+  chapterId?: string;
   cfiRange: string;
   text: string;
   color: 'yellow' | 'green' | 'blue' | 'pink' | 'purple' | 'orange';
   note?: string;
+  startOffset?: number;
+  endOffset?: number;
+  paragraphIndex?: number;
+  charOffset?: number;
+  charLength?: number;
   createdAt: Date;
 }
 
@@ -44,6 +50,12 @@ export interface SelectedText {
   cfiRange?: string;
   rect: DOMRect;
   source?: 'selection' | 'paragraph';
+  chapterId?: string;
+  paragraphIndex?: number;
+  charOffset?: number;
+  charLength?: number;
+  startOffset?: number;
+  endOffset?: number;
 }
 
 export interface TocItem {
