@@ -67,6 +67,11 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Skip PostHog proxy routes
+  if (pathname.startsWith('/ingest')) {
+    return NextResponse.next();
+  }
+
   // Detect region and set cookie if not already set
   const region = detectRegion(req);
   const hasRegionCookie = req.cookies.has(REGION_COOKIE);
