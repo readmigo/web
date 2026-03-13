@@ -16,6 +16,9 @@ const nextConfig: NextConfig = {
   // Enable standalone output for Docker/serverless
   output: "standalone",
 
+  // Required for PostHog proxy — PostHog sends to /e/ with trailing slash
+  skipTrailingSlashRedirect: true,
+
   // Image optimization
   images: {
     remotePatterns: [
