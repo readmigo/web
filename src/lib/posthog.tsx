@@ -10,7 +10,7 @@ const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY!;
 const POSTHOG_HOST = 'https://us.i.posthog.com';
 
 if (typeof window !== 'undefined' && POSTHOG_KEY) {
-  posthog.init(POSTHOG_KEY, {
+  posthog.init(POSTHOG_KEY.trim(), {
     api_host: POSTHOG_HOST,
     person_profiles: 'always',
     capture_pageview: false, // We capture manually below
@@ -21,6 +21,8 @@ if (typeof window !== 'undefined' && POSTHOG_KEY) {
       }
     },
   });
+  // Expose for debugging — remove after verifying events flow
+  (window as any).posthog = posthog;
 }
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
