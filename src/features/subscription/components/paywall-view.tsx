@@ -8,10 +8,9 @@ import {
   X,
   Sparkles,
   Star,
-  BookOpen,
+  Cloud,
+  ShieldCheck,
   Headphones,
-  Volume2,
-  Download,
   BarChart3,
   Palette,
   Trophy,
@@ -22,10 +21,9 @@ import { cn } from '@/lib/utils';
 import type { SubscriptionPeriod } from '../types';
 
 const PRO_FEATURES = [
-  { icon: BookOpen, labelKey: 'features.allBooks' },
-  { icon: Headphones, labelKey: 'features.audiobooks' },
-  { icon: Volume2, labelKey: 'features.cloudTTS' },
-  { icon: Download, labelKey: 'features.offline' },
+  { icon: Cloud, labelKey: 'features.dataSync' },
+  { icon: ShieldCheck, labelKey: 'features.cloudBackup' },
+  { icon: Headphones, labelKey: 'features.unlimitedAudio' },
   { icon: BarChart3, labelKey: 'features.stats' },
   { icon: Palette, labelKey: 'features.templates' },
 ] as const;

@@ -362,7 +362,7 @@
   },
   "subscription": {
     "title": "Readmigo Pro로 업그레이드",
-    "subtitle": "모든 기능을 잠금 해제하고 무제한 독서를 즐기세요",
+    "subtitle": "기기 간 동기화하고 무제한 오디오를 즐기세요",
     "users": "사용자",
     "bestValue": "최고 가성비",
     "month": "월",
@@ -380,10 +380,9 @@
       "yearly": "연간"
     },
     "features": {
-      "allBooks": "모든 도서",
-      "audiobooks": "무제한 오디오북",
-      "cloudTTS": "클라우드 TTS 음성",
-      "offline": "오프라인 다운로드",
+      "dataSync": "기기 간 동기화",
+      "cloudBackup": "클라우드 백업",
+      "unlimitedAudio": "무제한 오디오",
       "stats": "상세 통계",
       "templates": "프리미엄 템플릿"
     }

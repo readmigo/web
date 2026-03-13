@@ -51,9 +51,15 @@ export function SelectionPopup({
       cfiRange: selection.cfiRange || '',
       text: selection.text,
       color: 'yellow',
+      chapterId: selection.chapterId,
+      paragraphIndex: selection.paragraphIndex,
+      charOffset: selection.charOffset,
+      charLength: selection.charLength,
+      startOffset: selection.startOffset,
+      endOffset: selection.endOffset,
     });
     setSelectedText(null);
-  }, [addHighlight, bookId, selection.cfiRange, selection.text, setSelectedText]);
+  }, [addHighlight, bookId, selection, setSelectedText]);
 
   const handleThoughts = useCallback(() => {
     setShowNoteDialog(true);
@@ -66,9 +72,15 @@ export function SelectionPopup({
       text: selection.text,
       color: 'yellow',
       note,
+      chapterId: selection.chapterId,
+      paragraphIndex: selection.paragraphIndex,
+      charOffset: selection.charOffset,
+      charLength: selection.charLength,
+      startOffset: selection.startOffset,
+      endOffset: selection.endOffset,
     });
     setSelectedText(null);
-  }, [addHighlight, bookId, selection.cfiRange, selection.text, setSelectedText]);
+  }, [addHighlight, bookId, selection, setSelectedText]);
 
   const handleShare = useCallback(async () => {
     const shareText = selection.text.trim();

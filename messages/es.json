@@ -362,7 +362,7 @@
   },
   "subscription": {
     "title": "Mejora a Readmigo Pro",
-    "subtitle": "Desbloquea todas las funciones y disfruta de lectura ilimitada",
+    "subtitle": "Sincroniza tus dispositivos y disfruta de audio ilimitado",
     "users": "usuarios",
     "bestValue": "Mejor valor",
     "month": "mes",
@@ -380,10 +380,9 @@
       "yearly": "Anual"
     },
     "features": {
-      "allBooks": "Todos los libros",
-      "audiobooks": "Audiolibros ilimitados",
-      "cloudTTS": "Voces TTS en la nube",
-      "offline": "Descargas sin conexión",
+      "dataSync": "Sincronización entre dispositivos",
+      "cloudBackup": "Copia de seguridad en la nube",
+      "unlimitedAudio": "Audio ilimitado",
       "stats": "Estadísticas detalladas",
       "templates": "Plantillas premium"
     }

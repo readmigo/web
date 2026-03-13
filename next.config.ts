@@ -86,7 +86,7 @@ const nextConfig: NextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' blob:; img-src 'self' https: data: blob:; font-src 'self' data:; connect-src 'self' https://readmigo-api.fly.dev https://api.readmigo.cn https://cdn.readmigo.app https://*.readmigo.cn https://*.vercel-insights.com https://*.sentry.io https://us.i.posthog.com https://*.posthog.com; frame-src 'self' blob:; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline' blob:; img-src 'self' https: data: blob:; font-src 'self' data:; connect-src 'self' https://readmigo-api.fly.dev https://api.readmigo.cn https://cdn.readmigo.app https://*.readmigo.cn https://*.vercel-insights.com https://*.sentry.io https://us.i.posthog.com https://*.posthog.com https://*.amplitude.com; frame-src 'self' blob:; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
           },
           {
             key: "X-Frame-Options",
@@ -111,7 +111,12 @@ const nextConfig: NextConfig = {
 };
 
 export default withSentryConfig(withNextIntl(withSerwist(nextConfig)), {
-  silent: true,
+  org: "readmigo",
+  project: "readmigo-web",
+  silent: !process.env.CI,
   widenClientFileUpload: true,
-  sourcemaps: { disable: true },
+  sourcemaps: {
+    deleteSourcemapsAfterUpload: true,
+  },
+  authToken: process.env.SENTRY_AUTH_TOKEN,
 });

@@ -370,7 +370,7 @@
   },
   "subscription": {
     "title": "升级 Readmigo Pro",
-    "subtitle": "解锁全部功能，畅享无限阅读",
+    "subtitle": "跨设备同步，畅享无限音频",
     "users": "用户在用",
     "bestValue": "最划算",
     "month": "月",
@@ -388,10 +388,9 @@
       "yearly": "年"
     },
     "features": {
-      "allBooks": "全部书籍",
-      "audiobooks": "无限有声书",
-      "cloudTTS": "云端语音",
-      "offline": "离线下载",
+      "dataSync": "跨设备同步",
+      "cloudBackup": "云端备份",
+      "unlimitedAudio": "无限音频",
       "stats": "详细统计",
       "templates": "高级模板"
     }

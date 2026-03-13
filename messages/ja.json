@@ -362,7 +362,7 @@
   },
   "subscription": {
     "title": "Readmigo Pro にアップグレード",
-    "subtitle": "すべての機能をアンロックして無制限に読書を楽しもう",
+    "subtitle": "デバイス間で同期し、無制限オーディオを楽しもう",
     "users": "ユーザー",
     "bestValue": "お得",
     "month": "月",
@@ -380,10 +380,9 @@
       "yearly": "年払い"
     },
     "features": {
-      "allBooks": "すべての書籍",
-      "audiobooks": "無制限オーディオブック",
-      "cloudTTS": "クラウドTTS音声",
-      "offline": "オフラインダウンロード",
+      "dataSync": "デバイス間同期",
+      "cloudBackup": "クラウドバックアップ",
+      "unlimitedAudio": "無制限オーディオ",
       "stats": "詳細統計",
       "templates": "プレミアムテンプレート"
     }

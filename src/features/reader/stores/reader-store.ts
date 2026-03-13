@@ -130,6 +130,14 @@ interface ReaderActions {
   removeHighlight: (id: string, bookId: string) => void;
   updateHighlightNote: (id: string, bookId: string, note: string) => void;
   updateHighlightColor: (id: string, bookId: string, color: Highlight['color']) => void;
+  updateHighlightPosition: (id: string, bookId: string, data: {
+    text: string;
+    startOffset: number;
+    endOffset: number;
+    paragraphIndex: number;
+    charOffset: number;
+    charLength: number;
+  }) => void;
 
   // Reading session tracking
   startReadingSession: (bookId: string, currentPercentage: number) => void;
@@ -475,6 +483,43 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
             data: { highlightId: id, bookId, color },
           });
         });
+      },
+
+      updateHighlightPosition: (id, bookId, data) => {
+        // Optimistic update
+        set((state) => ({
+          highlights: state.highlights.map((h) =>
+            h.id === id
+              ? {
+                  ...h,
+                  text: data.text,
+                  startOffset: data.startOffset,
+                  endOffset: data.endOffset,
+                  paragraphIndex: data.paragraphIndex,
+                  charOffset: data.charOffset,
+                  charLength: data.charLength,
+                }
+              : h
+          ),
+        }));
+
+        // Sync to backend
+        apiClient
+          .patch(`/highlights/${id}`, {
+            selectedText: data.text,
+            startOffset: data.startOffset,
+            endOffset: data.endOffset,
+            paragraphIndex: data.paragraphIndex,
+            charOffset: data.charOffset,
+            charLength: data.charLength,
+          })
+          .catch((error) => {
+            console.error('Failed to update highlight position:', error);
+            addToOfflineQueue({
+              type: 'update_highlight',
+              data: { highlightId: id, bookId, ...data },
+            });
+          });
       },
 
       // Reading session tracking

@@ -362,7 +362,7 @@
   },
   "subscription": {
     "title": "Upgrade ke Readmigo Pro",
-    "subtitle": "Buka semua fitur dan nikmati membaca tanpa batas",
+    "subtitle": "Sinkronkan perangkat dan nikmati audio tanpa batas",
     "users": "pengguna",
     "bestValue": "Nilai Terbaik",
     "month": "bln",
@@ -380,10 +380,9 @@
       "yearly": "Tahunan"
     },
     "features": {
-      "allBooks": "Semua Buku",
-      "audiobooks": "Buku Audio Tanpa Batas",
-      "cloudTTS": "Suara TTS Cloud",
-      "offline": "Unduhan Offline",
+      "dataSync": "Sinkronisasi Lintas Perangkat",
+      "cloudBackup": "Pencadangan Cloud",
+      "unlimitedAudio": "Audio Tanpa Batas",
       "stats": "Statistik Terperinci",
       "templates": "Template Premium"
     }

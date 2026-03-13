@@ -362,7 +362,7 @@
   },
   "subscription": {
     "title": "Passer à Readmigo Pro",
-    "subtitle": "Déverrouillez toutes les fonctionnalités et profitez d'une lecture illimitée",
+    "subtitle": "Synchronisez vos appareils et profitez d'un audio illimité",
     "users": "utilisateurs",
     "bestValue": "Meilleur rapport qualité-prix",
     "month": "mois",
@@ -380,10 +380,9 @@
       "yearly": "Annuel"
     },
     "features": {
-      "allBooks": "Tous les livres",
-      "audiobooks": "Livres audio illimités",
-      "cloudTTS": "Voix TTS en nuage",
-      "offline": "Téléchargements hors ligne",
+      "dataSync": "Synchronisation multi-appareils",
+      "cloudBackup": "Sauvegarde cloud",
+      "unlimitedAudio": "Audio illimité",
       "stats": "Statistiques détaillées",
       "templates": "Modèles premium"
     }
