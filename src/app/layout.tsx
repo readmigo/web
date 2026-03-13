@@ -4,9 +4,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
-import { Suspense } from 'react';
 import { Providers } from '@/lib/providers';
-import { PostHogPageView } from '@/lib/posthog';
 import { SWRegister } from '@/components/shared/sw-register';
 import './globals.css';
 
@@ -85,9 +83,6 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <Providers>
-            <Suspense fallback={null}>
-              <PostHogPageView />
-            </Suspense>
             {children}
           </Providers>
         </NextIntlClientProvider>

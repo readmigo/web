@@ -13,12 +13,10 @@ if (typeof window !== 'undefined' && POSTHOG_KEY) {
   posthog.init(POSTHOG_KEY.trim(), {
     api_host: POSTHOG_HOST,
     person_profiles: 'always',
-    capture_pageview: false, // We capture manually below
+    capture_pageview: true,
     capture_pageleave: true,
     loaded: (ph) => {
-      if (process.env.NODE_ENV === 'development') {
-        ph.debug();
-      }
+      ph.debug(); // Temporarily enable to diagnose
     },
   });
 }
