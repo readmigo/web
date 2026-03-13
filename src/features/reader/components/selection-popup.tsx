@@ -47,10 +47,11 @@ export function SelectionPopup({
 
   const handleHighlight = useCallback(() => {
     addHighlight({
-      bookId,
+      userBookId: bookId,
       cfiRange: selection.cfiRange || '',
-      text: selection.text,
+      selectedText: selection.text,
       color: 'yellow',
+      style: 'background',
       chapterId: selection.chapterId,
       paragraphIndex: selection.paragraphIndex,
       charOffset: selection.charOffset,
@@ -67,10 +68,11 @@ export function SelectionPopup({
 
   const handleSaveNote = useCallback((note: string) => {
     addHighlight({
-      bookId,
+      userBookId: bookId,
       cfiRange: selection.cfiRange || '',
-      text: selection.text,
+      selectedText: selection.text,
       color: 'yellow',
+      style: 'background',
       note,
       chapterId: selection.chapterId,
       paragraphIndex: selection.paragraphIndex,

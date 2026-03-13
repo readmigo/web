@@ -8,9 +8,9 @@ vi.mock('../../stores/reader-store', () => ({
 
 const mockStore = {
   bookmarks: [
-    { id: 'bm-1', bookId: 'book-123', cfi: 'ch:0:pg:5', title: '第 1 章', createdAt: new Date('2026-01-01') },
-    { id: 'bm-2', bookId: 'book-123', cfi: 'ch:2:pg:3', title: '第 3 章', createdAt: new Date('2026-01-02') },
-    { id: 'bm-other', bookId: 'other-book', cfi: 'ch:0:pg:1', title: '其他书', createdAt: new Date('2026-01-03') },
+    { id: 'bm-1', userBookId: 'book-123', cfi: 'ch:0:pg:5', title: '第 1 章', createdAt: new Date('2026-01-01') },
+    { id: 'bm-2', userBookId: 'book-123', cfi: 'ch:2:pg:3', title: '第 3 章', createdAt: new Date('2026-01-02') },
+    { id: 'bm-other', userBookId: 'other-book', cfi: 'ch:0:pg:1', title: '其他书', createdAt: new Date('2026-01-03') },
   ],
   removeBookmark: vi.fn(),
 };

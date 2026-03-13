@@ -41,10 +41,11 @@ export function SelectionBottomSheet({ selection, bookId, bookTitle, authorName,
 
   const handleHighlight = useCallback((color: Highlight['color']) => {
     addHighlight({
-      bookId,
+      userBookId: bookId,
       cfiRange: selection.cfiRange || '',
-      text: selection.text,
+      selectedText: selection.text,
       color,
+      style: 'background',
       chapterId: selection.chapterId,
       paragraphIndex: selection.paragraphIndex,
       charOffset: selection.charOffset,
@@ -57,10 +58,11 @@ export function SelectionBottomSheet({ selection, bookId, bookTitle, authorName,
 
   const handleSaveNote = useCallback((note: string) => {
     addHighlight({
-      bookId,
+      userBookId: bookId,
       cfiRange: selection.cfiRange || '',
-      text: selection.text,
+      selectedText: selection.text,
       color: 'yellow',
+      style: 'background',
       note,
       chapterId: selection.chapterId,
       paragraphIndex: selection.paragraphIndex,

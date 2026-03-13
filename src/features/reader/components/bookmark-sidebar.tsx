@@ -22,7 +22,7 @@ export function BookmarkSidebar({ bookId, onNavigateToBookmark }: BookmarkSideba
   const t = useTranslations('reader');
   const { bookmarks, removeBookmark } = useReaderStore();
   const bookBookmarks = bookmarks
-    .filter((b) => b.bookId === bookId)
+    .filter((b) => b.userBookId === bookId)
     .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
   return (

@@ -35,7 +35,7 @@ export function HighlightSidebar({ bookId, onNavigateToHighlight }: HighlightSid
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const [noteText, setNoteText] = useState('');
 
-  const bookHighlights = highlights.filter((h) => h.bookId === bookId);
+  const bookHighlights = highlights.filter((h) => h.userBookId === bookId);
 
   const handleStartEditNote = (highlight: Highlight) => {
     setEditingNoteId(highlight.id);
@@ -117,7 +117,7 @@ export function HighlightSidebar({ bookId, onNavigateToHighlight }: HighlightSid
                       )}
                     >
                       <p className="text-sm text-gray-800 line-clamp-3">
-                        &ldquo;{highlight.text}&rdquo;
+                        &ldquo;{highlight.selectedText}&rdquo;
                       </p>
                     </div>
 

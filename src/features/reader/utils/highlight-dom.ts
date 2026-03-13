@@ -46,13 +46,13 @@ function getTextNodes(root: Node): Text[] {
 export function findHighlightRange(
   contentEl: HTMLElement,
   highlight: {
-    text: string;
+    selectedText: string;
     paragraphIndex?: number;
     charOffset?: number;
     charLength?: number;
   }
 ): Range | null {
-  const { text, paragraphIndex, charOffset, charLength } = highlight;
+  const { selectedText, paragraphIndex, charOffset, charLength } = highlight;
 
   // Position-based lookup
   if (
@@ -71,7 +71,7 @@ export function findHighlightRange(
   }
 
   // Fallback: text search across all text nodes in contentEl
-  return findRangeByTextSearch(contentEl, text);
+  return findRangeByTextSearch(contentEl, selectedText);
 }
 
 /**
@@ -307,7 +307,7 @@ export function clearAllHighlightMarks(contentEl: HTMLElement): void {
 export function getPositionFromSelection(
   contentEl: HTMLElement
 ): {
-  text: string;
+  selectedText: string;
   paragraphIndex: number;
   charOffset: number;
   charLength: number;
@@ -358,7 +358,7 @@ export function getPositionFromSelection(
   if (startOffset === null || endOffset === null) return null;
 
   return {
-    text: selectedText,
+    selectedText,
     paragraphIndex,
     charOffset,
     charLength,

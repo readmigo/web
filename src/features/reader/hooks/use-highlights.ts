@@ -7,42 +7,74 @@ import type { Highlight, Bookmark } from '../types';
 // API Response types
 interface HighlightResponse {
   id: string;
-  bookId: string;
+  userBookId: string;
+  bookId?: string;
+  chapterId?: string;
   cfiRange: string;
-  text: string;
+  selectedText: string;
   color: string;
+  style: string;
   note?: string;
+  startOffset?: number;
+  endOffset?: number;
+  paragraphIndex?: number;
+  charOffset?: number;
+  charLength?: number;
   createdAt: string;
+  updatedAt: string;
+  syncedAt?: string;
 }
 
 interface BookmarkResponse {
   id: string;
-  bookId: string;
+  userBookId: string;
+  bookId?: string;
   cfi: string;
   title: string;
+  scrollPosition?: number;
+  pageNumber?: number;
+  excerpt?: string;
   createdAt: string;
+  updatedAt: string;
+  syncedAt?: string;
 }
 
 // Transform API response to local types
 function transformHighlight(h: HighlightResponse): Highlight {
   return {
     id: h.id,
-    bookId: h.bookId,
+    serverId: h.id,
+    userBookId: h.userBookId || h.bookId || '',
+    chapterId: h.chapterId,
     cfiRange: h.cfiRange,
-    text: h.text,
+    selectedText: h.selectedText,
     color: h.color as Highlight['color'],
+    style: (h.style || 'background') as Highlight['style'],
     note: h.note,
+    startOffset: h.startOffset,
+    endOffset: h.endOffset,
+    paragraphIndex: h.paragraphIndex,
+    charOffset: h.charOffset,
+    charLength: h.charLength,
     createdAt: new Date(h.createdAt),
+    updatedAt: new Date(h.updatedAt),
+    syncedAt: h.syncedAt ? new Date(h.syncedAt) : undefined,
   };
 }
 
 function transformBookmark(b: BookmarkResponse): Bookmark {
   return {
     id: b.id,
-    bookId: b.bookId,
+    serverId: b.id,
+    userBookId: b.userBookId || b.bookId || '',
     cfi: b.cfi,
     title: b.title,
+    scrollPosition: b.scrollPosition,
+    pageNumber: b.pageNumber,
+    excerpt: b.excerpt,
     createdAt: new Date(b.createdAt),
+    updatedAt: new Date(b.updatedAt),
+    syncedAt: b.syncedAt ? new Date(b.syncedAt) : undefined,
   };
 }
 
@@ -67,8 +99,9 @@ export function useHighlights(bookId: string | undefined) {
 interface CreateHighlightRequest {
   bookId: string;
   cfiRange: string;
-  text: string;
+  selectedText: string;
   color: Highlight['color'];
+  style?: Highlight['style'];
   note?: string;
 }
 
@@ -86,7 +119,7 @@ export function useCreateHighlight() {
     onSuccess: (newHighlight) => {
       // Invalidate highlights query to refetch
       queryClient.invalidateQueries({
-        queryKey: ['highlights', newHighlight.bookId],
+        queryKey: ['highlights', newHighlight.userBookId],
       });
     },
   });
@@ -134,7 +167,7 @@ export function useUpdateHighlight() {
     },
     onSuccess: (updatedHighlight) => {
       queryClient.invalidateQueries({
-        queryKey: ['highlights', updatedHighlight.bookId],
+        queryKey: ['highlights', updatedHighlight.userBookId],
       });
     },
   });
@@ -177,7 +210,7 @@ export function useCreateBookmark() {
     },
     onSuccess: (newBookmark) => {
       queryClient.invalidateQueries({
-        queryKey: ['bookmarks', newBookmark.bookId],
+        queryKey: ['bookmarks', newBookmark.userBookId],
       });
     },
   });

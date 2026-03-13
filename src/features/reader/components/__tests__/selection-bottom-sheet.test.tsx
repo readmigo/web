@@ -45,7 +45,7 @@ describe('SelectionBottomSheet', () => {
     );
     fireEvent.click(screen.getByRole('button', { name: 'highlight-color-yellow' }));
     expect(mockStore.addHighlight).toHaveBeenCalledWith(
-      expect.objectContaining({ color: 'yellow', text: mockSelection.text })
+      expect.objectContaining({ color: 'yellow', selectedText: mockSelection.text })
     );
   });
 

@@ -23,11 +23,13 @@ export interface ReaderPosition {
 
 export interface Highlight {
   id: string;
-  bookId: string;
+  serverId?: string;
+  userBookId: string;
   chapterId?: string;
   cfiRange: string;
-  text: string;
+  selectedText: string;
   color: 'yellow' | 'green' | 'blue' | 'pink' | 'purple' | 'orange';
+  style: 'underline' | 'wavy' | 'background' | 'bold_line';
   note?: string;
   startOffset?: number;
   endOffset?: number;
@@ -35,14 +37,22 @@ export interface Highlight {
   charOffset?: number;
   charLength?: number;
   createdAt: Date;
+  updatedAt: Date;
+  syncedAt?: Date;
 }
 
 export interface Bookmark {
   id: string;
-  bookId: string;
+  serverId?: string;
+  userBookId: string;
   cfi: string;
   title: string;
+  scrollPosition?: number;
+  pageNumber?: number;
+  excerpt?: string;
   createdAt: Date;
+  updatedAt: Date;
+  syncedAt?: Date;
 }
 
 export interface SelectedText {

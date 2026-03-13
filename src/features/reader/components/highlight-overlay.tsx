@@ -41,7 +41,7 @@ import {
 
 export interface HighlightItem {
   id: string;
-  text: string;
+  selectedText: string;
   color: 'yellow' | 'green' | 'blue' | 'pink' | 'purple' | 'orange';
   paragraphIndex?: number;
   charOffset?: number;
@@ -49,7 +49,7 @@ export interface HighlightItem {
 }
 
 export interface HighlightUpdateData {
-  text: string;
+  selectedText: string;
   paragraphIndex: number;
   charOffset: number;
   charLength: number;
@@ -141,7 +141,7 @@ function computeActionBarPosition(
 function extractPositionFromRange(
   range: Range,
   contentElement: HTMLElement,
-): Omit<HighlightUpdateData, 'text'> | null {
+): Omit<HighlightUpdateData, 'selectedText'> | null {
   const paragraphs = Array.from(
     contentElement.querySelectorAll<HTMLElement>('p, blockquote, figcaption, h1, h2, h3, h4, h5, h6'),
   );
@@ -424,7 +424,7 @@ export function HighlightOverlay({
               const positionData = extractPositionFromRange(finalRange, contentElement);
               if (positionData) {
                 onHighlightUpdate(highlightId, {
-                  text: finalRange.toString(),
+                  selectedText: finalRange.toString(),
                   ...positionData,
                 });
               }
@@ -568,7 +568,7 @@ export function HighlightOverlay({
                   const positionData = extractPositionFromRange(range, contentElement);
                   if (positionData) {
                     onHighlightUpdate(activeHighlight.id, {
-                      text: activeHighlight.text,
+                      selectedText: activeHighlight.selectedText,
                       ...positionData,
                     });
                   }

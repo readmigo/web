@@ -173,7 +173,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         action: () => {
           if (position) {
             addBookmark({
-              bookId,
+              userBookId: bookId,
               cfi: `ch:${position.chapterIndex}:pg:${position.page}`,
               title: t('bookmarkLabel', { percent: Math.round(position.percentage * 100) }),
             });
@@ -412,7 +412,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   const bookHighlights = useMemo(
     () => getHighlightsForBook(bookId).map((h) => ({
       id: h.id,
-      text: h.text,
+      selectedText: h.selectedText,
       color: h.color,
       paragraphIndex: h.paragraphIndex,
       charOffset: h.charOffset,
@@ -422,7 +422,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   );
 
   const handleHighlightUpdate = useCallback(
-    (highlightId: string, data: { text: string; paragraphIndex: number; charOffset: number; charLength: number; startOffset: number; endOffset: number }) => {
+    (highlightId: string, data: { selectedText: string; paragraphIndex: number; charOffset: number; charLength: number; startOffset: number; endOffset: number }) => {
       updateHighlightPosition(highlightId, bookId, data);
     },
     [bookId, updateHighlightPosition],

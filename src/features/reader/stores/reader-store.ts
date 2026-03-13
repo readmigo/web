@@ -122,16 +122,16 @@ interface ReaderActions {
   ) => boolean;
 
   // Bookmarks
-  addBookmark: (bookmark: Omit<Bookmark, 'id' | 'createdAt'>) => void;
+  addBookmark: (bookmark: Omit<Bookmark, 'id' | 'createdAt' | 'updatedAt' | 'syncedAt' | 'serverId'>) => void;
   removeBookmark: (id: string, bookId: string) => void;
 
   // Highlights
-  addHighlight: (highlight: Omit<Highlight, 'id' | 'createdAt'>) => void;
+  addHighlight: (highlight: Omit<Highlight, 'id' | 'createdAt' | 'updatedAt' | 'syncedAt' | 'serverId'>) => void;
   removeHighlight: (id: string, bookId: string) => void;
   updateHighlightNote: (id: string, bookId: string, note: string) => void;
   updateHighlightColor: (id: string, bookId: string, color: Highlight['color']) => void;
   updateHighlightPosition: (id: string, bookId: string, data: {
-    text: string;
+    selectedText: string;
     startOffset: number;
     endOffset: number;
     paragraphIndex: number;
@@ -305,13 +305,15 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
 
       // Bookmark actions with backend sync
       addBookmark: (bookmark) => {
+        const now = new Date();
         const newBookmark: Bookmark = {
           ...bookmark,
           id: crypto.randomUUID(),
-          createdAt: new Date(),
+          createdAt: now,
+          updatedAt: now,
         };
 
-        trackEvent('bookmark_created', { book_id: bookmark.bookId });
+        trackEvent('bookmark_created', { book_id: bookmark.userBookId });
 
         // Optimistic update - add to local state immediately
         set((state) => ({
@@ -322,7 +324,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
         // Sync to backend
         apiClient
           .post('/reading/bookmarks', {
-            bookId: bookmark.bookId,
+            bookId: bookmark.userBookId,
             cfi: bookmark.cfi,
             title: bookmark.title,
           })
@@ -346,7 +348,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
             addToOfflineQueue({
               type: 'create_bookmark',
               data: {
-                bookId: bookmark.bookId,
+                bookId: bookmark.userBookId,
                 cfi: bookmark.cfi,
                 title: bookmark.title,
               },
@@ -373,16 +375,18 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
 
       // Highlight actions with backend sync
       addHighlight: (highlight) => {
+        const now = new Date();
         const newHighlight: Highlight = {
           ...highlight,
           id: crypto.randomUUID(),
-          createdAt: new Date(),
+          createdAt: now,
+          updatedAt: now,
         };
 
         trackEvent(highlight.note ? 'annotation_created' : 'highlight_created', {
-          book_id: highlight.bookId,
+          book_id: highlight.userBookId,
           color: highlight.color,
-          text_length: highlight.text.length,
+          text_length: highlight.selectedText.length,
         });
 
         // Optimistic update - add to local state immediately
@@ -394,10 +398,11 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
         // Sync to backend
         apiClient
           .post('/reading/highlights', {
-            bookId: highlight.bookId,
+            bookId: highlight.userBookId,
             cfiRange: highlight.cfiRange,
-            text: highlight.text,
+            selectedText: highlight.selectedText,
             color: highlight.color,
+            style: highlight.style,
             note: highlight.note,
           })
           .then((response) => {
@@ -420,10 +425,11 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
             addToOfflineQueue({
               type: 'create_highlight',
               data: {
-                bookId: highlight.bookId,
+                bookId: highlight.userBookId,
                 cfiRange: highlight.cfiRange,
-                text: highlight.text,
+                selectedText: highlight.selectedText,
                 color: highlight.color,
+                style: highlight.style,
                 note: highlight.note,
               },
             });
@@ -492,7 +498,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
             h.id === id
               ? {
                   ...h,
-                  text: data.text,
+                  selectedText: data.selectedText,
                   startOffset: data.startOffset,
                   endOffset: data.endOffset,
                   paragraphIndex: data.paragraphIndex,
@@ -505,8 +511,8 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
 
         // Sync to backend
         apiClient
-          .patch(`/highlights/${id}`, {
-            selectedText: data.text,
+          .patch(`/reading/highlights/${id}`, {
+            selectedText: data.selectedText,
             startOffset: data.startOffset,
             endOffset: data.endOffset,
             paragraphIndex: data.paragraphIndex,
@@ -838,24 +844,44 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
           const response = await apiClient.get<{
             data: Array<{
               id: string;
+              userBookId: string;
               bookId: string;
+              chapterId?: string;
               cfiRange: string;
-              text: string;
+              selectedText: string;
               color: string;
+              style: string;
               note?: string;
+              startOffset?: number;
+              endOffset?: number;
+              paragraphIndex?: number;
+              charOffset?: number;
+              charLength?: number;
               createdAt: string;
+              updatedAt: string;
+              syncedAt?: string;
             }>;
           }>('/reading/highlights', { params: { bookId } });
 
           const serverHighlights: Highlight[] = (response.data || []).map(
             (h) => ({
               id: h.id,
-              bookId: h.bookId,
+              serverId: h.id,
+              userBookId: h.userBookId || h.bookId,
+              chapterId: h.chapterId,
               cfiRange: h.cfiRange,
-              text: h.text,
+              selectedText: h.selectedText,
               color: h.color as Highlight['color'],
+              style: (h.style || 'background') as Highlight['style'],
               note: h.note,
+              startOffset: h.startOffset,
+              endOffset: h.endOffset,
+              paragraphIndex: h.paragraphIndex,
+              charOffset: h.charOffset,
+              charLength: h.charLength,
               createdAt: new Date(h.createdAt),
+              updatedAt: new Date(h.updatedAt),
+              syncedAt: h.syncedAt ? new Date(h.syncedAt) : undefined,
             })
           );
 
@@ -863,10 +889,10 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
           set((state) => {
             const pendingLocalHighlights = state.highlights.filter(
               (h) =>
-                h.bookId === bookId && state.pendingSync.has(h.id)
+                h.userBookId === bookId && state.pendingSync.has(h.id)
             );
             const otherBookHighlights = state.highlights.filter(
-              (h) => h.bookId !== bookId
+              (h) => h.userBookId !== bookId
             );
 
             return {
@@ -891,20 +917,32 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
           const response = await apiClient.get<{
             data: Array<{
               id: string;
+              userBookId: string;
               bookId: string;
               cfi: string;
               title: string;
+              scrollPosition?: number;
+              pageNumber?: number;
+              excerpt?: string;
               createdAt: string;
+              updatedAt: string;
+              syncedAt?: string;
             }>;
           }>('/reading/bookmarks', { params: { bookId } });
 
           const serverBookmarks: Bookmark[] = (response.data || []).map(
             (b) => ({
               id: b.id,
-              bookId: b.bookId,
+              serverId: b.id,
+              userBookId: b.userBookId || b.bookId,
               cfi: b.cfi,
               title: b.title,
+              scrollPosition: b.scrollPosition,
+              pageNumber: b.pageNumber,
+              excerpt: b.excerpt,
               createdAt: new Date(b.createdAt),
+              updatedAt: new Date(b.updatedAt),
+              syncedAt: b.syncedAt ? new Date(b.syncedAt) : undefined,
             })
           );
 
@@ -912,10 +950,10 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
           set((state) => {
             const pendingLocalBookmarks = state.bookmarks.filter(
               (b) =>
-                b.bookId === bookId && state.pendingSync.has(b.id)
+                b.userBookId === bookId && state.pendingSync.has(b.id)
             );
             const otherBookBookmarks = state.bookmarks.filter(
-              (b) => b.bookId !== bookId
+              (b) => b.userBookId !== bookId
             );
 
             return {
@@ -936,11 +974,11 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
 
       // Get highlights/bookmarks for a specific book
       getHighlightsForBook: (bookId: string) => {
-        return get().highlights.filter((h) => h.bookId === bookId);
+        return get().highlights.filter((h) => h.userBookId === bookId);
       },
 
       getBookmarksForBook: (bookId: string) => {
-        return get().bookmarks.filter((b) => b.bookId === bookId);
+        return get().bookmarks.filter((b) => b.userBookId === bookId);
       },
     }),
     {
