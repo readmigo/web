@@ -7,16 +7,18 @@ import { useSession } from 'next-auth/react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY!;
-const POSTHOG_HOST = 'https://us.i.posthog.com';
 
 if (typeof window !== 'undefined' && POSTHOG_KEY) {
   posthog.init(POSTHOG_KEY.trim(), {
-    api_host: POSTHOG_HOST,
+    api_host: '/ingest',
+    ui_host: 'https://us.posthog.com',
     person_profiles: 'always',
     capture_pageview: true,
     capture_pageleave: true,
     loaded: (ph) => {
-      ph.debug(); // Temporarily enable to diagnose
+      if (process.env.NODE_ENV === 'development') {
+        ph.debug();
+      }
     },
   });
 }
