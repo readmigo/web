@@ -21,8 +21,6 @@ if (typeof window !== 'undefined' && POSTHOG_KEY) {
       }
     },
   });
-  // Expose for debugging — remove after verifying events flow
-  (window as any).posthog = posthog;
 }
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
