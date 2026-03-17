@@ -27,6 +27,10 @@ import { usePositionSync } from '@/features/reader/hooks/use-position-sync';
 import type { SelectedText, TocItem } from '@/features/reader/types';
 import { trackEvent } from '@/lib/analytics';
 import { savePendingSession } from '@/features/reader/lib/pending-sessions';
+import { useSession } from 'next-auth/react';
+import { useAudioUsageTracker } from '@/features/subscription/hooks/use-audio-usage-tracker';
+import { AudioLimitDialog } from '@/features/subscription/components/audio-limit-dialog';
+import { PaywallView } from '@/features/subscription/components/paywall-view';
 
 interface ReaderContentProps {
   bookId: string;
@@ -80,6 +84,23 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   const [contentElement, setContentElement] = useState<HTMLElement | null>(null);
   const showControlsRef = useRef(false);
   const autoHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Audio limit dialog state
+  const [showAudioLimitDialog, setShowAudioLimitDialog] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const { data: session } = useSession();
+  const isGuest = !session?.user;
+
+  const handleTTSLimitReached = useCallback(() => {
+    tts.pause();
+    setShowAudioLimitDialog(true);
+  }, [tts]);
+
+  const { dailySecondsUsed, dailyLimitSeconds } = useAudioUsageTracker({
+    ttsState: tts.ttsState,
+    onLimitReached: handleTTSLimitReached,
+    onPauseTTS: () => tts.pause(),
+  });
 
   // Keep ref in sync with state
   useEffect(() => {
@@ -635,6 +656,23 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           images={imageViewerState.images}
           initialIndex={imageViewerState.index}
           onClose={() => setImageViewerState(null)}
+        />
+      )}
+
+      {/* Audio limit dialog — shown when TTS daily cap is reached */}
+      <AudioLimitDialog
+        open={showAudioLimitDialog}
+        onDismiss={() => setShowAudioLimitDialog(false)}
+        onUpgrade={() => setShowPaywall(true)}
+        dailySecondsUsed={dailySecondsUsed}
+        dailyLimitSeconds={dailyLimitSeconds}
+        isGuest={isGuest}
+      />
+
+      {showPaywall && (
+        <PaywallView
+          triggerSource="ttsLimitReached"
+          onDismiss={() => setShowPaywall(false)}
         />
       )}
     </div>

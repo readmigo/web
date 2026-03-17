@@ -414,11 +414,58 @@
       "templates": "Premium Templates"
     },
     "expires": "Expires",
+    "close": "Close",
+    "selectPlan": "Select a plan",
+    "checkoutError": "Failed to start checkout. Please try again.",
+    "cancelSubscription": "Cancel subscription",
+    "restore": {
+      "success": "Purchase restored successfully.",
+      "error": "Could not restore purchase.",
+      "contactSupport": "Contact support"
+    },
+    "cancelDialog": {
+      "step1Title": "Are you sure you want to cancel?",
+      "loseAccess": "You will lose access to these Pro features:",
+      "keepPro": "Keep Pro",
+      "continueCancelling": "Continue cancelling",
+      "step2Title": "Why are you cancelling?",
+      "step2Desc": "Your feedback helps us improve. Please select a reason.",
+      "confirm": "Confirm cancellation",
+      "cancelling": "Cancelling...",
+      "back": "Back",
+      "error": "Something went wrong. Please try again.",
+      "features": {
+        "dataSync": "Cross-Device Sync",
+        "cloudBackup": "Cloud Backup",
+        "unlimitedAudio": "Unlimited Audio",
+        "stats": "Detailed Stats",
+        "templates": "Premium Templates"
+      },
+      "reasons": {
+        "too_expensive": "Too expensive",
+        "not_enough_content": "Not enough content",
+        "found_alternative": "Found a better alternative",
+        "technical_issues": "Technical issues",
+        "not_using_enough": "Not using it enough",
+        "other": "Other reason"
+      }
+    },
     "gracePeriod": {
       "title": "Payment method needs updating",
       "description": "Your subscription is in a grace period. Please update your payment method to keep your Pro access.",
       "descriptionWithDays": "Your subscription expires in {days} day(s). Please update your payment method to keep your Pro access.",
       "fixPayment": "Fix Payment"
+    },
+    "audioLimit": {
+      "title": "Daily listening limit reached",
+      "descGuest": "Sign in to get 30 free minutes of audio per day",
+      "descFree": "Upgrade to Pro for unlimited daily listening",
+      "used": "{used} / {limit} min used",
+      "perDay": "per day",
+      "loginCta": "Sign In",
+      "upgradeCta": "Upgrade to Pro",
+      "cancel": "Maybe Later",
+      "dismiss": "Dismiss"
     }
   },
   "onboarding": {

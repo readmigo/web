@@ -414,11 +414,58 @@
       "templates": "高级模板"
     },
     "expires": "到期",
+    "close": "关闭",
+    "selectPlan": "选择方案",
+    "checkoutError": "支付跳转失败，请重试。",
+    "cancelSubscription": "取消订阅",
+    "restore": {
+      "success": "购买已成功恢复。",
+      "error": "无法恢复购买。",
+      "contactSupport": "联系支持"
+    },
+    "cancelDialog": {
+      "step1Title": "确认要取消吗？",
+      "loseAccess": "取消后您将失去以下 Pro 权益：",
+      "keepPro": "保留 Pro",
+      "continueCancelling": "继续取消",
+      "step2Title": "为什么取消？",
+      "step2Desc": "您的反馈帮助我们改进，请选择一个原因。",
+      "confirm": "确认取消",
+      "cancelling": "取消中...",
+      "back": "返回",
+      "error": "操作失败，请重试。",
+      "features": {
+        "dataSync": "跨设备同步",
+        "cloudBackup": "云端备份",
+        "unlimitedAudio": "无限音频",
+        "stats": "详细统计",
+        "templates": "高级模板"
+      },
+      "reasons": {
+        "too_expensive": "价格太贵",
+        "not_enough_content": "内容不够丰富",
+        "found_alternative": "找到了更好的替代品",
+        "technical_issues": "遇到技术问题",
+        "not_using_enough": "使用频率不高",
+        "other": "其他原因"
+      }
+    },
     "gracePeriod": {
       "title": "支付方式需要更新",
       "description": "您的订阅正处于宽限期，请及时更新支付方式以保留 Pro 权益。",
       "descriptionWithDays": "您的订阅将在 {days} 天后到期，请及时更新支付方式以保留 Pro 权益。",
       "fixPayment": "修复支付"
+    },
+    "audioLimit": {
+      "title": "今日免费听书时长已用完",
+      "descGuest": "登录后每天可免费听 30 分钟",
+      "descFree": "升级 Pro 享无限听书，随时随地",
+      "used": "已用 {used} / {limit} 分钟",
+      "perDay": "每天",
+      "loginCta": "立即登录",
+      "upgradeCta": "升级 Pro",
+      "cancel": "暂不升级",
+      "dismiss": "关闭"
     }
   },
   "onboarding": {
@@ -889,5 +936,12 @@
     "statusPaused": "已暂停",
     "statusCompleted": "已下载",
     "statusFailed": "失败"
+  },
+  "shareCard": {
+    "title": "分享卡片",
+    "theme": "主题",
+    "copyText": "复制文字",
+    "saveImage": "保存图片",
+    "share": "分享"
   }
 }
