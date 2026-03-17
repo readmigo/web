@@ -31,7 +31,14 @@
     "emptyTitle": "書籍が見つかりません",
     "exploreMore": "探索してもっと素晴らしい書籍を見つけよう",
     "noMoreBooks": "これ以上の書籍はありません",
-    "viewAllLists": "すべてのリストを見る"
+    "viewAllLists": "すべてのリストを見る",
+    "pullToRefresh": "引っ張って更新",
+    "refreshing": "更新中...",
+    "promoBanner": {
+      "freeBadge": "無料",
+      "cta": "今すぐ読む",
+      "dismiss": "閉じる"
+    }
   },
   "audiobooks": {
     "recentlyListened": "最近聴いた",
@@ -324,6 +331,9 @@
     "resetEmailSent": "メールをご確認ください",
     "resetEmailSentDesc": "そのメールアドレスでアカウントが存在する場合、パスワードリセットのリンクを送信しました。",
     "backToLogin": "ログインに戻る",
+    "emailInvalid": "有効なメールアドレスを入力してください",
+    "passwordTooShort": "パスワードは8文字以上である必要があります",
+    "signingIn": "ログイン中...",
     "loginFeatures": {
       "library": {
         "title": "ライブラリを見るにはサインイン",
@@ -673,7 +683,8 @@
     "avgSession": "1セッション平均 {min} 分",
     "favoriteGenres": "お気に入りジャンル",
     "yourTitle": "あなたの称号",
-    "share": "共有"
+    "share": "共有",
+    "booksRead": "今年読んだ本"
   },
   "about": {
     "tagline": "英語読書のコンパニオン",
@@ -755,7 +766,14 @@
     "writeComment": "コメントを書く...",
     "send": "送信",
     "deleteComment": "削除",
-    "confirmDelete": "削除を確認"
+    "confirmDelete": "削除を確認",
+    "moreOptions": "その他",
+    "notInterested": "興味なし",
+    "report": "報告",
+    "blockAuthor": "著者をブロック",
+    "hideSuccess": "投稿を非表示にしました",
+    "reportSuccess": "報告を送信しました",
+    "blockSuccess": "著者をブロックしました"
   },
   "explore": {
     "title": "書籍を探索",
@@ -1069,7 +1087,11 @@
     "statusDownloading": "ダウンロード中",
     "statusPaused": "一時停止中",
     "statusCompleted": "ダウンロード済み",
-    "statusFailed": "失敗"
+    "statusFailed": "失敗",
+    "cellularWarning": "モバイルデータを使用",
+    "cellularWarningDesc": "モバイルデータでダウンロードすると料金が発生する場合があります。続けますか？",
+    "doNotAskAgain": "今後確認しない",
+    "continueDownload": "続ける"
   },
   "shareCard": {
     "title": "引用をシェア",

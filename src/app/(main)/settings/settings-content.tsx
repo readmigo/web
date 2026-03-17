@@ -6,12 +6,23 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+} from '@/components/ui/alert-dialog';
 import {
   User,
   Globe,
   LogOut,
   Crown,
   ChevronRight,
+  Trash2,
 } from 'lucide-react';
 import Link from 'next/link';
 import { OfflineDownloadsCard } from '@/features/offline/components/offline-downloads-card';
@@ -19,6 +30,7 @@ import { OfflineSettingsCard } from '@/features/offline/components/offline-setti
 import { ProfileEditSection } from './profile-edit-section';
 import { apiClient } from '@/lib/api/client';
 import { useSubscription } from '@/features/subscription/hooks/use-subscription';
+import { clearUserData } from '@/lib/auth/clear-user-data';
 
 export function SettingsContent() {
   const t = useTranslations('settings');
@@ -31,6 +43,11 @@ export function SettingsContent() {
     }
     return 'zh';
   });
+
+  // D7: Delete account dialog state
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleLocaleChange = (locale: string) => {
     document.cookie = `NEXT_LOCALE=${locale};path=/;max-age=31536000`;
@@ -50,6 +67,19 @@ export function SettingsContent() {
     } catch {/* silent */}
 
     window.location.reload();
+  };
+
+  // D7: Delete account handler
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmText !== 'DELETE') return;
+    setIsDeleting(true);
+    try {
+      await apiClient.delete('/users/me');
+      clearUserData();
+      window.location.href = '/api/auth/signout?callbackUrl=/login';
+    } catch {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -155,6 +185,21 @@ export function SettingsContent() {
               {t('signOut')}
             </Button>
           </div>
+
+          {/* D7: Delete Account */}
+          <Separator />
+
+          <Button
+            variant="outline"
+            className="w-full justify-start text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/30"
+            onClick={() => {
+              setDeleteConfirmText('');
+              setDeleteDialogOpen(true);
+            }}
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            {t('deleteAccount')}
+          </Button>
         </CardContent>
       </Card>
 
@@ -169,6 +214,40 @@ export function SettingsContent() {
         <p>Readmigo Web App v1.0.0</p>
         <p className="mt-1">© 2026 Readmigo. All rights reserved.</p>
       </div>
+
+      {/* D7: Delete Account Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-destructive">
+              {t('deleteAccountTitle')}
+            </AlertDialogTitle>
+            <AlertDialogDescription className="space-y-3">
+              <span className="block">{t('deleteAccountDesc')}</span>
+              <Input
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder={t('deleteAccountConfirmPlaceholder')}
+                className="mt-2 font-mono"
+                aria-label={t('deleteAccountConfirmPlaceholder')}
+                autoComplete="off"
+              />
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>
+              {t('deleteAccountCancelBtn')}
+            </AlertDialogCancel>
+            <Button
+              variant="destructive"
+              disabled={deleteConfirmText !== 'DELETE' || isDeleting}
+              onClick={handleDeleteAccount}
+            >
+              {isDeleting ? '...' : t('deleteAccountConfirmBtn')}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

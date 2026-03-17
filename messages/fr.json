@@ -31,7 +31,14 @@
     "emptyTitle": "Aucun livre trouvé",
     "exploreMore": "Explorez pour découvrir de nouveaux livres",
     "noMoreBooks": "Plus de livres disponibles",
-    "viewAllLists": "Voir toutes les listes"
+    "viewAllLists": "Voir toutes les listes",
+    "pullToRefresh": "Tirer pour actualiser",
+    "refreshing": "Actualisation...",
+    "promoBanner": {
+      "freeBadge": "Gratuit",
+      "cta": "Lire maintenant",
+      "dismiss": "Fermer"
+    }
   },
   "audiobooks": {
     "recentlyListened": "Écoutés récemment",
@@ -324,6 +331,9 @@
     "resetEmailSent": "Vérifiez votre e-mail",
     "resetEmailSentDesc": "Si un compte existe pour cet e-mail, un lien de réinitialisation a été envoyé.",
     "backToLogin": "Retour à la connexion",
+    "emailInvalid": "Veuillez entrer une adresse e-mail valide",
+    "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères",
+    "signingIn": "Connexion en cours...",
     "loginFeatures": {
       "library": {
         "title": "Connectez-vous pour voir la bibliothèque",
@@ -512,6 +522,19 @@
       "stats": "Statistiques détaillées",
       "templates": "Modèles premium"
     },
+    "freeFeatures": {
+      "title": "Déjà gratuit",
+      "browseLibrary": "Parcourir la bibliothèque",
+      "dailyAudio": "30 min audio/jour",
+      "aiBasic": "Assistant IA de base"
+    },
+    "promoCode": {
+      "cta": "Vous avez un code promo ?",
+      "placeholder": "Entrez le code promo",
+      "apply": "Appliquer",
+      "success": "Code appliqué ! Votre abonnement est activé.",
+      "error": "Code invalide ou expiré. Veuillez réessayer."
+    },
     "expires": "Expire le",
     "close": "Close",
     "selectPlan": "Select a plan",
@@ -673,7 +696,8 @@
     "avgSession": "Moyenne de {min} min par session",
     "favoriteGenres": "Genres préférés",
     "yourTitle": "Votre titre",
-    "share": "Partager"
+    "share": "Partager",
+    "booksRead": "Livres lus cette année"
   },
   "about": {
     "tagline": "Votre compagnon de lecture en anglais",
@@ -755,7 +779,14 @@
     "writeComment": "Écrire un commentaire...",
     "send": "Envoyer",
     "deleteComment": "Supprimer",
-    "confirmDelete": "Confirmer la suppression"
+    "confirmDelete": "Confirmer la suppression",
+    "moreOptions": "Plus d'options",
+    "notInterested": "Pas intéressé",
+    "report": "Signaler",
+    "blockAuthor": "Bloquer l'auteur",
+    "hideSuccess": "Publication masquée",
+    "reportSuccess": "Signalement envoyé",
+    "blockSuccess": "Auteur bloqué"
   },
   "explore": {
     "title": "Explorer les livres",
@@ -1069,7 +1100,11 @@
     "statusDownloading": "Téléchargement",
     "statusPaused": "Mis en pause",
     "statusCompleted": "Téléchargé",
-    "statusFailed": "Échec"
+    "statusFailed": "Échec",
+    "cellularWarning": "Utilisation des données mobiles",
+    "cellularWarningDesc": "Le téléchargement via données mobiles peut entraîner des frais. Voulez-vous continuer ?",
+    "doNotAskAgain": "Ne plus demander",
+    "continueDownload": "Continuer"
   },
   "shareCard": {
     "title": "Partager la citation",

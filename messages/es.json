@@ -31,7 +31,14 @@
     "emptyTitle": "No se encontraron libros",
     "exploreMore": "Explora para descubrir más libros increíbles",
     "noMoreBooks": "No hay más libros",
-    "viewAllLists": "Ver todas las listas"
+    "viewAllLists": "Ver todas las listas",
+    "pullToRefresh": "Desliza para actualizar",
+    "refreshing": "Actualizando...",
+    "promoBanner": {
+      "freeBadge": "Gratis",
+      "cta": "Leer ahora",
+      "dismiss": "Cerrar"
+    }
   },
   "audiobooks": {
     "recentlyListened": "Escuchados recientemente",
@@ -324,6 +331,9 @@
     "resetEmailSent": "Revisa tu correo",
     "resetEmailSentDesc": "Si existe una cuenta con ese correo, se ha enviado un enlace para restablecer la contraseña.",
     "backToLogin": "Volver al inicio de sesión",
+    "emailInvalid": "Por favor, introduce una dirección de correo válida",
+    "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+    "signingIn": "Iniciando sesión...",
     "loginFeatures": {
       "library": {
         "title": "Inicia sesión para ver la biblioteca",
@@ -512,6 +522,19 @@
       "stats": "Estadísticas detalladas",
       "templates": "Plantillas premium"
     },
+    "freeFeatures": {
+      "title": "Ya incluido gratis",
+      "browseLibrary": "Explorar biblioteca",
+      "dailyAudio": "30 min audio/día",
+      "aiBasic": "Asistente IA básico"
+    },
+    "promoCode": {
+      "cta": "¿Tienes un código promocional?",
+      "placeholder": "Introduce el código",
+      "apply": "Aplicar",
+      "success": "¡Código aplicado! Tu suscripción está activa.",
+      "error": "Código no válido o caducado. Inténtalo de nuevo."
+    },
     "expires": "Expira",
     "close": "Close",
     "selectPlan": "Select a plan",
@@ -673,7 +696,8 @@
     "avgSession": "Promedio de {min} min por sesión",
     "favoriteGenres": "Géneros favoritos",
     "yourTitle": "Tu título",
-    "share": "Compartir"
+    "share": "Compartir",
+    "booksRead": "Libros leídos este año"
   },
   "about": {
     "tagline": "Tu compañero de lectura en inglés",
@@ -755,7 +779,14 @@
     "writeComment": "Escribe un comentario...",
     "send": "Enviar",
     "deleteComment": "Eliminar",
-    "confirmDelete": "Confirmar eliminación"
+    "confirmDelete": "Confirmar eliminación",
+    "moreOptions": "Más opciones",
+    "notInterested": "No me interesa",
+    "report": "Reportar",
+    "blockAuthor": "Bloquear autor",
+    "hideSuccess": "Publicación ocultada",
+    "reportSuccess": "Reporte enviado",
+    "blockSuccess": "Autor bloqueado"
   },
   "explore": {
     "title": "Explorar libros",
@@ -1069,7 +1100,11 @@
     "statusDownloading": "Descargando",
     "statusPaused": "Pausado",
     "statusCompleted": "Descargado",
-    "statusFailed": "Fallido"
+    "statusFailed": "Fallido",
+    "cellularWarning": "Usando datos móviles",
+    "cellularWarningDesc": "Descargar con datos móviles puede generar cargos. ¿Deseas continuar?",
+    "doNotAskAgain": "No volver a preguntar",
+    "continueDownload": "Continuar"
   },
   "shareCard": {
     "title": "Compartir cita",

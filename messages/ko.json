@@ -31,7 +31,14 @@
     "emptyTitle": "책을 찾을 수 없습니다",
     "exploreMore": "탐색하여 더 훌륭한 책을 발견하세요",
     "noMoreBooks": "더 이상 책이 없습니다",
-    "viewAllLists": "전체 목록 보기"
+    "viewAllLists": "전체 목록 보기",
+    "pullToRefresh": "당겨서 새로고침",
+    "refreshing": "새로고침 중...",
+    "promoBanner": {
+      "freeBadge": "무료",
+      "cta": "지금 읽기",
+      "dismiss": "닫기"
+    }
   },
   "audiobooks": {
     "recentlyListened": "최근 들은",
@@ -324,6 +331,9 @@
     "resetEmailSent": "이메일을 확인하세요",
     "resetEmailSentDesc": "해당 이메일로 등록된 계정이 있다면 비밀번호 재설정 링크를 보냈습니다.",
     "backToLogin": "로그인으로 돌아가기",
+    "emailInvalid": "유효한 이메일 주소를 입력해 주세요",
+    "passwordTooShort": "비밀번호는 8자 이상이어야 합니다",
+    "signingIn": "로그인 중...",
     "loginFeatures": {
       "library": {
         "title": "도서관 보기는 로그인 필요",
@@ -673,7 +683,8 @@
     "avgSession": "세션 평균 {min}분",
     "favoriteGenres": "즐겨찾는 장르",
     "yourTitle": "나의 칭호",
-    "share": "공유"
+    "share": "공유",
+    "booksRead": "올해 읽은 책"
   },
   "about": {
     "tagline": "나의 영어 독서 동반자",
@@ -755,7 +766,14 @@
     "writeComment": "댓글 작성...",
     "send": "전송",
     "deleteComment": "삭제",
-    "confirmDelete": "삭제 확인"
+    "confirmDelete": "삭제 확인",
+    "moreOptions": "더 보기",
+    "notInterested": "관심 없음",
+    "report": "신고",
+    "blockAuthor": "작성자 차단",
+    "hideSuccess": "게시물이 숨겨졌습니다",
+    "reportSuccess": "신고가 접수되었습니다",
+    "blockSuccess": "작성자가 차단되었습니다"
   },
   "explore": {
     "title": "책 탐색",
@@ -1069,7 +1087,11 @@
     "statusDownloading": "다운로드 중",
     "statusPaused": "일시정지됨",
     "statusCompleted": "다운로드 완료",
-    "statusFailed": "실패"
+    "statusFailed": "실패",
+    "cellularWarning": "모바일 데이터 사용",
+    "cellularWarningDesc": "모바일 데이터로 다운로드하면 요금이 발생할 수 있습니다. 계속하시겠습니까?",
+    "doNotAskAgain": "다시 묻지 않기",
+    "continueDownload": "계속"
   },
   "shareCard": {
     "title": "인용구 공유",

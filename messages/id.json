@@ -31,7 +31,14 @@
     "emptyTitle": "Tidak ada buku ditemukan",
     "exploreMore": "Jelajahi untuk menemukan lebih banyak buku bagus",
     "noMoreBooks": "Tidak ada buku lagi",
-    "viewAllLists": "Lihat Semua Daftar"
+    "viewAllLists": "Lihat Semua Daftar",
+    "pullToRefresh": "Tarik untuk menyegarkan",
+    "refreshing": "Menyegarkan...",
+    "promoBanner": {
+      "freeBadge": "Gratis",
+      "cta": "Baca Sekarang",
+      "dismiss": "Tutup"
+    }
   },
   "audiobooks": {
     "recentlyListened": "Baru Didengarkan",
@@ -324,6 +331,9 @@
     "resetEmailSent": "Periksa email Anda",
     "resetEmailSentDesc": "Jika akun dengan email tersebut ada, tautan pengaturan ulang kata sandi telah dikirimkan.",
     "backToLogin": "Kembali ke Login",
+    "emailInvalid": "Harap masukkan alamat email yang valid",
+    "passwordTooShort": "Kata sandi harus minimal 8 karakter",
+    "signingIn": "Sedang masuk...",
     "loginFeatures": {
       "library": {
         "title": "Masuk untuk Melihat Perpustakaan",
@@ -673,7 +683,8 @@
     "avgSession": "Rata-rata {min} menit per sesi",
     "favoriteGenres": "Genre Favorit",
     "yourTitle": "Gelar Anda",
-    "share": "Bagikan"
+    "share": "Bagikan",
+    "booksRead": "Buku yang Dibaca Tahun Ini"
   },
   "about": {
     "tagline": "Teman Membaca Bahasa Inggris Anda",
@@ -755,7 +766,14 @@
     "writeComment": "Tulis komentar...",
     "send": "Kirim",
     "deleteComment": "Hapus",
-    "confirmDelete": "Konfirmasi hapus"
+    "confirmDelete": "Konfirmasi hapus",
+    "moreOptions": "Opsi lainnya",
+    "notInterested": "Tidak tertarik",
+    "report": "Laporkan",
+    "blockAuthor": "Blokir penulis",
+    "hideSuccess": "Postingan disembunyikan",
+    "reportSuccess": "Laporan terkirim",
+    "blockSuccess": "Penulis diblokir"
   },
   "explore": {
     "title": "Jelajahi Buku",
@@ -1069,7 +1087,11 @@
     "statusDownloading": "Mengunduh",
     "statusPaused": "Dijeda",
     "statusCompleted": "Diunduh",
-    "statusFailed": "Gagal"
+    "statusFailed": "Gagal",
+    "cellularWarning": "Menggunakan Data Seluler",
+    "cellularWarningDesc": "Mengunduh melalui data seluler dapat dikenakan biaya. Lanjutkan?",
+    "doNotAskAgain": "Jangan tanya lagi",
+    "continueDownload": "Lanjutkan"
   },
   "shareCard": {
     "title": "Bagikan Kutipan",

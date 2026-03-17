@@ -31,7 +31,14 @@
     "emptyTitle": "Nenhum livro encontrado",
     "exploreMore": "Explore para descobrir mais livros incríveis",
     "noMoreBooks": "Não há mais livros",
-    "viewAllLists": "Ver todas as listas"
+    "viewAllLists": "Ver todas as listas",
+    "pullToRefresh": "Puxe para atualizar",
+    "refreshing": "Atualizando...",
+    "promoBanner": {
+      "freeBadge": "Grátis",
+      "cta": "Ler agora",
+      "dismiss": "Fechar"
+    }
   },
   "audiobooks": {
     "recentlyListened": "Ouvidos recentemente",
@@ -324,6 +331,9 @@
     "resetEmailSent": "Verifique seu e-mail",
     "resetEmailSentDesc": "Se uma conta existe para esse e-mail, um link de redefinição foi enviado.",
     "backToLogin": "Voltar para o login",
+    "emailInvalid": "Por favor, insira um endereço de e-mail válido",
+    "passwordTooShort": "A senha deve ter pelo menos 8 caracteres",
+    "signingIn": "Entrando...",
     "loginFeatures": {
       "library": {
         "title": "Entre para ver a biblioteca",
@@ -673,7 +683,8 @@
     "avgSession": "Média de {min} min por sessão",
     "favoriteGenres": "Gêneros favoritos",
     "yourTitle": "Seu título",
-    "share": "Compartilhar"
+    "share": "Compartilhar",
+    "booksRead": "Livros lidos este ano"
   },
   "about": {
     "tagline": "Seu companheiro de leitura em inglês",
@@ -755,7 +766,14 @@
     "writeComment": "Escreva um comentário...",
     "send": "Enviar",
     "deleteComment": "Excluir",
-    "confirmDelete": "Confirmar exclusão"
+    "confirmDelete": "Confirmar exclusão",
+    "moreOptions": "Mais opções",
+    "notInterested": "Não tenho interesse",
+    "report": "Denunciar",
+    "blockAuthor": "Bloquear autor",
+    "hideSuccess": "Publicação ocultada",
+    "reportSuccess": "Denúncia enviada",
+    "blockSuccess": "Autor bloqueado"
   },
   "explore": {
     "title": "Explorar livros",

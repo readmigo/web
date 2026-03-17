@@ -331,6 +331,9 @@
     "resetEmailSent": "請查收郵件",
     "resetEmailSentDesc": "如果該郵箱已註冊，重設連結已發送至您的郵箱。",
     "backToLogin": "返回登入",
+    "emailInvalid": "請輸入有效的電子郵件地址",
+    "passwordTooShort": "密碼至少需要 8 個字元",
+    "signingIn": "登入中...",
     "loginFeatures": {
       "library": {
         "title": "登入後查看書庫",
@@ -515,6 +518,19 @@
       "stats": "詳細統計",
       "templates": "高級模板"
     },
+    "freeFeatures": {
+      "title": "免費功能",
+      "browseLibrary": "瀏覽書庫",
+      "dailyAudio": "每日30分鐘音頻",
+      "aiBasic": "AI助手基礎功能"
+    },
+    "promoCode": {
+      "cta": "有兌換碼？",
+      "placeholder": "輸入兌換碼",
+      "apply": "兌換",
+      "success": "兌換成功！訂閱已啟用。",
+      "error": "兌換碼無效或已過期，請重試。"
+    },
     "expires": "到期",
     "trial": {
       "countdown": "試用還剩 {days} 天"
@@ -645,7 +661,8 @@
     "avgSession": "平均每次 {min} 分鐘",
     "favoriteGenres": "最愛類型",
     "yourTitle": "你的稱號",
-    "share": "分享"
+    "share": "分享",
+    "booksRead": "今年讀過的書"
   },
   "about": {
     "tagline": "你的英語閱讀夥伴",
@@ -727,7 +744,14 @@
     "writeComment": "寫評論...",
     "send": "發送",
     "deleteComment": "刪除",
-    "confirmDelete": "確認刪除"
+    "confirmDelete": "確認刪除",
+    "moreOptions": "更多選項",
+    "notInterested": "不感興趣",
+    "report": "檢舉",
+    "blockAuthor": "封鎖作者",
+    "hideSuccess": "已隱藏此帖",
+    "reportSuccess": "檢舉已提交",
+    "blockSuccess": "已封鎖該作者"
   },
   "explore": {
     "title": "探索書籍",

@@ -137,6 +137,7 @@
     "sendMessage": "Send Message",
     "community": "Community",
     "agora": "Agora",
+    "followingAuthors": "Following Authors",
     "other": "Other",
     "contactUs": "Contact Us",
     "legal": "Legal",
@@ -544,6 +545,19 @@
       "stats": "Detailed Stats",
       "templates": "Premium Templates"
     },
+    "freeFeatures": {
+      "title": "What's already free",
+      "browseLibrary": "Browse Library",
+      "dailyAudio": "30 min audio/day",
+      "aiBasic": "Basic AI Assistant"
+    },
+    "promoCode": {
+      "cta": "Have a promo code?",
+      "placeholder": "Enter promo code",
+      "apply": "Apply",
+      "success": "Promo code applied! Your subscription has been activated.",
+      "error": "Invalid or expired promo code. Please try again."
+    },
     "expires": "Expires",
     "close": "Close",
     "selectPlan": "Select a plan",
@@ -766,7 +780,8 @@
     "avgSession": "Average {min} min per session",
     "favoriteGenres": "Favorite Genres",
     "yourTitle": "Your Title",
-    "share": "Share"
+    "share": "Share",
+    "booksRead": "Books Read This Year"
   },
   "about": {
     "tagline": "Your English Reading Companion",
@@ -848,7 +863,14 @@
     "writeComment": "Write a comment...",
     "send": "Send",
     "deleteComment": "Delete",
-    "confirmDelete": "Confirm delete"
+    "confirmDelete": "Confirm delete",
+    "moreOptions": "More options",
+    "notInterested": "Not interested",
+    "report": "Report",
+    "blockAuthor": "Block author",
+    "hideSuccess": "Post hidden",
+    "reportSuccess": "Report submitted",
+    "blockSuccess": "Author blocked"
   },
   "explore": {
     "title": "Explore Books",
@@ -872,7 +894,16 @@
   },
   "author": {
     "follow": "Follow",
-    "following": "Following",
+    "followingLabel": "Following",
+    "following": {
+      "title": "Following Authors",
+      "count": "{count} authors",
+      "bookCount": "{count} books",
+      "unfollow": "Unfollow",
+      "emptyTitle": "No following yet",
+      "emptyDesc": "Follow authors to see them here",
+      "exploreAuthors": "Explore Authors"
+    },
     "works": "Works",
     "quotes": "Quotes",
     "followers": "Followers",
@@ -930,7 +961,8 @@
     "eventCategoryCultural": "Cultural",
     "eventCategoryPolitical": "Political",
     "eventCategoryScientific": "Scientific",
-    "browseAllAuthorQuotes": "Browse all quotes by this author"
+    "browseAllAuthorQuotes": "Browse all quotes by this author",
+    "unfollow": "Unfollow"
   },
   "wordLookup": {
     "noDefinition": "No definition found",

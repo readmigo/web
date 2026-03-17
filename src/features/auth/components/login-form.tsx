@@ -51,6 +51,9 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [userRegion, setUserRegion] = useState<string>('other');
+  // D8: inline validation state
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   useEffect(() => {
     const lang = navigator.language || '';
@@ -58,8 +61,39 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
     else if (lang.startsWith('ko')) setUserRegion('kr');
   }, []);
 
+  // D8: validate email on blur
+  const handleEmailBlur = () => {
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmailError(t('emailInvalid'));
+    } else {
+      setEmailError('');
+    }
+  };
+
+  // D8: validate password on blur
+  const handlePasswordBlur = () => {
+    if (password && password.length < 8) {
+      setPasswordError(t('passwordTooShort'));
+    } else {
+      setPasswordError('');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // D8: run validation before submit
+    let hasError = false;
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmailError(t('emailInvalid'));
+      hasError = true;
+    }
+    if (!password || password.length < 8) {
+      setPasswordError(t('passwordTooShort'));
+      hasError = true;
+    }
+    if (hasError) return;
+
     setIsLoading(true);
     setError('');
 
@@ -112,27 +146,38 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
           <h1 className="text-2xl font-bold text-white">{t('emailLogin')}</h1>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="relative space-y-4">
+          {/* D8: Full-form loading overlay */}
+          {isLoading && (
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 rounded-xl bg-black/40 backdrop-blur-sm">
+              <span className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              <span className="text-sm font-medium text-white">{t('signingIn')}</span>
+            </div>
+          )}
+
           {error && (
             <div className="rounded-lg bg-red-500/20 border border-red-400/30 p-3 text-sm text-white">
               {error}
             </div>
           )}
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <Label htmlFor="email" className="text-white/80">{t('emailLabel')}</Label>
             <Input
               id="email"
               type="email"
               placeholder="your@email.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="bg-white/15 border-white/20 text-white placeholder:text-white/40 focus:ring-white/30 h-12 rounded-[10px]"
-              required
+              onChange={(e) => { setEmail(e.target.value); if (emailError) setEmailError(''); }}
+              onBlur={handleEmailBlur}
+              className={`bg-white/15 border-white/20 text-white placeholder:text-white/40 focus:ring-white/30 h-12 rounded-[10px] ${emailError ? 'border-red-400' : ''}`}
             />
+            {emailError && (
+              <p className="text-xs text-red-400" role="alert">{emailError}</p>
+            )}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <div className="flex items-center justify-between">
               <Label htmlFor="password" className="text-white/80">{t('passwordLabel')}</Label>
               <Link
@@ -148,9 +193,9 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
                 type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="bg-white/15 border-white/20 text-white placeholder:text-white/40 focus:ring-white/30 h-12 rounded-[10px] pr-10"
-                required
+                onChange={(e) => { setPassword(e.target.value); if (passwordError) setPasswordError(''); }}
+                onBlur={handlePasswordBlur}
+                className={`bg-white/15 border-white/20 text-white placeholder:text-white/40 focus:ring-white/30 h-12 rounded-[10px] pr-10 ${passwordError ? 'border-red-400' : ''}`}
               />
               <button
                 type="button"
@@ -164,6 +209,9 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
                 )}
               </button>
             </div>
+            {passwordError && (
+              <p className="text-xs text-red-400" role="alert">{passwordError}</p>
+            )}
           </div>
 
           <Button
@@ -171,7 +219,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
             className="w-full h-12 rounded-[10px] bg-white text-purple-600 font-semibold hover:bg-white/90"
             disabled={isLoading}
           >
-            {isLoading ? t('loggingIn') : t('login')}
+            {t('login')}
           </Button>
         </form>
 

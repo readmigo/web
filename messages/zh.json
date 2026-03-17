@@ -137,6 +137,7 @@
     "sendMessage": "发送消息",
     "community": "社区",
     "agora": "广场",
+    "followingAuthors": "关注的作者",
     "other": "其他",
     "contactUs": "联系我们",
     "legal": "法律条款",
@@ -544,6 +545,19 @@
       "stats": "详细统计",
       "templates": "高级模板"
     },
+    "freeFeatures": {
+      "title": "免费功能",
+      "browseLibrary": "浏览书库",
+      "dailyAudio": "每日30分钟音频",
+      "aiBasic": "AI助手基础功能"
+    },
+    "promoCode": {
+      "cta": "有兑换码？",
+      "placeholder": "输入兑换码",
+      "apply": "兑换",
+      "success": "兑换成功！订阅已激活。",
+      "error": "兑换码无效或已过期，请重试。"
+    },
     "expires": "到期",
     "close": "关闭",
     "selectPlan": "选择方案",
@@ -766,7 +780,8 @@
     "avgSession": "平均每次 {min} 分钟",
     "favoriteGenres": "最爱类型",
     "yourTitle": "你的称号",
-    "share": "分享"
+    "share": "分享",
+    "booksRead": "今年读过的书"
   },
   "about": {
     "tagline": "你的英语阅读伙伴",
@@ -848,7 +863,14 @@
     "writeComment": "写评论...",
     "send": "发送",
     "deleteComment": "删除",
-    "confirmDelete": "确认删除"
+    "confirmDelete": "确认删除",
+    "moreOptions": "更多选项",
+    "notInterested": "不感兴趣",
+    "report": "举报",
+    "blockAuthor": "屏蔽作者",
+    "hideSuccess": "已隐藏此帖",
+    "reportSuccess": "举报已提交",
+    "blockSuccess": "已屏蔽该作者"
   },
   "explore": {
     "title": "探索书籍",
@@ -872,7 +894,16 @@
   },
   "author": {
     "follow": "关注",
-    "following": "已关注",
+    "followingLabel": "已关注",
+    "following": {
+      "title": "已关注作者",
+      "count": "{count} 位作者",
+      "bookCount": "{count} 本书",
+      "unfollow": "取消关注",
+      "emptyTitle": "还没有关注任何作者",
+      "emptyDesc": "关注感兴趣的作者，在这里查看",
+      "exploreAuthors": "探索作者"
+    },
     "works": "作品",
     "quotes": "名言",
     "followers": "关注",
@@ -930,7 +961,8 @@
     "eventCategoryCultural": "文化",
     "eventCategoryPolitical": "政治",
     "eventCategoryScientific": "科学",
-    "browseAllAuthorQuotes": "浏览该作者的所有名言"
+    "browseAllAuthorQuotes": "浏览该作者的所有名言",
+    "unfollow": "取消关注"
   },
   "wordLookup": {
     "noDefinition": "暂无释义",

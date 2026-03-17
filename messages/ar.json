@@ -31,7 +31,14 @@
     "emptyTitle": "لم يتم العثور على كتب",
     "exploreMore": "استكشف لاكتشاف المزيد من الكتب الرائعة",
     "noMoreBooks": "لا توجد كتب أخرى",
-    "viewAllLists": "عرض جميع القوائم"
+    "viewAllLists": "عرض جميع القوائم",
+    "pullToRefresh": "اسحب للتحديث",
+    "refreshing": "جارٍ التحديث...",
+    "promoBanner": {
+      "freeBadge": "مجاني",
+      "cta": "اقرأ الآن",
+      "dismiss": "إغلاق"
+    }
   },
   "audiobooks": {
     "recentlyListened": "تم الاستماع مؤخرًا",
@@ -324,6 +331,9 @@
     "resetEmailSent": "تحقق من بريدك الإلكتروني",
     "resetEmailSentDesc": "إذا كان هناك حساب مرتبط بهذا البريد، فقد تم إرسال رابط إعادة تعيين كلمة المرور.",
     "backToLogin": "العودة إلى تسجيل الدخول",
+    "emailInvalid": "يرجى إدخال عنوان بريد إلكتروني صالح",
+    "passwordTooShort": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+    "signingIn": "جارٍ تسجيل الدخول...",
     "loginFeatures": {
       "library": {
         "title": "سجّل دخولك لعرض المكتبة",
@@ -673,7 +683,8 @@
     "avgSession": "متوسط {min} دقيقة لكل جلسة",
     "favoriteGenres": "الأنواع المفضّلة",
     "yourTitle": "لقبك",
-    "share": "مشاركة"
+    "share": "مشاركة",
+    "booksRead": "الكتب المقروءة هذا العام"
   },
   "about": {
     "tagline": "رفيقك في قراءة اللغة الإنجليزية",
@@ -755,7 +766,14 @@
     "writeComment": "اكتب تعليقًا...",
     "send": "إرسال",
     "deleteComment": "حذف",
-    "confirmDelete": "تأكيد الحذف"
+    "confirmDelete": "تأكيد الحذف",
+    "moreOptions": "خيارات أخرى",
+    "notInterested": "غير مهتم",
+    "report": "إبلاغ",
+    "blockAuthor": "حظر المؤلف",
+    "hideSuccess": "تم إخفاء المنشور",
+    "reportSuccess": "تم إرسال البلاغ",
+    "blockSuccess": "تم حظر المؤلف"
   },
   "explore": {
     "title": "استكشف الكتب",
@@ -1069,7 +1087,11 @@
     "statusDownloading": "جارٍ التنزيل",
     "statusPaused": "متوقف مؤقتًا",
     "statusCompleted": "تم التنزيل",
-    "statusFailed": "فشل"
+    "statusFailed": "فشل",
+    "cellularWarning": "استخدام بيانات الجوال",
+    "cellularWarningDesc": "قد يتسبب التنزيل عبر بيانات الجوال في رسوم. هل تريد المتابعة؟",
+    "doNotAskAgain": "لا تسألني مجددًا",
+    "continueDownload": "متابعة"
   },
   "shareCard": {
     "title": "مشاركة الاقتباس",

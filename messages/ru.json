@@ -31,7 +31,14 @@
     "emptyTitle": "Книги не найдены",
     "exploreMore": "Исследуйте, чтобы открыть больше отличных книг",
     "noMoreBooks": "Больше книг нет",
-    "viewAllLists": "Смотреть все списки"
+    "viewAllLists": "Смотреть все списки",
+    "pullToRefresh": "Потяните для обновления",
+    "refreshing": "Обновление...",
+    "promoBanner": {
+      "freeBadge": "Бесплатно",
+      "cta": "Читать",
+      "dismiss": "Закрыть"
+    }
   },
   "audiobooks": {
     "recentlyListened": "Недавно прослушанные",
@@ -324,6 +331,9 @@
     "resetEmailSent": "Проверьте почту",
     "resetEmailSentDesc": "Если аккаунт с таким адресом существует, ссылка для сброса пароля отправлена.",
     "backToLogin": "Вернуться к входу",
+    "emailInvalid": "Пожалуйста, введите корректный адрес электронной почты",
+    "passwordTooShort": "Пароль должен содержать не менее 8 символов",
+    "signingIn": "Вход...",
     "loginFeatures": {
       "library": {
         "title": "Войдите, чтобы открыть библиотеку",
@@ -673,7 +683,8 @@
     "avgSession": "В среднем {min} мин за сессию",
     "favoriteGenres": "Любимые жанры",
     "yourTitle": "Ваш титул",
-    "share": "Поделиться"
+    "share": "Поделиться",
+    "booksRead": "Прочитанные книги за год"
   },
   "about": {
     "tagline": "Ваш помощник в чтении на английском",
@@ -755,7 +766,14 @@
     "writeComment": "Написать комментарий...",
     "send": "Отправить",
     "deleteComment": "Удалить",
-    "confirmDelete": "Подтвердить удаление"
+    "confirmDelete": "Подтвердить удаление",
+    "moreOptions": "Ещё",
+    "notInterested": "Не интересно",
+    "report": "Пожаловаться",
+    "blockAuthor": "Заблокировать автора",
+    "hideSuccess": "Публикация скрыта",
+    "reportSuccess": "Жалоба отправлена",
+    "blockSuccess": "Автор заблокирован"
   },
   "explore": {
     "title": "Исследовать книги",
@@ -1069,7 +1087,11 @@
     "statusDownloading": "Загрузка",
     "statusPaused": "Приостановлено",
     "statusCompleted": "Скачано",
-    "statusFailed": "Ошибка"
+    "statusFailed": "Ошибка",
+    "cellularWarning": "Использование мобильных данных",
+    "cellularWarningDesc": "Загрузка по мобильным данным может привести к расходам. Продолжить?",
+    "doNotAskAgain": "Больше не спрашивать",
+    "continueDownload": "Продолжить"
   },
   "shareCard": {
     "title": "Поделиться цитатой",
