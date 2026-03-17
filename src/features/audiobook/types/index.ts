@@ -36,6 +36,16 @@ export interface AudiobookChapter {
   bookChapterId?: string; // Link to ebook chapter for Whispersync
 }
 
+// A single available narrator voice for an audiobook
+export interface AudiobookVoice {
+  id: string;
+  name: string;
+  language: string;
+  previewUrl?: string;
+  // When provided, these replace audiobook.chapters on voice switch
+  chapters?: AudiobookChapter[];
+}
+
 // Audiobook
 export interface Audiobook {
   id: string;
@@ -49,6 +59,7 @@ export interface Audiobook {
   source: AudiobookSource;
   language: string;
   bookId?: string; // Associated ebook ID for Whispersync
+  availableVoices?: AudiobookVoice[];
   createdAt: string;
   updatedAt: string;
 }
@@ -99,6 +110,9 @@ export interface AudioPlayerState {
   playbackSpeed: PlaybackSpeed;
   volume: number; // 0-1
 
+  // Voice selection
+  selectedVoiceId: string | null;
+
   // UI state
   isMinimized: boolean;
   isVisible: boolean;
@@ -137,6 +151,9 @@ export interface AudioPlayerActions {
   // Sleep timer
   setSleepTimer: (option: SleepTimerOption | null) => void;
   clearSleepTimer: () => void;
+
+  // Voice selection
+  setSelectedVoice: (voiceId: string) => Promise<void>;
 
   // Audiobook management
   loadAudiobook: (audiobook: Audiobook, startChapter?: number, startPosition?: number) => void;

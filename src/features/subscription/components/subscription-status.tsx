@@ -2,12 +2,52 @@
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Crown, RefreshCw } from 'lucide-react';
+import { AlertTriangle, Crown, RefreshCw } from 'lucide-react';
+import Link from 'next/link';
 import { useSubscription } from '../hooks/use-subscription';
 import { useTranslations } from 'next-intl';
 
+function daysUntil(dateStr: string): number {
+  const diff = new Date(dateStr).getTime() - Date.now();
+  return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+}
+
+interface GracePeriodBannerProps {
+  expiresAt?: string;
+}
+
+function GracePeriodBanner({ expiresAt }: GracePeriodBannerProps) {
+  const t = useTranslations('subscription.gracePeriod');
+  const remainingDays = expiresAt ? daysUntil(expiresAt) : null;
+
+  return (
+    <div className="flex items-start gap-3 rounded-lg border border-orange-300 bg-orange-50 px-4 py-3 dark:border-orange-700 dark:bg-orange-950/40">
+      <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-orange-500" aria-hidden="true" />
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-orange-900 dark:text-orange-200">
+          {t('title')}
+        </p>
+        <p className="mt-0.5 text-xs text-orange-700 dark:text-orange-300">
+          {remainingDays !== null
+            ? t('descriptionWithDays', { days: remainingDays })
+            : t('description')}
+        </p>
+      </div>
+      <Button
+        asChild
+        size="sm"
+        className="shrink-0 bg-orange-500 text-white hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-500"
+      >
+        <Link href="/settings/subscription">
+          {t('fixPayment')}
+        </Link>
+      </Button>
+    </div>
+  );
+}
+
 export function SubscriptionStatus() {
-  const { tier, isPro, status, expiresAt, willRenew, isLoading } = useSubscription();
+  const { isPro, status, expiresAt, willRenew, isLoading } = useSubscription();
   const t = useTranslations('subscription');
 
   if (isLoading) {
@@ -19,27 +59,32 @@ export function SubscriptionStatus() {
   }
 
   return (
-    <div className="flex items-center gap-2">
-      {isPro ? (
-        <Badge className="bg-gradient-to-r from-purple-600 to-pink-500 text-white border-0">
-          <Crown className="mr-1 h-3 w-3" />
-          Pro
-        </Badge>
-      ) : (
-        <Badge variant="secondary">Free</Badge>
+    <div className="flex flex-col gap-3">
+      {status === 'GRACE_PERIOD' && (
+        <GracePeriodBanner expiresAt={expiresAt} />
       )}
-      {isPro && expiresAt && (
-        <span className="text-xs text-muted-foreground">
-          {willRenew ? (
-            <>
-              <RefreshCw className="inline mr-0.5 h-3 w-3" />
-              {new Date(expiresAt).toLocaleDateString()}
-            </>
-          ) : (
-            `Expires ${new Date(expiresAt).toLocaleDateString()}`
-          )}
-        </span>
-      )}
+      <div className="flex items-center gap-2">
+        {isPro ? (
+          <Badge className="bg-gradient-to-r from-purple-600 to-pink-500 text-white border-0">
+            <Crown className="mr-1 h-3 w-3" />
+            Pro
+          </Badge>
+        ) : (
+          <Badge variant="secondary">Free</Badge>
+        )}
+        {isPro && expiresAt && (
+          <span className="text-xs text-muted-foreground">
+            {willRenew ? (
+              <>
+                <RefreshCw className="inline mr-0.5 h-3 w-3" />
+                {new Date(expiresAt).toLocaleDateString()}
+              </>
+            ) : (
+              `${t('expires')} ${new Date(expiresAt).toLocaleDateString()}`
+            )}
+          </span>
+        )}
+      </div>
     </div>
   );
 }

@@ -398,6 +398,13 @@
       "unlimitedAudio": "Audio ilimitado",
       "stats": "Estadísticas detalladas",
       "templates": "Plantillas premium"
+    },
+    "expires": "Expira",
+    "gracePeriod": {
+      "title": "El método de pago necesita actualizarse",
+      "description": "Tu suscripción está en período de gracia. Actualiza tu método de pago para mantener el acceso Pro.",
+      "descriptionWithDays": "Tu suscripción expira en {days} día(s). Actualiza tu método de pago para mantener el acceso Pro.",
+      "fixPayment": "Arreglar pago"
     }
   },
   "onboarding": {
@@ -543,7 +550,20 @@
     "description": "Comparte perspectivas de lectura y descubre grandes citas",
     "welcome": "Bienvenido a la comunidad",
     "noActivity": "Sin actividad aún",
-    "noMore": "Has llegado al final"
+    "noMore": "Has llegado al final",
+    "createPost": "Crear publicación",
+    "postPlaceholder": "Comparte tus pensamientos de lectura...",
+    "postContent": "Contenido de la publicación",
+    "publish": "Publicar",
+    "publishing": "Publicando...",
+    "charCount": "{count}/500",
+    "cancel": "Cancelar",
+    "comments": "Comentarios",
+    "noComments": "Aún no hay comentarios. ¡Sé el primero!",
+    "writeComment": "Escribe un comentario...",
+    "send": "Enviar",
+    "deleteComment": "Eliminar",
+    "confirmDelete": "Confirmar eliminación"
   },
   "explore": {
     "title": "Explorar libros",

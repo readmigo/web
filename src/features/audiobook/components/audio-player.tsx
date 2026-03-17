@@ -15,6 +15,7 @@ import { PlayerControls } from './player-controls';
 import { ProgressSlider } from './progress-slider';
 import { SpeedSelector } from './speed-selector';
 import { SleepTimer } from './sleep-timer';
+import { VoiceSelector } from './voice-selector';
 import { ChapterList } from './chapter-list';
 import { WhispersyncToBook } from './whispersync-banner';
 import { DanmakuOverlay } from './danmaku-overlay';
@@ -37,6 +38,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
     volume,
     sleepTimer,
     sleepTimerEndTime,
+    selectedVoiceId,
     togglePlay,
     seek,
     seekForward,
@@ -47,6 +49,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
     setPlaybackSpeed,
     setVolume,
     setSleepTimer,
+    setSelectedVoice,
   } = useAudioPlayerStore();
 
   const t = useTranslations('audiobooks');
@@ -163,7 +166,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                     />
                   </div>
 
-                  {/* Secondary Controls - aligned to iOS order: Speed / Timer / Volume */}
+                  {/* Secondary Controls - aligned to iOS order: Speed / Timer / Voice / Volume */}
                   <div className="mt-6 flex items-center gap-4">
                     <SpeedSelector
                       speed={playbackSpeed}
@@ -175,6 +178,14 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                       endTime={sleepTimerEndTime}
                       onSetTimer={setSleepTimer}
                     />
+
+                    {audiobook.availableVoices && audiobook.availableVoices.length > 1 && (
+                      <VoiceSelector
+                        voices={audiobook.availableVoices}
+                        selectedVoiceId={selectedVoiceId}
+                        onVoiceSelect={setSelectedVoice}
+                      />
+                    )}
 
                     <div className="relative ml-auto">
                       <Button

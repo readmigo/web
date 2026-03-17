@@ -1,16 +1,23 @@
-import type { SubscriptionTier, GatedFeature, FeatureAccessResult } from '../types';
+import type { SubscriptionTier, SubscriptionStatus, GatedFeature, FeatureAccessResult } from '../types';
 
 /**
  * Feature gating for v3.0 subscription strategy.
  * Books and offline reading are free for all users.
  * Audio (TTS + audiobook) has a daily cap for free users (tracked in store).
  * Pro = data sync + unlimited audio.
+ *
+ * Grace Period policy (Web): Pro features remain fully accessible during grace
+ * period to give users time to fix their payment. No functionality is blocked —
+ * only a UI warning banner is shown. This differs from iOS which restricts access.
  */
 export function checkFeatureAccess(
   tier: SubscriptionTier,
   feature: GatedFeature,
+  status?: SubscriptionStatus,
 ): FeatureAccessResult {
-  const isPro = tier === 'PRO' || tier === 'PREMIUM';
+  // During grace period, treat as Pro so no features are blocked
+  const isGracePeriod = status === 'GRACE_PERIOD';
+  const isPro = isGracePeriod || tier === 'PRO' || tier === 'PREMIUM';
 
   switch (feature) {
     case 'bookAccess':

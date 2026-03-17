@@ -398,6 +398,13 @@
       "unlimitedAudio": "Áudio ilimitado",
       "stats": "Estatísticas detalhadas",
       "templates": "Templates premium"
+    },
+    "expires": "Expira em",
+    "gracePeriod": {
+      "title": "O método de pagamento precisa ser atualizado",
+      "description": "Sua assinatura está em período de carência. Atualize seu método de pagamento para manter o acesso Pro.",
+      "descriptionWithDays": "Sua assinatura expira em {days} dia(s). Atualize seu método de pagamento para manter o acesso Pro.",
+      "fixPayment": "Corrigir pagamento"
     }
   },
   "onboarding": {
@@ -543,7 +550,20 @@
     "description": "Compartilhe perspectivas de leitura e descubra ótimas citações",
     "welcome": "Bem-vindo à Comunidade",
     "noActivity": "Nenhuma atividade ainda",
-    "noMore": "Você chegou ao fim"
+    "noMore": "Você chegou ao fim",
+    "createPost": "Criar publicação",
+    "postPlaceholder": "Compartilhe seus pensamentos de leitura...",
+    "postContent": "Conteúdo da publicação",
+    "publish": "Publicar",
+    "publishing": "Publicando...",
+    "charCount": "{count}/500",
+    "cancel": "Cancelar",
+    "comments": "Comentários",
+    "noComments": "Ainda não há comentários. Seja o primeiro!",
+    "writeComment": "Escreva um comentário...",
+    "send": "Enviar",
+    "deleteComment": "Excluir",
+    "confirmDelete": "Confirmar exclusão"
   },
   "explore": {
     "title": "Explorar livros",

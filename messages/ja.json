@@ -76,7 +76,11 @@
     "noDefinitionFound": "定義が見つかりません",
     "addToVocabulary": "単語帳に追加",
     "alreadyInVocabulary": "単語帳に登録済み",
-    "close": "閉じる"
+    "close": "閉じる",
+    "voiceSelector": "声を選択",
+    "selectVoice": "声を選択",
+    "previewVoice": "{name} をプレビュー",
+    "stopPreview": "プレビューを停止"
   },
   "category": {
     "backToBookstore": "書店に戻る",
@@ -394,6 +398,13 @@
       "unlimitedAudio": "無制限オーディオ",
       "stats": "詳細統計",
       "templates": "プレミアムテンプレート"
+    },
+    "expires": "有効期限",
+    "gracePeriod": {
+      "title": "お支払い方法の更新が必要です",
+      "description": "サブスクリプションは猶予期間中です。Pro アクセスを維持するには、お支払い方法を更新してください。",
+      "descriptionWithDays": "サブスクリプションはあと {days} 日で終了します。Pro アクセスを維持するには、お支払い方法を更新してください。",
+      "fixPayment": "支払いを修正"
     }
   },
   "onboarding": {
@@ -539,7 +550,20 @@
     "description": "読書の感想を共有し、素晴らしい名言を発見しよう",
     "welcome": "コミュニティへようこそ",
     "noActivity": "まだアクティビティはありません",
-    "noMore": "最後まで見ました"
+    "noMore": "最後まで見ました",
+    "createPost": "投稿を作成",
+    "postPlaceholder": "読書の感想を共有しよう...",
+    "postContent": "投稿内容",
+    "publish": "投稿する",
+    "publishing": "投稿中...",
+    "charCount": "{count}/500",
+    "cancel": "キャンセル",
+    "comments": "コメント",
+    "noComments": "まだコメントはありません。最初にコメントしよう！",
+    "writeComment": "コメントを書く...",
+    "send": "送信",
+    "deleteComment": "削除",
+    "confirmDelete": "削除を確認"
   },
   "explore": {
     "title": "書籍を探索",

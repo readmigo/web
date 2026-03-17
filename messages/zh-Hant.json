@@ -398,6 +398,13 @@
       "unlimitedAudio": "無限音頻",
       "stats": "詳細統計",
       "templates": "高級模板"
+    },
+    "expires": "到期",
+    "gracePeriod": {
+      "title": "支付方式需要更新",
+      "description": "您的訂閱正處於寬限期，請及時更新支付方式以保留 Pro 權益。",
+      "descriptionWithDays": "您的訂閱將在 {days} 天後到期，請及時更新支付方式以保留 Pro 權益。",
+      "fixPayment": "修復支付"
     }
   },
   "onboarding": {
@@ -543,7 +550,20 @@
     "description": "分享閱讀心得，發現精彩書摘",
     "welcome": "歡迎來到城邦",
     "noActivity": "還沒有任何動態",
-    "noMore": "已經到底啦"
+    "noMore": "已經到底啦",
+    "createPost": "發帖",
+    "postPlaceholder": "分享你的閱讀心得...",
+    "postContent": "帖子內容",
+    "publish": "發布",
+    "publishing": "發布中...",
+    "charCount": "{count}/500",
+    "cancel": "取消",
+    "comments": "評論",
+    "noComments": "還沒有評論，來第一個留言吧！",
+    "writeComment": "寫評論...",
+    "send": "發送",
+    "deleteComment": "刪除",
+    "confirmDelete": "確認刪除"
   },
   "explore": {
     "title": "探索書籍",

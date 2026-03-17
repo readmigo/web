@@ -14,6 +14,7 @@ import type {
   AudioPlayerActions,
   PlaybackSpeed,
   SleepTimerOption,
+  AudiobookVoice,
 } from '../types';
 
 interface AudioPlayerStore extends AudioPlayerState, AudioPlayerActions {}
@@ -122,6 +123,7 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
         duration: 0,
         playbackSpeed: 1.0,
         volume: 1,
+        selectedVoiceId: null,
         isMinimized: false,
         isVisible: false,
         sleepTimer: null,
@@ -341,6 +343,41 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
           }
         },
 
+        setSelectedVoice: async (voiceId: string) => {
+          const { audiobook, chapterIndex, playbackSpeed, isPlaying } = get();
+          if (!audiobook?.availableVoices) return;
+
+          const voice: AudiobookVoice | undefined = audiobook.availableVoices.find(
+            (v) => v.id === voiceId
+          );
+          if (!voice) return;
+
+          set({ selectedVoiceId: voiceId, isLoading: true, error: null });
+
+          // If the voice carries its own chapter list, swap it in
+          const chapters = voice.chapters ?? audiobook.chapters;
+          const chapter = chapters[chapterIndex];
+          if (!chapter) {
+            set({ isLoading: false });
+            return;
+          }
+
+          const updatedAudiobook: Audiobook = { ...audiobook, chapters };
+          set({ audiobook: updatedAudiobook, currentChapter: chapter });
+
+          const audioManager = getAudioManager();
+          try {
+            await audioManager.load(chapter.audioUrl);
+            audioManager.setPlaybackSpeed(playbackSpeed);
+            if (isPlaying) {
+              await audioManager.play();
+            }
+            set({ isLoading: false });
+          } catch (error) {
+            set({ error: (error as Error).message, isLoading: false });
+          }
+        },
+
         unloadAudiobook: () => {
           const audioManager = getAudioManager();
           audioManager.pause();
@@ -358,6 +395,7 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
             isBuffering: false,
             currentTime: 0,
             duration: 0,
+            selectedVoiceId: null,
             isVisible: false,
             isMinimized: false,
             sleepTimer: null,

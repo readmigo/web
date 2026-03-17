@@ -558,7 +558,20 @@
     "description": "分享阅读心得，发现精彩书摘",
     "welcome": "欢迎来到城邦",
     "noActivity": "还没有任何动态",
-    "noMore": "已经到底啦"
+    "noMore": "已经到底啦",
+    "createPost": "发帖",
+    "postPlaceholder": "分享你的阅读心得...",
+    "postContent": "帖子内容",
+    "publish": "发布",
+    "publishing": "发布中...",
+    "charCount": "{count}/500",
+    "cancel": "取消",
+    "comments": "评论",
+    "noComments": "还没有评论，来第一个留言吧！",
+    "writeComment": "写评论...",
+    "send": "发送",
+    "deleteComment": "删除",
+    "confirmDelete": "确认删除"
   },
   "explore": {
     "title": "探索书籍",

@@ -76,7 +76,11 @@
     "noDefinitionFound": "정의를 찾을 수 없습니다",
     "addToVocabulary": "단어장에 추가",
     "alreadyInVocabulary": "단어장에 있음",
-    "close": "닫기"
+    "close": "닫기",
+    "voiceSelector": "목소리 선택",
+    "selectVoice": "목소리 선택",
+    "previewVoice": "{name} 미리 듣기",
+    "stopPreview": "미리 듣기 중지"
   },
   "category": {
     "backToBookstore": "서점으로 돌아가기",
@@ -394,6 +398,13 @@
       "unlimitedAudio": "무제한 오디오",
       "stats": "상세 통계",
       "templates": "프리미엄 템플릿"
+    },
+    "expires": "만료",
+    "gracePeriod": {
+      "title": "결제 수단을 업데이트해야 합니다",
+      "description": "구독이 유예 기간 중입니다. Pro 이용을 유지하려면 결제 수단을 업데이트해 주세요.",
+      "descriptionWithDays": "구독이 {days}일 후 만료됩니다. Pro 이용을 유지하려면 결제 수단을 업데이트해 주세요.",
+      "fixPayment": "결제 수정"
     }
   },
   "onboarding": {
@@ -539,7 +550,20 @@
     "description": "독서 통찰을 공유하고 훌륭한 명언을 발견하세요",
     "welcome": "커뮤니티에 오신 것을 환영합니다",
     "noActivity": "아직 활동이 없습니다",
-    "noMore": "마지막까지 보셨습니다"
+    "noMore": "마지막까지 보셨습니다",
+    "createPost": "게시물 작성",
+    "postPlaceholder": "독서 생각을 공유하세요...",
+    "postContent": "게시물 내용",
+    "publish": "게시",
+    "publishing": "게시 중...",
+    "charCount": "{count}/500",
+    "cancel": "취소",
+    "comments": "댓글",
+    "noComments": "아직 댓글이 없습니다. 첫 번째 댓글을 남겨보세요!",
+    "writeComment": "댓글 작성...",
+    "send": "전송",
+    "deleteComment": "삭제",
+    "confirmDelete": "삭제 확인"
   },
   "explore": {
     "title": "책 탐색",

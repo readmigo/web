@@ -558,7 +558,20 @@
     "description": "Share reading insights and discover great quotes",
     "welcome": "Welcome to Community",
     "noActivity": "No activity yet",
-    "noMore": "You've reached the end"
+    "noMore": "You've reached the end",
+    "createPost": "Create Post",
+    "postPlaceholder": "Share your reading thoughts...",
+    "postContent": "Post content",
+    "publish": "Publish",
+    "publishing": "Publishing...",
+    "charCount": "{count}/500",
+    "cancel": "Cancel",
+    "comments": "Comments",
+    "noComments": "No comments yet. Be the first!",
+    "writeComment": "Write a comment...",
+    "send": "Send",
+    "deleteComment": "Delete",
+    "confirmDelete": "Confirm delete"
   },
   "explore": {
     "title": "Explore Books",
