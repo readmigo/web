@@ -130,6 +130,7 @@ interface ReaderActions {
   removeHighlight: (id: string, bookId: string) => void;
   updateHighlightNote: (id: string, bookId: string, note: string) => void;
   updateHighlightColor: (id: string, bookId: string, color: Highlight['color']) => void;
+  updateHighlightStyle: (id: string, bookId: string, style: Highlight['style']) => void;
   updateHighlightPosition: (id: string, bookId: string, data: {
     selectedText: string;
     startOffset: number;
@@ -488,6 +489,24 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
           addToOfflineQueue({
             type: 'update_highlight',
             data: { highlightId: id, bookId, color },
+          });
+        });
+      },
+
+      updateHighlightStyle: (id, bookId, style) => {
+        // Optimistic update
+        set((state) => ({
+          highlights: state.highlights.map((h) =>
+            h.id === id ? { ...h, style } : h
+          ),
+        }));
+
+        // Sync to backend
+        apiClient.patch(`/reading/highlights/${id}`, { style }).catch((error) => {
+          console.error('Failed to update highlight style:', error);
+          addToOfflineQueue({
+            type: 'update_highlight',
+            data: { highlightId: id, bookId, style },
           });
         });
       },

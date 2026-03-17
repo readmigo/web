@@ -60,6 +60,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     addBookmark,
     removeHighlight,
     updateHighlightColor,
+    updateHighlightStyle,
     updateHighlightPosition,
     syncHighlightsFromBackend,
     syncBookmarksFromBackend,
@@ -420,6 +421,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       id: h.id,
       selectedText: h.selectedText,
       color: h.color,
+      style: h.style,
       paragraphIndex: h.paragraphIndex,
       charOffset: h.charOffset,
       charLength: h.charLength,
@@ -432,6 +434,20 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       updateHighlightPosition(highlightId, bookId, data);
     },
     [bookId, updateHighlightPosition],
+  );
+
+  const handleHighlightColorChange = useCallback(
+    (highlightId: string, color: 'yellow' | 'green' | 'blue' | 'pink' | 'purple' | 'orange') => {
+      updateHighlightColor(highlightId, bookId, color);
+    },
+    [bookId, updateHighlightColor],
+  );
+
+  const handleHighlightStyleChange = useCallback(
+    (highlightId: string, style: 'underline' | 'wavy' | 'background' | 'bold_line') => {
+      updateHighlightStyle(highlightId, bookId, style);
+    },
+    [bookId, updateHighlightStyle],
   );
 
   const handleHighlightDelete = useCallback(
@@ -516,6 +532,8 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           highlights={bookHighlights}
           onHighlightUpdate={handleHighlightUpdate}
           onHighlightDelete={handleHighlightDelete}
+          onHighlightColorChange={handleHighlightColorChange}
+          onHighlightStyleChange={handleHighlightStyleChange}
         />
 
         {/* Selection Bottom Sheet */}

@@ -43,6 +43,7 @@ export interface HighlightItem {
   id: string;
   selectedText: string;
   color: 'yellow' | 'green' | 'blue' | 'pink' | 'purple' | 'orange';
+  style?: 'underline' | 'wavy' | 'background' | 'bold_line';
   paragraphIndex?: number;
   charOffset?: number;
   charLength?: number;
@@ -63,6 +64,8 @@ export interface HighlightOverlayProps {
   onHighlightClick?: (highlightId: string) => void;
   onHighlightUpdate?: (highlightId: string, data: HighlightUpdateData) => void;
   onHighlightDelete?: (highlightId: string) => void;
+  onHighlightColorChange?: (highlightId: string, color: HighlightItem['color']) => void;
+  onHighlightStyleChange?: (highlightId: string, style: NonNullable<HighlightItem['style']>) => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -84,6 +87,46 @@ function getColorCss(color: HighlightItem['color']): string {
 
 function getColorTailwind(color: HighlightItem['color']): string {
   return HIGHLIGHT_COLORS.find((c) => c.name === color)?.tailwind ?? HIGHLIGHT_COLORS[0].tailwind;
+}
+
+const HIGHLIGHT_STYLES: Array<{ name: NonNullable<HighlightItem['style']>; label: string }> = [
+  { name: 'background', label: 'Background' },
+  { name: 'underline', label: 'Underline' },
+  { name: 'wavy', label: 'Wavy' },
+  { name: 'bold_line', label: 'Bold line' },
+];
+
+function StyleIcon({ style, active }: { style: NonNullable<HighlightItem['style']>; active: boolean }) {
+  const color = active ? 'currentColor' : '#9ca3af';
+  if (style === 'background') {
+    return (
+      <svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true">
+        <rect x="1" y="2" width="20" height="12" rx="2" fill={color} />
+      </svg>
+    );
+  }
+  if (style === 'underline') {
+    return (
+      <svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true">
+        <text x="2" y="12" fontFamily="serif" fontSize="11" fill={color}>Aa</text>
+        <line x1="1" y1="15" x2="21" y2="15" stroke={color} strokeWidth="1.5" />
+      </svg>
+    );
+  }
+  if (style === 'wavy') {
+    return (
+      <svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true">
+        <text x="2" y="12" fontFamily="serif" fontSize="11" fill={color}>Aa</text>
+        <path d="M1 15 Q4 13 7 15 Q10 17 13 15 Q16 13 19 15 Q20 15.5 21 15" stroke={color} strokeWidth="1.5" fill="none" />
+      </svg>
+    );
+  }
+  return (
+    <svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true">
+      <text x="2" y="12" fontFamily="serif" fontSize="11" fill={color}>Aa</text>
+      <line x1="1" y1="15" x2="21" y2="15" stroke={color} strokeWidth="3" />
+    </svg>
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -213,6 +256,8 @@ export function HighlightOverlay({
   onHighlightClick,
   onHighlightUpdate,
   onHighlightDelete,
+  onHighlightColorChange,
+  onHighlightStyleChange,
 }: HighlightOverlayProps) {
   const [activeHighlightId, setActiveHighlightId] = useState<string | null>(null);
   const [handlePositions, setHandlePositions] = useState<{
@@ -540,56 +585,75 @@ export function HighlightOverlay({
           data-highlight-action-bar
           role="toolbar"
           aria-label="Highlight actions"
-          className="fixed z-50 flex items-center gap-1 rounded-lg border bg-popover p-1 shadow-lg"
+          className="fixed z-50 flex flex-col rounded-lg border bg-popover shadow-lg overflow-hidden"
           style={{
             left: actionBarPosition.x,
             top: actionBarPosition.y,
             transform: 'translate(-50%, calc(-100% - 8px))',
           }}
         >
-          {/* Color picker */}
-          <div className="flex items-center gap-0.5 pr-1 border-r" role="group" aria-label="Highlight color">
-            {HIGHLIGHT_COLORS.map((color) => (
+          {/* Style picker row */}
+          <div
+            className="flex items-center gap-0.5 px-1 py-1 border-b"
+            role="group"
+            aria-label="Highlight style"
+          >
+            {HIGHLIGHT_STYLES.map((s) => (
               <button
-                key={color.name}
+                key={s.name}
                 type="button"
-                aria-label={`Change highlight color to ${color.name}`}
-                aria-pressed={activeHighlight.color === color.name}
+                aria-label={`Change highlight style to ${s.label}`}
+                aria-pressed={activeHighlight.style === s.name}
                 className={cn(
-                  'h-5 w-5 rounded-full transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
-                  color.tailwind,
-                  activeHighlight.color === color.name && 'ring-2 ring-offset-1 ring-gray-600',
+                  'flex h-8 w-8 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  activeHighlight.style === s.name
+                    ? 'bg-accent text-foreground'
+                    : 'text-muted-foreground hover:bg-muted',
                 )}
                 onClick={() => {
-                  // Color change is surfaced via onHighlightUpdate with same position data
-                  if (!contentElement || !onHighlightUpdate) return;
-                  const range = findHighlightRange(contentElement, activeHighlight);
-                  if (!range) return;
-                  const positionData = extractPositionFromRange(range, contentElement);
-                  if (positionData) {
-                    onHighlightUpdate(activeHighlight.id, {
-                      selectedText: activeHighlight.selectedText,
-                      ...positionData,
-                    });
-                  }
+                  onHighlightStyleChange?.(activeHighlight.id, s.name);
                 }}
-              />
+              >
+                <StyleIcon style={s.name} active={activeHighlight.style === s.name} />
+              </button>
             ))}
           </div>
 
-          {/* Delete button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-7 w-7 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
-            aria-label="Delete highlight"
-            onClick={() => {
-              onHighlightDelete?.(activeHighlight.id);
-              setActiveHighlightId(null);
-            }}
-          >
-            <Trash2 className="h-4 w-4" aria-hidden="true" />
-          </Button>
+          {/* Color picker + delete row */}
+          <div className="flex items-center gap-1 p-1">
+            <div className="flex items-center gap-0.5 pr-1 border-r" role="group" aria-label="Highlight color">
+              {HIGHLIGHT_COLORS.map((color) => (
+                <button
+                  key={color.name}
+                  type="button"
+                  aria-label={`Change highlight color to ${color.name}`}
+                  aria-pressed={activeHighlight.color === color.name}
+                  className={cn(
+                    'h-5 w-5 rounded-full transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
+                    color.tailwind,
+                    activeHighlight.color === color.name && 'ring-2 ring-offset-1 ring-gray-600',
+                  )}
+                  onClick={() => {
+                    onHighlightColorChange?.(activeHighlight.id, color.name);
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Delete button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 w-7 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
+              aria-label="Delete highlight"
+              onClick={() => {
+                onHighlightDelete?.(activeHighlight.id);
+                setActiveHighlightId(null);
+              }}
+            >
+              <Trash2 className="h-4 w-4" aria-hidden="true" />
+            </Button>
+          </div>
         </div>
       )}
     </>
