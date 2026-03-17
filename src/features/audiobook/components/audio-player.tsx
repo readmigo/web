@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { ChevronDown, List, Volume2, VolumeX } from 'lucide-react';
+import { ChevronDown, List, Volume2, VolumeX, AlignLeft } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { useTranslations } from 'next-intl';
 import { useAudioPlayerStore, formatTime, formatDuration } from '../stores/audio-player-store';
@@ -19,6 +19,7 @@ import { VoiceSelector } from './voice-selector';
 import { ChapterList } from './chapter-list';
 import { WhispersyncToBook } from './whispersync-banner';
 import { DanmakuOverlay } from './danmaku-overlay';
+import { SyncedReaderView } from './synced-reader-view';
 
 interface AudioPlayerProps {
   isOpen: boolean;
@@ -54,6 +55,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
 
   const t = useTranslations('audiobooks');
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
+  const [activeTab, setActiveTab] = useState('player');
   const { book, hasBook, getBookChapterId } = useWhispersyncFromAudiobook(audiobook);
   const { data: danmakuData } = useDanmaku(audiobook?.id, currentChapter?.number);
   const sendDanmaku = useSendDanmaku();
@@ -86,7 +88,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
 
           {/* Main Content */}
           <div className="flex-1 overflow-hidden">
-            <Tabs defaultValue="player" className="flex h-full flex-col">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex h-full flex-col">
               <TabsContent value="player" className="flex-1 overflow-auto">
                 <div className="flex flex-col items-center px-6 py-8">
                   {/* Cover Art + Danmaku */}
@@ -243,6 +245,15 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                 />
               </TabsContent>
 
+              <TabsContent value="lyrics" className="flex-1 overflow-hidden">
+                <SyncedReaderView
+                  audiobookId={audiobook.id}
+                  chapterIndex={chapterIndex}
+                  currentTime={currentTime}
+                  isActive={activeTab === 'lyrics'}
+                  onSeek={seek}
+                />
+              </TabsContent>
 
               {/* Tab Navigation */}
               <TabsList className="flex-shrink-0 w-full justify-center rounded-none border-t">
@@ -252,6 +263,10 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                 <TabsTrigger value="chapters" className="flex-1">
                   <List className="mr-2 h-4 w-4" />
                   {t('chaptersTab')}
+                </TabsTrigger>
+                <TabsTrigger value="lyrics" className="flex-1">
+                  <AlignLeft className="mr-2 h-4 w-4" />
+                  {t('lyricsTab')}
                 </TabsTrigger>
               </TabsList>
             </Tabs>

@@ -80,7 +80,9 @@
     "voiceSelector": "Select voice",
     "selectVoice": "Select Voice",
     "previewVoice": "Preview {name}",
-    "stopPreview": "Stop preview"
+    "stopPreview": "Stop preview",
+    "lyricsTab": "Lyrics",
+    "loadingLyrics": "Loading text..."
   },
   "category": {
     "backToBookstore": "Back to Bookstore",
@@ -371,6 +373,10 @@
     "currentStreak": "Current Streak",
     "avgDaily": "Daily Average",
     "readingTrend": "Reading Trend",
+    "days7": "7D",
+    "days30": "30D",
+    "year1": "1Y",
+    "totalMinutes": "{minutes} min",
     "daysActive": "{count} days active",
     "avgPerDay": "Avg {minutes}min/day",
     "currentlyReading": "Currently Reading",

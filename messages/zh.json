@@ -80,7 +80,9 @@
     "voiceSelector": "选择声音",
     "selectVoice": "选择声音",
     "previewVoice": "预览 {name}",
-    "stopPreview": "停止预览"
+    "stopPreview": "停止预览",
+    "lyricsTab": "跟读",
+    "loadingLyrics": "加载文本中..."
   },
   "category": {
     "backToBookstore": "返回书城",
@@ -371,6 +373,10 @@
     "currentStreak": "连续阅读",
     "avgDaily": "日均阅读",
     "readingTrend": "阅读趋势",
+    "days7": "7天",
+    "days30": "30天",
+    "year1": "1年",
+    "totalMinutes": "{minutes} 分钟",
     "daysActive": "{count} 天活跃",
     "avgPerDay": "日均 {minutes} 分钟",
     "currentlyReading": "正在阅读",
