@@ -98,8 +98,8 @@ async function getStorageInfo(): Promise<OfflineStorageInfo | null> {
 }
 
 // Fetch chapter meta + HTML (mirrors iOS downloadChapter logic)
-async function fetchChapterContent(bookId: string, chapterId: string): Promise<string> {
-  const metaRes = await fetch(`/api/proxy/books/${bookId}/content/${chapterId}`, {
+async function fetchChapterContent(bookId: string, chapterId: string, quality: string = 'high'): Promise<string> {
+  const metaRes = await fetch(`/api/proxy/books/${bookId}/content/${chapterId}?quality=${quality}`, {
     credentials: 'same-origin',
     headers: { 'Content-Type': 'application/json' },
   });
@@ -154,7 +154,7 @@ export const useOfflineStore = create<OfflineState>()((set, get) => {
     }
   }
 
-  async function executeTask(task: DownloadTask, _settings: OfflineSettings): Promise<void> {
+  async function executeTask(task: DownloadTask, settings: OfflineSettings): Promise<void> {
     try {
       // Skip if already cached
       const already = await hasChapter(task.bookId, task.chapterId);
@@ -163,7 +163,7 @@ export const useOfflineStore = create<OfflineState>()((set, get) => {
         return;
       }
 
-      const html = await fetchChapterContent(task.bookId, task.chapterId);
+      const html = await fetchChapterContent(task.bookId, task.chapterId, settings.downloadQuality);
       await saveChapter(task.bookId, task.chapterId, html);
       completeTask(task.id, task.bookId);
     } catch (err) {

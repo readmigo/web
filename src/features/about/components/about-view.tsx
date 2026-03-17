@@ -1,7 +1,9 @@
 'use client';
 
-import { Info, Hammer, Star, MessageSquareWarning, Heart, FileText } from 'lucide-react';
+import { Info, Hammer, Star, MessageSquareWarning, FileText, Users, BookOpen, Heart } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { ChangelogSection } from './changelog-section';
+import { LicensesRow } from './licenses-dialog';
 
 const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0';
 const APP_BUILD = process.env.NEXT_PUBLIC_APP_BUILD || '1';
@@ -37,6 +39,9 @@ export function AboutView() {
           <span className="text-sm text-muted-foreground">{APP_BUILD}</span>
         </div>
       </div>
+
+      {/* G10: Changelog */}
+      <ChangelogSection />
 
       {/* Feedback */}
       <div className="rounded-xl border divide-y">
@@ -79,6 +84,62 @@ export function AboutView() {
           <FileText className="h-4 w-4 text-muted-foreground" />
           <span className="text-sm">{t('termsOfService')}</span>
         </a>
+        {/* G11: Open Source Licenses */}
+        <LicensesRow />
+      </div>
+
+      {/* G12: Acknowledgments */}
+      <div className="rounded-xl border divide-y">
+        <p className="px-4 py-2 text-xs font-medium text-muted-foreground uppercase">
+          {t('acknowledgments.title')}
+        </p>
+
+        {/* Team */}
+        <div className="px-4 py-3 space-y-1.5">
+          <div className="flex items-center gap-2 mb-1.5">
+            <Users className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="text-xs font-medium text-muted-foreground uppercase">
+              {t('acknowledgments.teamTitle')}
+            </span>
+          </div>
+          <p className="text-sm text-muted-foreground">{t('acknowledgments.team')}</p>
+        </div>
+
+        {/* Content Sources */}
+        <div className="px-4 py-3 space-y-1.5">
+          <div className="flex items-center gap-2 mb-1.5">
+            <BookOpen className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="text-xs font-medium text-muted-foreground uppercase">
+              {t('acknowledgments.contentTitle')}
+            </span>
+          </div>
+          <ul className="space-y-1">
+            {(['content1', 'content2', 'content3'] as const).map((key) => (
+              <li key={key} className="text-sm text-muted-foreground flex items-start gap-1.5">
+                <span className="mt-1.5 h-1 w-1 rounded-full bg-muted-foreground shrink-0" />
+                {t(`acknowledgments.${key}`)}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Special Thanks */}
+        <div className="px-4 py-3 space-y-1.5">
+          <div className="flex items-center gap-2 mb-1.5">
+            <Heart className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="text-xs font-medium text-muted-foreground uppercase">
+              {t('acknowledgments.specialTitle')}
+            </span>
+          </div>
+          <ul className="space-y-1">
+            {(['special1', 'special2', 'special3'] as const).map((key) => (
+              <li key={key} className="text-sm text-muted-foreground flex items-start gap-1.5">
+                <span className="mt-1.5 h-1 w-1 rounded-full bg-muted-foreground shrink-0" />
+                {t(`acknowledgments.${key}`)}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       {/* Footer */}

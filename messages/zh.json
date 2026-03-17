@@ -1256,7 +1256,12 @@
     "cellularWarning": "使用移动数据",
     "cellularWarningDesc": "使用移动数据下载可能产生费用，是否继续？",
     "doNotAskAgain": "不再提示",
-    "continueDownload": "继续"
+    "continueDownload": "继续",
+    "downloadQuality": "下载质量",
+    "downloadQualityDesc": "较低质量占用更少存储空间",
+    "qualityLow": "低",
+    "qualityMedium": "中",
+    "qualityHigh": "高"
   },
   "shareCard": {
     "title": "分享卡片",

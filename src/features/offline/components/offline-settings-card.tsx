@@ -80,6 +80,27 @@ export function OfflineSettingsCard() {
                   </SelectContent>
                 </Select>
               </div>
+
+              {/* G14: Download Quality */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label className="text-sm font-medium">{t('downloadQuality')}</Label>
+                  <p className="text-xs text-muted-foreground">{t('downloadQualityDesc')}</p>
+                </div>
+                <Select
+                  value={settings.downloadQuality}
+                  onValueChange={(v) => updateSettings({ downloadQuality: v as 'low' | 'medium' | 'high' })}
+                >
+                  <SelectTrigger className="w-28">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">{t('qualityLow')}</SelectItem>
+                    <SelectItem value="medium">{t('qualityMedium')}</SelectItem>
+                    <SelectItem value="high">{t('qualityHigh')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </>
           )}
         </div>

@@ -52,12 +52,15 @@ export interface DownloadTask {
 
 // MARK: - Offline Settings
 
+export type DownloadQuality = 'low' | 'medium' | 'high';
+
 export interface OfflineSettings {
   autoDownloadEnabled: boolean;
   downloadOnWifiOnly: boolean;
   maxStorageMB: number; // 0 = unlimited
   autoDeleteAfterDays: number; // 0 = never
   predownloadNextChapters: number;
+  downloadQuality: DownloadQuality;
 }
 
 export const DEFAULT_OFFLINE_SETTINGS: OfflineSettings = {
@@ -66,6 +69,7 @@ export const DEFAULT_OFFLINE_SETTINGS: OfflineSettings = {
   maxStorageMB: 1000, // 1GB
   autoDeleteAfterDays: 30,
   predownloadNextChapters: 3,
+  downloadQuality: 'high',
 };
 
 // MARK: - Storage Info

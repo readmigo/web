@@ -15,6 +15,16 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from '@/components/ui/alert-dialog';
 import { Slider } from '@/components/ui/slider';
 import {
   UserCircle,
@@ -33,6 +43,7 @@ import {
   Building2,
   Camera,
   Trash2,
+  Users,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ContinueReadingCard } from '@/features/library/components/continue-reading-card';
@@ -322,6 +333,9 @@ export function MeContent() {
   const hasFavorites = favoriteIds.size > 0;
   const hasMyContent = isAuthenticated && (hasHistory || hasFavorites);
 
+  // sign out dialog
+  const [signOutOpen, setSignOutOpen] = useState(false);
+
   // avatar state
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [rawImageSrc, setRawImageSrc] = useState<string | null>(null);
@@ -488,6 +502,14 @@ export function MeContent() {
       {/* 6. Community */}
       <MenuSection title={t('community')}>
         <MenuRow icon={Building2} iconColor="#A855F7" title={t('agora')} href="/community" />
+        {isAuthenticated && (
+          <MenuRow
+            icon={Users}
+            iconColor="#6366F1"
+            title={t('followingAuthors')}
+            href="/author/following"
+          />
+        )}
       </MenuSection>
 
       {/* 7. Other */}
@@ -520,13 +542,32 @@ export function MeContent() {
             icon={LogOut}
             title={t('signOut')}
             destructive
-            onClick={() => {
-              clearUserData();
-              window.location.href = '/api/auth/signout';
-            }}
+            onClick={() => setSignOutOpen(true)}
           />
         </MenuSection>
       )}
+
+      {/* G13: Sign Out Confirmation Dialog */}
+      <AlertDialog open={signOutOpen} onOpenChange={setSignOutOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('signOutConfirmTitle')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('signOutConfirmDesc')}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('signOutCancel')}</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => {
+                clearUserData();
+                window.location.href = '/api/auth/signout';
+              }}
+            >
+              {t('signOutConfirm')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
