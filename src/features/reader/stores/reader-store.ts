@@ -176,6 +176,7 @@ const defaultSettings: ReaderSettings = {
   textIndent: 0,
   fontWeight: 'regular',
   appearanceMode: 'auto',
+  readingMode: 'paginated',
 };
 
 const MAX_TRANSLATIONS_PER_BOOK = 1000;

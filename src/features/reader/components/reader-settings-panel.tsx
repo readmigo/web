@@ -195,6 +195,29 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
 
         <Separator />
 
+        {/* Reading Mode */}
+        <div className="space-y-3">
+          <span className="text-sm font-medium">{t('readingMode')}</span>
+          <div className="flex gap-2">
+            {([
+              { value: 'paginated', label: t('readingModePaginated') },
+              { value: 'scrolling', label: t('readingModeScrolling') },
+            ] as const).map((mode) => (
+              <Button
+                key={mode.value}
+                variant={settings.readingMode === mode.value ? 'secondary' : 'outline'}
+                size="sm"
+                onClick={() => updateSettings({ readingMode: mode.value })}
+                className="flex-1"
+              >
+                {mode.label}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        <Separator />
+
         {/* Text Alignment */}
         <div className="space-y-3">
           <span className="text-sm font-medium">{t('textAlign')}</span>

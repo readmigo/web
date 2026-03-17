@@ -10,6 +10,7 @@ import { HighlightOverlay } from '@/features/reader/components/highlight-overlay
 import { TranslationSheet } from '@/features/reader/components/translation-sheet';
 import { ReadingStatsOverlay } from '@/features/reader/components/reading-stats-overlay';
 import { ReaderGuideOverlay } from '@/features/reader/components/reader-guide-overlay';
+import { ImageViewer } from '@/features/reader/components/image-viewer';
 import { TTSControls, MiniTTSControls } from '@/features/reader/components/tts-controls';
 import { TimelinePanel } from '@/features/reader/components/timeline-panel';
 import { KeyboardShortcutsDialog } from '@/components/shared/keyboard-shortcuts-dialog';
@@ -74,6 +75,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   const [showControls, setShowControls] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
   const [translationText, setTranslationText] = useState<string | null>(null);
+  const [imageViewerState, setImageViewerState] = useState<{ images: string[]; index: number } | null>(null);
   const [contentElement, setContentElement] = useState<HTMLElement | null>(null);
   const showControlsRef = useRef(false);
   const autoHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -408,6 +410,10 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     setTranslationText(text);
   }, []);
 
+  const handleImageClick = useCallback((images: string[], index: number) => {
+    setImageViewerState({ images, index });
+  }, []);
+
   // Get highlights for the current book, filtered for HighlightOverlay
   const bookHighlights = useMemo(
     () => getHighlightsForBook(bookId).map((h) => ({
@@ -501,6 +507,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           onTextSelect={handleTextSelect}
           onTocLoaded={setTocItems}
           onParagraphClick={handleParagraphClick}
+          onImageClick={handleImageClick}
         />
 
         {/* Highlight overlay with drag handles */}
@@ -601,6 +608,15 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         <ReaderGuideOverlay
           onComplete={handleGuideComplete}
           onSkip={handleGuideComplete}
+        />
+      )}
+
+      {/* Full-screen image viewer */}
+      {imageViewerState && (
+        <ImageViewer
+          images={imageViewerState.images}
+          initialIndex={imageViewerState.index}
+          onClose={() => setImageViewerState(null)}
         />
       )}
     </div>

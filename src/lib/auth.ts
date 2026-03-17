@@ -300,7 +300,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }) {
       if (session.user) {
         session.user.id = (token.backendUserId as string) || (token.sub as string);
-        session.user.isNewUser = token.isNewUser;
+        session.user.isNewUser = token.isNewUser as boolean | undefined;
       }
       // Tokens are kept server-side only (in the JWT cookie managed by NextAuth).
       // They are NOT exposed to the client session for security.

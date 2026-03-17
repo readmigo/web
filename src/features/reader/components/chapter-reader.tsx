@@ -36,6 +36,8 @@ interface ChapterReaderProps {
   onTextSelect?: (selection: SelectedText) => void;
   onTocLoaded?: (toc: TocItem[]) => void;
   onParagraphClick?: (text: string) => void;
+  /** Called when a reader-engine image is clicked. Provides all image srcs in the chapter and the clicked index. */
+  onImageClick?: (images: string[], index: number) => void;
 }
 
 interface ChapterContentResponse {
@@ -70,7 +72,7 @@ function mapSettings(
     textAlign: s.textAlign,
     hyphenation: s.hyphenation,
     theme: resolvedTheme,
-    readingMode: 'paginated',
+    readingMode: s.readingMode === 'scrolling' ? 'scroll' : 'paginated',
     margin: marginMap[s.marginSize] || 40,
     columnCount: s.columnCount,
     textIndent: s.textIndent,
@@ -83,7 +85,7 @@ function mapSettings(
 }
 
 export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>(
-  function ChapterReader({ bookId, chapters, initialChapterIndex, onReady, onTextSelect, onTocLoaded, onParagraphClick }, ref) {
+  function ChapterReader({ bookId, chapters, initialChapterIndex, onReady, onTextSelect, onTocLoaded, onParagraphClick, onImageClick }, ref) {
     const t = useTranslations('reader');
     const containerRef = useRef<HTMLDivElement>(null);
     const rendererRef = useRef<ChapterRenderer | null>(null);
@@ -114,6 +116,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
     const onTocLoadedRef = useRef(onTocLoaded);
     const onReadyRef = useRef(onReady);
     const onParagraphClickRef = useRef(onParagraphClick);
+    const onImageClickRef = useRef(onImageClick);
     const settingsRef = useRef(settings);
 
     useEffect(() => { bookIdRef.current = bookId; }, [bookId]);
@@ -121,6 +124,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
     useEffect(() => { onTocLoadedRef.current = onTocLoaded; }, [onTocLoaded]);
     useEffect(() => { onReadyRef.current = onReady; }, [onReady]);
     useEffect(() => { onParagraphClickRef.current = onParagraphClick; }, [onParagraphClick]);
+    useEffect(() => { onImageClickRef.current = onImageClick; }, [onImageClick]);
     useEffect(() => { settingsRef.current = settings; }, [settings]);
 
     const systemIsDarkRef = useRef(systemIsDark);
@@ -501,12 +505,27 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
         if (selection && selection.toString().trim()) cancelLongPress();
       };
 
+      // Image click — opens the full-screen viewer
+      const handleImgClick = (event: MouseEvent) => {
+        if (!(event.target instanceof HTMLImageElement)) return;
+        // Collect all img srcs in the chapter content
+        const allImgs = Array.from(contentEl.querySelectorAll('img')) as HTMLImageElement[];
+        const srcs = allImgs.map((img) => img.src).filter(Boolean);
+        if (!srcs.length) return;
+        const clickedSrc = (event.target as HTMLImageElement).src;
+        const index = srcs.indexOf(clickedSrc);
+        onImageClickRef.current?.(srcs, Math.max(0, index));
+        // Stop propagation so the click doesn't bubble into paragraph handlers
+        event.stopPropagation();
+      };
+
       contentEl.addEventListener('pointerdown', handlePointerDown);
       contentEl.addEventListener('pointermove', handlePointerMove);
       contentEl.addEventListener('pointerup', handlePointerUp);
       contentEl.addEventListener('pointercancel', handlePointerUp);
       contentEl.addEventListener('click', handleClick);
       contentEl.addEventListener('dblclick', handleDoubleClick);
+      contentEl.addEventListener('click', handleImgClick);
       document.addEventListener('selectionchange', handleSelectionChange);
 
       return () => {
@@ -516,6 +535,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
         contentEl.removeEventListener('pointercancel', handlePointerUp);
         contentEl.removeEventListener('click', handleClick);
         contentEl.removeEventListener('dblclick', handleDoubleClick);
+        contentEl.removeEventListener('click', handleImgClick);
         document.removeEventListener('selectionchange', handleSelectionChange);
         if (clickTimer) clearTimeout(clickTimer);
       };
