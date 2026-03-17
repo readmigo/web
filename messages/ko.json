@@ -404,6 +404,42 @@
       "templates": "프리미엄 템플릿"
     },
     "expires": "만료",
+    "close": "Close",
+    "selectPlan": "Select a plan",
+    "checkoutError": "Failed to start checkout. Please try again.",
+    "cancelSubscription": "Cancel subscription",
+    "restore": {
+      "success": "Purchase restored successfully.",
+      "error": "Could not restore purchase.",
+      "contactSupport": "Contact support"
+    },
+    "cancelDialog": {
+      "step1Title": "Are you sure you want to cancel?",
+      "loseAccess": "You will lose access to these Pro features:",
+      "keepPro": "Keep Pro",
+      "continueCancelling": "Continue cancelling",
+      "step2Title": "Why are you cancelling?",
+      "step2Desc": "Your feedback helps us improve. Please select a reason.",
+      "confirm": "Confirm cancellation",
+      "cancelling": "Cancelling...",
+      "back": "Back",
+      "error": "Something went wrong. Please try again.",
+      "features": {
+        "dataSync": "Cross-Device Sync",
+        "cloudBackup": "Cloud Backup",
+        "unlimitedAudio": "Unlimited Audio",
+        "stats": "Detailed Stats",
+        "templates": "Premium Templates"
+      },
+      "reasons": {
+        "too_expensive": "Too expensive",
+        "not_enough_content": "Not enough content",
+        "found_alternative": "Found a better alternative",
+        "technical_issues": "Technical issues",
+        "not_using_enough": "Not using it enough",
+        "other": "Other reason"
+      }
+    },
     "gracePeriod": {
       "title": "결제 수단을 업데이트해야 합니다",
       "description": "구독이 유예 기간 중입니다. Pro 이용을 유지하려면 결제 수단을 업데이트해 주세요.",
@@ -876,5 +912,12 @@
     "statusPaused": "일시정지됨",
     "statusCompleted": "다운로드 완료",
     "statusFailed": "실패"
+  },
+  "shareCard": {
+    "title": "인용구 공유",
+    "theme": "테마",
+    "copyText": "텍스트 복사",
+    "saveImage": "이미지 저장",
+    "share": "공유"
   }
 }

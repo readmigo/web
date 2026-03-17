@@ -404,6 +404,42 @@
       "templates": "Премиум-шаблоны"
     },
     "expires": "Истекает",
+    "close": "Close",
+    "selectPlan": "Select a plan",
+    "checkoutError": "Failed to start checkout. Please try again.",
+    "cancelSubscription": "Cancel subscription",
+    "restore": {
+      "success": "Purchase restored successfully.",
+      "error": "Could not restore purchase.",
+      "contactSupport": "Contact support"
+    },
+    "cancelDialog": {
+      "step1Title": "Are you sure you want to cancel?",
+      "loseAccess": "You will lose access to these Pro features:",
+      "keepPro": "Keep Pro",
+      "continueCancelling": "Continue cancelling",
+      "step2Title": "Why are you cancelling?",
+      "step2Desc": "Your feedback helps us improve. Please select a reason.",
+      "confirm": "Confirm cancellation",
+      "cancelling": "Cancelling...",
+      "back": "Back",
+      "error": "Something went wrong. Please try again.",
+      "features": {
+        "dataSync": "Cross-Device Sync",
+        "cloudBackup": "Cloud Backup",
+        "unlimitedAudio": "Unlimited Audio",
+        "stats": "Detailed Stats",
+        "templates": "Premium Templates"
+      },
+      "reasons": {
+        "too_expensive": "Too expensive",
+        "not_enough_content": "Not enough content",
+        "found_alternative": "Found a better alternative",
+        "technical_issues": "Technical issues",
+        "not_using_enough": "Not using it enough",
+        "other": "Other reason"
+      }
+    },
     "gracePeriod": {
       "title": "Способ оплаты требует обновления",
       "description": "Ваша подписка находится в льготном периоде. Обновите способ оплаты, чтобы сохранить доступ Pro.",
@@ -876,5 +912,12 @@
     "statusPaused": "Приостановлено",
     "statusCompleted": "Скачано",
     "statusFailed": "Ошибка"
+  },
+  "shareCard": {
+    "title": "Поделиться цитатой",
+    "theme": "Тема",
+    "copyText": "Копировать текст",
+    "saveImage": "Сохранить изображение",
+    "share": "Поделиться"
   }
 }

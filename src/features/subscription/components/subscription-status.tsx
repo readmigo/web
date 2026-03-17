@@ -1,11 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AlertTriangle, Crown, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import { useSubscription } from '../hooks/use-subscription';
 import { useTranslations } from 'next-intl';
+import { CancelSubscriptionDialog } from './cancel-subscription-dialog';
 
 function daysUntil(dateStr: string): number {
   const diff = new Date(dateStr).getTime() - Date.now();
@@ -49,6 +51,7 @@ function GracePeriodBanner({ expiresAt }: GracePeriodBannerProps) {
 export function SubscriptionStatus() {
   const { isPro, status, expiresAt, willRenew, isLoading } = useSubscription();
   const t = useTranslations('subscription');
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -66,7 +69,7 @@ export function SubscriptionStatus() {
       <div className="flex items-center gap-2">
         {isPro ? (
           <Badge className="bg-gradient-to-r from-purple-600 to-pink-500 text-white border-0">
-            <Crown className="mr-1 h-3 w-3" />
+            <Crown className="mr-1 h-3 w-3" aria-hidden="true" />
             Pro
           </Badge>
         ) : (
@@ -76,7 +79,7 @@ export function SubscriptionStatus() {
           <span className="text-xs text-muted-foreground">
             {willRenew ? (
               <>
-                <RefreshCw className="inline mr-0.5 h-3 w-3" />
+                <RefreshCw className="inline mr-0.5 h-3 w-3" aria-hidden="true" />
                 {new Date(expiresAt).toLocaleDateString()}
               </>
             ) : (
@@ -85,6 +88,21 @@ export function SubscriptionStatus() {
           </span>
         )}
       </div>
+
+      {isPro && status === 'ACTIVE' && (
+        <>
+          <button
+            className="self-start text-xs text-muted-foreground underline-offset-2 hover:text-destructive hover:underline transition-colors"
+            onClick={() => setCancelDialogOpen(true)}
+          >
+            {t('cancelSubscription')}
+          </button>
+          <CancelSubscriptionDialog
+            open={cancelDialogOpen}
+            onOpenChange={setCancelDialogOpen}
+          />
+        </>
+      )}
     </div>
   );
 }

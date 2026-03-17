@@ -404,6 +404,42 @@
       "templates": "Plantillas premium"
     },
     "expires": "Expira",
+    "close": "Close",
+    "selectPlan": "Select a plan",
+    "checkoutError": "Failed to start checkout. Please try again.",
+    "cancelSubscription": "Cancel subscription",
+    "restore": {
+      "success": "Purchase restored successfully.",
+      "error": "Could not restore purchase.",
+      "contactSupport": "Contact support"
+    },
+    "cancelDialog": {
+      "step1Title": "Are you sure you want to cancel?",
+      "loseAccess": "You will lose access to these Pro features:",
+      "keepPro": "Keep Pro",
+      "continueCancelling": "Continue cancelling",
+      "step2Title": "Why are you cancelling?",
+      "step2Desc": "Your feedback helps us improve. Please select a reason.",
+      "confirm": "Confirm cancellation",
+      "cancelling": "Cancelling...",
+      "back": "Back",
+      "error": "Something went wrong. Please try again.",
+      "features": {
+        "dataSync": "Cross-Device Sync",
+        "cloudBackup": "Cloud Backup",
+        "unlimitedAudio": "Unlimited Audio",
+        "stats": "Detailed Stats",
+        "templates": "Premium Templates"
+      },
+      "reasons": {
+        "too_expensive": "Too expensive",
+        "not_enough_content": "Not enough content",
+        "found_alternative": "Found a better alternative",
+        "technical_issues": "Technical issues",
+        "not_using_enough": "Not using it enough",
+        "other": "Other reason"
+      }
+    },
     "gracePeriod": {
       "title": "El método de pago necesita actualizarse",
       "description": "Tu suscripción está en período de gracia. Actualiza tu método de pago para mantener el acceso Pro.",
@@ -876,5 +912,12 @@
     "statusPaused": "Pausado",
     "statusCompleted": "Descargado",
     "statusFailed": "Fallido"
+  },
+  "shareCard": {
+    "title": "Compartir cita",
+    "theme": "Tema",
+    "copyText": "Copiar texto",
+    "saveImage": "Guardar imagen",
+    "share": "Compartir"
   }
 }

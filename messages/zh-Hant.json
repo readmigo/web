@@ -876,5 +876,12 @@
     "statusPaused": "已暫停",
     "statusCompleted": "已下載",
     "statusFailed": "失敗"
+  },
+  "shareCard": {
+    "title": "分享卡片",
+    "theme": "主題",
+    "copyText": "複製文字",
+    "saveImage": "儲存圖片",
+    "share": "分享"
   }
 }
