@@ -44,6 +44,14 @@ export function Footer() {
           >
             {t('website')}
           </a>
+          <a
+            href="https://x.com/readmigo_app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-foreground"
+          >
+            X
+          </a>
         </div>
       </div>
     </footer>
