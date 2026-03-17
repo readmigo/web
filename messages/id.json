@@ -522,6 +522,19 @@
       "stats": "Statistik Terperinci",
       "templates": "Template Premium"
     },
+    "freeFeatures": {
+      "title": "Sudah gratis",
+      "browseLibrary": "Jelajahi perpustakaan",
+      "dailyAudio": "30 mnt audio/hari",
+      "aiBasic": "Asisten AI dasar"
+    },
+    "promoCode": {
+      "cta": "Punya kode promo?",
+      "placeholder": "Masukkan kode promo",
+      "apply": "Terapkan",
+      "success": "Kode diterapkan! Langganan Anda aktif.",
+      "error": "Kode tidak valid atau kadaluarsa. Coba lagi."
+    },
     "expires": "Berakhir",
     "close": "Close",
     "selectPlan": "Select a plan",

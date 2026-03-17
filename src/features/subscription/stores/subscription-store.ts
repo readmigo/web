@@ -18,6 +18,11 @@ interface SubscriptionStoreState {
   isLoading: boolean;
   dailyAudioSeconds: number;
   dailyAudioDate: string;
+  /** Timestamp (ms) recorded when the daily usage counter was last reset.
+   *  Used to guard against system-clock manipulation: we only allow a reset
+   *  when the calendar date has changed AND at least 20 hours have elapsed
+   *  since the previous reset. */
+  dailyAudioResetAt: number;
 
   setSubscription: (state: SubscriptionState) => void;
   setLoading: (loading: boolean) => void;
@@ -37,6 +42,7 @@ export const useSubscriptionStore = create<SubscriptionStoreState>()(
       isLoading: false,
       dailyAudioSeconds: 0,
       dailyAudioDate: todayISO(),
+      dailyAudioResetAt: 0,
 
       setSubscription: (state) =>
         set({
@@ -54,7 +60,7 @@ export const useSubscriptionStore = create<SubscriptionStoreState>()(
         set({ dailyAudioSeconds: seconds, dailyAudioDate: date }),
 
       resetDailyAudioUsage: () =>
-        set({ dailyAudioSeconds: 0, dailyAudioDate: todayISO() }),
+        set({ dailyAudioSeconds: 0, dailyAudioDate: todayISO(), dailyAudioResetAt: Date.now() }),
 
       reset: () =>
         set({
@@ -66,6 +72,7 @@ export const useSubscriptionStore = create<SubscriptionStoreState>()(
           willRenew: false,
           dailyAudioSeconds: 0,
           dailyAudioDate: todayISO(),
+          dailyAudioResetAt: 0,
         }),
     }),
     {
@@ -79,6 +86,7 @@ export const useSubscriptionStore = create<SubscriptionStoreState>()(
         willRenew: state.willRenew,
         dailyAudioSeconds: state.dailyAudioSeconds,
         dailyAudioDate: state.dailyAudioDate,
+        dailyAudioResetAt: state.dailyAudioResetAt,
       }),
     },
   ),

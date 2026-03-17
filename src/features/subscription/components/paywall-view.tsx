@@ -20,6 +20,11 @@ import {
   Loader2,
   AlertTriangle,
   AlertCircle,
+  BookOpen,
+  Clock,
+  MessageCircle,
+  Tag,
+  ChevronDown,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { apiClient } from '@/lib/api/client';
@@ -35,7 +40,14 @@ const PRO_FEATURES = [
   { icon: Palette, labelKey: 'features.templates' },
 ] as const;
 
+const FREE_FEATURES = [
+  { icon: BookOpen, labelKey: 'freeFeatures.browseLibrary' },
+  { icon: Clock, labelKey: 'freeFeatures.dailyAudio' },
+  { icon: MessageCircle, labelKey: 'freeFeatures.aiBasic' },
+] as const;
+
 type RestoreState = 'idle' | 'loading' | 'success' | 'error';
+type PromoState = 'idle' | 'loading' | 'success' | 'error';
 
 interface PaywallViewProps {
   trigger?: PaywallTrigger;
@@ -48,14 +60,34 @@ export function PaywallView({ trigger = 'general', onDismiss }: PaywallViewProps
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionPeriod>('yearly');
   const [restoreState, setRestoreState] = useState<RestoreState>('idle');
 
+  // C15: Promo code state
+  const [promoOpen, setPromoOpen] = useState(false);
+  const [promoCode, setPromoCode] = useState('');
+  const [promoState, setPromoState] = useState<PromoState>('idle');
+  const [promoError, setPromoError] = useState('');
+
   const { plans, isLoading: plansLoading } = useSubscriptionPlans();
   const { createCheckoutSession, isPending: checkoutPending, isError: checkoutError, error: checkoutErrorData } = useCheckout();
 
   const selected = plans.find((p) => p.id === selectedPlan) ?? plans[0];
 
+  // C14: plan_selected event fires when user picks a plan
+  const handlePlanSelect = useCallback((planId: SubscriptionPeriod) => {
+    const plan = plans.find((p) => p.id === planId);
+    trackEvent('plan_selected', {
+      plan_id: planId,
+      price: plan?.priceDisplay ?? '',
+      source: trigger,
+    });
+    setSelectedPlan(planId);
+  }, [plans, trigger]);
+
+  // C14: purchase_initiated with plan_id and price
   const handleSubscribe = useCallback(() => {
+    const plan = plans.find((p) => p.id === selectedPlan);
     trackEvent('purchase_initiated', {
-      plan: selectedPlan,
+      plan_id: selectedPlan,
+      price: plan?.priceDisplay ?? '',
       source: trigger,
     });
 
@@ -64,7 +96,7 @@ export function PaywallView({ trigger = 'general', onDismiss }: PaywallViewProps
       successUrl: window.location.href,
       cancelUrl: window.location.href,
     });
-  }, [selectedPlan, trigger, createCheckoutSession]);
+  }, [selectedPlan, trigger, createCheckoutSession, plans]);
 
   const restoreMutation = useMutation({
     mutationFn: async () => {
@@ -74,7 +106,8 @@ export function PaywallView({ trigger = 'general', onDismiss }: PaywallViewProps
       setRestoreState('loading');
     },
     onSuccess: async () => {
-      trackEvent('restore_purchases_success', { source: trigger });
+      // C14: subscription_restored event
+      trackEvent('subscription_restored', { source: trigger });
       await queryClient.invalidateQueries({ queryKey: ['subscription', 'status'] });
       setRestoreState('success');
       // Close paywall after a brief moment so user sees success feedback
@@ -92,10 +125,39 @@ export function PaywallView({ trigger = 'general', onDismiss }: PaywallViewProps
     restoreMutation.mutate();
   }, [restoreState, restoreMutation]);
 
+  // C15: promo code redemption
+  const promoMutation = useMutation({
+    mutationFn: async (code: string) => {
+      await apiClient.post('/subscriptions/redeem-promo', { code });
+    },
+    onMutate: () => {
+      setPromoState('loading');
+      setPromoError('');
+    },
+    onSuccess: async () => {
+      setPromoState('success');
+      await queryClient.invalidateQueries({ queryKey: ['subscription', 'status'] });
+      setTimeout(onDismiss, 1500);
+    },
+    onError: (err: Error) => {
+      setPromoState('error');
+      setPromoError(err.message ?? t('promoCode.error'));
+    },
+  });
+
+  const handlePromoSubmit = useCallback(() => {
+    const trimmed = promoCode.trim();
+    if (!trimmed || promoState === 'loading') return;
+    promoMutation.mutate(trimmed);
+  }, [promoCode, promoState, promoMutation]);
+
   // Track view
   useState(() => {
     trackEvent('paywall_viewed', { source: trigger });
   });
+
+  // C16: only show shimmer when button is in idle state
+  const isButtonIdle = !checkoutPending && !plansLoading;
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center">
@@ -138,7 +200,7 @@ export function PaywallView({ trigger = 'general', onDismiss }: PaywallViewProps
           </div>
         </div>
 
-        {/* Features */}
+        {/* Pro Features grid */}
         <div className="mt-5 grid grid-cols-2 gap-2">
           {PRO_FEATURES.map(({ icon: Icon, labelKey }) => (
             <div key={labelKey} className="flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-2">
@@ -146,6 +208,24 @@ export function PaywallView({ trigger = 'general', onDismiss }: PaywallViewProps
               <span className="text-xs">{t(labelKey)}</span>
             </div>
           ))}
+        </div>
+
+        {/* C13: What's already free block */}
+        <div className="mt-3">
+          <p className="mb-1.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground/70">
+            {t('freeFeatures.title')}
+          </p>
+          <div className="grid grid-cols-3 gap-1.5">
+            {FREE_FEATURES.map(({ icon: Icon, labelKey }) => (
+              <div
+                key={labelKey}
+                className="flex flex-col items-center gap-1 rounded-lg border border-border/50 bg-muted/20 px-2 py-2 text-center"
+              >
+                <Icon className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0" aria-hidden="true" />
+                <span className="text-[10px] text-muted-foreground/70 leading-tight">{t(labelKey)}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Plan selector */}
@@ -169,7 +249,7 @@ export function PaywallView({ trigger = 'general', onDismiss }: PaywallViewProps
                       ? 'border-primary bg-primary/5'
                       : 'border-muted hover:border-muted-foreground/30',
                   )}
-                  onClick={() => setSelectedPlan(plan.id)}
+                  onClick={() => handlePlanSelect(plan.id)}
                 >
                   {plan.isBestValue && (
                     <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-primary px-2 py-0.5 text-[10px] font-medium text-primary-foreground flex items-center gap-0.5">
@@ -212,12 +292,18 @@ export function PaywallView({ trigger = 'general', onDismiss }: PaywallViewProps
           </div>
         )}
 
-        {/* Subscribe button */}
+        {/* C16: Subscribe button with shimmer in idle state */}
         <Button
-          className="mt-5 h-12 w-full text-base bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white border-0"
+          className="relative mt-5 h-12 w-full overflow-hidden text-base bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white border-0"
           onClick={handleSubscribe}
           disabled={checkoutPending || plansLoading}
         >
+          {isButtonIdle && (
+            <span
+              className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_2.5s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent"
+              aria-hidden="true"
+            />
+          )}
           {checkoutPending ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
@@ -251,6 +337,59 @@ export function PaywallView({ trigger = 'general', onDismiss }: PaywallViewProps
             </a>
           </p>
         )}
+
+        {/* C15: Promo code entry */}
+        <div className="mt-3">
+          {!promoOpen ? (
+            <button
+              className="flex w-full items-center justify-center gap-1 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
+              onClick={() => setPromoOpen(true)}
+            >
+              <Tag className="h-3 w-3" aria-hidden="true" />
+              {t('promoCode.cta')}
+              <ChevronDown className="h-3 w-3" aria-hidden="true" />
+            </button>
+          ) : (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={promoCode}
+                onChange={(e) => setPromoCode(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') handlePromoSubmit(); }}
+                placeholder={t('promoCode.placeholder')}
+                aria-label={t('promoCode.placeholder')}
+                disabled={promoState === 'loading' || promoState === 'success'}
+                className="h-9 flex-1 rounded-lg border border-border bg-background px-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
+              />
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-9 shrink-0"
+                onClick={handlePromoSubmit}
+                disabled={!promoCode.trim() || promoState === 'loading' || promoState === 'success'}
+                aria-busy={promoState === 'loading'}
+              >
+                {promoState === 'loading' ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+                ) : promoState === 'success' ? (
+                  <Check className="h-3.5 w-3.5 text-green-600" aria-hidden="true" />
+                ) : (
+                  t('promoCode.apply')
+                )}
+              </Button>
+            </div>
+          )}
+          {promoState === 'success' && (
+            <p className="mt-1.5 text-center text-xs text-green-600" role="status">
+              {t('promoCode.success')}
+            </p>
+          )}
+          {promoState === 'error' && promoError && (
+            <p className="mt-1.5 text-center text-xs text-destructive" role="alert">
+              {promoError}
+            </p>
+          )}
+        </div>
 
         {/* Legal */}
         <div className="mt-3 flex items-center justify-center gap-3 text-[10px] text-muted-foreground">

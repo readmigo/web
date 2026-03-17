@@ -522,6 +522,19 @@
       "stats": "詳細統計",
       "templates": "プレミアムテンプレート"
     },
+    "freeFeatures": {
+      "title": "すでに無料",
+      "browseLibrary": "ライブラリを閲覧",
+      "dailyAudio": "30分音声/日",
+      "aiBasic": "基本AIアシスタント"
+    },
+    "promoCode": {
+      "cta": "プロモコードをお持ちですか？",
+      "placeholder": "プロモコードを入力",
+      "apply": "適用",
+      "success": "コードを適用しました！サブスクリプションが有効になりました。",
+      "error": "無効または期限切れのコードです。もう一度お試しください。"
+    },
     "expires": "有効期限",
     "close": "Close",
     "selectPlan": "Select a plan",

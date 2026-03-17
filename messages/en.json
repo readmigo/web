@@ -157,7 +157,11 @@
       "confirm": "Confirm",
       "zoom": "Zoom"
     },
-    "subscriptionPro": "Pro Member"
+    "subscriptionPro": "Pro Member",
+    "signOutConfirmTitle": "Sign Out?",
+    "signOutConfirmDesc": "You will be signed out of your account.",
+    "signOutConfirm": "Sign Out",
+    "signOutCancel": "Cancel"
   },
   "settings": {
     "appearance": "Appearance",
@@ -793,7 +797,58 @@
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service",
     "copyright": "© 2025 Readmigo. All rights reserved.",
-    "madeWith": "Made with ❤️"
+    "madeWith": "Made with ❤️",
+    "changelog": {
+      "title": "What's New",
+      "items": {
+        "v280_new1": "Annual reading report with personalized insights",
+        "v280_new2": "Community Agora — share reading thoughts with others",
+        "v280_imp1": "Faster chapter loading with improved caching",
+        "v280_fix1": "Fixed TTS voice selector not saving preferences",
+        "v270_new1": "Offline reading — download books for Wi-Fi-free reading",
+        "v270_imp1": "Redesigned Me page with cleaner layout",
+        "v270_imp2": "Better audiobook chapter navigation",
+        "v270_fix1": "Fixed progress sync issues on reconnect",
+        "v260_new1": "Audiobook lyric follow-along mode",
+        "v260_new2": "Sleep timer with chapter-end option",
+        "v260_fix1": "Fixed bookmark deletion in paginated mode",
+        "v260_fix2": "Resolved login loop on token expiry",
+        "v250_new1": "Vocabulary review with spaced repetition",
+        "v250_imp1": "Smoother reader transitions and animations",
+        "v250_fix1": "Fixed highlight colors not persisting",
+        "v240_new1": "Subscription management page",
+        "v240_new2": "Push notification support",
+        "v240_imp1": "Improved search results with author cards",
+        "v230_new1": "Author detail pages with biography and works",
+        "v230_imp1": "Faster book list loading with pagination",
+        "v230_fix1": "Fixed audio position reset after backgrounding",
+        "v220_new1": "Dark mode support for the reader",
+        "v220_imp1": "Enhanced font and layout customization",
+        "v220_fix1": "Fixed table of contents scroll position",
+        "v220_fix2": "Resolved avatar upload failures on some browsers",
+        "v210_new1": "Quotes feed — discover and save book quotes",
+        "v210_new2": "Reading statistics dashboard",
+        "v210_imp1": "Reduced app launch time by 40%"
+      }
+    },
+    "licenses": {
+      "label": "Open Source Licenses",
+      "title": "Open Source Licenses",
+      "desc": "Readmigo is built on the shoulders of great open source projects."
+    },
+    "acknowledgments": {
+      "title": "Acknowledgments",
+      "teamTitle": "Team",
+      "team": "Built with care by the Readmigo team — dedicated to helping readers around the world enjoy English literature.",
+      "contentTitle": "Content Sources",
+      "content1": "Project Gutenberg — over 70,000 free public domain ebooks",
+      "content2": "LibriVox — free public domain audiobooks read by volunteers",
+      "content3": "Standard Ebooks — carefully formatted, public domain editions",
+      "specialTitle": "Special Thanks",
+      "special1": "Our early beta users for invaluable feedback and patience",
+      "special2": "The open source community for the tools that power this app",
+      "special3": "Every reader who chose Readmigo as their reading companion"
+    }
   },
   "notifications": {
     "empty": "No notifications",
@@ -1201,7 +1256,12 @@
     "cellularWarning": "Using Mobile Data",
     "cellularWarningDesc": "Downloading over mobile data may incur charges. Do you want to continue?",
     "doNotAskAgain": "Do not ask again",
-    "continueDownload": "Continue"
+    "continueDownload": "Continue",
+    "downloadQuality": "Download Quality",
+    "downloadQualityDesc": "Lower quality uses less storage space",
+    "qualityLow": "Low",
+    "qualityMedium": "Medium",
+    "qualityHigh": "High"
   },
   "shareCard": {
     "title": "Share Quote",

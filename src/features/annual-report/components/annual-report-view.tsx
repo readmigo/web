@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Sparkles,
@@ -127,6 +126,44 @@ function OverviewPage({ overview }: { overview: ReadingOverview }) {
             <p className="text-[10px] text-muted-foreground">{overview.finishedBooks}/{overview.totalBooks}</p>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function BooksPage({ overview }: { overview: ReadingOverview }) {
+  const t = useTranslations('annualReport');
+
+  const books = overview.booksDetail ?? [];
+
+  if (books.length === 0) return null;
+
+  return (
+    <div className="flex flex-col items-center px-6 py-8">
+      <BookOpen className="h-10 w-10 text-indigo-500" />
+      <p className="mt-3 text-xl font-semibold">{t('booksRead')}</p>
+
+      <div className="mt-6 w-full grid grid-cols-3 gap-3 max-w-sm">
+        {books.map((book) => (
+          <div key={book.id} className="flex flex-col items-center gap-1.5">
+            {book.coverUrl ? (
+              <img
+                src={book.coverUrl}
+                alt={book.title}
+                className="w-full aspect-[2/3] rounded-lg object-cover shadow-sm"
+              />
+            ) : (
+              <div className="w-full aspect-[2/3] rounded-lg bg-muted/60 flex items-center justify-center shadow-sm">
+                <span className="text-xl font-bold text-muted-foreground">
+                  {book.title.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            )}
+            <p className="text-[10px] text-muted-foreground text-center leading-tight line-clamp-2 w-full">
+              {book.title}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -298,6 +335,64 @@ export function AnnualReportView({ year: initialYear }: AnnualReportViewProps) {
     }
   }, [statusData, refetch]);
 
+  // ── Swipe gesture handling (all hooks must be before any early return) ──
+  // Compute page count from report data so it's available before early returns.
+  // 2 base pages (cover + overview) + optional books + optional highlights + 3 fixed tail pages.
+  const computedPageCount = report
+    ? 2 +
+      ((report.readingOverview.booksDetail ?? []).length > 0 ? 1 : 0) +
+      (report.highlights.longestReadingDay ||
+       report.highlights.latestReadingNight ||
+       report.highlights.mostNotesDay ||
+       report.highlights.mostCommentsDay
+        ? 1
+        : 0) +
+      3
+    : 0;
+
+  const touchStartX = useRef<number>(0);
+  const touchStartY = useRef<number>(0);
+  const [swipeOffset, setSwipeOffset] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    const deltaX = e.touches[0].clientX - touchStartX.current;
+    const deltaY = e.touches[0].clientY - touchStartY.current;
+    if (Math.abs(deltaY) > Math.abs(deltaX)) return;
+    setSwipeOffset(deltaX);
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+      const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+
+      setSwipeOffset(0);
+
+      if (Math.abs(deltaY) > Math.abs(deltaX) || Math.abs(deltaX) < 50) return;
+
+      if (deltaX < 0 && page < computedPageCount - 1) {
+        setIsAnimating(true);
+        setPage((p) => p + 1);
+      } else if (deltaX > 0 && page > 0) {
+        setIsAnimating(true);
+        setPage((p) => p - 1);
+      }
+    },
+    [page, computedPageCount],
+  );
+
+  useEffect(() => {
+    if (!isAnimating) return;
+    const id = setTimeout(() => setIsAnimating(false), 300);
+    return () => clearTimeout(id);
+  }, [isAnimating]);
+
   const handleShare = async () => {
     const result = await shareMutation.mutateAsync(year);
     if (result?.url) {
@@ -358,6 +453,10 @@ export function AnnualReportView({ year: initialYear }: AnnualReportViewProps) {
     <OverviewPage key="overview" overview={report.readingOverview} />,
   ];
 
+  if ((report.readingOverview.booksDetail ?? []).length > 0) {
+    pages.push(<BooksPage key="books" overview={report.readingOverview} />);
+  }
+
   const hasHighlights = report.highlights.longestReadingDay ||
     report.highlights.latestReadingNight ||
     report.highlights.mostNotesDay ||
@@ -399,8 +498,17 @@ export function AnnualReportView({ year: initialYear }: AnnualReportViewProps) {
         )}
       </div>
 
-      {/* Page content */}
-      <div className="rounded-2xl border bg-gradient-to-br from-blue-500/5 to-purple-500/5 overflow-hidden">
+      {/* Page content with swipe support */}
+      <div
+        className="rounded-2xl border bg-gradient-to-br from-blue-500/5 to-purple-500/5 overflow-hidden touch-pan-y select-none"
+        style={{
+          transform: swipeOffset !== 0 ? `translateX(${swipeOffset * 0.3}px)` : undefined,
+          transition: isAnimating ? 'transform 300ms ease' : swipeOffset !== 0 ? 'none' : 'transform 200ms ease',
+        }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         {pages[page]}
       </div>
 

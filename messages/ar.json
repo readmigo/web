@@ -522,6 +522,19 @@
       "stats": "إحصائيات مفصّلة",
       "templates": "قوالب مميّزة"
     },
+    "freeFeatures": {
+      "title": "متاح مجاناً",
+      "browseLibrary": "تصفح المكتبة",
+      "dailyAudio": "30 د صوت/يوم",
+      "aiBasic": "مساعد ذكاء اصطناعي أساسي"
+    },
+    "promoCode": {
+      "cta": "لديك رمز ترويجي؟",
+      "placeholder": "أدخل الرمز الترويجي",
+      "apply": "تطبيق",
+      "success": "تم تطبيق الرمز! تم تفعيل اشتراكك.",
+      "error": "رمز غير صالح أو منتهي الصلاحية. حاول مجدداً."
+    },
     "expires": "ينتهي في",
     "close": "Close",
     "selectPlan": "Select a plan",

@@ -522,6 +522,19 @@
       "stats": "상세 통계",
       "templates": "프리미엄 템플릿"
     },
+    "freeFeatures": {
+      "title": "이미 무료",
+      "browseLibrary": "도서관 탐색",
+      "dailyAudio": "30분 오디오/일",
+      "aiBasic": "기본 AI 어시스턴트"
+    },
+    "promoCode": {
+      "cta": "프로모 코드가 있나요?",
+      "placeholder": "프로모 코드 입력",
+      "apply": "적용",
+      "success": "코드 적용 완료! 구독이 활성화되었습니다.",
+      "error": "유효하지 않거나 만료된 코드입니다. 다시 시도하세요."
+    },
     "expires": "만료",
     "close": "Close",
     "selectPlan": "Select a plan",

@@ -522,6 +522,19 @@
       "stats": "Estatísticas detalhadas",
       "templates": "Templates premium"
     },
+    "freeFeatures": {
+      "title": "Já gratuito",
+      "browseLibrary": "Explorar biblioteca",
+      "dailyAudio": "30 min áudio/dia",
+      "aiBasic": "Assistente IA básico"
+    },
+    "promoCode": {
+      "cta": "Tem um código promocional?",
+      "placeholder": "Digite o código",
+      "apply": "Aplicar",
+      "success": "Código aplicado! Sua assinatura foi ativada.",
+      "error": "Código inválido ou expirado. Tente novamente."
+    },
     "expires": "Expira em",
     "close": "Close",
     "selectPlan": "Select a plan",
@@ -1087,7 +1100,11 @@
     "statusDownloading": "Baixando",
     "statusPaused": "Pausado",
     "statusCompleted": "Baixado",
-    "statusFailed": "Falhou"
+    "statusFailed": "Falhou",
+    "cellularWarning": "Usando dados móveis",
+    "cellularWarningDesc": "O download por dados móveis pode gerar cobranças. Deseja continuar?",
+    "doNotAskAgain": "Não perguntar novamente",
+    "continueDownload": "Continuar"
   },
   "shareCard": {
     "title": "Compartilhar citação",

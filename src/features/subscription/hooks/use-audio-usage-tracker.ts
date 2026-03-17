@@ -9,6 +9,11 @@ function todayISO(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+/** Minimum wall-clock time (ms) that must pass between daily resets.
+ *  Prevents users from bypassing the quota by manually advancing the
+ *  system clock to the next calendar date. */
+const MIN_RESET_INTERVAL_MS = 20 * 60 * 60 * 1000; // 20 hours
+
 interface UseAudioUsageTrackerOptions {
   /** Current TTS state from useTTS(); omit when used without TTS context. */
   ttsState?: TTSState;
@@ -32,7 +37,9 @@ interface AudioUsageTrackerResult {
  * - Uses Date.now() intervals (Web has no Mach Time equivalent)
  * - Accumulates every 5 seconds while playing, then settles remainder on pause/stop
  * - Pro users are entirely skipped — no intervals are started
- * - Resets the usage counter automatically when the calendar date changes
+ * - Resets the usage counter automatically when the calendar date changes,
+ *   but only when at least 20 hours have elapsed since the last reset to
+ *   prevent system-clock manipulation attacks
  * - Limit check is instant on each accumulation tick, not deferred to next interval
  */
 export function useAudioUsageTracker(
@@ -66,12 +73,21 @@ export function useAudioUsageTracker(
   useEffect(() => { onLimitReachedRef.current = onLimitReached; }, [onLimitReached]);
   useEffect(() => { onPauseTTSRef.current = onPauseTTS; }, [onPauseTTS]);
 
-  // Auto-reset when the calendar date rolls over
+  // Auto-reset when the calendar date rolls over.
+  // Guard: also require that at least 20 hours have elapsed since the last
+  // reset so that users who manually set their system clock forward cannot
+  // immediately unlock a fresh quota.
   useEffect(() => {
     const today = todayISO();
     if (dailyAudioDate !== today) {
-      resetDailyAudioUsage();
-      limitReachedRef.current = false;
+      const resetAt = useSubscriptionStore.getState().dailyAudioResetAt;
+      const elapsedSinceLastReset = Date.now() - resetAt;
+      // resetAt === 0 means this is the very first run (no prior reset recorded),
+      // so allow the reset unconditionally.
+      if (resetAt === 0 || elapsedSinceLastReset >= MIN_RESET_INTERVAL_MS) {
+        resetDailyAudioUsage();
+        limitReachedRef.current = false;
+      }
     }
   }, [dailyAudioDate, resetDailyAudioUsage]);
 

@@ -157,7 +157,11 @@
       "confirm": "确认",
       "zoom": "缩放"
     },
-    "subscriptionPro": "Pro 会员"
+    "subscriptionPro": "Pro 会员",
+    "signOutConfirmTitle": "确定要退出登录吗？",
+    "signOutConfirmDesc": "退出后将返回登录页面。",
+    "signOutConfirm": "退出登录",
+    "signOutCancel": "取消"
   },
   "settings": {
     "appearance": "外观",
@@ -793,7 +797,58 @@
     "privacyPolicy": "隐私政策",
     "termsOfService": "服务条款",
     "copyright": "© 2025 Readmigo. All rights reserved.",
-    "madeWith": "Made with ❤️"
+    "madeWith": "Made with ❤️",
+    "changelog": {
+      "title": "更新日志",
+      "items": {
+        "v280_new1": "年度阅读报告，含个性化洞察",
+        "v280_new2": "城邦社区 — 与他人分享阅读心得",
+        "v280_imp1": "章节加载更快，缓存优化",
+        "v280_fix1": "修复 TTS 声音选择未保存的问题",
+        "v270_new1": "离线阅读 — 下载书籍，随时随地阅读",
+        "v270_imp1": "我的页面全新设计，布局更清晰",
+        "v270_imp2": "有声书章节导航体验改善",
+        "v270_fix1": "修复重连后进度同步问题",
+        "v260_new1": "有声书歌词跟读模式",
+        "v260_new2": "定时关闭，支持章节末尾停止",
+        "v260_fix1": "修复分页模式下书签删除问题",
+        "v260_fix2": "修复 Token 过期导致的登录循环",
+        "v250_new1": "生词本 — 间隔重复记忆复习",
+        "v250_imp1": "阅读器切换动效更流畅",
+        "v250_fix1": "修复高亮颜色未持久化的问题",
+        "v240_new1": "订阅管理页面",
+        "v240_new2": "推送通知支持",
+        "v240_imp1": "搜索结果增加作者卡片展示",
+        "v230_new1": "作者详情页，含传记与作品",
+        "v230_imp1": "书单加载更快，分页优化",
+        "v230_fix1": "修复切到后台后音频位置重置问题",
+        "v220_new1": "阅读器深色模式支持",
+        "v220_imp1": "字体与排版自定义选项更丰富",
+        "v220_fix1": "修复目录滚动位置偏移",
+        "v220_fix2": "修复部分浏览器头像上传失败",
+        "v210_new1": "名言广场 — 发现并收藏书摘",
+        "v210_new2": "阅读统计看板",
+        "v210_imp1": "应用启动速度提升 40%"
+      }
+    },
+    "licenses": {
+      "label": "开源许可证",
+      "title": "开源许可证",
+      "desc": "Readmigo 建立在众多出色的开源项目之上。"
+    },
+    "acknowledgments": {
+      "title": "致谢",
+      "teamTitle": "团队",
+      "team": "由 Readmigo 团队用心打造，致力于帮助全球读者享受英语文学之美。",
+      "contentTitle": "内容来源",
+      "content1": "Project Gutenberg — 超过 7 万本免费公版电子书",
+      "content2": "LibriVox — 由志愿者朗读的免费公版有声书",
+      "content3": "Standard Ebooks — 精心排版的公版书籍",
+      "specialTitle": "特别感谢",
+      "special1": "早期测试用户，感谢你们宝贵的反馈与耐心",
+      "special2": "开源社区，感谢提供支撑本应用的各类工具",
+      "special3": "每一位选择 Readmigo 作为阅读伙伴的读者"
+    }
   },
   "notifications": {
     "empty": "暂无通知",
