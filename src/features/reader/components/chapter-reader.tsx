@@ -449,6 +449,14 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
         if (longPressTriggered) { lastTapTime = 0; lastTapHash = ''; activeNode = null; return; }
 
         if (event.pointerType === 'touch') {
+          // Skip paragraph translation if tap is in the middle zone (toggleControls area)
+          const cRect = contentEl.getBoundingClientRect();
+          const relX = event.clientX - cRect.left;
+          if (relX > cRect.width / 3 && relX < (cRect.width * 2) / 3) {
+            activeNode = null;
+            return;
+          }
+
           const textHash = ensureParagraphHashRef.current(activeNode);
           if (!textHash) { activeNode = null; return; }
           const now = Date.now();
@@ -486,6 +494,10 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
       const handleClick = (event: MouseEvent) => {
         // Only handle primary mouse button, ignore if text is selected
         if (event.button !== 0) return;
+        // Skip paragraph translation if click is in the middle zone (toggleControls area)
+        const cRect = contentEl.getBoundingClientRect();
+        const relX = event.clientX - cRect.left;
+        if (relX > cRect.width / 3 && relX < (cRect.width * 2) / 3) return;
         const node = getParagraphFromTarget(event.target);
         if (!node) return;
         const selection = window.getSelection();
