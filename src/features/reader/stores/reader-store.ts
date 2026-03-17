@@ -174,7 +174,7 @@ const defaultSettings: ReaderSettings = {
   paragraphSpacing: 12,
   textAlign: 'justify',
   hyphenation: true,
-  columnCount: 1,
+  columnCount: 2,
   textIndent: 0,
   fontWeight: 'regular',
   appearanceMode: 'auto',
