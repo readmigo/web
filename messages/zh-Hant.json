@@ -134,7 +134,8 @@
       "cancel": "取消",
       "confirm": "確認",
       "zoom": "縮放"
-    }
+    },
+    "subscriptionPro": "Pro 會員"
   },
   "settings": {
     "appearance": "外觀",
@@ -245,7 +246,24 @@
     "textIndent": "首行縮進",
     "autoPage": "自動翻頁",
     "autoPageIntervalOption": "{seconds}秒",
-    "resetDefaults": "重設預設設定"
+    "resetDefaults": "重設預設設定",
+    "profile": {
+      "title": "個人資料",
+      "desc": "完善您的帳戶資訊",
+      "gender": "性別",
+      "genderPlaceholder": "請選擇性別",
+      "genderMale": "男",
+      "genderFemale": "女",
+      "genderOther": "其他",
+      "genderPreferNot": "不願透露",
+      "birthYear": "出生年份",
+      "birthYearPlaceholder": "請選擇年份",
+      "country": "國家 / 地區",
+      "countryPlaceholder": "請選擇國家",
+      "save": "儲存變更",
+      "saved": "已儲存",
+      "saveError": "儲存失敗，請重試。"
+    }
   },
   "auth": {
     "back": "← 返回",
@@ -405,14 +423,31 @@
       "streak": "連續",
       "milestone": "里程碑",
       "social": "社交"
-    }
+    },
+    "notFound": "未找到徽章",
+    "back": "返回",
+    "description": "描述",
+    "progress": "進度",
+    "howToEarn": "如何獲得",
+    "earnedOn": "獲得於 {date}",
+    "requirementTarget": "目標：{value}"
   },
   "quotes": {
     "dailyQuote": "每日名言",
     "trending": "熱門名言",
     "searchPlaceholder": "搜尋名言...",
     "all": "全部",
-    "empty": "暫無名言"
+    "empty": "暫無名言",
+    "notFound": "未找到名言",
+    "back": "返回",
+    "like": "喜歡",
+    "unlike": "取消喜歡",
+    "share": "分享",
+    "favorites": "我的收藏",
+    "favoritesEmpty": "還沒有收藏的名言",
+    "viewAll": "查看全部",
+    "viewAuthorQuotes": "瀏覽 {author} 的所有名言",
+    "viewBookQuotes": "瀏覽《{book}》的所有名言"
   },
   "analytics": {
     "totalTime": "總閱讀時長",
@@ -432,7 +467,14 @@
       "title": "詳細統計",
       "desc": "升級 Pro 查看完整閱讀數據分析",
       "upgrade": "升級 Pro"
-    }
+    },
+    "dailyDetails": "每日明細",
+    "reading": "閱讀",
+    "tts": "朗讀",
+    "audiobook": "有聲書",
+    "noActivity": "暫無記錄",
+    "showLess": "收起",
+    "showAll": "展開全部 {count} 天"
   },
   "subscription": {
     "title": "升級 Readmigo Pro",
@@ -461,6 +503,27 @@
       "templates": "高級模板"
     },
     "expires": "到期",
+    "trial": {
+      "countdown": "試用還剩 {days} 天"
+    },
+    "triggers": {
+      "audioLimitReached": {
+        "title": "升級享無限音頻",
+        "subtitle": "今日免費聽書時長已用完，升級 Pro 享無限暢聽。"
+      },
+      "syncRequired": {
+        "title": "跨裝置同步閱讀進度",
+        "subtitle": "升級 Pro，在所有裝置上同步您的閱讀進度和書籤。"
+      },
+      "downloadRequired": {
+        "title": "隨時隨地離線閱讀",
+        "subtitle": "訂閱 Pro，一鍵下載書籍，無需網路即可閱讀。"
+      },
+      "dataBackup": {
+        "title": "備份您的閱讀資料",
+        "subtitle": "雲端備份筆記、標注和閱讀進度，永不遺失。"
+      }
+    },
     "gracePeriod": {
       "title": "支付方式需要更新",
       "description": "您的訂閱正處於寬限期，請及時更新支付方式以保留 Pro 權益。",
@@ -584,7 +647,8 @@
     "madeWith": "Made with ❤️"
   },
   "notifications": {
-    "empty": "暫無通知"
+    "empty": "暫無通知",
+    "markAllRead": "全部標為已讀"
   },
   "messaging": {
     "thread": "對話詳情",
@@ -612,7 +676,11 @@
         "performance": "效能問題",
         "other": "其他"
       }
-    }
+    },
+    "filterAll": "全部",
+    "filterNew": "新建",
+    "filterInProgress": "處理中",
+    "filterResolved": "已解決"
   },
   "notFound": {
     "title": "頁面不存在",
@@ -665,7 +733,8 @@
     "tableOfContents": "目錄",
     "viewAllChapters": "查看全部 {count} 章",
     "loadError": "載入書籍詳情失敗，請稍後重試",
-    "notFound": "未找到該書籍"
+    "notFound": "未找到該書籍",
+    "bookQuotes": "本書名言"
   },
   "author": {
     "follow": "關注",
@@ -726,7 +795,8 @@
     "eventCategoryRevolution": "革命",
     "eventCategoryCultural": "文化",
     "eventCategoryPolitical": "政治",
-    "eventCategoryScientific": "科學"
+    "eventCategoryScientific": "科學",
+    "browseAllAuthorQuotes": "瀏覽該作者的所有名言"
   },
   "wordLookup": {
     "noDefinition": "暫無釋義",

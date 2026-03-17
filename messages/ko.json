@@ -134,7 +134,8 @@
       "cancel": "취소",
       "confirm": "확인",
       "zoom": "확대/축소"
-    }
+    },
+    "subscriptionPro": "Pro 멤버"
   },
   "settings": {
     "appearance": "외관",
@@ -197,6 +198,11 @@
     "fontSerif": "세리프",
     "fontSansSerif": "산세리프",
     "fontMonospace": "고정폭",
+    "fontCategorySansSerif": "산세리프",
+    "fontCategorySerif": "세리프",
+    "fontCategoryMonospace": "고정폭",
+    "fontCategoryDyslexia": "난독증 친화",
+    "fontCategoryChinese": "중국어 글꼴",
     "short": "짧게",
     "normal": "보통",
     "long": "길게",
@@ -240,7 +246,24 @@
     "textIndent": "들여쓰기",
     "autoPage": "자동 페이지 넘기기",
     "autoPageIntervalOption": "{seconds}초",
-    "resetDefaults": "기본값으로 재설정"
+    "resetDefaults": "기본값으로 재설정",
+    "profile": {
+      "title": "프로필",
+      "desc": "계정 정보를 업데이트하세요",
+      "gender": "성별",
+      "genderPlaceholder": "성별 선택",
+      "genderMale": "남성",
+      "genderFemale": "여성",
+      "genderOther": "기타",
+      "genderPreferNot": "밝히지 않음",
+      "birthYear": "출생 연도",
+      "birthYearPlaceholder": "연도 선택",
+      "country": "국가 / 지역",
+      "countryPlaceholder": "국가 선택",
+      "save": "변경사항 저장",
+      "saved": "저장됨",
+      "saveError": "저장 실패. 다시 시도하세요."
+    }
   },
   "auth": {
     "back": "← 뒤로",
@@ -400,14 +423,31 @@
       "streak": "연속",
       "milestone": "마일스톤",
       "social": "소셜"
-    }
+    },
+    "notFound": "배지를 찾을 수 없습니다",
+    "back": "뒤로",
+    "description": "설명",
+    "progress": "진행도",
+    "howToEarn": "획득 방법",
+    "earnedOn": "{date}에 획득",
+    "requirementTarget": "목표: {value}"
   },
   "quotes": {
     "dailyQuote": "오늘의 명언",
     "trending": "트렌딩",
     "searchPlaceholder": "명언 검색...",
     "all": "전체",
-    "empty": "명언을 찾을 수 없습니다"
+    "empty": "명언을 찾을 수 없습니다",
+    "notFound": "명언을 찾을 수 없습니다",
+    "back": "뒤로",
+    "like": "좋아요",
+    "unlike": "좋아요 취소",
+    "share": "공유",
+    "favorites": "내 즐겨찾기",
+    "favoritesEmpty": "즐겨찾기한 명언이 없습니다",
+    "viewAll": "모두 보기",
+    "viewAuthorQuotes": "{author}의 모든 명언 보기",
+    "viewBookQuotes": "«{book}»의 모든 명언 보기"
   },
   "analytics": {
     "totalTime": "총 독서 시간",
@@ -427,7 +467,14 @@
       "title": "상세 통계",
       "desc": "Pro로 업그레이드하여 전체 독서 분석 보기",
       "upgrade": "Pro로 업그레이드"
-    }
+    },
+    "dailyDetails": "일별 상세",
+    "reading": "독서",
+    "tts": "TTS",
+    "audiobook": "오디오북",
+    "noActivity": "기록 없음",
+    "showLess": "접기",
+    "showAll": "{count}일 모두 보기"
   },
   "subscription": {
     "title": "Readmigo Pro로 업그레이드",
@@ -614,7 +661,8 @@
     "madeWith": "Made with ❤️"
   },
   "notifications": {
-    "empty": "알림이 없습니다"
+    "empty": "알림이 없습니다",
+    "markAllRead": "모두 읽음으로 표시"
   },
   "messaging": {
     "thread": "대화",
@@ -642,7 +690,11 @@
         "performance": "성능",
         "other": "기타"
       }
-    }
+    },
+    "filterAll": "전체",
+    "filterNew": "새 메시지",
+    "filterInProgress": "처리 중",
+    "filterResolved": "해결됨"
   },
   "notFound": {
     "title": "페이지를 찾을 수 없습니다",
@@ -695,7 +747,8 @@
     "tableOfContents": "목차",
     "viewAllChapters": "전체 {count}개 챕터 보기",
     "loadError": "책 상세 정보 로딩 실패. 잠시 후 다시 시도해 주세요.",
-    "notFound": "책을 찾을 수 없습니다"
+    "notFound": "책을 찾을 수 없습니다",
+    "bookQuotes": "이 책의 명언"
   },
   "author": {
     "follow": "팔로우",
@@ -756,7 +809,8 @@
     "eventCategoryRevolution": "혁명",
     "eventCategoryCultural": "문화",
     "eventCategoryPolitical": "정치",
-    "eventCategoryScientific": "과학"
+    "eventCategoryScientific": "과학",
+    "browseAllAuthorQuotes": "이 작가의 모든 명언 보기"
   },
   "wordLookup": {
     "noDefinition": "정의를 찾을 수 없습니다",

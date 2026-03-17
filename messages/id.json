@@ -134,7 +134,8 @@
       "cancel": "Batal",
       "confirm": "Konfirmasi",
       "zoom": "Zoom"
-    }
+    },
+    "subscriptionPro": "Anggota Pro"
   },
   "settings": {
     "appearance": "Tampilan",
@@ -197,6 +198,11 @@
     "fontSerif": "Serif",
     "fontSansSerif": "Sans-Serif",
     "fontMonospace": "Monospace",
+    "fontCategorySansSerif": "Sans-Serif",
+    "fontCategorySerif": "Serif",
+    "fontCategoryMonospace": "Monospace",
+    "fontCategoryDyslexia": "Ramah Disleksia",
+    "fontCategoryChinese": "Font Cina",
     "short": "Pendek",
     "normal": "Normal",
     "long": "Panjang",
@@ -240,7 +246,24 @@
     "textIndent": "Indentasi Teks",
     "autoPage": "Balik Halaman Otomatis",
     "autoPageIntervalOption": "{seconds}d",
-    "resetDefaults": "Atur Ulang Default"
+    "resetDefaults": "Atur Ulang Default",
+    "profile": {
+      "title": "Profil",
+      "desc": "Sesuaikan akun Anda",
+      "gender": "Jenis Kelamin",
+      "genderPlaceholder": "Pilih jenis kelamin",
+      "genderMale": "Laki-laki",
+      "genderFemale": "Perempuan",
+      "genderOther": "Lainnya",
+      "genderPreferNot": "Tidak ingin menyebutkan",
+      "birthYear": "Tahun Lahir",
+      "birthYearPlaceholder": "Pilih tahun",
+      "country": "Negara / Wilayah",
+      "countryPlaceholder": "Pilih negara",
+      "save": "Simpan Perubahan",
+      "saved": "Tersimpan",
+      "saveError": "Gagal menyimpan. Coba lagi."
+    }
   },
   "auth": {
     "back": "← Kembali",
@@ -400,14 +423,31 @@
       "streak": "Berturut-turut",
       "milestone": "Pencapaian",
       "social": "Sosial"
-    }
+    },
+    "notFound": "Lencana tidak ditemukan",
+    "back": "Kembali",
+    "description": "Deskripsi",
+    "progress": "Kemajuan",
+    "howToEarn": "Cara mendapatkan",
+    "earnedOn": "Didapat pada {date}",
+    "requirementTarget": "Target: {value}"
   },
   "quotes": {
     "dailyQuote": "Kutipan Harian",
     "trending": "Trending",
     "searchPlaceholder": "Cari kutipan...",
     "all": "Semua",
-    "empty": "Tidak ada kutipan ditemukan"
+    "empty": "Tidak ada kutipan ditemukan",
+    "notFound": "Kutipan tidak ditemukan",
+    "back": "Kembali",
+    "like": "Suka",
+    "unlike": "Batal suka",
+    "share": "Bagikan",
+    "favorites": "Favorit saya",
+    "favoritesEmpty": "Belum ada kutipan favorit",
+    "viewAll": "Lihat semua",
+    "viewAuthorQuotes": "Lihat semua kutipan oleh {author}",
+    "viewBookQuotes": "Lihat semua kutipan dari «{book}»"
   },
   "analytics": {
     "totalTime": "Total Membaca",
@@ -427,7 +467,14 @@
       "title": "Statistik Terperinci",
       "desc": "Upgrade ke Pro untuk melihat analitik membaca lengkap",
       "upgrade": "Upgrade ke Pro"
-    }
+    },
+    "dailyDetails": "Detail Harian",
+    "reading": "Membaca",
+    "tts": "TTS",
+    "audiobook": "Buku Audio",
+    "noActivity": "Tidak ada aktivitas",
+    "showLess": "Tampilkan lebih sedikit",
+    "showAll": "Tampilkan semua {count} hari"
   },
   "subscription": {
     "title": "Upgrade ke Readmigo Pro",
@@ -489,6 +536,27 @@
         "technical_issues": "Technical issues",
         "not_using_enough": "Not using it enough",
         "other": "Other reason"
+      }
+    },
+    "trial": {
+      "countdown": "Uji coba berakhir dalam {days} hari"
+    },
+    "triggers": {
+      "audioLimitReached": {
+        "title": "Upgrade untuk Audio Tak Terbatas",
+        "subtitle": "Anda telah mencapai batas audio harian. Berlangganan Pro untuk mendengarkan tanpa batas."
+      },
+      "syncRequired": {
+        "title": "Sinkronkan di Semua Perangkat",
+        "subtitle": "Upgrade ke Pro untuk menjaga progres membaca Anda tetap sinkron di mana saja."
+      },
+      "downloadRequired": {
+        "title": "Baca Offline di Mana Saja",
+        "subtitle": "Unduh buku untuk dibaca tanpa internet dengan langganan Pro."
+      },
+      "dataBackup": {
+        "title": "Cadangkan Data Anda",
+        "subtitle": "Lindungi catatan, sorotan, dan progres Anda dengan cadangan cloud."
       }
     },
     "gracePeriod": {
@@ -614,7 +682,8 @@
     "madeWith": "Dibuat dengan ❤️"
   },
   "notifications": {
-    "empty": "Tidak ada notifikasi"
+    "empty": "Tidak ada notifikasi",
+    "markAllRead": "Tandai semua sebagai dibaca"
   },
   "messaging": {
     "thread": "Percakapan",
@@ -642,7 +711,11 @@
         "performance": "Performa",
         "other": "Lainnya"
       }
-    }
+    },
+    "filterAll": "Semua",
+    "filterNew": "Baru",
+    "filterInProgress": "Sedang diproses",
+    "filterResolved": "Selesai"
   },
   "notFound": {
     "title": "Halaman Tidak Ditemukan",
@@ -695,7 +768,8 @@
     "tableOfContents": "Daftar Isi",
     "viewAllChapters": "Lihat Semua {count} Bab",
     "loadError": "Gagal memuat detail buku. Silakan coba lagi nanti.",
-    "notFound": "Buku tidak ditemukan"
+    "notFound": "Buku tidak ditemukan",
+    "bookQuotes": "Kutipan dari buku ini"
   },
   "author": {
     "follow": "Ikuti",
@@ -756,7 +830,8 @@
     "eventCategoryRevolution": "Revolusi",
     "eventCategoryCultural": "Budaya",
     "eventCategoryPolitical": "Politik",
-    "eventCategoryScientific": "Ilmiah"
+    "eventCategoryScientific": "Ilmiah",
+    "browseAllAuthorQuotes": "Lihat semua kutipan penulis ini"
   },
   "wordLookup": {
     "noDefinition": "Tidak ada definisi ditemukan",

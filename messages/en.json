@@ -102,7 +102,18 @@
     "emptyTitle": "Your library is empty",
     "emptySubtitle": "Explore the bookstore to find great books",
     "goToBookstore": "Browse Bookstore",
-    "remove": "Remove"
+    "remove": "Remove",
+    "guestPromptTitle": "Sign in to view your library",
+    "guestPromptSubtitle": "Track your reading progress, favorites, and more",
+    "loginToView": "Sign In",
+    "edit": "Edit",
+    "done": "Done",
+    "deleteSelected": "Delete Selected",
+    "confirmDeleteTitle": "Remove books?",
+    "confirmDeleteDesc": "This will remove {count} book(s) from your favorites.",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "browseAll": "Browse All Books"
   },
   "me": {
     "user": "User",
@@ -136,7 +147,8 @@
       "cancel": "Cancel",
       "confirm": "Confirm",
       "zoom": "Zoom"
-    }
+    },
+    "subscriptionPro": "Pro Member"
   },
   "settings": {
     "appearance": "Appearance",
@@ -255,7 +267,24 @@
     "textIndent": "Text Indent",
     "autoPage": "Auto Page Turn",
     "autoPageIntervalOption": "{seconds}s",
-    "resetDefaults": "Reset Defaults"
+    "resetDefaults": "Reset Defaults",
+    "profile": {
+      "title": "Profile",
+      "desc": "Personalize your account",
+      "gender": "Gender",
+      "genderPlaceholder": "Select gender",
+      "genderMale": "Male",
+      "genderFemale": "Female",
+      "genderOther": "Other",
+      "genderPreferNot": "Prefer not to say",
+      "birthYear": "Birth Year",
+      "birthYearPlaceholder": "Select year",
+      "country": "Country / Region",
+      "countryPlaceholder": "Select country",
+      "save": "Save Changes",
+      "saved": "Saved",
+      "saveError": "Failed to save. Please try again."
+    }
   },
   "auth": {
     "back": "← Back",
@@ -415,14 +444,31 @@
       "streak": "Streak",
       "milestone": "Milestone",
       "social": "Social"
-    }
+    },
+    "notFound": "Badge not found",
+    "back": "Back",
+    "description": "Description",
+    "progress": "Progress",
+    "howToEarn": "How to Earn",
+    "earnedOn": "Earned on {date}",
+    "requirementTarget": "Target: {value}"
   },
   "quotes": {
     "dailyQuote": "Daily Quote",
     "trending": "Trending",
     "searchPlaceholder": "Search quotes...",
     "all": "All",
-    "empty": "No quotes found"
+    "empty": "No quotes found",
+    "notFound": "Quote not found",
+    "back": "Back",
+    "like": "Like",
+    "unlike": "Unlike",
+    "share": "Share",
+    "favorites": "My Favorites",
+    "favoritesEmpty": "No liked quotes yet",
+    "viewAll": "View all",
+    "viewAuthorQuotes": "Browse all quotes by {author}",
+    "viewBookQuotes": "Browse all quotes from {book}"
   },
   "analytics": {
     "totalTime": "Total Reading",
@@ -442,7 +488,14 @@
       "title": "Detailed Statistics",
       "desc": "Upgrade to Pro to see full reading analytics",
       "upgrade": "Upgrade to Pro"
-    }
+    },
+    "dailyDetails": "Daily Details",
+    "reading": "Reading",
+    "tts": "TTS",
+    "audiobook": "Audiobook",
+    "noActivity": "No activity",
+    "showLess": "Show less",
+    "showAll": "Show all {count} days"
   },
   "subscription": {
     "title": "Upgrade to Readmigo Pro",
@@ -711,7 +764,8 @@
     "madeWith": "Made with ❤️"
   },
   "notifications": {
-    "empty": "No notifications"
+    "empty": "No notifications",
+    "markAllRead": "Mark all as read"
   },
   "messaging": {
     "thread": "Conversation",
@@ -739,7 +793,11 @@
         "performance": "Performance",
         "other": "Other"
       }
-    }
+    },
+    "filterAll": "All",
+    "filterNew": "New",
+    "filterInProgress": "In Progress",
+    "filterResolved": "Resolved"
   },
   "notFound": {
     "title": "Page Not Found",
@@ -792,7 +850,8 @@
     "tableOfContents": "Table of Contents",
     "viewAllChapters": "View All {count} Chapters",
     "loadError": "Failed to load book details. Please try again later.",
-    "notFound": "Book not found"
+    "notFound": "Book not found",
+    "bookQuotes": "Quotes from this book"
   },
   "author": {
     "follow": "Follow",
@@ -853,7 +912,8 @@
     "eventCategoryRevolution": "Revolution",
     "eventCategoryCultural": "Cultural",
     "eventCategoryPolitical": "Political",
-    "eventCategoryScientific": "Scientific"
+    "eventCategoryScientific": "Scientific",
+    "browseAllAuthorQuotes": "Browse all quotes by this author"
   },
   "wordLookup": {
     "noDefinition": "No definition found",

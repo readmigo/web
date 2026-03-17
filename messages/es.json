@@ -134,7 +134,8 @@
       "cancel": "Cancelar",
       "confirm": "Confirmar",
       "zoom": "Zoom"
-    }
+    },
+    "subscriptionPro": "Miembro Pro"
   },
   "settings": {
     "appearance": "Apariencia",
@@ -245,7 +246,24 @@
     "textIndent": "Sangría",
     "autoPage": "Pasar página automáticamente",
     "autoPageIntervalOption": "{seconds}s",
-    "resetDefaults": "Restablecer valores predeterminados"
+    "resetDefaults": "Restablecer valores predeterminados",
+    "profile": {
+      "title": "Perfil",
+      "desc": "Personaliza tu cuenta",
+      "gender": "Género",
+      "genderPlaceholder": "Seleccionar género",
+      "genderMale": "Masculino",
+      "genderFemale": "Femenino",
+      "genderOther": "Otro",
+      "genderPreferNot": "Prefiero no decirlo",
+      "birthYear": "Año de nacimiento",
+      "birthYearPlaceholder": "Seleccionar año",
+      "country": "País / Región",
+      "countryPlaceholder": "Seleccionar país",
+      "save": "Guardar cambios",
+      "saved": "Guardado",
+      "saveError": "Error al guardar. Inténtalo de nuevo."
+    }
   },
   "auth": {
     "back": "← Volver",
@@ -405,14 +423,31 @@
       "streak": "Racha",
       "milestone": "Hito",
       "social": "Social"
-    }
+    },
+    "notFound": "Insignia no encontrada",
+    "back": "Volver",
+    "description": "Descripción",
+    "progress": "Progreso",
+    "howToEarn": "Cómo obtenerla",
+    "earnedOn": "Obtenida el {date}",
+    "requirementTarget": "Objetivo: {value}"
   },
   "quotes": {
     "dailyQuote": "Cita del día",
     "trending": "Tendencias",
     "searchPlaceholder": "Buscar citas...",
     "all": "Todas",
-    "empty": "No se encontraron citas"
+    "empty": "No se encontraron citas",
+    "notFound": "Cita no encontrada",
+    "back": "Volver",
+    "like": "Me gusta",
+    "unlike": "Ya no me gusta",
+    "share": "Compartir",
+    "favorites": "Mis favoritas",
+    "favoritesEmpty": "No tienes citas favoritas aún",
+    "viewAll": "Ver todas",
+    "viewAuthorQuotes": "Ver todas las citas de {author}",
+    "viewBookQuotes": "Ver todas las citas de «{book}»"
   },
   "analytics": {
     "totalTime": "Lectura total",
@@ -432,7 +467,14 @@
       "title": "Estadísticas detalladas",
       "desc": "Mejora a Pro para ver análisis completos de lectura",
       "upgrade": "Mejorar a Pro"
-    }
+    },
+    "dailyDetails": "Detalles diarios",
+    "reading": "Lectura",
+    "tts": "TTS",
+    "audiobook": "Audiolibro",
+    "noActivity": "Sin actividad",
+    "showLess": "Ver menos",
+    "showAll": "Ver los {count} días"
   },
   "subscription": {
     "title": "Mejora a Readmigo Pro",
@@ -494,6 +536,27 @@
         "technical_issues": "Technical issues",
         "not_using_enough": "Not using it enough",
         "other": "Other reason"
+      }
+    },
+    "trial": {
+      "countdown": "La prueba termina en {days} día(s)"
+    },
+    "triggers": {
+      "audioLimitReached": {
+        "title": "Actualiza para audio ilimitado",
+        "subtitle": "Has alcanzado tu límite diario de audio. Hazte Pro para escuchar sin límites."
+      },
+      "syncRequired": {
+        "title": "Sincroniza entre dispositivos",
+        "subtitle": "Actualiza a Pro para mantener tu progreso de lectura en todos tus dispositivos."
+      },
+      "downloadRequired": {
+        "title": "Lee sin conexión en cualquier lugar",
+        "subtitle": "Descarga libros para leer sin internet con una suscripción Pro."
+      },
+      "dataBackup": {
+        "title": "Haz una copia de tus datos",
+        "subtitle": "Protege tus notas, subrayados y progreso con la copia de seguridad en la nube."
       }
     },
     "gracePeriod": {
@@ -619,7 +682,8 @@
     "madeWith": "Hecho con ❤️"
   },
   "notifications": {
-    "empty": "Sin notificaciones"
+    "empty": "Sin notificaciones",
+    "markAllRead": "Marcar todo como leído"
   },
   "messaging": {
     "thread": "Conversación",
@@ -647,7 +711,11 @@
         "performance": "Rendimiento",
         "other": "Otro"
       }
-    }
+    },
+    "filterAll": "Todos",
+    "filterNew": "Nuevos",
+    "filterInProgress": "En progreso",
+    "filterResolved": "Resueltos"
   },
   "notFound": {
     "title": "Página no encontrada",
@@ -700,7 +768,8 @@
     "tableOfContents": "Tabla de contenidos",
     "viewAllChapters": "Ver todos los {count} capítulos",
     "loadError": "Error al cargar los detalles del libro. Por favor, inténtalo más tarde.",
-    "notFound": "Libro no encontrado"
+    "notFound": "Libro no encontrado",
+    "bookQuotes": "Citas del libro"
   },
   "author": {
     "follow": "Seguir",
@@ -761,7 +830,8 @@
     "eventCategoryRevolution": "Revolución",
     "eventCategoryCultural": "Cultural",
     "eventCategoryPolitical": "Político",
-    "eventCategoryScientific": "Científico"
+    "eventCategoryScientific": "Científico",
+    "browseAllAuthorQuotes": "Ver todas las citas de este autor"
   },
   "wordLookup": {
     "noDefinition": "No se encontró definición",

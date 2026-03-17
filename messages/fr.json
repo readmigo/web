@@ -134,7 +134,8 @@
       "cancel": "Annuler",
       "confirm": "Confirmer",
       "zoom": "Zoom"
-    }
+    },
+    "subscriptionPro": "Membre Pro"
   },
   "settings": {
     "appearance": "Apparence",
@@ -197,6 +198,11 @@
     "fontSerif": "Serif",
     "fontSansSerif": "Sans-Serif",
     "fontMonospace": "Monospace",
+    "fontCategorySansSerif": "Sans-Serif",
+    "fontCategorySerif": "Serif",
+    "fontCategoryMonospace": "Monospace",
+    "fontCategoryDyslexia": "Pour Dyslexie",
+    "fontCategoryChinese": "Chinois",
     "short": "Court",
     "normal": "Normal",
     "long": "Long",
@@ -240,7 +246,24 @@
     "textIndent": "Retrait de texte",
     "autoPage": "Tournage automatique",
     "autoPageIntervalOption": "{seconds}s",
-    "resetDefaults": "Rétablir les paramètres par défaut"
+    "resetDefaults": "Rétablir les paramètres par défaut",
+    "profile": {
+      "title": "Profil",
+      "desc": "Personnalisez votre compte",
+      "gender": "Genre",
+      "genderPlaceholder": "Sélectionner le genre",
+      "genderMale": "Homme",
+      "genderFemale": "Femme",
+      "genderOther": "Autre",
+      "genderPreferNot": "Préfère ne pas dire",
+      "birthYear": "Année de naissance",
+      "birthYearPlaceholder": "Sélectionner l'année",
+      "country": "Pays / Région",
+      "countryPlaceholder": "Sélectionner un pays",
+      "save": "Enregistrer",
+      "saved": "Enregistré",
+      "saveError": "Échec de l'enregistrement. Réessayez."
+    }
   },
   "auth": {
     "back": "← Retour",
@@ -400,14 +423,31 @@
       "streak": "Série",
       "milestone": "Étape",
       "social": "Social"
-    }
+    },
+    "notFound": "Badge introuvable",
+    "back": "Retour",
+    "description": "Description",
+    "progress": "Progression",
+    "howToEarn": "Comment l'obtenir",
+    "earnedOn": "Obtenu le {date}",
+    "requirementTarget": "Objectif : {value}"
   },
   "quotes": {
     "dailyQuote": "Citation du jour",
     "trending": "Tendances",
     "searchPlaceholder": "Rechercher des citations...",
     "all": "Toutes",
-    "empty": "Aucune citation trouvée"
+    "empty": "Aucune citation trouvée",
+    "notFound": "Citation introuvable",
+    "back": "Retour",
+    "like": "Aimer",
+    "unlike": "Ne plus aimer",
+    "share": "Partager",
+    "favorites": "Mes favoris",
+    "favoritesEmpty": "Aucune citation favorite",
+    "viewAll": "Tout voir",
+    "viewAuthorQuotes": "Voir toutes les citations de {author}",
+    "viewBookQuotes": "Voir toutes les citations de «{book}»"
   },
   "analytics": {
     "totalTime": "Lecture totale",
@@ -427,7 +467,14 @@
       "title": "Statistiques détaillées",
       "desc": "Passez à Pro pour voir l'analyse complète de lecture",
       "upgrade": "Passer à Pro"
-    }
+    },
+    "dailyDetails": "Détails quotidiens",
+    "reading": "Lecture",
+    "tts": "TTS",
+    "audiobook": "Livre audio",
+    "noActivity": "Aucune activité",
+    "showLess": "Voir moins",
+    "showAll": "Voir les {count} jours"
   },
   "subscription": {
     "title": "Passer à Readmigo Pro",
@@ -489,6 +536,27 @@
         "technical_issues": "Technical issues",
         "not_using_enough": "Not using it enough",
         "other": "Other reason"
+      }
+    },
+    "trial": {
+      "countdown": "L'essai se termine dans {days} jour(s)"
+    },
+    "triggers": {
+      "audioLimitReached": {
+        "title": "Passez à l'audio illimité",
+        "subtitle": "Vous avez atteint votre limite audio quotidienne. Passez Pro pour écouter sans limite."
+      },
+      "syncRequired": {
+        "title": "Synchronisez entre vos appareils",
+        "subtitle": "Passez à Pro pour synchroniser votre progression de lecture partout."
+      },
+      "downloadRequired": {
+        "title": "Lisez hors ligne partout",
+        "subtitle": "Téléchargez des livres pour les lire hors connexion avec un abonnement Pro."
+      },
+      "dataBackup": {
+        "title": "Sauvegardez vos données",
+        "subtitle": "Protégez vos notes, surlignages et progression avec la sauvegarde cloud."
       }
     },
     "gracePeriod": {
@@ -614,7 +682,8 @@
     "madeWith": "Fait avec ❤️"
   },
   "notifications": {
-    "empty": "Aucune notification"
+    "empty": "Aucune notification",
+    "markAllRead": "Tout marquer comme lu"
   },
   "messaging": {
     "thread": "Conversation",
@@ -642,7 +711,11 @@
         "performance": "Performance",
         "other": "Autre"
       }
-    }
+    },
+    "filterAll": "Tous",
+    "filterNew": "Nouveaux",
+    "filterInProgress": "En cours",
+    "filterResolved": "Résolus"
   },
   "notFound": {
     "title": "Page introuvable",
@@ -695,7 +768,8 @@
     "tableOfContents": "Table des matières",
     "viewAllChapters": "Voir les {count} chapitres",
     "loadError": "Échec du chargement des détails du livre. Veuillez réessayer plus tard.",
-    "notFound": "Livre introuvable"
+    "notFound": "Livre introuvable",
+    "bookQuotes": "Citations du livre"
   },
   "author": {
     "follow": "Suivre",
@@ -756,7 +830,8 @@
     "eventCategoryRevolution": "Révolution",
     "eventCategoryCultural": "Culturel",
     "eventCategoryPolitical": "Politique",
-    "eventCategoryScientific": "Scientifique"
+    "eventCategoryScientific": "Scientifique",
+    "browseAllAuthorQuotes": "Voir toutes les citations de cet auteur"
   },
   "wordLookup": {
     "noDefinition": "Aucune définition trouvée",

@@ -134,7 +134,8 @@
       "cancel": "إلغاء",
       "confirm": "تأكيد",
       "zoom": "تكبير/تصغير"
-    }
+    },
+    "subscriptionPro": "عضو Pro"
   },
   "settings": {
     "appearance": "المظهر",
@@ -197,6 +198,11 @@
     "fontSerif": "مزخرف",
     "fontSansSerif": "غير مزخرف",
     "fontMonospace": "أحادي المسافة",
+    "fontCategorySansSerif": "غير مزخرف",
+    "fontCategorySerif": "مزخرف",
+    "fontCategoryMonospace": "أحادي المسافة",
+    "fontCategoryDyslexia": "صديق لعسر القراءة",
+    "fontCategoryChinese": "خطوط صينية",
     "short": "قصير",
     "normal": "عادي",
     "long": "طويل",
@@ -240,7 +246,24 @@
     "textIndent": "مسافة بادئة",
     "autoPage": "تقليب الصفحات تلقائيًا",
     "autoPageIntervalOption": "{seconds}ث",
-    "resetDefaults": "إعادة الضبط الافتراضي"
+    "resetDefaults": "إعادة الضبط الافتراضي",
+    "profile": {
+      "title": "الملف الشخصي",
+      "desc": "تخصيص حسابك",
+      "gender": "الجنس",
+      "genderPlaceholder": "اختر الجنس",
+      "genderMale": "ذكر",
+      "genderFemale": "أنثى",
+      "genderOther": "آخر",
+      "genderPreferNot": "أفضل عدم الإفصاح",
+      "birthYear": "سنة الميلاد",
+      "birthYearPlaceholder": "اختر السنة",
+      "country": "الدولة / المنطقة",
+      "countryPlaceholder": "اختر الدولة",
+      "save": "حفظ التغييرات",
+      "saved": "تم الحفظ",
+      "saveError": "فشل الحفظ. حاول مرة أخرى."
+    }
   },
   "auth": {
     "back": "→ رجوع",
@@ -400,14 +423,31 @@
       "streak": "التسلسل",
       "milestone": "الإنجاز",
       "social": "اجتماعي"
-    }
+    },
+    "notFound": "الشارة غير موجودة",
+    "back": "رجوع",
+    "description": "الوصف",
+    "progress": "التقدم",
+    "howToEarn": "كيفية الحصول عليها",
+    "earnedOn": "حُصل عليها في {date}",
+    "requirementTarget": "الهدف: {value}"
   },
   "quotes": {
     "dailyQuote": "اقتباس اليوم",
     "trending": "الأكثر رواجًا",
     "searchPlaceholder": "ابحث في الاقتباسات...",
     "all": "الكل",
-    "empty": "لم يتم العثور على اقتباسات"
+    "empty": "لم يتم العثور على اقتباسات",
+    "notFound": "الاقتباس غير موجود",
+    "back": "رجوع",
+    "like": "إعجاب",
+    "unlike": "إلغاء الإعجاب",
+    "share": "مشاركة",
+    "favorites": "المفضلة",
+    "favoritesEmpty": "لا توجد اقتباسات مفضلة بعد",
+    "viewAll": "عرض الكل",
+    "viewAuthorQuotes": "تصفح جميع اقتباسات {author}",
+    "viewBookQuotes": "تصفح اقتباسات «{book}»"
   },
   "analytics": {
     "totalTime": "إجمالي وقت القراءة",
@@ -427,7 +467,14 @@
       "title": "إحصائيات مفصّلة",
       "desc": "قم بالترقية إلى Pro لعرض تحليلات القراءة الكاملة",
       "upgrade": "الترقية إلى Pro"
-    }
+    },
+    "dailyDetails": "التفاصيل اليومية",
+    "reading": "قراءة",
+    "tts": "TTS",
+    "audiobook": "كتاب صوتي",
+    "noActivity": "لا نشاط",
+    "showLess": "عرض أقل",
+    "showAll": "عرض جميع الأيام {count}"
   },
   "subscription": {
     "title": "الترقية إلى Readmigo Pro",
@@ -489,6 +536,27 @@
         "technical_issues": "Technical issues",
         "not_using_enough": "Not using it enough",
         "other": "Other reason"
+      }
+    },
+    "trial": {
+      "countdown": "ينتهي الإصدار التجريبي خلال {days} يوم"
+    },
+    "triggers": {
+      "audioLimitReached": {
+        "title": "ترقية للصوت غير المحدود",
+        "subtitle": "وصلت إلى حد الاستماع اليومي. اشترك في Pro للاستماع بلا حدود."
+      },
+      "syncRequired": {
+        "title": "مزامنة بين أجهزتك",
+        "subtitle": "اشترك في Pro للحفاظ على تقدم قراءتك على جميع أجهزتك."
+      },
+      "downloadRequired": {
+        "title": "اقرأ بدون إنترنت في أي مكان",
+        "subtitle": "حمّل الكتب للقراءة دون اتصال مع اشتراك Pro."
+      },
+      "dataBackup": {
+        "title": "احتفظ بنسخة احتياطية من بياناتك",
+        "subtitle": "احمِ ملاحظاتك وتحديداتك وتقدمك بالنسخ الاحتياطي السحابي."
       }
     },
     "gracePeriod": {
@@ -614,7 +682,8 @@
     "madeWith": "صُنع بـ ❤️"
   },
   "notifications": {
-    "empty": "لا توجد إشعارات"
+    "empty": "لا توجد إشعارات",
+    "markAllRead": "تحديد الكل كمقروء"
   },
   "messaging": {
     "thread": "المحادثة",
@@ -642,7 +711,11 @@
         "performance": "الأداء",
         "other": "أخرى"
       }
-    }
+    },
+    "filterAll": "الكل",
+    "filterNew": "جديد",
+    "filterInProgress": "قيد التنفيذ",
+    "filterResolved": "محلول"
   },
   "notFound": {
     "title": "الصفحة غير موجودة",
@@ -695,7 +768,8 @@
     "tableOfContents": "جدول المحتويات",
     "viewAllChapters": "عرض جميع الفصول الـ {count}",
     "loadError": "فشل تحميل تفاصيل الكتاب. يرجى المحاولة لاحقًا.",
-    "notFound": "الكتاب غير موجود"
+    "notFound": "الكتاب غير موجود",
+    "bookQuotes": "اقتباسات من الكتاب"
   },
   "author": {
     "follow": "متابعة",
@@ -756,7 +830,8 @@
     "eventCategoryRevolution": "ثورة",
     "eventCategoryCultural": "ثقافي",
     "eventCategoryPolitical": "سياسي",
-    "eventCategoryScientific": "علمي"
+    "eventCategoryScientific": "علمي",
+    "browseAllAuthorQuotes": "تصفح جميع اقتباسات هذا المؤلف"
   },
   "wordLookup": {
     "noDefinition": "لم يتم العثور على تعريف",

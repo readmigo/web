@@ -134,7 +134,8 @@
       "cancel": "Отмена",
       "confirm": "Подтвердить",
       "zoom": "Масштаб"
-    }
+    },
+    "subscriptionPro": "Pro-участник"
   },
   "settings": {
     "appearance": "Внешний вид",
@@ -197,6 +198,11 @@
     "fontSerif": "С засечками",
     "fontSansSerif": "Без засечек",
     "fontMonospace": "Моноширинный",
+    "fontCategorySansSerif": "Без засечек",
+    "fontCategorySerif": "С засечками",
+    "fontCategoryMonospace": "Моноширинный",
+    "fontCategoryDyslexia": "Для дислексии",
+    "fontCategoryChinese": "Китайский",
     "short": "Короткий",
     "normal": "Нормальный",
     "long": "Длинный",
@@ -240,7 +246,24 @@
     "textIndent": "Красная строка",
     "autoPage": "Автоперелистывание",
     "autoPageIntervalOption": "{seconds}с",
-    "resetDefaults": "Сбросить настройки"
+    "resetDefaults": "Сбросить настройки",
+    "profile": {
+      "title": "Профиль",
+      "desc": "Настройте ваш аккаунт",
+      "gender": "Пол",
+      "genderPlaceholder": "Выберите пол",
+      "genderMale": "Мужской",
+      "genderFemale": "Женский",
+      "genderOther": "Другой",
+      "genderPreferNot": "Предпочитаю не указывать",
+      "birthYear": "Год рождения",
+      "birthYearPlaceholder": "Выберите год",
+      "country": "Страна / Регион",
+      "countryPlaceholder": "Выберите страну",
+      "save": "Сохранить",
+      "saved": "Сохранено",
+      "saveError": "Ошибка сохранения. Попробуйте снова."
+    }
   },
   "auth": {
     "back": "← Назад",
@@ -400,14 +423,31 @@
       "streak": "Серия",
       "milestone": "Вехи",
       "social": "Социальное"
-    }
+    },
+    "notFound": "Значок не найден",
+    "back": "Назад",
+    "description": "Описание",
+    "progress": "Прогресс",
+    "howToEarn": "Как получить",
+    "earnedOn": "Получен {date}",
+    "requirementTarget": "Цель: {value}"
   },
   "quotes": {
     "dailyQuote": "Цитата дня",
     "trending": "В тренде",
     "searchPlaceholder": "Поиск цитат...",
     "all": "Все",
-    "empty": "Цитаты не найдены"
+    "empty": "Цитаты не найдены",
+    "notFound": "Цитата не найдена",
+    "back": "Назад",
+    "like": "Нравится",
+    "unlike": "Убрать лайк",
+    "share": "Поделиться",
+    "favorites": "Избранное",
+    "favoritesEmpty": "Нет избранных цитат",
+    "viewAll": "Смотреть все",
+    "viewAuthorQuotes": "Все цитаты автора {author}",
+    "viewBookQuotes": "Все цитаты из «{book}»"
   },
   "analytics": {
     "totalTime": "Всего прочитано",
@@ -427,7 +467,14 @@
       "title": "Подробная статистика",
       "desc": "Перейдите на Pro для просмотра полной аналитики чтения",
       "upgrade": "Перейти на Pro"
-    }
+    },
+    "dailyDetails": "Дневная статистика",
+    "reading": "Чтение",
+    "tts": "TTS",
+    "audiobook": "Аудиокнига",
+    "noActivity": "Нет активности",
+    "showLess": "Свернуть",
+    "showAll": "Показать все {count} дней"
   },
   "subscription": {
     "title": "Перейти на Readmigo Pro",
@@ -614,7 +661,8 @@
     "madeWith": "Сделано с ❤️"
   },
   "notifications": {
-    "empty": "Уведомлений нет"
+    "empty": "Уведомлений нет",
+    "markAllRead": "Отметить все как прочитанные"
   },
   "messaging": {
     "thread": "Разговор",
@@ -642,7 +690,11 @@
         "performance": "Производительность",
         "other": "Другое"
       }
-    }
+    },
+    "filterAll": "Все",
+    "filterNew": "Новые",
+    "filterInProgress": "В обработке",
+    "filterResolved": "Решённые"
   },
   "notFound": {
     "title": "Страница не найдена",
@@ -695,7 +747,8 @@
     "tableOfContents": "Содержание",
     "viewAllChapters": "Смотреть все {count} глав",
     "loadError": "Не удалось загрузить сведения о книге. Пожалуйста, попробуйте позже.",
-    "notFound": "Книга не найдена"
+    "notFound": "Книга не найдена",
+    "bookQuotes": "Цитаты из книги"
   },
   "author": {
     "follow": "Подписаться",
@@ -756,7 +809,8 @@
     "eventCategoryRevolution": "Революция",
     "eventCategoryCultural": "Культурное",
     "eventCategoryPolitical": "Политическое",
-    "eventCategoryScientific": "Научное"
+    "eventCategoryScientific": "Научное",
+    "browseAllAuthorQuotes": "Все цитаты этого автора"
   },
   "wordLookup": {
     "noDefinition": "Определение не найдено",

@@ -134,7 +134,8 @@
       "cancel": "Cancelar",
       "confirm": "Confirmar",
       "zoom": "Zoom"
-    }
+    },
+    "subscriptionPro": "Membro Pro"
   },
   "settings": {
     "appearance": "Aparência",
@@ -197,6 +198,11 @@
     "fontSerif": "Serif",
     "fontSansSerif": "Sans-Serif",
     "fontMonospace": "Monoespaçado",
+    "fontCategorySansSerif": "Sem Serifa",
+    "fontCategorySerif": "Serifa",
+    "fontCategoryMonospace": "Monoespaçado",
+    "fontCategoryDyslexia": "Para Dislexia",
+    "fontCategoryChinese": "Chinês",
     "short": "Curto",
     "normal": "Normal",
     "long": "Longo",
@@ -240,7 +246,24 @@
     "textIndent": "Recuo de texto",
     "autoPage": "Virar página automaticamente",
     "autoPageIntervalOption": "{seconds}s",
-    "resetDefaults": "Restaurar padrões"
+    "resetDefaults": "Restaurar padrões",
+    "profile": {
+      "title": "Perfil",
+      "desc": "Personalize sua conta",
+      "gender": "Gênero",
+      "genderPlaceholder": "Selecionar gênero",
+      "genderMale": "Masculino",
+      "genderFemale": "Feminino",
+      "genderOther": "Outro",
+      "genderPreferNot": "Prefiro não dizer",
+      "birthYear": "Ano de nascimento",
+      "birthYearPlaceholder": "Selecionar ano",
+      "country": "País / Região",
+      "countryPlaceholder": "Selecionar país",
+      "save": "Salvar alterações",
+      "saved": "Salvo",
+      "saveError": "Falha ao salvar. Tente novamente."
+    }
   },
   "auth": {
     "back": "← Voltar",
@@ -400,14 +423,31 @@
       "streak": "Sequência",
       "milestone": "Marco",
       "social": "Social"
-    }
+    },
+    "notFound": "Distintivo não encontrado",
+    "back": "Voltar",
+    "description": "Descrição",
+    "progress": "Progresso",
+    "howToEarn": "Como obter",
+    "earnedOn": "Obtido em {date}",
+    "requirementTarget": "Meta: {value}"
   },
   "quotes": {
     "dailyQuote": "Citação do dia",
     "trending": "Em alta",
     "searchPlaceholder": "Pesquisar citações...",
     "all": "Todas",
-    "empty": "Nenhuma citação encontrada"
+    "empty": "Nenhuma citação encontrada",
+    "notFound": "Citação não encontrada",
+    "back": "Voltar",
+    "like": "Curtir",
+    "unlike": "Descurtir",
+    "share": "Compartilhar",
+    "favorites": "Meus favoritos",
+    "favoritesEmpty": "Nenhuma citação favorita ainda",
+    "viewAll": "Ver todos",
+    "viewAuthorQuotes": "Ver todas as citações de {author}",
+    "viewBookQuotes": "Ver todas as citações de «{book}»"
   },
   "analytics": {
     "totalTime": "Leitura total",
@@ -427,7 +467,14 @@
       "title": "Estatísticas detalhadas",
       "desc": "Atualize para Pro para ver análises completas de leitura",
       "upgrade": "Atualizar para Pro"
-    }
+    },
+    "dailyDetails": "Detalhes diários",
+    "reading": "Leitura",
+    "tts": "TTS",
+    "audiobook": "Audiolivro",
+    "noActivity": "Sem atividade",
+    "showLess": "Ver menos",
+    "showAll": "Ver todos os {count} dias"
   },
   "subscription": {
     "title": "Atualizar para Readmigo Pro",
@@ -614,7 +661,8 @@
     "madeWith": "Feito com ❤️"
   },
   "notifications": {
-    "empty": "Nenhuma notificação"
+    "empty": "Nenhuma notificação",
+    "markAllRead": "Marcar tudo como lido"
   },
   "messaging": {
     "thread": "Conversa",
@@ -642,7 +690,11 @@
         "performance": "Desempenho",
         "other": "Outro"
       }
-    }
+    },
+    "filterAll": "Todos",
+    "filterNew": "Novos",
+    "filterInProgress": "Em andamento",
+    "filterResolved": "Resolvidos"
   },
   "notFound": {
     "title": "Página não encontrada",
@@ -695,7 +747,8 @@
     "tableOfContents": "Sumário",
     "viewAllChapters": "Ver todos os {count} capítulos",
     "loadError": "Falha ao carregar os detalhes do livro. Por favor, tente novamente mais tarde.",
-    "notFound": "Livro não encontrado"
+    "notFound": "Livro não encontrado",
+    "bookQuotes": "Citações do livro"
   },
   "author": {
     "follow": "Seguir",
@@ -756,7 +809,8 @@
     "eventCategoryRevolution": "Revolução",
     "eventCategoryCultural": "Cultural",
     "eventCategoryPolitical": "Político",
-    "eventCategoryScientific": "Científico"
+    "eventCategoryScientific": "Científico",
+    "browseAllAuthorQuotes": "Ver todas as citações deste autor"
   },
   "wordLookup": {
     "noDefinition": "Nenhuma definição encontrada",

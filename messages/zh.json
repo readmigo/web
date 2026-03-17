@@ -102,7 +102,18 @@
     "emptyTitle": "您的书架还是空的",
     "emptySubtitle": "去书城发现更多好书吧",
     "goToBookstore": "去书城看看",
-    "remove": "移除"
+    "remove": "移除",
+    "guestPromptTitle": "登录后查看你的书架",
+    "guestPromptSubtitle": "追踪阅读进度、收藏书籍等更多功能",
+    "loginToView": "立即登录",
+    "edit": "编辑",
+    "done": "完成",
+    "deleteSelected": "删除选中",
+    "confirmDeleteTitle": "移除书籍？",
+    "confirmDeleteDesc": "将从收藏中移除 {count} 本书籍。",
+    "cancel": "取消",
+    "confirm": "确认",
+    "browseAll": "浏览全部书籍"
   },
   "me": {
     "user": "用户",
@@ -136,7 +147,8 @@
       "cancel": "取消",
       "confirm": "确认",
       "zoom": "缩放"
-    }
+    },
+    "subscriptionPro": "Pro 会员"
   },
   "settings": {
     "appearance": "外观",
@@ -255,7 +267,24 @@
     "textIndent": "首行缩进",
     "autoPage": "自动翻页",
     "autoPageIntervalOption": "{seconds}秒",
-    "resetDefaults": "重置默认设置"
+    "resetDefaults": "重置默认设置",
+    "profile": {
+      "title": "个人资料",
+      "desc": "完善您的账户信息",
+      "gender": "性别",
+      "genderPlaceholder": "请选择性别",
+      "genderMale": "男",
+      "genderFemale": "女",
+      "genderOther": "其他",
+      "genderPreferNot": "不愿透露",
+      "birthYear": "出生年份",
+      "birthYearPlaceholder": "请选择年份",
+      "country": "国家 / 地区",
+      "countryPlaceholder": "请选择国家",
+      "save": "保存更改",
+      "saved": "已保存",
+      "saveError": "保存失败，请重试。"
+    }
   },
   "auth": {
     "back": "← 返回",
@@ -415,14 +444,31 @@
       "streak": "连续",
       "milestone": "里程碑",
       "social": "社交"
-    }
+    },
+    "notFound": "未找到徽章",
+    "back": "返回",
+    "description": "描述",
+    "progress": "进度",
+    "howToEarn": "如何获得",
+    "earnedOn": "获得于 {date}",
+    "requirementTarget": "目标：{value}"
   },
   "quotes": {
     "dailyQuote": "每日名言",
     "trending": "热门名言",
     "searchPlaceholder": "搜索名言...",
     "all": "全部",
-    "empty": "暂无名言"
+    "empty": "暂无名言",
+    "notFound": "未找到名言",
+    "back": "返回",
+    "like": "喜欢",
+    "unlike": "取消喜欢",
+    "share": "分享",
+    "favorites": "我的收藏",
+    "favoritesEmpty": "还没有收藏的名言",
+    "viewAll": "查看全部",
+    "viewAuthorQuotes": "浏览 {author} 的所有名言",
+    "viewBookQuotes": "浏览《{book}》的所有名言"
   },
   "analytics": {
     "totalTime": "总阅读时长",
@@ -442,7 +488,14 @@
       "title": "详细统计",
       "desc": "升级 Pro 查看完整阅读数据分析",
       "upgrade": "升级 Pro"
-    }
+    },
+    "dailyDetails": "每日明细",
+    "reading": "阅读",
+    "tts": "朗读",
+    "audiobook": "有声书",
+    "noActivity": "暂无记录",
+    "showLess": "收起",
+    "showAll": "展开全部 {count} 天"
   },
   "subscription": {
     "title": "升级 Readmigo Pro",
@@ -543,6 +596,56 @@
       "upgradeCta": "升级 Pro",
       "cancel": "暂不升级",
       "dismiss": "关闭"
+    },
+    "page": {
+      "metaTitle": "订阅管理",
+      "metaDescription": "管理你的 Readmigo 订阅套餐与账单信息",
+      "heading": "订阅管理",
+      "subheading": "查看并管理你的套餐与账单详情",
+      "backToSettings": "返回设置",
+      "currentPlan": "当前套餐",
+      "currentPlanDesc": "你的有效订阅及续费详情",
+      "planLabel": "套餐",
+      "premiumTier": "高级会员",
+      "renewsOn": "续费日期",
+      "expiresOn": "到期日期",
+      "autoRenewOn": "自动续费已开启",
+      "autoRenewOff": "自动续费已关闭",
+      "statusExpired": "你的订阅已过期",
+      "statusCancelled": "订阅已取消 — 到期前仍可使用 Pro 权益",
+      "manageSubscription": "管理订阅",
+      "upgradeToPro": "升级 Pro",
+      "audioUsageTitle": "每日音频用量",
+      "audioUsageDesc": "免费用户每天可享 30 分钟音频",
+      "dailyUsage": "今日已用",
+      "minutes": "分钟",
+      "audioLimitReached": "今日用量已达上限，将于午夜重置。",
+      "audioResetNote": "用量每天午夜（本地时间）自动重置",
+      "proFeaturesTitle": "Pro 专属功能",
+      "proFeaturesDesc": "Readmigo Pro 包含的全部权益",
+      "featureDataSync": "跨设备同步",
+      "featureCloudBackup": "云端备份",
+      "featureUnlimitedAudio": "无限音频",
+      "featureStats": "详细阅读统计",
+      "featureTemplates": "高级模板",
+      "featureBookAccess": "完整书库",
+      "featureOfflineReading": "离线阅读",
+      "unlockAllFeatures": "解锁全部 Pro 权益",
+      "manageTitle": "账单管理",
+      "manageDesc": "更新支付方式、查看发票或取消订阅",
+      "stripePortal": "进入账单管理页",
+      "faqTitle": "常见问题",
+      "faq1Q": "如何取消订阅？",
+      "faq1A": "你可以随时通过账单管理页或点击上方的「取消订阅」来取消。取消后，当前计费周期结束前仍可使用 Pro 权益。",
+      "faq2Q": "可以切换套餐吗？",
+      "faq2A": "可以。进入账单管理页即可升级或降级套餐，变更将在下一个计费周期开始时生效。",
+      "faq3Q": "升级时会立即扣费吗？",
+      "faq3A": "升级时，系统会按当前计费周期的剩余天数收取差价。降级将在续费时生效。",
+      "faq4Q": "如何申请退款？",
+      "faq4A": "退款资格取决于你所在地区及支付方式。请在购买后 7 天内联系我们的支持团队，我们将为你审核处理。",
+      "contactTitle": "需要帮助？",
+      "contactDesc": "我们的支持团队通常在 24 小时内回复",
+      "contactButton": "联系支持"
     }
   },
   "onboarding": {
@@ -661,7 +764,8 @@
     "madeWith": "Made with ❤️"
   },
   "notifications": {
-    "empty": "暂无通知"
+    "empty": "暂无通知",
+    "markAllRead": "全部标为已读"
   },
   "messaging": {
     "thread": "对话详情",
@@ -689,7 +793,11 @@
         "performance": "性能问题",
         "other": "其他"
       }
-    }
+    },
+    "filterAll": "全部",
+    "filterNew": "新建",
+    "filterInProgress": "处理中",
+    "filterResolved": "已解决"
   },
   "notFound": {
     "title": "页面不存在",
@@ -742,7 +850,8 @@
     "tableOfContents": "目录",
     "viewAllChapters": "查看全部 {count} 章",
     "loadError": "加载书籍详情失败，请稍后重试",
-    "notFound": "未找到该书籍"
+    "notFound": "未找到该书籍",
+    "bookQuotes": "本书名言"
   },
   "author": {
     "follow": "关注",
@@ -803,7 +912,8 @@
     "eventCategoryRevolution": "革命",
     "eventCategoryCultural": "文化",
     "eventCategoryPolitical": "政治",
-    "eventCategoryScientific": "科学"
+    "eventCategoryScientific": "科学",
+    "browseAllAuthorQuotes": "浏览该作者的所有名言"
   },
   "wordLookup": {
     "noDefinition": "暂无释义",

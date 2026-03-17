@@ -40,3 +40,14 @@ export function useMarkAsRead() {
     },
   });
 }
+
+export function useMarkAllRead() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => apiClient.post('/notifications/mark-all-read', {}),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
+  });
+}

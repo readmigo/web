@@ -4,11 +4,16 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api/client';
 import type { ThreadsResponse, Message } from '../types';
 
-export function useTickets(page = 1) {
+export function useTickets(page = 1, status?: string) {
   return useQuery({
-    queryKey: ['tickets', page],
-    queryFn: () =>
-      apiClient.get<ThreadsResponse>(`/me/tickets?page=${page}&limit=20`) as Promise<ThreadsResponse>,
+    queryKey: ['tickets', page, status],
+    queryFn: () => {
+      const params = new URLSearchParams();
+      params.set('page', String(page));
+      params.set('limit', '20');
+      if (status) params.set('status', status);
+      return apiClient.get<ThreadsResponse>(`/me/tickets?${params}`) as Promise<ThreadsResponse>;
+    },
     staleTime: 60 * 1000,
   });
 }

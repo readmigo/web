@@ -134,7 +134,8 @@
       "cancel": "キャンセル",
       "confirm": "確認",
       "zoom": "ズーム"
-    }
+    },
+    "subscriptionPro": "Proメンバー"
   },
   "settings": {
     "appearance": "外観",
@@ -197,6 +198,11 @@
     "fontSerif": "セリフ",
     "fontSansSerif": "サンセリフ",
     "fontMonospace": "等幅",
+    "fontCategorySansSerif": "サンセリフ",
+    "fontCategorySerif": "セリフ",
+    "fontCategoryMonospace": "等幅",
+    "fontCategoryDyslexia": "ディスレクシア対応",
+    "fontCategoryChinese": "中国語フォント",
     "short": "短い",
     "normal": "普通",
     "long": "長い",
@@ -240,7 +246,24 @@
     "textIndent": "字下げ",
     "autoPage": "自動ページめくり",
     "autoPageIntervalOption": "{seconds}秒",
-    "resetDefaults": "デフォルトにリセット"
+    "resetDefaults": "デフォルトにリセット",
+    "profile": {
+      "title": "プロフィール",
+      "desc": "アカウント情報を更新",
+      "gender": "性別",
+      "genderPlaceholder": "性別を選択",
+      "genderMale": "男性",
+      "genderFemale": "女性",
+      "genderOther": "その他",
+      "genderPreferNot": "答えたくない",
+      "birthYear": "生まれ年",
+      "birthYearPlaceholder": "年を選択",
+      "country": "国 / 地域",
+      "countryPlaceholder": "国を選択",
+      "save": "保存する",
+      "saved": "保存済み",
+      "saveError": "保存に失敗しました。再試行してください。"
+    }
   },
   "auth": {
     "back": "← 戻る",
@@ -400,14 +423,31 @@
       "streak": "連続",
       "milestone": "マイルストーン",
       "social": "ソーシャル"
-    }
+    },
+    "notFound": "バッジが見つかりません",
+    "back": "戻る",
+    "description": "説明",
+    "progress": "進捗",
+    "howToEarn": "獲得方法",
+    "earnedOn": "{date}に獲得",
+    "requirementTarget": "目標：{value}"
   },
   "quotes": {
     "dailyQuote": "今日の名言",
     "trending": "トレンド",
     "searchPlaceholder": "名言を検索...",
     "all": "すべて",
-    "empty": "名言が見つかりません"
+    "empty": "名言が見つかりません",
+    "notFound": "名言が見つかりません",
+    "back": "戻る",
+    "like": "いいね",
+    "unlike": "いいね取消",
+    "share": "シェア",
+    "favorites": "お気に入り",
+    "favoritesEmpty": "お気に入りの名言はまだありません",
+    "viewAll": "すべて表示",
+    "viewAuthorQuotes": "{author}のすべての名言を見る",
+    "viewBookQuotes": "「{book}」のすべての名言を見る"
   },
   "analytics": {
     "totalTime": "総読書時間",
@@ -427,7 +467,14 @@
       "title": "詳細統計",
       "desc": "Proにアップグレードして完全な読書分析を見る",
       "upgrade": "Proにアップグレード"
-    }
+    },
+    "dailyDetails": "日別詳細",
+    "reading": "読書",
+    "tts": "TTS",
+    "audiobook": "オーディオブック",
+    "noActivity": "記録なし",
+    "showLess": "折りたたむ",
+    "showAll": "{count}日分をすべて表示"
   },
   "subscription": {
     "title": "Readmigo Pro にアップグレード",
@@ -614,7 +661,8 @@
     "madeWith": "Made with ❤️"
   },
   "notifications": {
-    "empty": "通知はありません"
+    "empty": "通知はありません",
+    "markAllRead": "すべて既読にする"
   },
   "messaging": {
     "thread": "会話",
@@ -642,7 +690,11 @@
         "performance": "パフォーマンス",
         "other": "その他"
       }
-    }
+    },
+    "filterAll": "すべて",
+    "filterNew": "新着",
+    "filterInProgress": "対応中",
+    "filterResolved": "解決済み"
   },
   "notFound": {
     "title": "ページが見つかりません",
@@ -695,7 +747,8 @@
     "tableOfContents": "目次",
     "viewAllChapters": "全 {count} チャプターを見る",
     "loadError": "書籍の詳細の読み込みに失敗しました。しばらくしてからお試しください。",
-    "notFound": "書籍が見つかりません"
+    "notFound": "書籍が見つかりません",
+    "bookQuotes": "この本の名言"
   },
   "author": {
     "follow": "フォロー",
@@ -756,7 +809,8 @@
     "eventCategoryRevolution": "革命",
     "eventCategoryCultural": "文化",
     "eventCategoryPolitical": "政治",
-    "eventCategoryScientific": "科学"
+    "eventCategoryScientific": "科学",
+    "browseAllAuthorQuotes": "この著者のすべての名言を見る"
   },
   "wordLookup": {
     "noDefinition": "定義が見つかりません",
