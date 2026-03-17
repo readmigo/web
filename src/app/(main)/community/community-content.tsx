@@ -484,13 +484,14 @@ function MediaLightbox({
       {/* Media content */}
       <div className="max-h-[90vh] max-w-[90vw]">
         {current.type === 'video' ? (
-          // eslint-disable-next-line jsx-a11y/media-has-caption
           <video
             src={current.url}
             controls
             autoPlay
             className="max-h-[85vh] max-w-[85vw] rounded-lg"
-          />
+          >
+            <track kind="captions" />
+          </video>
         ) : (
           <img
             src={current.url}

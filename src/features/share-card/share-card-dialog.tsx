@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Copy, Download, Share2, Loader2 } from 'lucide-react';
+import { Copy, Download, Share2, Loader2, Crown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SHARE_CARD_THEMES } from './types';
 import type { ShareCardTheme, ShareCardContent } from './types';
@@ -109,15 +109,14 @@ export function ShareCardDialog({ open, content, onClose }: ShareCardDialogProps
                       {t_name}
                     </span>
                     {cfg.isPremium && (
-                      <span
+                      <Crown
                         className={cn(
-                          'absolute -right-1 -top-1 rounded-full px-1 py-0.5 text-[8px] font-bold leading-none',
-                          'bg-amber-400 text-amber-900',
-                          'sm:static sm:ml-auto sm:text-[9px] sm:px-1',
+                          'absolute -right-1 -top-1 h-4 w-4 text-amber-400 drop-shadow',
+                          'sm:static sm:ml-auto sm:h-3.5 sm:w-3.5',
                         )}
-                      >
-                        PRO
-                      </span>
+                        aria-label="Premium theme"
+                        fill="currentColor"
+                      />
                     )}
                   </button>
                 );

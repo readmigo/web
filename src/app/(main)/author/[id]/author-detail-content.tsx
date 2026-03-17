@@ -11,7 +11,6 @@ import {
   BookOpen,
   Quote,
   Calendar,
-  MapPin,
   Globe,
   Heart,
   Share2,
@@ -23,6 +22,7 @@ import {
   Feather,
   Clock,
   Users,
+  List,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
@@ -63,7 +63,38 @@ const eraBorderColors: Record<string, string> = {
   'Postmodern': 'border-fuchsia-500',
 };
 
-function getEraGradient(era?: string): string {
+/**
+ * Returns a Tailwind gradient class based on author birth year.
+ * Periods:
+ *   Ancient   < 500    : gold/brown
+ *   Medieval  500-1500 : deep red/dark gold
+ *   Early Mod 1500-1800: indigo/deep purple
+ *   Modern    1800-1950: emerald/blue-gray
+ *   Contemp   > 1950   : bright blue/pink
+ */
+function getBirthYearGradient(birthYear?: number): string | null {
+  if (birthYear === undefined || birthYear === null) return null;
+  if (birthYear < 500) return 'from-amber-700 to-yellow-900';
+  if (birthYear < 1500) return 'from-red-800 to-yellow-800';
+  if (birthYear < 1800) return 'from-indigo-700 to-purple-900';
+  if (birthYear < 1950) return 'from-emerald-700 to-slate-700';
+  return 'from-blue-500 to-pink-600';
+}
+
+function getBirthYearBorderColor(birthYear?: number): string | null {
+  if (birthYear === undefined || birthYear === null) return null;
+  if (birthYear < 500) return 'border-amber-400';
+  if (birthYear < 1500) return 'border-red-500';
+  if (birthYear < 1800) return 'border-indigo-400';
+  if (birthYear < 1950) return 'border-emerald-400';
+  return 'border-blue-400';
+}
+
+function getEraGradient(era?: string, birthYear?: number): string {
+  // Prefer birth-year gradient when available
+  const byGradient = getBirthYearGradient(birthYear);
+  if (byGradient) return byGradient;
+
   if (!era) return 'from-primary/80 to-primary';
   for (const [key, value] of Object.entries(eraGradients)) {
     if (era.toLowerCase().includes(key.toLowerCase())) return value;
@@ -71,7 +102,10 @@ function getEraGradient(era?: string): string {
   return 'from-primary/80 to-primary';
 }
 
-function getEraBorderColor(era?: string): string {
+function getEraBorderColor(era?: string, birthYear?: number): string {
+  const byBorder = getBirthYearBorderColor(birthYear);
+  if (byBorder) return byBorder;
+
   if (!era) return 'border-primary';
   for (const [key, value] of Object.entries(eraBorderColors)) {
     if (era.toLowerCase().includes(key.toLowerCase())) return value;
@@ -137,8 +171,8 @@ export function AuthorDetailContent({ authorId }: AuthorDetailContentProps) {
     );
   }
 
-  const gradient = getEraGradient(author.era);
-  const borderColor = getEraBorderColor(author.era);
+  const gradient = getEraGradient(author.era, author.birthYear);
+  const borderColor = getEraBorderColor(author.era, author.birthYear);
 
   // Collect related authors from civilizationMap
   const relatedAuthors: AuthorLinkType[] = [];
@@ -219,7 +253,7 @@ export function AuthorDetailContent({ authorId }: AuthorDetailContentProps) {
               {isFollowing ? (
                 <>
                   <UserCheck className="mr-2 h-4 w-4" />
-                  {t('following')}
+                  {t('followingLabel')}
                 </>
               ) : (
                 <>
@@ -245,6 +279,19 @@ export function AuthorDetailContent({ authorId }: AuthorDetailContentProps) {
               <p className="text-xs text-muted-foreground">{t('followers')}</p>
             </div>
           </div>
+
+          {/* Following list entry link */}
+          {isFollowing && (
+            <div className="flex justify-center pt-1">
+              <Link
+                href="/author/following"
+                className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline"
+              >
+                <List className="h-3.5 w-3.5" />
+                {t('following.title')}
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* All sections stacked vertically */}
@@ -462,6 +509,12 @@ function QuotesSection({
             )}
           </Button>
         )}
+        <Link
+          href={`/quotes?authorId=${authorId}`}
+          className="block text-center text-sm text-primary hover:underline pt-1"
+        >
+          {t('browseAllAuthorQuotes')}
+        </Link>
       </div>
     </div>
   );
