@@ -51,6 +51,7 @@ export function useSubscription() {
     isPro,
     status: store.status,
     expiresAt: store.expiresAt,
+    trialEnd: store.trialEnd,
     willRenew: store.willRenew,
     isLoading: store.isLoading,
     canUseAudio,

@@ -4,20 +4,26 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import {
   User,
   Globe,
   LogOut,
+  Crown,
+  ChevronRight,
 } from 'lucide-react';
+import Link from 'next/link';
 import { OfflineDownloadsCard } from '@/features/offline/components/offline-downloads-card';
 import { OfflineSettingsCard } from '@/features/offline/components/offline-settings-card';
+import { ProfileEditSection } from './profile-edit-section';
+import { apiClient } from '@/lib/api/client';
+import { useSubscription } from '@/features/subscription/hooks/use-subscription';
 
 export function SettingsContent() {
   const t = useTranslations('settings');
-  const tc = useTranslations('common');
+  const ts = useTranslations('subscription');
+  const { isPro, isLoading: subLoading } = useSubscription();
 
   const [currentLocale, setCurrentLocale] = useState(() => {
     if (typeof document !== 'undefined') {
@@ -29,11 +35,28 @@ export function SettingsContent() {
   const handleLocaleChange = (locale: string) => {
     document.cookie = `NEXT_LOCALE=${locale};path=/;max-age=31536000`;
     setCurrentLocale(locale);
+
+    // G8: Sync locale to server (fire-and-forget)
+    apiClient.patch('/users/me', { locale }).catch(() => {/* silent */});
+
+    // G8: Analytics event
+    try {
+      // posthog may not be available in all environments — access via window to avoid import issues
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const ph = (window as any).posthog;
+      if (ph?.capture) {
+        ph.capture('language_changed', { from: currentLocale, to: locale });
+      }
+    } catch {/* silent */}
+
     window.location.reload();
   };
 
   return (
     <div className="space-y-6">
+      {/* Profile Edit — G7 */}
+      <ProfileEditSection />
+
       {/* Language */}
       <Card>
         <CardHeader>
@@ -67,6 +90,39 @@ export function SettingsContent() {
               </Button>
             ))}
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Subscription */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Crown className="h-5 w-5 text-purple-500" aria-hidden="true" />
+            {ts('page.heading')}
+          </CardTitle>
+          <CardDescription>{ts('page.subheading')}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Link
+            href="/settings/subscription"
+            className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50"
+            aria-label={ts('page.manageSubscription')}
+          >
+            <div className="flex items-center gap-3">
+              {!subLoading && (
+                isPro ? (
+                  <Badge className="bg-gradient-to-r from-purple-600 to-pink-500 text-white border-0">
+                    <Crown className="mr-1 h-3 w-3" aria-hidden="true" />
+                    Pro
+                  </Badge>
+                ) : (
+                  <Badge variant="secondary">Free</Badge>
+                )
+              )}
+              <span className="text-sm font-medium">{ts('page.manageSubscription')}</span>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+          </Link>
         </CardContent>
       </Card>
 

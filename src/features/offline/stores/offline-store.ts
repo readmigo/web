@@ -122,6 +122,18 @@ export const useOfflineStore = create<OfflineState>()((set, get) => {
     const state = get();
     if (!state.isOnline) return;
 
+    // G9: Enforce WiFi-only setting — pause queue on cellular/unknown networks
+    if (state.settings.downloadOnWifiOnly) {
+      // navigator.connection is a non-standard Network Information API
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const conn = (navigator as any).connection;
+      // Only block when we can positively identify a non-wifi connection type.
+      // If type is undefined (unsupported browsers), we allow downloads to proceed.
+      if (conn?.type && conn.type !== 'wifi' && conn.type !== 'ethernet') {
+        return;
+      }
+    }
+
     const { settings, downloadQueue, activeTaskIds } = state;
     const queuedTasks = downloadQueue.filter((t) => t.status === 'queued');
     const slots = MAX_CONCURRENT - activeTaskIds.size;

@@ -1,6 +1,6 @@
 export type SubscriptionTier = 'FREE' | 'PRO' | 'PREMIUM';
 
-export type SubscriptionStatus = 'ACTIVE' | 'EXPIRED' | 'CANCELLED' | 'GRACE_PERIOD';
+export type SubscriptionStatus = 'ACTIVE' | 'EXPIRED' | 'CANCELLED' | 'GRACE_PERIOD' | 'TRIALING';
 
 export interface SubscriptionState {
   tier: SubscriptionTier;
@@ -8,6 +8,7 @@ export interface SubscriptionState {
   isActive: boolean;
   startedAt?: string;
   expiresAt?: string;
+  trialEnd?: string;
   willRenew: boolean;
   originalTransactionId?: string;
   productId?: string;
@@ -28,6 +29,7 @@ export interface SubscriptionPlan {
 export type GatedFeature =
   | 'bookAccess'
   | 'offlineReading'
+  | 'offlineDownload'
   | 'premiumTemplates'
   | 'detailedStats'
   | 'cloudTTS'
@@ -36,6 +38,13 @@ export type GatedFeature =
   | 'dataSync'
   | 'cloudBackup'
   | 'unlimitedAudio';
+
+export type PaywallTrigger =
+  | 'general'
+  | 'audioLimitReached'
+  | 'syncRequired'
+  | 'downloadRequired'
+  | 'dataBackup';
 
 export type FeatureAccessResult =
   | { type: 'allowed' }

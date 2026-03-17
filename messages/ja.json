@@ -538,6 +538,27 @@
         "other": "Other reason"
       }
     },
+    "trial": {
+      "countdown": "トライアル終了まで {days} 日"
+    },
+    "triggers": {
+      "audioLimitReached": {
+        "title": "無制限オーディオにアップグレード",
+        "subtitle": "本日の音声再生上限に達しました。Pro にアップグレードして無制限に楽しみましょう。"
+      },
+      "syncRequired": {
+        "title": "デバイス間で同期",
+        "subtitle": "Pro にアップグレードして、すべてのデバイスで読書の進捗を同期させましょう。"
+      },
+      "downloadRequired": {
+        "title": "どこでもオフライン読書",
+        "subtitle": "Pro サブスクリプションで書籍をダウンロードして、インターネットなしで読みましょう。"
+      },
+      "dataBackup": {
+        "title": "データをバックアップ",
+        "subtitle": "クラウドバックアップでメモ、ハイライト、進捗を守りましょう。"
+      }
+    },
     "gracePeriod": {
       "title": "お支払い方法の更新が必要です",
       "description": "サブスクリプションは猶予期間中です。Pro アクセスを維持するには、お支払い方法を更新してください。",

@@ -51,7 +51,7 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
     : 0;
 
   const handleDownload = () => {
-    if (!requireFeature('offlineReading', 'download-book')) return;
+    if (!requireFeature('offlineDownload', 'download-book')) return;
     downloadBook(book);
   };
 
@@ -62,7 +62,7 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
   };
 
   if (showPaywall) {
-    return <PaywallView triggerSource="download-book" onDismiss={dismissPaywall} />;
+    return <PaywallView trigger="downloadRequired" onDismiss={dismissPaywall} />;
   }
 
   // Not downloaded — show download button

@@ -53,7 +53,7 @@ export function GlobalAudioPlayer() {
 
       {showPaywall && (
         <PaywallView
-          triggerSource="audioLimitReached"
+          trigger="audioLimitReached"
           onDismiss={() => setShowPaywall(false)}
         />
       )}

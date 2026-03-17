@@ -254,7 +254,7 @@ export function VoicePicker({ open, onOpenChange, tts, bookId }: VoicePickerProp
       {showPaywall && (
         <div className="fixed inset-0 z-[100]">
           <PaywallView
-            triggerSource="cloud_tts"
+            trigger="audioLimitReached"
             onDismiss={() => setShowPaywall(false)}
           />
         </div>

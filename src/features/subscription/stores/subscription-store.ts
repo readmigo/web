@@ -13,6 +13,7 @@ interface SubscriptionStoreState {
   status: SubscriptionStatus;
   isActive: boolean;
   expiresAt?: string;
+  trialEnd?: string;
   willRenew: boolean;
   isLoading: boolean;
   dailyAudioSeconds: number;
@@ -43,6 +44,7 @@ export const useSubscriptionStore = create<SubscriptionStoreState>()(
           status: state.status,
           isActive: state.isActive,
           expiresAt: state.expiresAt,
+          trialEnd: state.trialEnd,
           willRenew: state.willRenew,
         }),
 
@@ -60,6 +62,7 @@ export const useSubscriptionStore = create<SubscriptionStoreState>()(
           status: 'EXPIRED',
           isActive: false,
           expiresAt: undefined,
+          trialEnd: undefined,
           willRenew: false,
           dailyAudioSeconds: 0,
           dailyAudioDate: todayISO(),
@@ -72,6 +75,7 @@ export const useSubscriptionStore = create<SubscriptionStoreState>()(
         status: state.status,
         isActive: state.isActive,
         expiresAt: state.expiresAt,
+        trialEnd: state.trialEnd,
         willRenew: state.willRenew,
         dailyAudioSeconds: state.dailyAudioSeconds,
         dailyAudioDate: state.dailyAudioDate,

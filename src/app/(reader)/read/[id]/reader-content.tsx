@@ -671,7 +671,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
 
       {showPaywall && (
         <PaywallView
-          triggerSource="ttsLimitReached"
+          trigger="audioLimitReached"
           onDismiss={() => setShowPaywall(false)}
         />
       )}

@@ -315,7 +315,7 @@ export function MeContent() {
   const isAuthenticated = !!session?.user;
   const { history } = useBrowsingHistory();
   const { favoriteIds } = useFavoriteBookIds();
-  const { isPro, tier } = useSubscription();
+  const { isPro } = useSubscription();
   const { data: unreadCount } = useUnreadCount();
 
   const hasHistory = history.length > 0;

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { AlertTriangle, Crown, RefreshCw } from 'lucide-react';
+import { AlertTriangle, Clock, Crown, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import { useSubscription } from '../hooks/use-subscription';
 import { useTranslations } from 'next-intl';
@@ -16,6 +16,45 @@ function daysUntil(dateStr: string): number {
 
 interface GracePeriodBannerProps {
   expiresAt?: string;
+}
+
+interface TrialCountdownBannerProps {
+  trialEnd: string;
+}
+
+function TrialCountdownBanner({ trialEnd }: TrialCountdownBannerProps) {
+  const t = useTranslations('subscription.trial');
+  const remainingDays = daysUntil(trialEnd);
+
+  const colorClasses =
+    remainingDays > 7
+      ? 'border-purple-300 bg-purple-50 dark:border-purple-700 dark:bg-purple-950/40'
+      : remainingDays >= 3
+        ? 'border-orange-300 bg-orange-50 dark:border-orange-700 dark:bg-orange-950/40'
+        : 'border-red-300 bg-red-50 dark:border-red-700 dark:bg-red-950/40';
+
+  const iconColorClass =
+    remainingDays > 7
+      ? 'text-purple-500'
+      : remainingDays >= 3
+        ? 'text-orange-500'
+        : 'text-red-500';
+
+  const textColorClass =
+    remainingDays > 7
+      ? 'text-purple-900 dark:text-purple-200'
+      : remainingDays >= 3
+        ? 'text-orange-900 dark:text-orange-200'
+        : 'text-red-900 dark:text-red-200';
+
+  return (
+    <div className={`flex items-center gap-3 rounded-lg border px-4 py-3 ${colorClasses}`}>
+      <Clock className={`h-4 w-4 shrink-0 ${iconColorClass}`} aria-hidden="true" />
+      <p className={`flex-1 text-sm font-medium ${textColorClass}`}>
+        {t('countdown', { days: remainingDays })}
+      </p>
+    </div>
+  );
 }
 
 function GracePeriodBanner({ expiresAt }: GracePeriodBannerProps) {
@@ -49,7 +88,7 @@ function GracePeriodBanner({ expiresAt }: GracePeriodBannerProps) {
 }
 
 export function SubscriptionStatus() {
-  const { isPro, status, expiresAt, willRenew, isLoading } = useSubscription();
+  const { isPro, status, expiresAt, trialEnd, willRenew, isLoading } = useSubscription();
   const t = useTranslations('subscription');
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
 
@@ -63,6 +102,9 @@ export function SubscriptionStatus() {
 
   return (
     <div className="flex flex-col gap-3">
+      {status === 'TRIALING' && trialEnd && (
+        <TrialCountdownBanner trialEnd={trialEnd} />
+      )}
       {status === 'GRACE_PERIOD' && (
         <GracePeriodBanner expiresAt={expiresAt} />
       )}

@@ -538,6 +538,27 @@
         "other": "Other reason"
       }
     },
+    "trial": {
+      "countdown": "O período de teste termina em {days} dia(s)"
+    },
+    "triggers": {
+      "audioLimitReached": {
+        "title": "Atualize para áudio ilimitado",
+        "subtitle": "Você atingiu seu limite diário de áudio. Torne-se Pro para ouvir sem limites."
+      },
+      "syncRequired": {
+        "title": "Sincronize entre dispositivos",
+        "subtitle": "Atualize para Pro para manter seu progresso de leitura sincronizado em todos os lugares."
+      },
+      "downloadRequired": {
+        "title": "Leia offline em qualquer lugar",
+        "subtitle": "Baixe livros para leitura offline com uma assinatura Pro."
+      },
+      "dataBackup": {
+        "title": "Faça backup dos seus dados",
+        "subtitle": "Proteja suas notas, destaques e progresso com backup na nuvem."
+      }
+    },
     "gracePeriod": {
       "title": "O método de pagamento precisa ser atualizado",
       "description": "Sua assinatura está em período de carência. Atualize seu método de pagamento para manter o acesso Pro.",

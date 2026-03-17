@@ -13,6 +13,7 @@ import { OverviewCards } from './overview-cards';
 import { ReadingTrendCard } from './reading-trend';
 import { CurrentlyReading } from './currently-reading';
 import { RecentSessions } from './recent-sessions';
+import { DailyStatsSection } from './daily-stats-section';
 
 function StatsLoadingSkeleton() {
   return (
@@ -53,7 +54,7 @@ export function ReadingStatsDashboard() {
           </button>
         </div>
         {showPaywall && (
-          <PaywallView triggerSource="reading_stats_v2" onDismiss={dismissPaywall} />
+          <PaywallView trigger="general" onDismiss={dismissPaywall} />
         )}
       </div>
     );
@@ -77,13 +78,14 @@ export function ReadingStatsDashboard() {
       {overview && <OverviewCards data={overview} />}
       <TodayCard data={data.today} />
       {data.weekly.days.length > 0 && <WeeklyChart data={data.weekly} />}
+      {data.weekly.days.length > 0 && <DailyStatsSection days={data.weekly.days} />}
       <ReadingTrendCard />
       <StreakCard data={data.monthly} />
       <TypeBreakdown data={data.monthly} />
       {progress && <CurrentlyReading books={progress.currentlyReading} />}
       {progress && <RecentSessions sessions={progress.recentSessions} />}
       {showPaywall && (
-        <PaywallView triggerSource="reading_stats_v2" onDismiss={dismissPaywall} />
+        <PaywallView trigger="general" onDismiss={dismissPaywall} />
       )}
     </div>
   );

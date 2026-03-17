@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { apiClient } from '@/lib/api/client';
-import type { SubscriptionPeriod } from '../types';
+import type { SubscriptionPeriod, PaywallTrigger } from '../types';
 import { useCheckout } from '../hooks/use-checkout';
 import { useSubscriptionPlans } from '../hooks/use-subscription-plans';
 
@@ -38,11 +38,11 @@ const PRO_FEATURES = [
 type RestoreState = 'idle' | 'loading' | 'success' | 'error';
 
 interface PaywallViewProps {
-  triggerSource?: string;
+  trigger?: PaywallTrigger;
   onDismiss: () => void;
 }
 
-export function PaywallView({ triggerSource, onDismiss }: PaywallViewProps) {
+export function PaywallView({ trigger = 'general', onDismiss }: PaywallViewProps) {
   const t = useTranslations('subscription');
   const queryClient = useQueryClient();
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionPeriod>('yearly');
@@ -56,7 +56,7 @@ export function PaywallView({ triggerSource, onDismiss }: PaywallViewProps) {
   const handleSubscribe = useCallback(() => {
     trackEvent('purchase_initiated', {
       plan: selectedPlan,
-      source: triggerSource,
+      source: trigger,
     });
 
     createCheckoutSession({
@@ -64,7 +64,7 @@ export function PaywallView({ triggerSource, onDismiss }: PaywallViewProps) {
       successUrl: window.location.href,
       cancelUrl: window.location.href,
     });
-  }, [selectedPlan, triggerSource, createCheckoutSession]);
+  }, [selectedPlan, trigger, createCheckoutSession]);
 
   const restoreMutation = useMutation({
     mutationFn: async () => {
@@ -74,14 +74,14 @@ export function PaywallView({ triggerSource, onDismiss }: PaywallViewProps) {
       setRestoreState('loading');
     },
     onSuccess: async () => {
-      trackEvent('restore_purchases_success', { source: triggerSource });
+      trackEvent('restore_purchases_success', { source: trigger });
       await queryClient.invalidateQueries({ queryKey: ['subscription', 'status'] });
       setRestoreState('success');
       // Close paywall after a brief moment so user sees success feedback
       setTimeout(onDismiss, 1200);
     },
     onError: () => {
-      trackEvent('restore_purchases_failed', { source: triggerSource });
+      trackEvent('restore_purchases_failed', { source: trigger });
       setRestoreState('error');
     },
   });
@@ -94,7 +94,7 @@ export function PaywallView({ triggerSource, onDismiss }: PaywallViewProps) {
 
   // Track view
   useState(() => {
-    trackEvent('paywall_viewed', { source: triggerSource });
+    trackEvent('paywall_viewed', { source: trigger });
   });
 
   return (
@@ -104,7 +104,7 @@ export function PaywallView({ triggerSource, onDismiss }: PaywallViewProps) {
         <button
           className="absolute right-4 top-4 rounded-full p-1 hover:bg-muted"
           onClick={() => {
-            trackEvent('paywall_dismissed', { source: triggerSource });
+            trackEvent('paywall_dismissed', { source: trigger });
             onDismiss();
           }}
           aria-label={t('close')}
@@ -116,10 +116,14 @@ export function PaywallView({ triggerSource, onDismiss }: PaywallViewProps) {
         <div className="flex flex-col items-center pt-2">
           <div className="flex items-center gap-1.5">
             <Sparkles className="h-5 w-5 text-purple-500" aria-hidden="true" />
-            <h2 className="text-xl font-bold">{t('title')}</h2>
+            <h2 className="text-xl font-bold">
+              {trigger === 'general' ? t('title') : t(`triggers.${trigger}.title`)}
+            </h2>
             <Sparkles className="h-5 w-5 text-pink-500" aria-hidden="true" />
           </div>
-          <p className="mt-1.5 text-sm text-muted-foreground">{t('subtitle')}</p>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            {trigger === 'general' ? t('subtitle') : t(`triggers.${trigger}.subtitle`)}
+          </p>
         </div>
 
         {/* Social proof */}
