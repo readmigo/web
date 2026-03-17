@@ -52,6 +52,14 @@ export function Footer() {
           >
             X
           </a>
+          <a
+            href="https://discord.gg/X79FTWZHJb"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-foreground"
+          >
+            Discord
+          </a>
         </div>
       </div>
     </footer>
