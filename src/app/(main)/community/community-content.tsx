@@ -18,6 +18,8 @@ import {
   Loader2,
   BookOpen,
 } from 'lucide-react';
+import { CreatePostDialog } from '@/features/agora/components/create-post-dialog';
+import { CommentSheet } from '@/features/agora/components/comment-sheet';
 
 // ---- Types ----
 
@@ -51,6 +53,10 @@ export function CommunityContent() {
   const t = useTranslations('community');
   const queryClient = useQueryClient();
   const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // State for the comment sheet
+  const [commentPostId, setCommentPostId] = useState<string | null>(null);
+  const [commentPostContent, setCommentPostContent] = useState<string | undefined>();
 
   // Infinite query for agora posts
   const {
@@ -159,6 +165,16 @@ export function CommunityContent() {
   // Flatten all pages
   const posts = data?.pages.flatMap((page) => page.data ?? []) || [];
 
+  const handleCommentClick = (post: AgoraPost) => {
+    setCommentPostId(post.id);
+    setCommentPostContent(post.content);
+  };
+
+  const handleCommentSheetClose = () => {
+    setCommentPostId(null);
+    setCommentPostContent(undefined);
+  };
+
   // ---- Loading State ----
   if (isLoading) {
     return (
@@ -188,38 +204,58 @@ export function CommunityContent() {
   // ---- Empty State ----
   if (posts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20">
-        <MessageSquare className="h-12 w-12 text-muted-foreground" />
-        <p className="mt-4 text-lg font-medium">{t('welcome')}</p>
-        <p className="mt-1 text-sm text-muted-foreground">{t('noActivity')}</p>
-      </div>
+      <>
+        <div className="mb-4 flex items-center justify-end">
+          <CreatePostDialog />
+        </div>
+        <div className="flex flex-col items-center justify-center py-20">
+          <MessageSquare className="h-12 w-12 text-muted-foreground" />
+          <p className="mt-4 text-lg font-medium">{t('welcome')}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{t('noActivity')}</p>
+        </div>
+      </>
     );
   }
 
   // ---- Post Feed ----
   return (
-    <div className="space-y-4">
-      {posts.map((post) => (
-        <PostCard
-          key={post.id}
-          post={post}
-          onLikeToggle={(postId, isLiked) => likeMutation.mutate({ postId, isLiked })}
-        />
-      ))}
-
-      {/* Sentinel for infinite scroll */}
-      <div ref={sentinelRef} className="flex justify-center py-6">
-        {isFetchingNextPage && (
-          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-        )}
-        {!hasNextPage && posts.length > 0 && (
-          <div className="flex flex-col items-center text-muted-foreground">
-            <CheckCircle className="h-5 w-5" />
-            <p className="mt-1 text-sm">{t('noMore')}</p>
-          </div>
-        )}
+    <>
+      {/* Header row with create button */}
+      <div className="mb-4 flex items-center justify-end">
+        <CreatePostDialog />
       </div>
-    </div>
+
+      <div className="space-y-4">
+        {posts.map((post) => (
+          <PostCard
+            key={post.id}
+            post={post}
+            onLikeToggle={(postId, isLiked) => likeMutation.mutate({ postId, isLiked })}
+            onCommentClick={() => handleCommentClick(post)}
+          />
+        ))}
+
+        {/* Sentinel for infinite scroll */}
+        <div ref={sentinelRef} className="flex justify-center py-6">
+          {isFetchingNextPage && (
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          )}
+          {!hasNextPage && posts.length > 0 && (
+            <div className="flex flex-col items-center text-muted-foreground">
+              <CheckCircle className="h-5 w-5" />
+              <p className="mt-1 text-sm">{t('noMore')}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Comment Sheet — rendered at feed level to avoid re-mount on scroll */}
+      <CommentSheet
+        postId={commentPostId}
+        postContent={commentPostContent}
+        onClose={handleCommentSheetClose}
+      />
+    </>
   );
 }
 
@@ -228,11 +264,14 @@ export function CommunityContent() {
 function PostCard({
   post,
   onLikeToggle,
+  onCommentClick,
 }: {
   post: AgoraPost;
   onLikeToggle: (postId: string, isLiked: boolean) => void;
+  onCommentClick: () => void;
 }) {
   const tCommon = useTranslations('common');
+  const t = useTranslations('community');
   const [expanded, setExpanded] = useState(false);
 
   const relativeTimeT = {
@@ -310,6 +349,8 @@ function PostCard({
               ? 'text-red-500'
               : 'text-muted-foreground hover:text-foreground'
           }`}
+          aria-label={post.isLiked ? 'Unlike post' : 'Like post'}
+          aria-pressed={post.isLiked}
         >
           <Heart
             className={`h-4 w-4 ${post.isLiked ? 'fill-red-500' : ''}`}
@@ -317,7 +358,11 @@ function PostCard({
           {post.likeCount > 0 && <span>{post.likeCount}</span>}
         </button>
 
-        <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+        <button
+          onClick={onCommentClick}
+          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          aria-label={t('comments')}
+        >
           <MessageCircle className="h-4 w-4" />
           {post.commentCount > 0 && <span>{post.commentCount}</span>}
         </button>

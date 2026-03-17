@@ -398,6 +398,13 @@
       "unlimitedAudio": "Audio Tanpa Batas",
       "stats": "Statistik Terperinci",
       "templates": "Template Premium"
+    },
+    "expires": "Berakhir",
+    "gracePeriod": {
+      "title": "Metode pembayaran perlu diperbarui",
+      "description": "Langganan Anda sedang dalam masa tenggang. Perbarui metode pembayaran untuk mempertahankan akses Pro.",
+      "descriptionWithDays": "Langganan Anda berakhir dalam {days} hari. Perbarui metode pembayaran untuk mempertahankan akses Pro.",
+      "fixPayment": "Perbaiki pembayaran"
     }
   },
   "onboarding": {
@@ -543,7 +550,20 @@
     "description": "Bagikan wawasan membaca dan temukan kutipan bagus",
     "welcome": "Selamat Datang di Komunitas",
     "noActivity": "Belum ada aktivitas",
-    "noMore": "Anda telah mencapai akhir"
+    "noMore": "Anda telah mencapai akhir",
+    "createPost": "Buat Postingan",
+    "postPlaceholder": "Bagikan pemikiran membaca Anda...",
+    "postContent": "Konten postingan",
+    "publish": "Publikasikan",
+    "publishing": "Mempublikasikan...",
+    "charCount": "{count}/500",
+    "cancel": "Batal",
+    "comments": "Komentar",
+    "noComments": "Belum ada komentar. Jadilah yang pertama!",
+    "writeComment": "Tulis komentar...",
+    "send": "Kirim",
+    "deleteComment": "Hapus",
+    "confirmDelete": "Konfirmasi hapus"
   },
   "explore": {
     "title": "Jelajahi Buku",

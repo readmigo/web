@@ -398,6 +398,13 @@
       "unlimitedAudio": "صوت غير محدود",
       "stats": "إحصائيات مفصّلة",
       "templates": "قوالب مميّزة"
+    },
+    "expires": "ينتهي في",
+    "gracePeriod": {
+      "title": "طريقة الدفع تحتاج إلى تحديث",
+      "description": "اشتراكك في فترة السماح. يُرجى تحديث طريقة الدفع للحفاظ على وصول Pro.",
+      "descriptionWithDays": "ينتهي اشتراكك خلال {days} يوم. يُرجى تحديث طريقة الدفع للحفاظ على وصول Pro.",
+      "fixPayment": "إصلاح الدفع"
     }
   },
   "onboarding": {
@@ -543,7 +550,20 @@
     "description": "شارك رؤى القراءة واكتشف اقتباسات رائعة",
     "welcome": "مرحبًا بك في المجتمع",
     "noActivity": "لا يوجد نشاط بعد",
-    "noMore": "لقد وصلت إلى النهاية"
+    "noMore": "لقد وصلت إلى النهاية",
+    "createPost": "إنشاء منشور",
+    "postPlaceholder": "شارك أفكارك في القراءة...",
+    "postContent": "محتوى المنشور",
+    "publish": "نشر",
+    "publishing": "جارٍ النشر...",
+    "charCount": "{count}/500",
+    "cancel": "إلغاء",
+    "comments": "التعليقات",
+    "noComments": "لا توجد تعليقات بعد. كن أول من يعلق!",
+    "writeComment": "اكتب تعليقًا...",
+    "send": "إرسال",
+    "deleteComment": "حذف",
+    "confirmDelete": "تأكيد الحذف"
   },
   "explore": {
     "title": "استكشف الكتب",
