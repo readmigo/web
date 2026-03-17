@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
@@ -10,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Mail, Eye, EyeOff } from 'lucide-react';
+import { useGuestMode } from '@/features/auth/hooks/use-guest-mode';
 function LineLogo({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -40,6 +42,8 @@ interface LoginFormProps {
 
 export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
   const t = useTranslations('auth');
+  const router = useRouter();
+  const { enterGuestMode } = useGuestMode();
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -271,12 +275,16 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
 
         {/* Guest Mode */}
         <div className="pt-2 text-center">
-          <Link
-            href="/"
+          <button
+            type="button"
             className="text-sm text-white/60 underline underline-offset-4 hover:text-white/80 transition-colors"
+            onClick={() => {
+              enterGuestMode();
+              router.push('/');
+            }}
           >
             {t('browseGuest')}
-          </Link>
+          </button>
         </div>
       </div>
     </div>

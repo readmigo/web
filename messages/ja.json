@@ -294,7 +294,57 @@
     "sendingEmail": "送信中...",
     "resetEmailSent": "メールをご確認ください",
     "resetEmailSentDesc": "そのメールアドレスでアカウントが存在する場合、パスワードリセットのリンクを送信しました。",
-    "backToLogin": "ログインに戻る"
+    "backToLogin": "ログインに戻る",
+    "loginFeatures": {
+      "library": {
+        "title": "ライブラリを見るにはサインイン",
+        "desc": "サインインして個人ライブラリを管理し、読書の進捗を追跡しましょう。"
+      },
+      "bookmark": {
+        "title": "ブックマークするにはサインイン",
+        "desc": "サインインしてお気に入りの箇所をブックマークし、いつでも振り返れます。"
+      },
+      "highlight": {
+        "title": "ハイライトするにはサインイン",
+        "desc": "サインインして重要な箇所をハイライトし、メモを追加しましょう。"
+      },
+      "vocabulary": {
+        "title": "単語を保存するにはサインイン",
+        "desc": "サインインして読書中に個人の単語リストを作成しましょう。"
+      },
+      "stats": {
+        "title": "読書統計を見るにはサインイン",
+        "desc": "サインインして読書時間や進捗などのデータを確認しましょう。"
+      },
+      "achievements": {
+        "title": "実績を解除するにはサインイン",
+        "desc": "サインインして読書実績を集め、成長を追跡しましょう。"
+      },
+      "notes": {
+        "title": "メモするにはサインイン",
+        "desc": "サインインして読んでいる本に個人メモを追加しましょう。"
+      },
+      "audiobook": {
+        "title": "オーディオブックはサインインが必要",
+        "desc": "サインインしてオーディオブック機能を解除し、没入型のリスニングを楽しみましょう。"
+      },
+      "translation": {
+        "title": "翻訳するにはサインイン",
+        "desc": "サインインして段落を翻訳し、理解を深めましょう。"
+      },
+      "sync": {
+        "title": "同期するにはサインイン",
+        "desc": "サインインして全デバイスで読書進捗とメモを同期しましょう。"
+      },
+      "community": {
+        "title": "コミュニティに参加するにはサインイン",
+        "desc": "サインインして議論に参加し、他の読者と感想を共有しましょう。"
+      },
+      "paper": {
+        "title": "論文を読むにはサインイン",
+        "desc": "サインインして学術論文をインポートして読みましょう。"
+      }
+    }
   },
   "footer": {
     "privacyPolicy": "プライバシーポリシー",
@@ -390,7 +440,11 @@
     "subscribe": "今すぐ購読",
     "startTrial": "7日間無料トライアルを開始",
     "processing": "処理中...",
-    "restore": "購入を復元",
+    "restore": {
+      "success": "Purchase restored successfully.",
+      "error": "Could not restore purchase.",
+      "contactSupport": "Contact support"
+    },
     "terms": "利用規約",
     "privacy": "プライバシーポリシー",
     "plans": {
@@ -410,11 +464,6 @@
     "selectPlan": "Select a plan",
     "checkoutError": "Failed to start checkout. Please try again.",
     "cancelSubscription": "Cancel subscription",
-    "restore": {
-      "success": "Purchase restored successfully.",
-      "error": "Could not restore purchase.",
-      "contactSupport": "Contact support"
-    },
     "cancelDialog": {
       "step1Title": "Are you sure you want to cancel?",
       "loseAccess": "You will lose access to these Pro features:",
@@ -571,7 +620,29 @@
     "thread": "会話",
     "inputPlaceholder": "メッセージを入力...",
     "empty": "まだメッセージはありません",
-    "newTicket": "新しいチケット"
+    "newTicket": "新しいチケット",
+    "createTicket": {
+      "title": "新しいチケット",
+      "category": "カテゴリ",
+      "categoryPlaceholder": "カテゴリを選択",
+      "subject": "件名",
+      "subjectPlaceholder": "問題の簡単な説明",
+      "content": "メッセージ",
+      "contentPlaceholder": "問題を詳しく説明してください...",
+      "deviceInfo": "デバイス情報を添付",
+      "deviceInfoDesc": "ブラウザ、言語、画面サイズを自動的に含めます",
+      "submit": "送信",
+      "submitting": "送信中...",
+      "cancel": "キャンセル",
+      "categories": {
+        "bug": "バグ報告",
+        "feature_request": "機能リクエスト",
+        "ui_ux": "UI / UX",
+        "content": "コンテンツ",
+        "performance": "パフォーマンス",
+        "other": "その他"
+      }
+    }
   },
   "notFound": {
     "title": "ページが見つかりません",
@@ -862,7 +933,8 @@
     "bookstore": "書店",
     "bookstoreDesc": "新しい書籍を発見",
     "settings": "設定",
-    "settingsDesc": "アプリの設定を管理"
+    "settingsDesc": "アプリの設定を管理",
+    "viewMore": "もっと見る"
   },
   "offline": {
     "downloadForOffline": "オフライン用にダウンロード",

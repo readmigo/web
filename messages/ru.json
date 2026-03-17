@@ -294,7 +294,57 @@
     "sendingEmail": "Отправка...",
     "resetEmailSent": "Проверьте почту",
     "resetEmailSentDesc": "Если аккаунт с таким адресом существует, ссылка для сброса пароля отправлена.",
-    "backToLogin": "Вернуться к входу"
+    "backToLogin": "Вернуться к входу",
+    "loginFeatures": {
+      "library": {
+        "title": "Войдите, чтобы открыть библиотеку",
+        "desc": "Войдите, чтобы управлять личной библиотекой и отслеживать прогресс чтения."
+      },
+      "bookmark": {
+        "title": "Войдите, чтобы добавить закладку",
+        "desc": "Войдите, чтобы сохранять любимые отрывки и возвращаться к ним в любое время."
+      },
+      "highlight": {
+        "title": "Войдите, чтобы выделить текст",
+        "desc": "Войдите, чтобы выделять ключевые отрывки и добавлять личные заметки."
+      },
+      "vocabulary": {
+        "title": "Войдите, чтобы сохранить слова",
+        "desc": "Войдите, чтобы создавать личный словарный список во время чтения."
+      },
+      "stats": {
+        "title": "Войдите для статистики чтения",
+        "desc": "Войдите, чтобы просматривать время чтения, прогресс и отчёты."
+      },
+      "achievements": {
+        "title": "Войдите для достижений",
+        "desc": "Войдите, чтобы разблокировать достижения и отслеживать свой прогресс."
+      },
+      "notes": {
+        "title": "Войдите, чтобы делать заметки",
+        "desc": "Войдите, чтобы добавлять личные заметки к любой читаемой книге."
+      },
+      "audiobook": {
+        "title": "Войдите для аудиокниг",
+        "desc": "Войдите, чтобы разблокировать функцию аудиокниг и наслаждаться прослушиванием."
+      },
+      "translation": {
+        "title": "Войдите для перевода",
+        "desc": "Войдите, чтобы переводить отрывки и углублять понимание."
+      },
+      "sync": {
+        "title": "Войдите для синхронизации",
+        "desc": "Войдите, чтобы синхронизировать прогресс и заметки на всех устройствах."
+      },
+      "community": {
+        "title": "Войдите в сообщество",
+        "desc": "Войдите, чтобы участвовать в обсуждениях и делиться мыслями с другими читателями."
+      },
+      "paper": {
+        "title": "Войдите для чтения статей",
+        "desc": "Войдите, чтобы импортировать и читать научные статьи."
+      }
+    }
   },
   "footer": {
     "privacyPolicy": "Политика конфиденциальности",
@@ -390,7 +440,11 @@
     "subscribe": "Подписаться сейчас",
     "startTrial": "Начать 7-дневную бесплатную пробную версию",
     "processing": "Обработка...",
-    "restore": "Восстановить покупки",
+    "restore": {
+      "success": "Purchase restored successfully.",
+      "error": "Could not restore purchase.",
+      "contactSupport": "Contact support"
+    },
     "terms": "Условия использования",
     "privacy": "Политика конфиденциальности",
     "plans": {
@@ -410,11 +464,6 @@
     "selectPlan": "Select a plan",
     "checkoutError": "Failed to start checkout. Please try again.",
     "cancelSubscription": "Cancel subscription",
-    "restore": {
-      "success": "Purchase restored successfully.",
-      "error": "Could not restore purchase.",
-      "contactSupport": "Contact support"
-    },
     "cancelDialog": {
       "step1Title": "Are you sure you want to cancel?",
       "loseAccess": "You will lose access to these Pro features:",
@@ -571,7 +620,29 @@
     "thread": "Разговор",
     "inputPlaceholder": "Напишите сообщение...",
     "empty": "Сообщений пока нет",
-    "newTicket": "Новый тикет"
+    "newTicket": "Новый тикет",
+    "createTicket": {
+      "title": "Новая заявка",
+      "category": "Категория",
+      "categoryPlaceholder": "Выберите категорию",
+      "subject": "Тема",
+      "subjectPlaceholder": "Краткое описание проблемы",
+      "content": "Сообщение",
+      "contentPlaceholder": "Опишите проблему подробнее...",
+      "deviceInfo": "Прикрепить информацию об устройстве",
+      "deviceInfoDesc": "Автоматически добавит браузер, язык и размер экрана",
+      "submit": "Отправить",
+      "submitting": "Отправка...",
+      "cancel": "Отмена",
+      "categories": {
+        "bug": "Сообщение об ошибке",
+        "feature_request": "Запрос функции",
+        "ui_ux": "Интерфейс / UX",
+        "content": "Контент",
+        "performance": "Производительность",
+        "other": "Другое"
+      }
+    }
   },
   "notFound": {
     "title": "Страница не найдена",
@@ -862,7 +933,8 @@
     "bookstore": "Книжный магазин",
     "bookstoreDesc": "Открыть новые книги",
     "settings": "Настройки",
-    "settingsDesc": "Управление настройками приложения"
+    "settingsDesc": "Управление настройками приложения",
+    "viewMore": "Смотреть больше"
   },
   "offline": {
     "downloadForOffline": "Скачать для офлайна",

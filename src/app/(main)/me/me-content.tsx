@@ -4,6 +4,7 @@ import { useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
+import { clearUserData } from '@/lib/auth/clear-user-data';
 import Cropper from 'react-easy-crop';
 import type { Area } from 'react-easy-crop';
 import { Button } from '@/components/ui/button';
@@ -37,6 +38,8 @@ import { useTranslations } from 'next-intl';
 import { ContinueReadingCard } from '@/features/library/components/continue-reading-card';
 import { useBrowsingHistory } from '@/features/library/hooks/use-browsing-history';
 import { useFavoriteBookIds } from '@/features/library/hooks/use-favorites';
+import { useSubscription } from '@/features/subscription/hooks/use-subscription';
+import { useUnreadCount } from '@/features/notifications/hooks/use-notifications';
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
@@ -79,6 +82,7 @@ function MenuRow({
   href,
   onClick,
   destructive,
+  badge,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   iconColor?: string;
@@ -87,6 +91,7 @@ function MenuRow({
   href?: string;
   onClick?: () => void;
   destructive?: boolean;
+  badge?: number;
 }) {
   const content = (
     <div className="flex items-center gap-3 rounded-xl bg-card px-4 py-3 transition-colors hover:bg-accent">
@@ -106,6 +111,11 @@ function MenuRow({
         </span>
         {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
       </div>
+      {badge !== undefined && badge > 0 && (
+        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-destructive-foreground">
+          {badge > 99 ? '99+' : badge}
+        </span>
+      )}
       {!destructive && <ChevronRight className="h-4 w-4 text-muted-foreground" />}
     </div>
   );
@@ -305,6 +315,8 @@ export function MeContent() {
   const isAuthenticated = !!session?.user;
   const { history } = useBrowsingHistory();
   const { favoriteIds } = useFavoriteBookIds();
+  const { isPro, tier } = useSubscription();
+  const { data: unreadCount } = useUnreadCount();
 
   const hasHistory = history.length > 0;
   const hasFavorites = favoriteIds.size > 0;
@@ -447,15 +459,29 @@ export function MeContent() {
         <MenuRow
           icon={Crown}
           iconColor="#EAB308"
-          title={t('subscription')}
-          subtitle={t('subscriptionFree')}
+          title={
+            isPro
+              ? `${t('subscription')} — Pro`
+              : t('subscription')
+          }
+          subtitle={
+            isPro
+              ? t('subscriptionPro')
+              : t('subscriptionFree')
+          }
           href="/settings"
         />
       </MenuSection>
 
       {/* 5. Notifications & Messages */}
       <MenuSection title={t('notifications')}>
-        <MenuRow icon={Bell} iconColor="#F97316" title={t('notificationCenter')} href="/settings" />
+        <MenuRow
+          icon={Bell}
+          iconColor="#F97316"
+          title={t('notificationCenter')}
+          href="/settings"
+          badge={unreadCount ?? 0}
+        />
         <MenuRow icon={MessageSquare} iconColor="#3B82F6" title={t('sendMessage')} href="/settings" />
       </MenuSection>
 
@@ -495,6 +521,7 @@ export function MeContent() {
             title={t('signOut')}
             destructive
             onClick={() => {
+              clearUserData();
               window.location.href = '/api/auth/signout';
             }}
           />

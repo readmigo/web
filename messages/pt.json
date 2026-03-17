@@ -294,7 +294,57 @@
     "sendingEmail": "Enviando...",
     "resetEmailSent": "Verifique seu e-mail",
     "resetEmailSentDesc": "Se uma conta existe para esse e-mail, um link de redefinição foi enviado.",
-    "backToLogin": "Voltar para o login"
+    "backToLogin": "Voltar para o login",
+    "loginFeatures": {
+      "library": {
+        "title": "Entre para ver a biblioteca",
+        "desc": "Entre para gerenciar sua biblioteca pessoal e acompanhar seu progresso de leitura."
+      },
+      "bookmark": {
+        "title": "Entre para salvar marcadores",
+        "desc": "Entre para marcar suas passagens favoritas e revisitá-las quando quiser."
+      },
+      "highlight": {
+        "title": "Entre para destacar",
+        "desc": "Entre para destacar passagens importantes e adicionar anotações pessoais."
+      },
+      "vocabulary": {
+        "title": "Entre para salvar palavras",
+        "desc": "Entre para criar sua lista de vocabulário personalizada enquanto lê."
+      },
+      "stats": {
+        "title": "Entre para ver estatísticas",
+        "desc": "Entre para ver seu tempo de leitura, progresso e relatórios."
+      },
+      "achievements": {
+        "title": "Entre para conquistas",
+        "desc": "Entre para desbloquear conquistas de leitura e acompanhar seu crescimento."
+      },
+      "notes": {
+        "title": "Entre para fazer anotações",
+        "desc": "Entre para adicionar notas pessoais a qualquer livro que estiver lendo."
+      },
+      "audiobook": {
+        "title": "Entre para audiolivros",
+        "desc": "Entre para desbloquear a função de audiolivro e aproveitar uma escuta imersiva."
+      },
+      "translation": {
+        "title": "Entre para traduzir",
+        "desc": "Entre para traduzir passagens e aprofundar sua compreensão."
+      },
+      "sync": {
+        "title": "Entre para sincronizar",
+        "desc": "Entre para sincronizar seu progresso e notas em todos os seus dispositivos."
+      },
+      "community": {
+        "title": "Entre para a comunidade",
+        "desc": "Entre para participar de discussões e compartilhar ideias com outros leitores."
+      },
+      "paper": {
+        "title": "Entre para ler artigos",
+        "desc": "Entre para importar e ler artigos acadêmicos."
+      }
+    }
   },
   "footer": {
     "privacyPolicy": "Política de privacidade",
@@ -390,7 +440,11 @@
     "subscribe": "Assinar agora",
     "startTrial": "Iniciar teste grátis de 7 dias",
     "processing": "Processando...",
-    "restore": "Restaurar compras",
+    "restore": {
+      "success": "Purchase restored successfully.",
+      "error": "Could not restore purchase.",
+      "contactSupport": "Contact support"
+    },
     "terms": "Termos de uso",
     "privacy": "Política de privacidade",
     "plans": {
@@ -410,11 +464,6 @@
     "selectPlan": "Select a plan",
     "checkoutError": "Failed to start checkout. Please try again.",
     "cancelSubscription": "Cancel subscription",
-    "restore": {
-      "success": "Purchase restored successfully.",
-      "error": "Could not restore purchase.",
-      "contactSupport": "Contact support"
-    },
     "cancelDialog": {
       "step1Title": "Are you sure you want to cancel?",
       "loseAccess": "You will lose access to these Pro features:",
@@ -571,7 +620,29 @@
     "thread": "Conversa",
     "inputPlaceholder": "Digite uma mensagem...",
     "empty": "Nenhuma mensagem ainda",
-    "newTicket": "Novo ticket"
+    "newTicket": "Novo ticket",
+    "createTicket": {
+      "title": "Novo ticket",
+      "category": "Categoria",
+      "categoryPlaceholder": "Selecione uma categoria",
+      "subject": "Assunto",
+      "subjectPlaceholder": "Breve descrição do problema",
+      "content": "Mensagem",
+      "contentPlaceholder": "Descreva o problema em detalhes...",
+      "deviceInfo": "Anexar informações do dispositivo",
+      "deviceInfoDesc": "Inclui automaticamente navegador, idioma e tamanho de tela",
+      "submit": "Enviar",
+      "submitting": "Enviando...",
+      "cancel": "Cancelar",
+      "categories": {
+        "bug": "Relatório de bug",
+        "feature_request": "Solicitação de recurso",
+        "ui_ux": "UI / UX",
+        "content": "Conteúdo",
+        "performance": "Desempenho",
+        "other": "Outro"
+      }
+    }
   },
   "notFound": {
     "title": "Página não encontrada",
@@ -862,7 +933,8 @@
     "bookstore": "Livraria",
     "bookstoreDesc": "Descobrir novos livros",
     "settings": "Configurações",
-    "settingsDesc": "Gerenciar configurações do app"
+    "settingsDesc": "Gerenciar configurações do app",
+    "viewMore": "Ver mais"
   },
   "offline": {
     "downloadForOffline": "Baixar para uso offline",

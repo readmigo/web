@@ -207,6 +207,11 @@
     "fontSerif": "Serif",
     "fontSansSerif": "Sans-Serif",
     "fontMonospace": "Monospace",
+    "fontCategorySansSerif": "Sans-Serif",
+    "fontCategorySerif": "Serif",
+    "fontCategoryMonospace": "Monospace",
+    "fontCategoryDyslexia": "Dyslexia-Friendly",
+    "fontCategoryChinese": "Chinese",
     "short": "Short",
     "normal": "Normal",
     "long": "Long",
@@ -304,7 +309,57 @@
     "sendingEmail": "Sending...",
     "resetEmailSent": "Check your email",
     "resetEmailSentDesc": "If an account exists for that email, a password reset link has been sent.",
-    "backToLogin": "Back to Login"
+    "backToLogin": "Back to Login",
+    "loginFeatures": {
+      "library": {
+        "title": "Sign In to View Library",
+        "desc": "Sign in to manage your personal library and track your reading progress."
+      },
+      "bookmark": {
+        "title": "Sign In to Bookmark",
+        "desc": "Sign in to bookmark your favourite passages and revisit them anytime."
+      },
+      "highlight": {
+        "title": "Sign In to Highlight",
+        "desc": "Sign in to highlight key passages and add personal annotations."
+      },
+      "vocabulary": {
+        "title": "Sign In to Save Words",
+        "desc": "Sign in to build your personal vocabulary list as you read."
+      },
+      "stats": {
+        "title": "Sign In for Reading Stats",
+        "desc": "Sign in to view your reading time, progress, and insights."
+      },
+      "achievements": {
+        "title": "Sign In for Achievements",
+        "desc": "Sign in to unlock reading achievements and track your growth."
+      },
+      "notes": {
+        "title": "Sign In to Take Notes",
+        "desc": "Sign in to add personal notes to any book you are reading."
+      },
+      "audiobook": {
+        "title": "Sign In for Audiobooks",
+        "desc": "Sign in to unlock the audiobook feature and enjoy immersive listening."
+      },
+      "translation": {
+        "title": "Sign In to Translate",
+        "desc": "Sign in to translate passages and deepen your comprehension."
+      },
+      "sync": {
+        "title": "Sign In to Sync",
+        "desc": "Sign in to sync your reading progress and notes across all devices."
+      },
+      "community": {
+        "title": "Sign In to Join Community",
+        "desc": "Sign in to join discussions and share insights with fellow readers."
+      },
+      "paper": {
+        "title": "Sign In to Read Papers",
+        "desc": "Sign in to import and read academic papers."
+      }
+    }
   },
   "footer": {
     "privacyPolicy": "Privacy Policy",
@@ -400,7 +455,11 @@
     "subscribe": "Subscribe Now",
     "startTrial": "Start 7-Day Free Trial",
     "processing": "Processing...",
-    "restore": "Restore Purchases",
+    "restore": {
+      "success": "Purchase restored successfully.",
+      "error": "Could not restore purchase.",
+      "contactSupport": "Contact support"
+    },
     "terms": "Terms of Use",
     "privacy": "Privacy Policy",
     "plans": {
@@ -420,11 +479,6 @@
     "selectPlan": "Select a plan",
     "checkoutError": "Failed to start checkout. Please try again.",
     "cancelSubscription": "Cancel subscription",
-    "restore": {
-      "success": "Purchase restored successfully.",
-      "error": "Could not restore purchase.",
-      "contactSupport": "Contact support"
-    },
     "cancelDialog": {
       "step1Title": "Are you sure you want to cancel?",
       "loseAccess": "You will lose access to these Pro features:",
@@ -458,6 +512,27 @@
       "descriptionWithDays": "Your subscription expires in {days} day(s). Please update your payment method to keep your Pro access.",
       "fixPayment": "Fix Payment"
     },
+    "trial": {
+      "countdown": "Trial ends in {days} day(s)"
+    },
+    "triggers": {
+      "audioLimitReached": {
+        "title": "Upgrade for Unlimited Audio",
+        "subtitle": "You've reached your daily audio limit. Go Pro for unlimited listening."
+      },
+      "syncRequired": {
+        "title": "Sync Across Your Devices",
+        "subtitle": "Upgrade to Pro to keep your reading progress in sync everywhere."
+      },
+      "downloadRequired": {
+        "title": "Read Offline Anywhere",
+        "subtitle": "Download books for offline reading with a Pro subscription."
+      },
+      "dataBackup": {
+        "title": "Back Up Your Data",
+        "subtitle": "Protect your highlights, notes, and progress with cloud backup."
+      }
+    },
     "audioLimit": {
       "title": "Daily listening limit reached",
       "descGuest": "Sign in to get 30 free minutes of audio per day",
@@ -468,6 +543,56 @@
       "upgradeCta": "Upgrade to Pro",
       "cancel": "Maybe Later",
       "dismiss": "Dismiss"
+    },
+    "page": {
+      "metaTitle": "Subscription",
+      "metaDescription": "Manage your Readmigo subscription plan and billing",
+      "heading": "Subscription",
+      "subheading": "Manage your plan and billing details",
+      "backToSettings": "Back to Settings",
+      "currentPlan": "Current Plan",
+      "currentPlanDesc": "Your active subscription and renewal details",
+      "planLabel": "Plan",
+      "premiumTier": "Premium tier",
+      "renewsOn": "Renews on",
+      "expiresOn": "Expires on",
+      "autoRenewOn": "Auto-renew enabled",
+      "autoRenewOff": "Auto-renew off",
+      "statusExpired": "Your subscription has expired",
+      "statusCancelled": "Subscription cancelled — access continues until expiry",
+      "manageSubscription": "Manage Subscription",
+      "upgradeToPro": "Upgrade to Pro",
+      "audioUsageTitle": "Daily Audio Usage",
+      "audioUsageDesc": "Free users get 30 minutes of audio per day",
+      "dailyUsage": "Today's usage",
+      "minutes": "min",
+      "audioLimitReached": "Daily limit reached. Resets at midnight.",
+      "audioResetNote": "Usage resets every day at midnight (local time)",
+      "proFeaturesTitle": "Pro Features",
+      "proFeaturesDesc": "Everything included with Readmigo Pro",
+      "featureDataSync": "Cross-Device Sync",
+      "featureCloudBackup": "Cloud Backup",
+      "featureUnlimitedAudio": "Unlimited Audio",
+      "featureStats": "Detailed Reading Stats",
+      "featureTemplates": "Premium Templates",
+      "featureBookAccess": "Full Book Library",
+      "featureOfflineReading": "Offline Reading",
+      "unlockAllFeatures": "Unlock All Pro Features",
+      "manageTitle": "Manage Billing",
+      "manageDesc": "Update payment method, view invoices, or cancel",
+      "stripePortal": "Open Billing Portal",
+      "faqTitle": "Frequently Asked Questions",
+      "faq1Q": "How do I cancel my subscription?",
+      "faq1A": "You can cancel anytime from the billing portal or by tapping \"Cancel subscription\" above. Access continues until the end of your billing period.",
+      "faq2Q": "Can I switch between plans?",
+      "faq2A": "Yes. Open the billing portal to upgrade or downgrade your plan. Changes take effect at the start of your next billing cycle.",
+      "faq3Q": "Will I be charged immediately when upgrading?",
+      "faq3A": "When upgrading, you are charged a prorated amount for the remainder of your current billing period. Downgrading takes effect at renewal.",
+      "faq4Q": "How do I get a refund?",
+      "faq4A": "Refund eligibility depends on your region and payment method. Contact our support team within 7 days of purchase and we will review your request.",
+      "contactTitle": "Need Help?",
+      "contactDesc": "Our support team typically responds within 24 hours",
+      "contactButton": "Contact Support"
     }
   },
   "onboarding": {
@@ -592,7 +717,29 @@
     "thread": "Conversation",
     "inputPlaceholder": "Type a message...",
     "empty": "No messages yet",
-    "newTicket": "New Ticket"
+    "newTicket": "New Ticket",
+    "createTicket": {
+      "title": "New Ticket",
+      "category": "Category",
+      "categoryPlaceholder": "Select a category",
+      "subject": "Subject",
+      "subjectPlaceholder": "Brief description of the issue",
+      "content": "Message",
+      "contentPlaceholder": "Describe the issue in detail...",
+      "deviceInfo": "Attach device info",
+      "deviceInfoDesc": "Automatically includes browser, language and screen size",
+      "submit": "Submit",
+      "submitting": "Submitting...",
+      "cancel": "Cancel",
+      "categories": {
+        "bug": "Bug Report",
+        "feature_request": "Feature Request",
+        "ui_ux": "UI / UX",
+        "content": "Content",
+        "performance": "Performance",
+        "other": "Other"
+      }
+    }
   },
   "notFound": {
     "title": "Page Not Found",
@@ -886,7 +1033,8 @@
     "bookstore": "Bookstore",
     "bookstoreDesc": "Discover new books",
     "settings": "Settings",
-    "settingsDesc": "Manage app settings"
+    "settingsDesc": "Manage app settings",
+    "viewMore": "View More"
   },
   "offline": {
     "downloadForOffline": "Download for Offline",

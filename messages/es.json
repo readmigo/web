@@ -197,6 +197,11 @@
     "fontSerif": "Serif",
     "fontSansSerif": "Sans-Serif",
     "fontMonospace": "Monoespaciado",
+    "fontCategorySansSerif": "Sin Serifa",
+    "fontCategorySerif": "Serifa",
+    "fontCategoryMonospace": "Monoespaciado",
+    "fontCategoryDyslexia": "Para Dislexia",
+    "fontCategoryChinese": "Chino",
     "short": "Corto",
     "normal": "Normal",
     "long": "Largo",
@@ -294,7 +299,57 @@
     "sendingEmail": "Enviando...",
     "resetEmailSent": "Revisa tu correo",
     "resetEmailSentDesc": "Si existe una cuenta con ese correo, se ha enviado un enlace para restablecer la contraseña.",
-    "backToLogin": "Volver al inicio de sesión"
+    "backToLogin": "Volver al inicio de sesión",
+    "loginFeatures": {
+      "library": {
+        "title": "Inicia sesión para ver la biblioteca",
+        "desc": "Inicia sesión para gestionar tu biblioteca personal y seguir tu progreso de lectura."
+      },
+      "bookmark": {
+        "title": "Inicia sesión para guardar marcadores",
+        "desc": "Inicia sesión para marcar tus pasajes favoritos y revisitarlos cuando quieras."
+      },
+      "highlight": {
+        "title": "Inicia sesión para resaltar",
+        "desc": "Inicia sesión para resaltar pasajes clave y añadir anotaciones personales."
+      },
+      "vocabulary": {
+        "title": "Inicia sesión para guardar palabras",
+        "desc": "Inicia sesión para construir tu lista de vocabulario personal mientras lees."
+      },
+      "stats": {
+        "title": "Inicia sesión para ver estadísticas",
+        "desc": "Inicia sesión para ver tu tiempo de lectura, progreso e informes."
+      },
+      "achievements": {
+        "title": "Inicia sesión para logros",
+        "desc": "Inicia sesión para desbloquear logros de lectura y seguir tu progreso."
+      },
+      "notes": {
+        "title": "Inicia sesión para tomar notas",
+        "desc": "Inicia sesión para añadir notas personales a cualquier libro."
+      },
+      "audiobook": {
+        "title": "Inicia sesión para audiolibros",
+        "desc": "Inicia sesión para desbloquear la función de audiolibros y disfrutar de la escucha."
+      },
+      "translation": {
+        "title": "Inicia sesión para traducir",
+        "desc": "Inicia sesión para traducir pasajes y mejorar tu comprensión."
+      },
+      "sync": {
+        "title": "Inicia sesión para sincronizar",
+        "desc": "Inicia sesión para sincronizar tu progreso y notas en todos tus dispositivos."
+      },
+      "community": {
+        "title": "Inicia sesión para unirte a la comunidad",
+        "desc": "Inicia sesión para participar en debates y compartir ideas con otros lectores."
+      },
+      "paper": {
+        "title": "Inicia sesión para leer artículos",
+        "desc": "Inicia sesión para importar y leer artículos académicos."
+      }
+    }
   },
   "footer": {
     "privacyPolicy": "Política de privacidad",
@@ -390,7 +445,11 @@
     "subscribe": "Suscribirse ahora",
     "startTrial": "Iniciar prueba gratis de 7 días",
     "processing": "Procesando...",
-    "restore": "Restaurar compras",
+    "restore": {
+      "success": "Purchase restored successfully.",
+      "error": "Could not restore purchase.",
+      "contactSupport": "Contact support"
+    },
     "terms": "Términos de uso",
     "privacy": "Política de privacidad",
     "plans": {
@@ -410,11 +469,6 @@
     "selectPlan": "Select a plan",
     "checkoutError": "Failed to start checkout. Please try again.",
     "cancelSubscription": "Cancel subscription",
-    "restore": {
-      "success": "Purchase restored successfully.",
-      "error": "Could not restore purchase.",
-      "contactSupport": "Contact support"
-    },
     "cancelDialog": {
       "step1Title": "Are you sure you want to cancel?",
       "loseAccess": "You will lose access to these Pro features:",
@@ -571,7 +625,29 @@
     "thread": "Conversación",
     "inputPlaceholder": "Escribe un mensaje...",
     "empty": "Sin mensajes aún",
-    "newTicket": "Nuevo ticket"
+    "newTicket": "Nuevo ticket",
+    "createTicket": {
+      "title": "Nuevo ticket",
+      "category": "Categoría",
+      "categoryPlaceholder": "Selecciona una categoría",
+      "subject": "Asunto",
+      "subjectPlaceholder": "Descripción breve del problema",
+      "content": "Mensaje",
+      "contentPlaceholder": "Describe el problema con detalle...",
+      "deviceInfo": "Adjuntar información del dispositivo",
+      "deviceInfoDesc": "Incluye automáticamente navegador, idioma y tamaño de pantalla",
+      "submit": "Enviar",
+      "submitting": "Enviando...",
+      "cancel": "Cancelar",
+      "categories": {
+        "bug": "Reporte de error",
+        "feature_request": "Solicitud de función",
+        "ui_ux": "UI / UX",
+        "content": "Contenido",
+        "performance": "Rendimiento",
+        "other": "Otro"
+      }
+    }
   },
   "notFound": {
     "title": "Página no encontrada",
@@ -862,7 +938,8 @@
     "bookstore": "Librería",
     "bookstoreDesc": "Descubrir nuevos libros",
     "settings": "Configuración",
-    "settingsDesc": "Gestionar configuración de la app"
+    "settingsDesc": "Gestionar configuración de la app",
+    "viewMore": "Ver más"
   },
   "offline": {
     "downloadForOffline": "Descargar sin conexión",

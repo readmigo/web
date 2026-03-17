@@ -207,6 +207,11 @@
     "fontSerif": "衬线",
     "fontSansSerif": "无衬线",
     "fontMonospace": "等宽",
+    "fontCategorySansSerif": "无衬线",
+    "fontCategorySerif": "衬线",
+    "fontCategoryMonospace": "等宽",
+    "fontCategoryDyslexia": "阅读障碍友好",
+    "fontCategoryChinese": "中文字体",
     "short": "短",
     "normal": "正常",
     "long": "长",
@@ -304,7 +309,57 @@
     "sendingEmail": "发送中...",
     "resetEmailSent": "请查收邮件",
     "resetEmailSentDesc": "如果该邮箱已注册，重置链接已发送至您的邮箱。",
-    "backToLogin": "返回登录"
+    "backToLogin": "返回登录",
+    "loginFeatures": {
+      "library": {
+        "title": "登录后查看书库",
+        "desc": "登录后即可管理您的个人书库，追踪阅读进度。"
+      },
+      "bookmark": {
+        "title": "登录后收藏书签",
+        "desc": "登录后即可为您喜爱的段落添加书签，随时回顾。"
+      },
+      "highlight": {
+        "title": "登录后添加高亮",
+        "desc": "登录后即可高亮精彩段落，并添加批注。"
+      },
+      "vocabulary": {
+        "title": "登录后保存生词",
+        "desc": "登录后即可保存生词，构建专属词汇表。"
+      },
+      "stats": {
+        "title": "登录后查看统计",
+        "desc": "登录后即可查看您的阅读时长、进度等数据。"
+      },
+      "achievements": {
+        "title": "登录后解锁成就",
+        "desc": "登录后即可收集阅读成就，追踪您的成长。"
+      },
+      "notes": {
+        "title": "登录后添加笔记",
+        "desc": "登录后即可为书籍添加个人笔记，记录灵感。"
+      },
+      "audiobook": {
+        "title": "登录后收听有声书",
+        "desc": "登录后即可解锁有声书功能，享受沉浸式阅读。"
+      },
+      "translation": {
+        "title": "登录后使用翻译",
+        "desc": "登录后即可翻译段落，助力深度理解。"
+      },
+      "sync": {
+        "title": "登录后同步数据",
+        "desc": "登录后即可跨设备同步阅读进度与笔记。"
+      },
+      "community": {
+        "title": "登录后加入社区",
+        "desc": "登录后即可参与讨论，与书友分享心得。"
+      },
+      "paper": {
+        "title": "登录后阅读论文",
+        "desc": "登录后即可导入并阅读学术论文。"
+      }
+    }
   },
   "footer": {
     "privacyPolicy": "隐私政策",
@@ -400,7 +455,11 @@
     "subscribe": "立即订阅",
     "startTrial": "开始 7 天免费试用",
     "processing": "处理中...",
-    "restore": "恢复购买",
+    "restore": {
+      "success": "购买已成功恢复。",
+      "error": "无法恢复购买。",
+      "contactSupport": "联系支持"
+    },
     "terms": "服务条款",
     "privacy": "隐私政策",
     "plans": {
@@ -420,11 +479,6 @@
     "selectPlan": "选择方案",
     "checkoutError": "支付跳转失败，请重试。",
     "cancelSubscription": "取消订阅",
-    "restore": {
-      "success": "购买已成功恢复。",
-      "error": "无法恢复购买。",
-      "contactSupport": "联系支持"
-    },
     "cancelDialog": {
       "step1Title": "确认要取消吗？",
       "loseAccess": "取消后您将失去以下 Pro 权益：",
@@ -457,6 +511,27 @@
       "description": "您的订阅正处于宽限期，请及时更新支付方式以保留 Pro 权益。",
       "descriptionWithDays": "您的订阅将在 {days} 天后到期，请及时更新支付方式以保留 Pro 权益。",
       "fixPayment": "修复支付"
+    },
+    "trial": {
+      "countdown": "试用还剩 {days} 天"
+    },
+    "triggers": {
+      "audioLimitReached": {
+        "title": "升级享无限音频",
+        "subtitle": "今日免费听书时长已用完，升级 Pro 享无限畅听。"
+      },
+      "syncRequired": {
+        "title": "跨设备同步阅读进度",
+        "subtitle": "升级 Pro，在所有设备上同步您的阅读进度和书签。"
+      },
+      "downloadRequired": {
+        "title": "随时随地离线阅读",
+        "subtitle": "订阅 Pro，一键下载书籍，无需网络即可阅读。"
+      },
+      "dataBackup": {
+        "title": "备份您的阅读数据",
+        "subtitle": "云端备份笔记、高亮和阅读进度，永不丢失。"
+      }
     },
     "audioLimit": {
       "title": "今日免费听书时长已用完",
@@ -592,7 +667,29 @@
     "thread": "对话详情",
     "inputPlaceholder": "输入消息...",
     "empty": "暂无消息",
-    "newTicket": "新建工单"
+    "newTicket": "新建工单",
+    "createTicket": {
+      "title": "新建工单",
+      "category": "类别",
+      "categoryPlaceholder": "请选择类别",
+      "subject": "主题",
+      "subjectPlaceholder": "问题的简短描述",
+      "content": "详情",
+      "contentPlaceholder": "请详细描述问题...",
+      "deviceInfo": "附加设备信息",
+      "deviceInfoDesc": "自动附加浏览器、语言和屏幕尺寸",
+      "submit": "提交",
+      "submitting": "提交中...",
+      "cancel": "取消",
+      "categories": {
+        "bug": "缺陷反馈",
+        "feature_request": "功能建议",
+        "ui_ux": "界面 / 体验",
+        "content": "内容问题",
+        "performance": "性能问题",
+        "other": "其他"
+      }
+    }
   },
   "notFound": {
     "title": "页面不存在",
@@ -886,7 +983,8 @@
     "bookstore": "书城",
     "bookstoreDesc": "探索新书籍",
     "settings": "设置",
-    "settingsDesc": "管理应用设置"
+    "settingsDesc": "管理应用设置",
+    "viewMore": "查看更多"
   },
   "offline": {
     "downloadForOffline": "下载离线阅读",

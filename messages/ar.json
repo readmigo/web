@@ -294,7 +294,57 @@
     "sendingEmail": "جاري الإرسال...",
     "resetEmailSent": "تحقق من بريدك الإلكتروني",
     "resetEmailSentDesc": "إذا كان هناك حساب مرتبط بهذا البريد، فقد تم إرسال رابط إعادة تعيين كلمة المرور.",
-    "backToLogin": "العودة إلى تسجيل الدخول"
+    "backToLogin": "العودة إلى تسجيل الدخول",
+    "loginFeatures": {
+      "library": {
+        "title": "سجّل دخولك لعرض المكتبة",
+        "desc": "سجّل دخولك لإدارة مكتبتك الشخصية ومتابعة تقدمك في القراءة."
+      },
+      "bookmark": {
+        "title": "سجّل دخولك لإضافة إشارة مرجعية",
+        "desc": "سجّل دخولك لحفظ مقاطعك المفضلة ومراجعتها في أي وقت."
+      },
+      "highlight": {
+        "title": "سجّل دخولك للتمييز بالألوان",
+        "desc": "سجّل دخولك لتمييز المقاطع الرئيسية وإضافة تعليقاتك الشخصية."
+      },
+      "vocabulary": {
+        "title": "سجّل دخولك لحفظ الكلمات",
+        "desc": "سجّل دخولك لبناء قائمة مفرداتك الشخصية أثناء القراءة."
+      },
+      "stats": {
+        "title": "سجّل دخولك لإحصاءات القراءة",
+        "desc": "سجّل دخولك لعرض وقت القراءة والتقدم والتقارير."
+      },
+      "achievements": {
+        "title": "سجّل دخولك للإنجازات",
+        "desc": "سجّل دخولك لفتح إنجازات القراءة وتتبع نموك."
+      },
+      "notes": {
+        "title": "سجّل دخولك لكتابة الملاحظات",
+        "desc": "سجّل دخولك لإضافة ملاحظاتك الشخصية لأي كتاب تقرأه."
+      },
+      "audiobook": {
+        "title": "سجّل دخولك للكتب الصوتية",
+        "desc": "سجّل دخولك لفتح ميزة الكتب الصوتية والاستمتاع بالاستماع الغامر."
+      },
+      "translation": {
+        "title": "سجّل دخولك للترجمة",
+        "desc": "سجّل دخولك لترجمة المقاطع وتعميق فهمك."
+      },
+      "sync": {
+        "title": "سجّل دخولك للمزامنة",
+        "desc": "سجّل دخولك لمزامنة تقدمك وملاحظاتك على جميع أجهزتك."
+      },
+      "community": {
+        "title": "سجّل دخولك للانضمام للمجتمع",
+        "desc": "سجّل دخولك للمشاركة في النقاشات ومشاركة الأفكار مع القراء الآخرين."
+      },
+      "paper": {
+        "title": "سجّل دخولك لقراءة الأوراق البحثية",
+        "desc": "سجّل دخولك لاستيراد الأوراق البحثية الأكاديمية وقراءتها."
+      }
+    }
   },
   "footer": {
     "privacyPolicy": "سياسة الخصوصية",
@@ -390,7 +440,11 @@
     "subscribe": "اشترك الآن",
     "startTrial": "ابدأ التجربة المجانية لمدة 7 أيام",
     "processing": "جارٍ المعالجة...",
-    "restore": "استعادة المشتريات",
+    "restore": {
+      "success": "Purchase restored successfully.",
+      "error": "Could not restore purchase.",
+      "contactSupport": "Contact support"
+    },
     "terms": "شروط الاستخدام",
     "privacy": "سياسة الخصوصية",
     "plans": {
@@ -410,11 +464,6 @@
     "selectPlan": "Select a plan",
     "checkoutError": "Failed to start checkout. Please try again.",
     "cancelSubscription": "Cancel subscription",
-    "restore": {
-      "success": "Purchase restored successfully.",
-      "error": "Could not restore purchase.",
-      "contactSupport": "Contact support"
-    },
     "cancelDialog": {
       "step1Title": "Are you sure you want to cancel?",
       "loseAccess": "You will lose access to these Pro features:",
@@ -571,7 +620,29 @@
     "thread": "المحادثة",
     "inputPlaceholder": "اكتب رسالة...",
     "empty": "لا توجد رسائل بعد",
-    "newTicket": "تذكرة جديدة"
+    "newTicket": "تذكرة جديدة",
+    "createTicket": {
+      "title": "تذكرة جديدة",
+      "category": "الفئة",
+      "categoryPlaceholder": "اختر فئة",
+      "subject": "الموضوع",
+      "subjectPlaceholder": "وصف مختصر للمشكلة",
+      "content": "الرسالة",
+      "contentPlaceholder": "صف المشكلة بالتفصيل...",
+      "deviceInfo": "إرفاق معلومات الجهاز",
+      "deviceInfoDesc": "يتضمن تلقائياً المتصفح واللغة وحجم الشاشة",
+      "submit": "إرسال",
+      "submitting": "جارٍ الإرسال...",
+      "cancel": "إلغاء",
+      "categories": {
+        "bug": "تقرير خطأ",
+        "feature_request": "طلب ميزة",
+        "ui_ux": "واجهة المستخدم",
+        "content": "محتوى",
+        "performance": "الأداء",
+        "other": "أخرى"
+      }
+    }
   },
   "notFound": {
     "title": "الصفحة غير موجودة",
@@ -862,7 +933,8 @@
     "bookstore": "المكتبة",
     "bookstoreDesc": "اكتشف كتبًا جديدة",
     "settings": "الإعدادات",
-    "settingsDesc": "إدارة إعدادات التطبيق"
+    "settingsDesc": "إدارة إعدادات التطبيق",
+    "viewMore": "عرض المزيد"
   },
   "offline": {
     "downloadForOffline": "تنزيل للاستخدام دون اتصال",

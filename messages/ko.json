@@ -294,7 +294,57 @@
     "sendingEmail": "전송 중...",
     "resetEmailSent": "이메일을 확인하세요",
     "resetEmailSentDesc": "해당 이메일로 등록된 계정이 있다면 비밀번호 재설정 링크를 보냈습니다.",
-    "backToLogin": "로그인으로 돌아가기"
+    "backToLogin": "로그인으로 돌아가기",
+    "loginFeatures": {
+      "library": {
+        "title": "도서관 보기는 로그인 필요",
+        "desc": "로그인하여 개인 도서관을 관리하고 독서 진행 상황을 추적하세요."
+      },
+      "bookmark": {
+        "title": "북마크는 로그인 필요",
+        "desc": "로그인하여 마음에 드는 구절을 북마크하고 언제든지 다시 확인하세요."
+      },
+      "highlight": {
+        "title": "하이라이트는 로그인 필요",
+        "desc": "로그인하여 주요 구절을 하이라이트하고 개인 메모를 추가하세요."
+      },
+      "vocabulary": {
+        "title": "단어 저장은 로그인 필요",
+        "desc": "로그인하여 읽으면서 나만의 단어 목록을 만드세요."
+      },
+      "stats": {
+        "title": "독서 통계는 로그인 필요",
+        "desc": "로그인하여 독서 시간, 진행 상황 등의 데이터를 확인하세요."
+      },
+      "achievements": {
+        "title": "업적 달성은 로그인 필요",
+        "desc": "로그인하여 독서 업적을 쌓고 성장을 추적하세요."
+      },
+      "notes": {
+        "title": "메모는 로그인 필요",
+        "desc": "로그인하여 읽고 있는 책에 개인 메모를 추가하세요."
+      },
+      "audiobook": {
+        "title": "오디오북은 로그인 필요",
+        "desc": "로그인하여 오디오북 기능을 잠금 해제하고 몰입형 청취를 즐기세요."
+      },
+      "translation": {
+        "title": "번역은 로그인 필요",
+        "desc": "로그인하여 구절을 번역하고 이해를 깊이 있게 하세요."
+      },
+      "sync": {
+        "title": "동기화는 로그인 필요",
+        "desc": "로그인하여 모든 기기에서 독서 진행 상황과 메모를 동기화하세요."
+      },
+      "community": {
+        "title": "커뮤니티는 로그인 필요",
+        "desc": "로그인하여 토론에 참여하고 다른 독자들과 생각을 나누세요."
+      },
+      "paper": {
+        "title": "논문 읽기는 로그인 필요",
+        "desc": "로그인하여 학술 논문을 가져와서 읽으세요."
+      }
+    }
   },
   "footer": {
     "privacyPolicy": "개인정보 처리방침",
@@ -390,7 +440,11 @@
     "subscribe": "지금 구독",
     "startTrial": "7일 무료 체험 시작",
     "processing": "처리 중...",
-    "restore": "구매 복원",
+    "restore": {
+      "success": "Purchase restored successfully.",
+      "error": "Could not restore purchase.",
+      "contactSupport": "Contact support"
+    },
     "terms": "이용약관",
     "privacy": "개인정보 처리방침",
     "plans": {
@@ -410,11 +464,6 @@
     "selectPlan": "Select a plan",
     "checkoutError": "Failed to start checkout. Please try again.",
     "cancelSubscription": "Cancel subscription",
-    "restore": {
-      "success": "Purchase restored successfully.",
-      "error": "Could not restore purchase.",
-      "contactSupport": "Contact support"
-    },
     "cancelDialog": {
       "step1Title": "Are you sure you want to cancel?",
       "loseAccess": "You will lose access to these Pro features:",
@@ -571,7 +620,29 @@
     "thread": "대화",
     "inputPlaceholder": "메시지를 입력하세요...",
     "empty": "아직 메시지가 없습니다",
-    "newTicket": "새 티켓"
+    "newTicket": "새 티켓",
+    "createTicket": {
+      "title": "새 티켓",
+      "category": "카테고리",
+      "categoryPlaceholder": "카테고리 선택",
+      "subject": "제목",
+      "subjectPlaceholder": "문제에 대한 간단한 설명",
+      "content": "메시지",
+      "contentPlaceholder": "문제를 자세히 설명해 주세요...",
+      "deviceInfo": "기기 정보 첨부",
+      "deviceInfoDesc": "브라우저, 언어 및 화면 크기를 자동으로 포함합니다",
+      "submit": "제출",
+      "submitting": "제출 중...",
+      "cancel": "취소",
+      "categories": {
+        "bug": "버그 신고",
+        "feature_request": "기능 요청",
+        "ui_ux": "UI / UX",
+        "content": "콘텐츠",
+        "performance": "성능",
+        "other": "기타"
+      }
+    }
   },
   "notFound": {
     "title": "페이지를 찾을 수 없습니다",
@@ -862,7 +933,8 @@
     "bookstore": "서점",
     "bookstoreDesc": "새 책 발견",
     "settings": "설정",
-    "settingsDesc": "앱 설정 관리"
+    "settingsDesc": "앱 설정 관리",
+    "viewMore": "더 보기"
   },
   "offline": {
     "downloadForOffline": "오프라인용 다운로드",

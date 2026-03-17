@@ -294,7 +294,57 @@
     "sendingEmail": "Envoi en cours...",
     "resetEmailSent": "Vérifiez votre e-mail",
     "resetEmailSentDesc": "Si un compte existe pour cet e-mail, un lien de réinitialisation a été envoyé.",
-    "backToLogin": "Retour à la connexion"
+    "backToLogin": "Retour à la connexion",
+    "loginFeatures": {
+      "library": {
+        "title": "Connectez-vous pour voir la bibliothèque",
+        "desc": "Connectez-vous pour gérer votre bibliothèque personnelle et suivre votre progression."
+      },
+      "bookmark": {
+        "title": "Connectez-vous pour les signets",
+        "desc": "Connectez-vous pour ajouter des signets à vos passages préférés."
+      },
+      "highlight": {
+        "title": "Connectez-vous pour surligner",
+        "desc": "Connectez-vous pour surligner des passages clés et ajouter des annotations."
+      },
+      "vocabulary": {
+        "title": "Connectez-vous pour les mots",
+        "desc": "Connectez-vous pour construire votre liste de vocabulaire personnelle."
+      },
+      "stats": {
+        "title": "Connectez-vous pour les statistiques",
+        "desc": "Connectez-vous pour consulter votre temps de lecture et votre progression."
+      },
+      "achievements": {
+        "title": "Connectez-vous pour les succès",
+        "desc": "Connectez-vous pour débloquer des succès de lecture et suivre votre évolution."
+      },
+      "notes": {
+        "title": "Connectez-vous pour prendre des notes",
+        "desc": "Connectez-vous pour ajouter des notes personnelles à vos lectures."
+      },
+      "audiobook": {
+        "title": "Connectez-vous pour les livres audio",
+        "desc": "Connectez-vous pour accéder aux livres audio et profiter d'une écoute immersive."
+      },
+      "translation": {
+        "title": "Connectez-vous pour traduire",
+        "desc": "Connectez-vous pour traduire des passages et approfondir votre compréhension."
+      },
+      "sync": {
+        "title": "Connectez-vous pour synchroniser",
+        "desc": "Connectez-vous pour synchroniser vos notes et votre progression sur tous vos appareils."
+      },
+      "community": {
+        "title": "Connectez-vous pour la communauté",
+        "desc": "Connectez-vous pour participer aux discussions et partager vos idées."
+      },
+      "paper": {
+        "title": "Connectez-vous pour les articles",
+        "desc": "Connectez-vous pour importer et lire des articles académiques."
+      }
+    }
   },
   "footer": {
     "privacyPolicy": "Politique de confidentialité",
@@ -390,7 +440,11 @@
     "subscribe": "S'abonner maintenant",
     "startTrial": "Commencer l'essai gratuit de 7 jours",
     "processing": "Traitement en cours...",
-    "restore": "Restaurer les achats",
+    "restore": {
+      "success": "Purchase restored successfully.",
+      "error": "Could not restore purchase.",
+      "contactSupport": "Contact support"
+    },
     "terms": "Conditions d'utilisation",
     "privacy": "Politique de confidentialité",
     "plans": {
@@ -410,11 +464,6 @@
     "selectPlan": "Select a plan",
     "checkoutError": "Failed to start checkout. Please try again.",
     "cancelSubscription": "Cancel subscription",
-    "restore": {
-      "success": "Purchase restored successfully.",
-      "error": "Could not restore purchase.",
-      "contactSupport": "Contact support"
-    },
     "cancelDialog": {
       "step1Title": "Are you sure you want to cancel?",
       "loseAccess": "You will lose access to these Pro features:",
@@ -571,7 +620,29 @@
     "thread": "Conversation",
     "inputPlaceholder": "Tapez un message...",
     "empty": "Aucun message pour l'instant",
-    "newTicket": "Nouveau ticket"
+    "newTicket": "Nouveau ticket",
+    "createTicket": {
+      "title": "Nouveau ticket",
+      "category": "Catégorie",
+      "categoryPlaceholder": "Sélectionner une catégorie",
+      "subject": "Sujet",
+      "subjectPlaceholder": "Description brève du problème",
+      "content": "Message",
+      "contentPlaceholder": "Décrivez le problème en détail...",
+      "deviceInfo": "Joindre les infos appareil",
+      "deviceInfoDesc": "Inclut automatiquement le navigateur, la langue et la taille d'écran",
+      "submit": "Envoyer",
+      "submitting": "Envoi...",
+      "cancel": "Annuler",
+      "categories": {
+        "bug": "Rapport de bug",
+        "feature_request": "Demande de fonctionnalité",
+        "ui_ux": "UI / UX",
+        "content": "Contenu",
+        "performance": "Performance",
+        "other": "Autre"
+      }
+    }
   },
   "notFound": {
     "title": "Page introuvable",
@@ -862,7 +933,8 @@
     "bookstore": "Librairie",
     "bookstoreDesc": "Découvrir de nouveaux livres",
     "settings": "Paramètres",
-    "settingsDesc": "Gérer les paramètres de l'app"
+    "settingsDesc": "Gérer les paramètres de l'app",
+    "viewMore": "Voir plus"
   },
   "offline": {
     "downloadForOffline": "Télécharger hors ligne",

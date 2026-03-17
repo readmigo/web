@@ -197,6 +197,11 @@
     "fontSerif": "襯線",
     "fontSansSerif": "無襯線",
     "fontMonospace": "等寬",
+    "fontCategorySansSerif": "無襯線",
+    "fontCategorySerif": "襯線",
+    "fontCategoryMonospace": "等寬",
+    "fontCategoryDyslexia": "閱讀障礙友好",
+    "fontCategoryChinese": "中文字體",
     "short": "短",
     "normal": "正常",
     "long": "長",
@@ -294,7 +299,57 @@
     "sendingEmail": "發送中...",
     "resetEmailSent": "請查收郵件",
     "resetEmailSentDesc": "如果該郵箱已註冊，重設連結已發送至您的郵箱。",
-    "backToLogin": "返回登入"
+    "backToLogin": "返回登入",
+    "loginFeatures": {
+      "library": {
+        "title": "登入後查看書庫",
+        "desc": "登入後即可管理您的個人書庫，追蹤閱讀進度。"
+      },
+      "bookmark": {
+        "title": "登入後收藏書籤",
+        "desc": "登入後即可為您喜愛的段落添加書籤，隨時回顧。"
+      },
+      "highlight": {
+        "title": "登入後新增螢光標記",
+        "desc": "登入後即可標記精彩段落，並新增批注。"
+      },
+      "vocabulary": {
+        "title": "登入後儲存生詞",
+        "desc": "登入後即可儲存生詞，建立專屬詞彙表。"
+      },
+      "stats": {
+        "title": "登入後查看統計",
+        "desc": "登入後即可查看您的閱讀時長、進度等數據。"
+      },
+      "achievements": {
+        "title": "登入後解鎖成就",
+        "desc": "登入後即可收集閱讀成就，追蹤您的成長。"
+      },
+      "notes": {
+        "title": "登入後新增筆記",
+        "desc": "登入後即可為書籍新增個人筆記，記錄靈感。"
+      },
+      "audiobook": {
+        "title": "登入後收聽有聲書",
+        "desc": "登入後即可解鎖有聲書功能，享受沉浸式閱讀。"
+      },
+      "translation": {
+        "title": "登入後使用翻譯",
+        "desc": "登入後即可翻譯段落，助力深度理解。"
+      },
+      "sync": {
+        "title": "登入後同步資料",
+        "desc": "登入後即可跨裝置同步閱讀進度與筆記。"
+      },
+      "community": {
+        "title": "登入後加入社群",
+        "desc": "登入後即可參與討論，與書友分享心得。"
+      },
+      "paper": {
+        "title": "登入後閱讀論文",
+        "desc": "登入後即可匯入並閱讀學術論文。"
+      }
+    }
   },
   "footer": {
     "privacyPolicy": "隱私政策",
@@ -535,7 +590,29 @@
     "thread": "對話詳情",
     "inputPlaceholder": "輸入訊息...",
     "empty": "暫無訊息",
-    "newTicket": "新建工單"
+    "newTicket": "新建工單",
+    "createTicket": {
+      "title": "新建工單",
+      "category": "類別",
+      "categoryPlaceholder": "請選擇類別",
+      "subject": "主題",
+      "subjectPlaceholder": "問題的簡短描述",
+      "content": "詳情",
+      "contentPlaceholder": "請詳細描述問題...",
+      "deviceInfo": "附加裝置資訊",
+      "deviceInfoDesc": "自動附加瀏覽器、語言及螢幕尺寸",
+      "submit": "提交",
+      "submitting": "提交中...",
+      "cancel": "取消",
+      "categories": {
+        "bug": "缺陷回報",
+        "feature_request": "功能建議",
+        "ui_ux": "介面 / 體驗",
+        "content": "內容問題",
+        "performance": "效能問題",
+        "other": "其他"
+      }
+    }
   },
   "notFound": {
     "title": "頁面不存在",
@@ -826,7 +903,8 @@
     "bookstore": "書城",
     "bookstoreDesc": "探索新書籍",
     "settings": "設定",
-    "settingsDesc": "管理應用設定"
+    "settingsDesc": "管理應用設定",
+    "viewMore": "查看更多"
   },
   "offline": {
     "downloadForOffline": "下載離線閱讀",
