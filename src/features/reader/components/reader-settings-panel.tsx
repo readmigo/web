@@ -1,28 +1,250 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
-import { X, Minus, Plus, RotateCcw } from 'lucide-react';
+import { X, Minus, Plus, RotateCcw, ChevronDown, ChevronRight } from 'lucide-react';
 import { useReaderStore } from '../stores/reader-store';
 import { cn } from '@/lib/utils';
+import type { ReaderSettings } from '../types';
 
 interface ReaderSettingsPanelProps {
   onClose: () => void;
 }
+
+// ─── Font data ────────────────────────────────────────────────────────────────
+
+type FontValue = ReaderSettings['fontFamily'];
+
+interface FontOption {
+  value: FontValue;
+  name: string;
+  previewText: string;
+  previewStyle: string; // inline CSS font-family for the preview element
+}
+
+interface FontCategory {
+  key: string;
+  labelKey: string;
+  fonts: FontOption[];
+}
+
+const FONT_CATEGORIES: FontCategory[] = [
+  {
+    key: 'sansSerif',
+    labelKey: 'fontCategorySansSerif',
+    fonts: [
+      {
+        value: 'system-ui',
+        name: 'System UI',
+        previewText: 'The quick brown fox',
+        previewStyle: 'system-ui, -apple-system, sans-serif',
+      },
+      {
+        value: 'Inter',
+        name: 'Inter',
+        previewText: 'The quick brown fox',
+        previewStyle: '"Inter", system-ui, sans-serif',
+      },
+      {
+        value: 'Helvetica Neue',
+        name: 'Helvetica Neue',
+        previewText: 'The quick brown fox',
+        previewStyle: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+      },
+    ],
+  },
+  {
+    key: 'serif',
+    labelKey: 'fontCategorySerif',
+    fonts: [
+      {
+        value: 'Georgia',
+        name: 'Georgia',
+        previewText: 'The quick brown fox',
+        previewStyle: 'Georgia, serif',
+      },
+      {
+        value: 'Times New Roman',
+        name: 'Times New Roman',
+        previewText: 'The quick brown fox',
+        previewStyle: '"Times New Roman", Times, serif',
+      },
+      {
+        value: 'Palatino',
+        name: 'Palatino',
+        previewText: 'The quick brown fox',
+        previewStyle: 'Palatino, "Palatino Linotype", serif',
+      },
+    ],
+  },
+  {
+    key: 'monospace',
+    labelKey: 'fontCategoryMonospace',
+    fonts: [
+      {
+        value: 'JetBrains Mono',
+        name: 'JetBrains Mono',
+        previewText: 'The quick brown fox',
+        previewStyle: '"JetBrains Mono", "Courier New", monospace',
+      },
+      {
+        value: 'Consolas',
+        name: 'Consolas',
+        previewText: 'The quick brown fox',
+        previewStyle: 'Consolas, "Courier New", monospace',
+      },
+      {
+        value: 'Courier New',
+        name: 'Courier New',
+        previewText: 'The quick brown fox',
+        previewStyle: '"Courier New", Courier, monospace',
+      },
+    ],
+  },
+  {
+    key: 'dyslexia',
+    labelKey: 'fontCategoryDyslexia',
+    fonts: [
+      {
+        value: 'OpenDyslexic',
+        name: 'OpenDyslexic',
+        previewText: 'The quick brown fox',
+        previewStyle: 'OpenDyslexic, sans-serif',
+      },
+    ],
+  },
+  {
+    key: 'chinese',
+    labelKey: 'fontCategoryChinese',
+    fonts: [
+      {
+        value: 'Noto Serif SC',
+        name: 'Noto Serif SC',
+        previewText: '春江花月夜',
+        previewStyle: '"Noto Serif SC", Georgia, serif',
+      },
+      {
+        value: 'LXGW WenKai',
+        name: 'LXGW WenKai',
+        previewText: '春江花月夜',
+        previewStyle: '"LXGW WenKai", Georgia, serif',
+      },
+    ],
+  },
+];
+
+// Google Fonts URL for Inter, JetBrains Mono, Noto Serif SC, LXGW WenKai
+const GOOGLE_FONTS_URL =
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&family=Noto+Serif+SC:wght@400&family=LXGW+WenKai&display=swap';
+
+// OpenDyslexic is not on Google Fonts — load from CDN
+const OPENDYSLEXIC_URL =
+  'https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/open-dyslexic-regular.min.css';
+
+// ─── Font Picker sub-component ────────────────────────────────────────────────
+
+interface FontPickerProps {
+  selected: FontValue;
+  onChange: (value: FontValue) => void;
+}
+
+function FontPicker({ selected, onChange }: FontPickerProps) {
+  const t = useTranslations('settings');
+  const fontsInjected = useRef(false);
+
+  // Lazy-load Google Fonts and OpenDyslexic when the picker mounts
+  useEffect(() => {
+    if (fontsInjected.current) return;
+    fontsInjected.current = true;
+
+    const injectLink = (href: string) => {
+      if (document.querySelector(`link[href="${href}"]`)) return;
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      document.head.appendChild(link);
+    };
+
+    injectLink(GOOGLE_FONTS_URL);
+    injectLink(OPENDYSLEXIC_URL);
+  }, []);
+
+  // All categories expanded by default
+  const [expanded, setExpanded] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(FONT_CATEGORIES.map((c) => [c.key, true]))
+  );
+
+  const toggleCategory = (key: string) => {
+    setExpanded((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  return (
+    <div className="space-y-1">
+      {FONT_CATEGORIES.map((category) => (
+        <div key={category.key}>
+          {/* Category header */}
+          <button
+            type="button"
+            onClick={() => toggleCategory(category.key)}
+            className="flex w-full items-center justify-between rounded-md px-1 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+            aria-expanded={expanded[category.key]}
+          >
+            <span>{t(category.labelKey as Parameters<typeof t>[0])}</span>
+            {expanded[category.key] ? (
+              <ChevronDown className="h-3 w-3" />
+            ) : (
+              <ChevronRight className="h-3 w-3" />
+            )}
+          </button>
+
+          {/* Font option cards */}
+          {expanded[category.key] && (
+            <div className="grid grid-cols-1 gap-1.5 pb-2">
+              {category.fonts.map((font) => {
+                const isSelected = selected === font.value;
+                return (
+                  <button
+                    key={font.value}
+                    type="button"
+                    onClick={() => onChange(font.value)}
+                    className={cn(
+                      'flex flex-col items-start gap-0.5 rounded-lg border px-3 py-2 text-left transition-colors',
+                      isSelected
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border hover:border-muted-foreground/50 hover:bg-muted/40'
+                    )}
+                    aria-pressed={isSelected}
+                  >
+                    {/* Preview text rendered in the target font */}
+                    <span
+                      className="text-base leading-snug text-foreground"
+                      style={{ fontFamily: font.previewStyle }}
+                    >
+                      {font.previewText}
+                    </span>
+                    {/* Font name label in system UI */}
+                    <span className="text-xs text-muted-foreground">{font.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── Main settings panel ──────────────────────────────────────────────────────
 
 export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
   const t = useTranslations('settings');
   const tReader = useTranslations('reader');
   const tCommon = useTranslations('common');
   const { settings, updateSettings, resetSettings } = useReaderStore();
-
-  const fontFamilies = [
-    { value: 'serif', label: t('fontSerif') },
-    { value: 'sans-serif', label: t('fontSansSerif') },
-    { value: 'monospace', label: t('fontMonospace') },
-  ] as const;
 
   const themes = [
     { value: 'light', label: t('bright'), bg: 'bg-white', text: 'text-black' },
@@ -106,22 +328,13 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
 
         <Separator />
 
-        {/* Font Family */}
+        {/* Font Family — enhanced categorized picker */}
         <div className="space-y-3">
           <span className="text-sm font-medium">{t('font')}</span>
-          <div className="flex gap-2">
-            {fontFamilies.map((font) => (
-              <Button
-                key={font.value}
-                variant={settings.fontFamily === font.value ? 'secondary' : 'outline'}
-                size="sm"
-                onClick={() => updateSettings({ fontFamily: font.value })}
-                className="flex-1"
-              >
-                {font.label}
-              </Button>
-            ))}
-          </div>
+          <FontPicker
+            selected={settings.fontFamily}
+            onChange={(value) => updateSettings({ fontFamily: value })}
+          />
         </div>
 
         <Separator />
@@ -377,37 +590,6 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
             step={0.5}
             onValueChange={([value]) => updateSettings({ textIndent: value })}
           />
-        </div>
-
-        <Separator />
-
-        {/* Auto Page Turn */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">{t('autoPage')}</span>
-            <Button
-              variant={settings.autoPageEnabled ? 'secondary' : 'outline'}
-              size="sm"
-              onClick={() => updateSettings({ autoPageEnabled: !settings.autoPageEnabled })}
-            >
-              {settings.autoPageEnabled ? tCommon('on') : tCommon('off')}
-            </Button>
-          </div>
-          {settings.autoPageEnabled && (
-            <div className="flex gap-2">
-              {([5, 10, 15, 20, 30] as const).map((sec) => (
-                <Button
-                  key={sec}
-                  variant={settings.autoPageInterval === sec ? 'secondary' : 'outline'}
-                  size="sm"
-                  onClick={() => updateSettings({ autoPageInterval: sec })}
-                  className="flex-1 px-1 text-xs"
-                >
-                  {t('autoPageIntervalOption', { seconds: sec })}
-                </Button>
-              ))}
-            </div>
-          )}
         </div>
 
         <Separator />
