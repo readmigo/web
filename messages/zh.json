@@ -32,7 +32,14 @@
     "exploreMore": "去探索发现更多好书吧",
     "noMoreBooks": "没有更多书籍了",
     "viewAllLists": "查看全部书单",
-    "browseAll": "浏览全部书籍"
+    "browseAll": "浏览全部书籍",
+    "pullToRefresh": "下拉刷新",
+    "refreshing": "刷新中...",
+    "promoBanner": {
+      "freeBadge": "免费",
+      "cta": "立即阅读",
+      "dismiss": "关闭"
+    }
   },
   "audiobooks": {
     "recentlyListened": "最近收听",
@@ -215,6 +222,12 @@
     "free": "免费版",
     "upgrade": "升级到高级版",
     "signOut": "退出登录",
+    "deleteAccount": "删除账户",
+    "deleteAccountTitle": "删除账户",
+    "deleteAccountDesc": "此操作不可撤销，所有数据将被永久删除。请输入 DELETE 确认。",
+    "deleteAccountConfirmPlaceholder": "输入 DELETE",
+    "deleteAccountConfirmBtn": "永久删除账户",
+    "deleteAccountCancelBtn": "取消",
     "keyboardShortcuts": "键盘快捷键",
     "shortcutsToggleHint": "按 ? 显示/隐藏",
     "fontSerif": "衬线",
@@ -340,6 +353,9 @@
     "resetEmailSent": "请查收邮件",
     "resetEmailSentDesc": "如果该邮箱已注册，重置链接已发送至您的邮箱。",
     "backToLogin": "返回登录",
+    "emailInvalid": "请输入有效的邮箱地址",
+    "passwordTooShort": "密码至少需要 8 个字符",
+    "signingIn": "登录中...",
     "loginFeatures": {
       "library": {
         "title": "登录后查看书库",
@@ -1051,7 +1067,10 @@
       "skip": "跳过",
       "next": "下一步",
       "start": "开始阅读"
-    }
+    },
+    "sharePublicly": "公开分享",
+    "keepPrivate": "仅自己可见",
+    "translate": "翻译"
   },
   "bookList": {
     "tragedy": "悲剧",
@@ -1146,7 +1165,11 @@
     "statusDownloading": "下载中",
     "statusPaused": "已暂停",
     "statusCompleted": "已下载",
-    "statusFailed": "失败"
+    "statusFailed": "失败",
+    "cellularWarning": "使用移动数据",
+    "cellularWarningDesc": "使用移动数据下载可能产生费用，是否继续？",
+    "doNotAskAgain": "不再提示",
+    "continueDownload": "继续"
   },
   "shareCard": {
     "title": "分享卡片",

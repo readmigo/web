@@ -193,6 +193,12 @@
     "free": "مجاني",
     "upgrade": "الترقية إلى Premium",
     "signOut": "تسجيل الخروج",
+    "deleteAccount": "حذف الحساب",
+    "deleteAccountTitle": "حذف الحساب",
+    "deleteAccountDesc": "هذا الإجراء لا يمكن التراجع عنه. سيتم حذف جميع بياناتك نهائيًا. اكتب DELETE للتأكيد.",
+    "deleteAccountConfirmPlaceholder": "اكتب DELETE",
+    "deleteAccountConfirmBtn": "حذف الحساب نهائيًا",
+    "deleteAccountCancelBtn": "إلغاء",
     "keyboardShortcuts": "اختصارات لوحة المفاتيح",
     "shortcutsToggleHint": "اضغط ? للإظهار/الإخفاء",
     "fontSerif": "مزخرف",
@@ -968,7 +974,10 @@
       "skip": "تخطي",
       "next": "التالي",
       "start": "بدء القراءة"
-    }
+    },
+    "sharePublicly": "مشاركة علنية",
+    "keepPrivate": "ابقاء خاصاً",
+    "translate": "ترجمة"
   },
   "bookList": {
     "tragedy": "مأساة",

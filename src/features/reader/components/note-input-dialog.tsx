@@ -10,27 +10,31 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
+import { Globe, Lock } from 'lucide-react';
 
 interface NoteInputDialogProps {
   open: boolean;
   selectedText: string;
-  onSave: (note: string) => void;
+  onSave: (note: string, isPublic: boolean) => void;
   onClose: () => void;
 }
 
 export function NoteInputDialog({ open, selectedText, onSave, onClose }: NoteInputDialogProps) {
   const t = useTranslations('reader');
   const [note, setNote] = useState('');
+  const [isPublic, setIsPublic] = useState(false);
 
   const handleSave = () => {
     if (!note.trim()) return;
-    onSave(note.trim());
+    onSave(note.trim(), isPublic);
     setNote('');
+    setIsPublic(false);
     onClose();
   };
 
   const handleClose = () => {
     setNote('');
+    setIsPublic(false);
     onClose();
   };
 
@@ -58,6 +62,23 @@ export function NoteInputDialog({ open, selectedText, onSave, onClose }: NoteInp
           className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 resize-none"
           autoFocus
         />
+
+        {/* Public toggle */}
+        <button
+          type="button"
+          onClick={() => setIsPublic((prev) => !prev)}
+          aria-pressed={isPublic}
+          className="flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted w-full text-left"
+        >
+          {isPublic ? (
+            <Globe className="h-4 w-4 text-primary shrink-0" aria-hidden />
+          ) : (
+            <Lock className="h-4 w-4 text-muted-foreground shrink-0" aria-hidden />
+          )}
+          <span className={isPublic ? 'text-primary font-medium' : 'text-muted-foreground'}>
+            {isPublic ? t('sharePublicly') : t('keepPrivate')}
+          </span>
+        </button>
 
         <DialogFooter>
           <Button variant="ghost" onClick={handleClose}>{t('cancel')}</Button>

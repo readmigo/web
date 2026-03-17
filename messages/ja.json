@@ -193,6 +193,12 @@
     "free": "無料",
     "upgrade": "プレミアムにアップグレード",
     "signOut": "サインアウト",
+    "deleteAccount": "アカウントを削除",
+    "deleteAccountTitle": "アカウントを削除",
+    "deleteAccountDesc": "この操作は元に戻せません。すべてのデータが完全に削除されます。確認するために DELETE と入力してください。",
+    "deleteAccountConfirmPlaceholder": "DELETE と入力",
+    "deleteAccountConfirmBtn": "アカウントを完全に削除",
+    "deleteAccountCancelBtn": "キャンセル",
     "keyboardShortcuts": "キーボードショートカット",
     "shortcutsToggleHint": "? を押して表示/非表示",
     "fontSerif": "セリフ",
@@ -968,7 +974,10 @@
       "skip": "スキップ",
       "next": "次へ",
       "start": "読書を始める"
-    }
+    },
+    "sharePublicly": "公開する",
+    "keepPrivate": "非公開",
+    "translate": "翻訳"
   },
   "bookList": {
     "tragedy": "悲劇",

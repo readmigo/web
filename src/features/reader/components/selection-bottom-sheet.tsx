@@ -97,7 +97,7 @@ export function SelectionBottomSheet({ selection, bookId, bookTitle, authorName,
     dismiss();
   }, [addHighlight, bookId, selection, selectedStyle, dismiss]);
 
-  const handleSaveNote = useCallback((note: string) => {
+  const handleSaveNote = useCallback((note: string, isPublic: boolean) => {
     addHighlight({
       userBookId: bookId,
       cfiRange: selection.cfiRange || '',
@@ -105,6 +105,7 @@ export function SelectionBottomSheet({ selection, bookId, bookTitle, authorName,
       color: 'yellow',
       style: selectedStyle,
       note,
+      isPublic,
       chapterId: selection.chapterId,
       paragraphIndex: selection.paragraphIndex,
       charOffset: selection.charOffset,

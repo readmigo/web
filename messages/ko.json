@@ -193,6 +193,12 @@
     "free": "무료",
     "upgrade": "프리미엄으로 업그레이드",
     "signOut": "로그아웃",
+    "deleteAccount": "계정 삭제",
+    "deleteAccountTitle": "계정 삭제",
+    "deleteAccountDesc": "이 작업은 되돌릴 수 없습니다. 모든 데이터가 영구적으로 삭제됩니다. 확인하려면 DELETE를 입력하세요.",
+    "deleteAccountConfirmPlaceholder": "DELETE 입력",
+    "deleteAccountConfirmBtn": "계정 영구 삭제",
+    "deleteAccountCancelBtn": "취소",
     "keyboardShortcuts": "키보드 단축키",
     "shortcutsToggleHint": "?를 눌러 표시/숨기기",
     "fontSerif": "세리프",
@@ -968,7 +974,10 @@
       "skip": "건너뛰기",
       "next": "다음",
       "start": "읽기 시작"
-    }
+    },
+    "sharePublicly": "공개 공유",
+    "keepPrivate": "비공개 유지",
+    "translate": "번역"
   },
   "bookList": {
     "tragedy": "비극",

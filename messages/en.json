@@ -32,7 +32,14 @@
     "exploreMore": "Explore to discover more great books",
     "noMoreBooks": "No more books",
     "viewAllLists": "View All Lists",
-    "browseAll": "Browse All Books"
+    "browseAll": "Browse All Books",
+    "pullToRefresh": "Pull to refresh",
+    "refreshing": "Refreshing...",
+    "promoBanner": {
+      "freeBadge": "Free",
+      "cta": "Read Now",
+      "dismiss": "Dismiss"
+    }
   },
   "audiobooks": {
     "recentlyListened": "Recently Listened",
@@ -215,6 +222,12 @@
     "free": "Free",
     "upgrade": "Upgrade to Premium",
     "signOut": "Sign Out",
+    "deleteAccount": "Delete Account",
+    "deleteAccountTitle": "Delete Account",
+    "deleteAccountDesc": "This action is irreversible. All your data will be permanently deleted. Type DELETE to confirm.",
+    "deleteAccountConfirmPlaceholder": "Type DELETE",
+    "deleteAccountConfirmBtn": "Permanently Delete Account",
+    "deleteAccountCancelBtn": "Cancel",
     "keyboardShortcuts": "Keyboard Shortcuts",
     "shortcutsToggleHint": "Press ? to show/hide",
     "fontSerif": "Serif",
@@ -340,6 +353,9 @@
     "resetEmailSent": "Check your email",
     "resetEmailSentDesc": "If an account exists for that email, a password reset link has been sent.",
     "backToLogin": "Back to Login",
+    "emailInvalid": "Please enter a valid email address",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "signingIn": "Signing in...",
     "loginFeatures": {
       "library": {
         "title": "Sign In to View Library",
@@ -1051,7 +1067,10 @@
       "skip": "Skip",
       "next": "Next",
       "start": "Start Reading"
-    }
+    },
+    "sharePublicly": "Share publicly",
+    "keepPrivate": "Keep private",
+    "translate": "Translate"
   },
   "bookList": {
     "tragedy": "Tragedy",
@@ -1146,7 +1165,11 @@
     "statusDownloading": "Downloading",
     "statusPaused": "Paused",
     "statusCompleted": "Downloaded",
-    "statusFailed": "Failed"
+    "statusFailed": "Failed",
+    "cellularWarning": "Using Mobile Data",
+    "cellularWarningDesc": "Downloading over mobile data may incur charges. Do you want to continue?",
+    "doNotAskAgain": "Do not ask again",
+    "continueDownload": "Continue"
   },
   "shareCard": {
     "title": "Share Quote",

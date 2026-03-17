@@ -193,6 +193,12 @@
     "free": "Gratis",
     "upgrade": "Upgrade ke Premium",
     "signOut": "Keluar",
+    "deleteAccount": "Hapus Akun",
+    "deleteAccountTitle": "Hapus Akun",
+    "deleteAccountDesc": "Tindakan ini tidak dapat dibatalkan. Semua data Anda akan dihapus secara permanen. Ketik DELETE untuk mengonfirmasi.",
+    "deleteAccountConfirmPlaceholder": "Ketik DELETE",
+    "deleteAccountConfirmBtn": "Hapus Akun Secara Permanen",
+    "deleteAccountCancelBtn": "Batal",
     "keyboardShortcuts": "Pintasan Keyboard",
     "shortcutsToggleHint": "Tekan ? untuk tampilkan/sembunyikan",
     "fontSerif": "Serif",
@@ -968,7 +974,10 @@
       "skip": "Lewati",
       "next": "Berikutnya",
       "start": "Mulai membaca"
-    }
+    },
+    "sharePublicly": "Bagikan publik",
+    "keepPrivate": "Tetap pribadi",
+    "translate": "Terjemahkan"
   },
   "bookList": {
     "tragedy": "Tragedi",

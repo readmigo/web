@@ -193,6 +193,12 @@
     "free": "Бесплатно",
     "upgrade": "Перейти на Premium",
     "signOut": "Выйти",
+    "deleteAccount": "Удалить аккаунт",
+    "deleteAccountTitle": "Удалить аккаунт",
+    "deleteAccountDesc": "Это действие необратимо. Все ваши данные будут удалены навсегда. Введите DELETE для подтверждения.",
+    "deleteAccountConfirmPlaceholder": "Введите DELETE",
+    "deleteAccountConfirmBtn": "Удалить аккаунт навсегда",
+    "deleteAccountCancelBtn": "Отмена",
     "keyboardShortcuts": "Горячие клавиши",
     "shortcutsToggleHint": "Нажмите ? для показа/скрытия",
     "fontSerif": "С засечками",
@@ -968,7 +974,10 @@
       "skip": "Пропустить",
       "next": "Далее",
       "start": "Начать чтение"
-    }
+    },
+    "sharePublicly": "Опубликовать",
+    "keepPrivate": "Оставить приватным",
+    "translate": "Перевести"
   },
   "bookList": {
     "tragedy": "Трагедия",

@@ -408,6 +408,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
             color: highlight.color,
             style: highlight.style,
             note: highlight.note,
+            isPublic: highlight.isPublic ?? false,
           })
           .then((response) => {
             // Update local ID with server ID
@@ -435,6 +436,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
                 color: highlight.color,
                 style: highlight.style,
                 note: highlight.note,
+                isPublic: highlight.isPublic ?? false,
               },
             });
           });

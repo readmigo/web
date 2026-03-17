@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { X, Clock, BookOpen, Zap, TrendingUp } from 'lucide-react';
+import { X, Clock, BookOpen, Zap, TrendingUp, Flame } from 'lucide-react';
 import { useReaderStore } from '../stores/reader-store';
+import { useReadingStats } from '@/features/stats/hooks/use-reading-stats';
+import { MilestoneCelebration } from './milestone-celebration';
 import { cn } from '@/lib/utils';
 
 interface ReadingStatsOverlayProps {
@@ -28,6 +30,10 @@ export function ReadingStatsOverlay({
 
   const [sessionTime, setSessionTime] = useState(0);
   const bookStats = getBookStats(bookId);
+
+  // Fetch streak from API (stale-while-revalidate, low priority)
+  const { data: readingStatsData } = useReadingStats();
+  const currentStreak = readingStatsData?.monthly?.currentStreak ?? 0;
 
   // Update session time every second
   useEffect(() => {
@@ -63,100 +69,116 @@ export function ReadingStatsOverlay({
     : 0;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="relative w-full max-w-md mx-4 bg-background rounded-xl shadow-2xl overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-lg font-semibold">Reading Progress</h2>
-          <Button variant="ghost" size="icon" onClick={toggleReadingStats}>
-            <X className="h-5 w-5" />
-          </Button>
-        </div>
+    <>
+      {/* Milestone celebration fires based on live progress */}
+      <MilestoneCelebration progress={percentage} />
 
-        {/* Content */}
-        <div className="p-6 space-y-6">
-          {/* Book Progress */}
-          <div className="space-y-3">
-            {bookTitle && (
-              <p className="text-sm text-muted-foreground truncate">{bookTitle}</p>
-            )}
-            <div className="relative">
-              <Progress value={percentage * 100} className="h-4" />
-              <span className="absolute inset-0 flex items-center justify-center text-xs font-medium">
-                {Math.round(percentage * 100)}%
-              </span>
-            </div>
-            {totalChapters > 0 && (
-              <p className="text-sm text-muted-foreground text-center">
-                Chapter {currentChapter} of {totalChapters}
-              </p>
-            )}
-          </div>
-
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 gap-4">
-            {/* Current Session */}
-            <StatCard
-              icon={<Clock className="h-5 w-5 text-blue-500" />}
-              label="This Session"
-              value={formatTime(sessionTime)}
-              subtext="Reading time"
-            />
-
-            {/* Total Time */}
-            <StatCard
-              icon={<BookOpen className="h-5 w-5 text-green-500" />}
-              label="Total Time"
-              value={formatTotalTime(bookStats?.totalReadingTime || 0)}
-              subtext={`${bookStats?.sessionsCount || 0} sessions`}
-            />
-
-            {/* Reading Speed */}
-            <StatCard
-              icon={<Zap className="h-5 w-5 text-yellow-500" />}
-              label="Reading Speed"
-              value={`${bookStats?.averageWpm || 0}`}
-              subtext="words/min"
-            />
-
-            {/* Time Remaining */}
-            <StatCard
-              icon={<TrendingUp className="h-5 w-5 text-purple-500" />}
-              label="Estimated Left"
-              value={estimatedTimeRemaining > 0 ? formatTotalTime(estimatedTimeRemaining * 60) : '--'}
-              subtext="to finish"
-            />
-          </div>
-
-          {/* Progress Milestones */}
-          <div className="space-y-2">
-            <p className="text-sm font-medium">Milestones</p>
-            <div className="flex justify-between">
-              {[25, 50, 75, 100].map((milestone) => (
-                <div
-                  key={milestone}
-                  className={cn(
-                    'flex flex-col items-center',
-                    percentage * 100 >= milestone ? 'text-primary' : 'text-muted-foreground'
-                  )}
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+        <div className="relative w-full max-w-md mx-4 bg-background rounded-xl shadow-2xl overflow-hidden">
+          {/* Header */}
+          <div className="flex items-center justify-between p-4 border-b">
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg font-semibold">Reading Progress</h2>
+              {currentStreak > 0 && (
+                <span
+                  className="flex items-center gap-1 rounded-full bg-orange-500/10 px-2 py-0.5 text-xs font-semibold text-orange-500"
+                  aria-label={`${currentStreak} day reading streak`}
                 >
+                  <Flame className="h-3 w-3" />
+                  {currentStreak}d streak
+                </span>
+              )}
+            </div>
+            <Button variant="ghost" size="icon" onClick={toggleReadingStats}>
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+
+          {/* Content */}
+          <div className="p-6 space-y-6">
+            {/* Book Progress */}
+            <div className="space-y-3">
+              {bookTitle && (
+                <p className="text-sm text-muted-foreground truncate">{bookTitle}</p>
+              )}
+              <div className="relative">
+                <Progress value={percentage * 100} className="h-4" />
+                <span className="absolute inset-0 flex items-center justify-center text-xs font-medium">
+                  {Math.round(percentage * 100)}%
+                </span>
+              </div>
+              {totalChapters > 0 && (
+                <p className="text-sm text-muted-foreground text-center">
+                  Chapter {currentChapter} of {totalChapters}
+                </p>
+              )}
+            </div>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* Current Session */}
+              <StatCard
+                icon={<Clock className="h-5 w-5 text-blue-500" />}
+                label="This Session"
+                value={formatTime(sessionTime)}
+                subtext="Reading time"
+              />
+
+              {/* Total Time */}
+              <StatCard
+                icon={<BookOpen className="h-5 w-5 text-green-500" />}
+                label="Total Time"
+                value={formatTotalTime(bookStats?.totalReadingTime || 0)}
+                subtext={`${bookStats?.sessionsCount || 0} sessions`}
+              />
+
+              {/* Reading Speed */}
+              <StatCard
+                icon={<Zap className="h-5 w-5 text-yellow-500" />}
+                label="Reading Speed"
+                value={`${bookStats?.averageWpm || 0}`}
+                subtext="words/min"
+              />
+
+              {/* Time Remaining */}
+              <StatCard
+                icon={<TrendingUp className="h-5 w-5 text-purple-500" />}
+                label="Estimated Left"
+                value={estimatedTimeRemaining > 0 ? formatTotalTime(estimatedTimeRemaining * 60) : '--'}
+                subtext="to finish"
+              />
+            </div>
+
+            {/* Progress Milestones */}
+            <div className="space-y-2">
+              <p className="text-sm font-medium">Milestones</p>
+              <div className="flex justify-between">
+                {[25, 50, 75, 100].map((milestone) => (
                   <div
+                    key={milestone}
                     className={cn(
-                      'w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium border-2',
-                      percentage * 100 >= milestone
-                        ? 'bg-primary text-primary-foreground border-primary'
-                        : 'border-muted-foreground/30'
+                      'flex flex-col items-center',
+                      percentage * 100 >= milestone ? 'text-primary' : 'text-muted-foreground'
                     )}
                   >
-                    {percentage * 100 >= milestone ? '✓' : `${milestone}%`}
+                    <div
+                      className={cn(
+                        'w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium border-2',
+                        percentage * 100 >= milestone
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'border-muted-foreground/30'
+                      )}
+                    >
+                      {percentage * 100 >= milestone ? '✓' : `${milestone}%`}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

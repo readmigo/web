@@ -7,10 +7,12 @@ import {
   Highlighter,
   MessageSquare,
   Share2,
+  Languages,
 } from 'lucide-react';
 import { useReaderStore } from '../stores/reader-store';
 import type { SelectedText, Highlight } from '../types';
 import { NoteInputDialog } from './note-input-dialog';
+import { TranslationSheet } from './translation-sheet';
 import { cn } from '@/lib/utils';
 
 const POPUP_STYLES: { name: Highlight['style']; label: string }[] = [
@@ -67,6 +69,7 @@ export function SelectionPopup({
   const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [showStylePicker, setShowStylePicker] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState<Highlight['style']>('background');
+  const [showTranslation, setShowTranslation] = useState(false);
   const { addHighlight, setSelectedText } = useReaderStore();
 
   useEffect(() => {
@@ -122,7 +125,7 @@ export function SelectionPopup({
     setShowNoteDialog(true);
   }, []);
 
-  const handleSaveNote = useCallback((note: string) => {
+  const handleSaveNote = useCallback((note: string, isPublic: boolean) => {
     addHighlight({
       userBookId: bookId,
       cfiRange: selection.cfiRange || '',
@@ -130,6 +133,7 @@ export function SelectionPopup({
       color: 'yellow',
       style: selectedStyle,
       note,
+      isPublic,
       chapterId: selection.chapterId,
       paragraphIndex: selection.paragraphIndex,
       charOffset: selection.charOffset,
@@ -163,6 +167,10 @@ export function SelectionPopup({
       }
     }
   }, [selection.text, setSelectedText]);
+
+  const handleTranslate = useCallback(() => {
+    setShowTranslation(true);
+  }, []);
 
   return (
     <div
@@ -235,6 +243,16 @@ export function SelectionPopup({
         >
           <Share2 className="h-4 w-4" />
         </Button>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-8 px-2"
+          onClick={handleTranslate}
+          title="Translate"
+        >
+          <Languages className="h-4 w-4" />
+        </Button>
       </div>
 
       <NoteInputDialog
@@ -242,6 +260,16 @@ export function SelectionPopup({
         selectedText={selection.text}
         onSave={handleSaveNote}
         onClose={() => setShowNoteDialog(false)}
+      />
+
+      <TranslationSheet
+        open={showTranslation}
+        originalText={selection.text}
+        bookId={bookId}
+        onClose={() => {
+          setShowTranslation(false);
+          setSelectedText(null);
+        }}
       />
     </div>
   );

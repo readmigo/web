@@ -193,6 +193,12 @@
     "free": "Gratuit",
     "upgrade": "Passer à Premium",
     "signOut": "Se déconnecter",
+    "deleteAccount": "Supprimer le compte",
+    "deleteAccountTitle": "Supprimer le compte",
+    "deleteAccountDesc": "Cette action est irréversible. Toutes vos données seront supprimées définitivement. Tapez DELETE pour confirmer.",
+    "deleteAccountConfirmPlaceholder": "Tapez DELETE",
+    "deleteAccountConfirmBtn": "Supprimer définitivement le compte",
+    "deleteAccountCancelBtn": "Annuler",
     "keyboardShortcuts": "Raccourcis clavier",
     "shortcutsToggleHint": "Appuyez sur ? pour afficher/masquer",
     "fontSerif": "Serif",
@@ -968,7 +974,10 @@
       "skip": "Passer",
       "next": "Suivant",
       "start": "Commencer la lecture"
-    }
+    },
+    "sharePublicly": "Partager publiquement",
+    "keepPrivate": "Garder privé",
+    "translate": "Traduire"
   },
   "bookList": {
     "tragedy": "Tragédie",

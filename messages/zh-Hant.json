@@ -31,7 +31,14 @@
     "emptyTitle": "暫無書籍",
     "exploreMore": "去探索發現更多好書吧",
     "noMoreBooks": "沒有更多書籍了",
-    "viewAllLists": "查看全部書單"
+    "viewAllLists": "查看全部書單",
+    "pullToRefresh": "下拉刷新",
+    "refreshing": "刷新中...",
+    "promoBanner": {
+      "freeBadge": "免費",
+      "cta": "立即閱讀",
+      "dismiss": "關閉"
+    }
   },
   "audiobooks": {
     "recentlyListened": "最近收聽",
@@ -193,6 +200,12 @@
     "free": "免費版",
     "upgrade": "升級到高級版",
     "signOut": "退出登入",
+    "deleteAccount": "刪除帳戶",
+    "deleteAccountTitle": "刪除帳戶",
+    "deleteAccountDesc": "此操作不可撤銷，所有資料將被永久刪除。請輸入 DELETE 確認。",
+    "deleteAccountConfirmPlaceholder": "輸入 DELETE",
+    "deleteAccountConfirmBtn": "永久刪除帳戶",
+    "deleteAccountCancelBtn": "取消",
     "keyboardShortcuts": "鍵盤快捷鍵",
     "shortcutsToggleHint": "按 ? 顯示/隱藏",
     "fontSerif": "襯線",
@@ -933,7 +946,10 @@
       "skip": "跳過",
       "next": "下一步",
       "start": "開始閱讀"
-    }
+    },
+    "sharePublicly": "公開分享",
+    "keepPrivate": "僅自己可見",
+    "translate": "翻譯"
   },
   "bookList": {
     "tragedy": "悲劇",
@@ -1025,7 +1041,11 @@
     "statusDownloading": "下載中",
     "statusPaused": "已暫停",
     "statusCompleted": "已下載",
-    "statusFailed": "失敗"
+    "statusFailed": "失敗",
+    "cellularWarning": "使用行動數據",
+    "cellularWarningDesc": "使用行動數據下載可能產生費用，是否繼續？",
+    "doNotAskAgain": "不再提示",
+    "continueDownload": "繼續"
   },
   "shareCard": {
     "title": "分享卡片",

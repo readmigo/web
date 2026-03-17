@@ -46,6 +46,7 @@ export interface Highlight {
   color: 'yellow' | 'green' | 'blue' | 'pink' | 'purple' | 'orange';
   style: 'underline' | 'wavy' | 'background' | 'bold_line';
   note?: string;
+  isPublic?: boolean;
   startOffset?: number;
   endOffset?: number;
   paragraphIndex?: number;
