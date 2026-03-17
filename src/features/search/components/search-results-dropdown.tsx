@@ -14,6 +14,7 @@ import {
   TrendingUp,
   Flame,
   Sparkles,
+  ChevronRight,
 } from 'lucide-react';
 import type { SearchResponse, SearchSuggestion, PopularSearch } from '../types';
 
@@ -285,6 +286,8 @@ export function SearchResultsDropdown({
     );
   }
 
+  const searchPath = `/search?q=${encodeURIComponent(trimmedQuery)}`;
+
   return (
     <DropdownWrapper>
       <div className="p-2">
@@ -326,6 +329,15 @@ export function SearchResultsDropdown({
                 </span>
               </button>
             ))}
+            {authors.hasMore && (
+              <button
+                className="flex w-full items-center justify-center gap-1 rounded-md px-2 py-1.5 text-xs text-primary transition-colors hover:bg-accent"
+                onClick={() => handleNavigate(`${searchPath}&tab=authors`)}
+              >
+                {t('viewMore')}
+                <ChevronRight className="h-3 w-3" />
+              </button>
+            )}
           </div>
         )}
 
@@ -361,6 +373,15 @@ export function SearchResultsDropdown({
                 </div>
               </button>
             ))}
+            {books.hasMore && (
+              <button
+                className="flex w-full items-center justify-center gap-1 rounded-md px-2 py-1.5 text-xs text-primary transition-colors hover:bg-accent"
+                onClick={() => handleNavigate(`${searchPath}&tab=books`)}
+              >
+                {t('viewMore')}
+                <ChevronRight className="h-3 w-3" />
+              </button>
+            )}
           </div>
         )}
 
@@ -397,6 +418,15 @@ export function SearchResultsDropdown({
                 </div>
               </button>
             ))}
+            {quotes.hasMore && (
+              <button
+                className="flex w-full items-center justify-center gap-1 rounded-md px-2 py-1.5 text-xs text-primary transition-colors hover:bg-accent"
+                onClick={() => handleNavigate(`${searchPath}&tab=quotes`)}
+              >
+                {t('viewMore')}
+                <ChevronRight className="h-3 w-3" />
+              </button>
+            )}
           </div>
         )}
       </div>

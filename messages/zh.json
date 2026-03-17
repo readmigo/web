@@ -31,7 +31,8 @@
     "emptyTitle": "暂无书籍",
     "exploreMore": "去探索发现更多好书吧",
     "noMoreBooks": "没有更多书籍了",
-    "viewAllLists": "查看全部书单"
+    "viewAllLists": "查看全部书单",
+    "browseAll": "浏览全部书籍"
   },
   "audiobooks": {
     "recentlyListened": "最近收听",

@@ -12,7 +12,7 @@ import { useCategories } from '@/features/library/hooks/use-categories';
 import {
   Search, RefreshCw, Loader2, BookOpen, Library, Drama, Mountain,
   Lightbulb, Quote, Wand2, Moon, Heart, Folder, Clock, FlaskConical,
-  Code, TrendingUp, Users, Palette, Sun, Star, Globe, ChevronRight, ListMusic,
+  Code, TrendingUp, Users, Palette, Sun, Star, Globe, ChevronRight, ListMusic, LayoutGrid,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { Category } from '@/features/library/types';
@@ -305,6 +305,16 @@ export function BookstoreContent() {
           <ChevronRight className="h-4 w-4 text-muted-foreground" />
         </Link>
       )}
+
+      {/* Browse All Books Entry */}
+      <Link
+        href="/browse"
+        className="flex items-center justify-center gap-2 rounded-xl bg-secondary/50 px-4 py-3 transition-colors hover:bg-secondary"
+      >
+        <LayoutGrid className="h-4 w-4 text-muted-foreground" />
+        <span className="text-sm font-medium text-muted-foreground">{t('browseAll')}</span>
+        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+      </Link>
 
       {/* "全部书籍" divider */}
       <div className="flex items-center gap-3">

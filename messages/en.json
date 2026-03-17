@@ -31,7 +31,8 @@
     "emptyTitle": "No books found",
     "exploreMore": "Explore to discover more great books",
     "noMoreBooks": "No more books",
-    "viewAllLists": "View All Lists"
+    "viewAllLists": "View All Lists",
+    "browseAll": "Browse All Books"
   },
   "audiobooks": {
     "recentlyListened": "Recently Listened",

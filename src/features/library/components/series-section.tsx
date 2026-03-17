@@ -52,15 +52,23 @@ export function SeriesSection({ series }: SeriesSectionProps) {
   return (
     <div className="rounded-xl border p-4">
       <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-semibold">{series.name}</p>
+        <Link href={`/series/${series.id}`} className="group flex-1 min-w-0">
+          <p className="text-sm font-semibold group-hover:text-primary transition-colors">{series.name}</p>
           <p className="text-xs text-muted-foreground">
             {series.authorName} · {series.bookCount} books
           </p>
+        </Link>
+        <div className="flex items-center gap-2 shrink-0">
+          <Badge variant="secondary" className="text-xs">
+            Series
+          </Badge>
+          <Link
+            href={`/series/${series.id}`}
+            className="text-xs text-primary hover:underline"
+          >
+            View All
+          </Link>
         </div>
-        <Badge variant="secondary" className="text-xs">
-          Series
-        </Badge>
       </div>
 
       {detail && detail.books.length > 0 && (
@@ -96,9 +104,12 @@ export function SeriesSection({ series }: SeriesSectionProps) {
             </Link>
           ))}
           {detail.books.length > 5 && (
-            <p className="text-center text-xs text-muted-foreground">
+            <Link
+              href={`/series/${series.id}`}
+              className="block text-center text-xs text-primary hover:underline py-1"
+            >
               +{detail.books.length - 5} more
-            </p>
+            </Link>
           )}
         </div>
       )}
