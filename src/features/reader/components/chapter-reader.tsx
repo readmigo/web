@@ -56,15 +56,24 @@ function mapSettings(
   systemIsDark: boolean,
 ): EngineSettings {
   const marginMap = { small: 20, medium: 40, large: 60 } as const;
-  const fontMap = {
-    serif: 'Georgia, serif',
-    'sans-serif': '"Helvetica Neue", Helvetica, Arial, sans-serif',
-    monospace: 'monospace',
-  } as const;
+  const fontMap: Record<string, string> = {
+    'system-ui': 'system-ui, -apple-system, sans-serif',
+    'Inter': '"Inter", system-ui, sans-serif',
+    'Helvetica Neue': '"Helvetica Neue", Helvetica, Arial, sans-serif',
+    'Georgia': 'Georgia, serif',
+    'Times New Roman': '"Times New Roman", Times, serif',
+    'Palatino': 'Palatino, "Palatino Linotype", serif',
+    'JetBrains Mono': '"JetBrains Mono", "Courier New", monospace',
+    'Consolas': 'Consolas, "Courier New", monospace',
+    'Courier New': '"Courier New", Courier, monospace',
+    'OpenDyslexic': 'OpenDyslexic, sans-serif',
+    'Noto Serif SC': '"Noto Serif SC", Georgia, serif',
+    'LXGW WenKai': '"LXGW WenKai", Georgia, serif',
+  };
   const resolvedTheme = resolveTheme(s.appearanceMode, DEFAULT_THEME_MAPPING, systemIsDark);
   return {
     fontSize: s.fontSize,
-    fontFamily: fontMap[s.fontFamily] || 'Georgia, serif',
+    fontFamily: fontMap[s.fontFamily] ?? 'Georgia, serif',
     lineHeight: s.lineHeight,
     letterSpacing: s.letterSpacing,
     wordSpacing: s.wordSpacing,
@@ -80,7 +89,7 @@ function mapSettings(
     pageTransition: 'slide',
     transitionDuration: 300,
     swipeEnabled: true,
-    autoPageInterval: null,
+    autoPageInterval: s.autoPageEnabled ? s.autoPageInterval * 1000 : null,
   };
 }
 

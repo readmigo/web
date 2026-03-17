@@ -238,6 +238,8 @@
     "wordSpacing": "Espaçamento entre palavras",
     "paragraphSpacing": "Espaçamento entre parágrafos",
     "textIndent": "Recuo de texto",
+    "autoPage": "Virar página automaticamente",
+    "autoPageIntervalOption": "{seconds}s",
     "resetDefaults": "Restaurar padrões"
   },
   "auth": {

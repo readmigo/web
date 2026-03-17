@@ -238,6 +238,8 @@
     "wordSpacing": "単語間隔",
     "paragraphSpacing": "段落間隔",
     "textIndent": "字下げ",
+    "autoPage": "自動ページめくり",
+    "autoPageIntervalOption": "{seconds}秒",
     "resetDefaults": "デフォルトにリセット"
   },
   "auth": {

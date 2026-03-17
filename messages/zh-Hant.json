@@ -238,6 +238,8 @@
     "wordSpacing": "詞間距",
     "paragraphSpacing": "段間距",
     "textIndent": "首行縮進",
+    "autoPage": "自動翻頁",
+    "autoPageIntervalOption": "{seconds}秒",
     "resetDefaults": "重設預設設定"
   },
   "auth": {

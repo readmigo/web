@@ -238,6 +238,8 @@
     "wordSpacing": "Espacement des mots",
     "paragraphSpacing": "Espacement des paragraphes",
     "textIndent": "Retrait de texte",
+    "autoPage": "Tournage automatique",
+    "autoPageIntervalOption": "{seconds}s",
     "resetDefaults": "Rétablir les paramètres par défaut"
   },
   "auth": {

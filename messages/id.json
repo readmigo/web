@@ -238,6 +238,8 @@
     "wordSpacing": "Jarak Kata",
     "paragraphSpacing": "Jarak Paragraf",
     "textIndent": "Indentasi Teks",
+    "autoPage": "Balik Halaman Otomatis",
+    "autoPageIntervalOption": "{seconds}d",
     "resetDefaults": "Atur Ulang Default"
   },
   "auth": {

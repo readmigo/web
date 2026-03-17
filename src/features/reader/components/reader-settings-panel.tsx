@@ -381,6 +381,37 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
 
         <Separator />
 
+        {/* Auto Page Turn */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium">{t('autoPage')}</span>
+            <Button
+              variant={settings.autoPageEnabled ? 'secondary' : 'outline'}
+              size="sm"
+              onClick={() => updateSettings({ autoPageEnabled: !settings.autoPageEnabled })}
+            >
+              {settings.autoPageEnabled ? tCommon('on') : tCommon('off')}
+            </Button>
+          </div>
+          {settings.autoPageEnabled && (
+            <div className="flex gap-2">
+              {([5, 10, 15, 20, 30] as const).map((sec) => (
+                <Button
+                  key={sec}
+                  variant={settings.autoPageInterval === sec ? 'secondary' : 'outline'}
+                  size="sm"
+                  onClick={() => updateSettings({ autoPageInterval: sec })}
+                  className="flex-1 px-1 text-xs"
+                >
+                  {t('autoPageIntervalOption', { seconds: sec })}
+                </Button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <Separator />
+
         {/* Reset */}
         <Button
           variant="outline"

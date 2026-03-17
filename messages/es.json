@@ -238,6 +238,8 @@
     "wordSpacing": "Espaciado entre palabras",
     "paragraphSpacing": "Espaciado entre párrafos",
     "textIndent": "Sangría",
+    "autoPage": "Pasar página automáticamente",
+    "autoPageIntervalOption": "{seconds}s",
     "resetDefaults": "Restablecer valores predeterminados"
   },
   "auth": {

@@ -18,11 +18,13 @@ import { SLEEP_TIMER_OPTIONS } from '../hooks/use-tts';
 import { VoicePicker } from './voice-picker';
 import { TTSSettings } from './tts-settings';
 
-// Speed presets — aligned with iOS TTSControlView (0.5x / 1x / 1.5x)
+// Speed presets — aligned with iOS TTSControlView (0.5x / 0.75x / 1x / 1.5x / 2x)
 const SPEED_OPTIONS: Array<{ label: string; rate: number }> = [
   { label: '0.5x', rate: 0.5 },
+  { label: '0.75x', rate: 0.75 },
   { label: '1x', rate: 1.0 },
   { label: '1.5x', rate: 1.5 },
+  { label: '2x', rate: 2.0 },
 ];
 
 interface TTSControlsProps {

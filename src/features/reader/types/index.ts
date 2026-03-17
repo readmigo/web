@@ -1,6 +1,18 @@
 export interface ReaderSettings {
   fontSize: number;
-  fontFamily: 'serif' | 'sans-serif' | 'monospace';
+  fontFamily:
+    | 'system-ui'
+    | 'Inter'
+    | 'Helvetica Neue'
+    | 'Georgia'
+    | 'Times New Roman'
+    | 'Palatino'
+    | 'JetBrains Mono'
+    | 'Consolas'
+    | 'Courier New'
+    | 'OpenDyslexic'
+    | 'Noto Serif SC'
+    | 'LXGW WenKai';
   lineHeight: number;
   theme: 'light' | 'sepia' | 'dark' | 'ultraDark';
   marginSize: 'small' | 'medium' | 'large';
@@ -14,6 +26,8 @@ export interface ReaderSettings {
   fontWeight: 'light' | 'regular' | 'medium' | 'semibold' | 'bold';
   appearanceMode: 'light' | 'dark' | 'auto';
   readingMode: 'paginated' | 'scrolling';
+  autoPageEnabled: boolean;
+  autoPageInterval: number;
 }
 
 export interface ReaderPosition {

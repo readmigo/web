@@ -238,6 +238,8 @@
     "wordSpacing": "تباعد الكلمات",
     "paragraphSpacing": "تباعد الفقرات",
     "textIndent": "مسافة بادئة",
+    "autoPage": "تقليب الصفحات تلقائيًا",
+    "autoPageIntervalOption": "{seconds}ث",
     "resetDefaults": "إعادة الضبط الافتراضي"
   },
   "auth": {

@@ -248,6 +248,8 @@
     "wordSpacing": "Word Spacing",
     "paragraphSpacing": "Paragraph Spacing",
     "textIndent": "Text Indent",
+    "autoPage": "Auto Page Turn",
+    "autoPageIntervalOption": "{seconds}s",
     "resetDefaults": "Reset Defaults"
   },
   "auth": {

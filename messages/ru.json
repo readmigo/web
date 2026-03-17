@@ -238,6 +238,8 @@
     "wordSpacing": "Межсловный интервал",
     "paragraphSpacing": "Интервал между абзацами",
     "textIndent": "Красная строка",
+    "autoPage": "Автоперелистывание",
+    "autoPageIntervalOption": "{seconds}с",
     "resetDefaults": "Сбросить настройки"
   },
   "auth": {

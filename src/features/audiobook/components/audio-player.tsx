@@ -162,8 +162,8 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                       onPlayPause={togglePlay}
                       onPrevious={previousChapter}
                       onNext={nextChapter}
-                      onSeekBackward={() => seekBackward(10)}
-                      onSeekForward={() => seekForward(10)}
+                      onSeekBackward={() => seekBackward(15)}
+                      onSeekForward={() => seekForward(30)}
                       size="lg"
                     />
                   </div>

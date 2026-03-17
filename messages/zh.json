@@ -248,6 +248,8 @@
     "wordSpacing": "词间距",
     "paragraphSpacing": "段间距",
     "textIndent": "首行缩进",
+    "autoPage": "自动翻页",
+    "autoPageIntervalOption": "{seconds}秒",
     "resetDefaults": "重置默认设置"
   },
   "auth": {

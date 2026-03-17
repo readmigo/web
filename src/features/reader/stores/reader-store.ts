@@ -164,7 +164,7 @@ interface ReaderActions {
 
 const defaultSettings: ReaderSettings = {
   fontSize: 26,
-  fontFamily: 'serif',
+  fontFamily: 'Georgia',
   lineHeight: 1.6,
   theme: 'light',
   marginSize: 'medium',
@@ -178,6 +178,8 @@ const defaultSettings: ReaderSettings = {
   fontWeight: 'regular',
   appearanceMode: 'auto',
   readingMode: 'paginated',
+  autoPageEnabled: false,
+  autoPageInterval: 10,
 };
 
 const MAX_TRANSLATIONS_PER_BOOK = 1000;

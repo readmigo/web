@@ -238,6 +238,8 @@
     "wordSpacing": "단어 간격",
     "paragraphSpacing": "단락 간격",
     "textIndent": "들여쓰기",
+    "autoPage": "자동 페이지 넘기기",
+    "autoPageIntervalOption": "{seconds}초",
     "resetDefaults": "기본값으로 재설정"
   },
   "auth": {
