@@ -2,13 +2,13 @@
 
 import { useState, useEffect, useCallback } from 'react';
 
-const STORAGE_KEY = 'readmigo-search-history';
+const DEFAULT_STORAGE_KEY = 'readmigo-search-history';
 const MAX_HISTORY = 20;
 
-function loadHistory(): string[] {
+function loadHistory(storageKey: string): string[] {
   if (typeof window === 'undefined') return [];
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(storageKey);
     if (stored) {
       const parsed = JSON.parse(stored);
       if (Array.isArray(parsed)) {
@@ -21,52 +21,64 @@ function loadHistory(): string[] {
   return [];
 }
 
-function saveHistory(history: string[]) {
+function saveHistory(storageKey: string, history: string[]) {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    localStorage.setItem(storageKey, JSON.stringify(history));
   } catch {
     // Ignore storage errors (e.g., quota exceeded)
   }
 }
 
-export function useSearchHistory() {
+interface UseSearchHistoryOptions {
+  storageKey?: string;
+  maxHistory?: number;
+}
+
+export function useSearchHistory(options: UseSearchHistoryOptions = {}) {
+  const { storageKey = DEFAULT_STORAGE_KEY, maxHistory = MAX_HISTORY } = options;
   const [history, setHistory] = useState<string[]>([]);
 
   // Load history from localStorage on mount
   useEffect(() => {
-    setHistory(loadHistory());
-  }, []);
+    setHistory(loadHistory(storageKey));
+  }, [storageKey]);
 
-  const addSearch = useCallback((query: string) => {
-    const trimmed = query.trim();
-    if (!trimmed) return;
+  const addSearch = useCallback(
+    (query: string) => {
+      const trimmed = query.trim();
+      if (!trimmed) return;
 
-    setHistory((prev) => {
-      // Remove duplicate if exists, then prepend
-      const filtered = prev.filter(
-        (item) => item.toLowerCase() !== trimmed.toLowerCase()
-      );
-      const updated = [trimmed, ...filtered].slice(0, MAX_HISTORY);
-      saveHistory(updated);
-      return updated;
-    });
-  }, []);
+      setHistory((prev) => {
+        // Remove duplicate if exists, then prepend
+        const filtered = prev.filter(
+          (item) => item.toLowerCase() !== trimmed.toLowerCase()
+        );
+        const updated = [trimmed, ...filtered].slice(0, maxHistory);
+        saveHistory(storageKey, updated);
+        return updated;
+      });
+    },
+    [storageKey, maxHistory]
+  );
 
-  const removeSearch = useCallback((query: string) => {
-    setHistory((prev) => {
-      const updated = prev.filter(
-        (item) => item.toLowerCase() !== query.toLowerCase()
-      );
-      saveHistory(updated);
-      return updated;
-    });
-  }, []);
+  const removeSearch = useCallback(
+    (query: string) => {
+      setHistory((prev) => {
+        const updated = prev.filter(
+          (item) => item.toLowerCase() !== query.toLowerCase()
+        );
+        saveHistory(storageKey, updated);
+        return updated;
+      });
+    },
+    [storageKey]
+  );
 
   const clearHistory = useCallback(() => {
     setHistory([]);
-    saveHistory([]);
-  }, []);
+    saveHistory(storageKey, []);
+  }, [storageKey]);
 
   return { history, addSearch, removeSearch, clearHistory };
 }

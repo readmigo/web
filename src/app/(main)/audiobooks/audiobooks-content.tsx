@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, Headphones, ChevronRight } from 'lucide-react';
+import { Search, Headphones, ChevronRight, Clock, X } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTranslations } from 'next-intl';
 import {
@@ -15,6 +15,7 @@ import { formatDuration } from '@/features/audiobook/stores/audio-player-store';
 import type { AudiobookListItem, AudiobookWithProgress } from '@/features/audiobook/types';
 import { useAudiobookLists } from '@/features/library/hooks/use-book-lists';
 import type { BookList, BookListBook } from '@/features/library/types';
+import { useSearchHistory } from '@/features/search/hooks/use-search-history';
 
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -394,23 +395,116 @@ function AudiobookGrid({
 
 export function AudiobooksContent() {
   const t = useTranslations('audiobooks');
+  const ts = useTranslations('search');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>(
-    undefined
+  const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>(undefined);
+  const [showHistory, setShowHistory] = useState(false);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  const { history, addSearch, removeSearch, clearHistory } = useSearchHistory({
+    storageKey: 'readmigo-audiobook-search-history',
+    maxHistory: 10,
+  });
+
+  // Close history dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target as Node)
+      ) {
+        setShowHistory(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSelectHistoryItem = useCallback((term: string) => {
+    setSearchQuery(term);
+    setShowHistory(false);
+  }, []);
+
+  const handleSearchKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter' && searchQuery.trim()) {
+        addSearch(searchQuery.trim());
+        setShowHistory(false);
+      } else if (e.key === 'Escape') {
+        setShowHistory(false);
+      }
+    },
+    [searchQuery, addSearch]
   );
+
+  const visibleHistory = history.slice(0, 10);
+  const shouldShowDropdown = showHistory && visibleHistory.length > 0;
 
   return (
     <div className="space-y-4">
-      {/* Search bar */}
-      <div className="relative">
+      {/* Search bar with history dropdown */}
+      <div className="relative" ref={searchContainerRef}>
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <input
           type="text"
           placeholder={t('search.placeholder')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          onFocus={() => setShowHistory(true)}
+          onKeyDown={handleSearchKeyDown}
           className="w-full bg-secondary rounded-xl h-11 pl-10 pr-4 text-sm outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
+          aria-label={t('search.placeholder')}
         />
+
+        {/* Search History Dropdown */}
+        {shouldShowDropdown && (
+          <div
+            className="absolute left-0 right-0 top-full z-50 mt-1 rounded-lg border bg-popover shadow-lg"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between px-3 py-2 border-b">
+              <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                <Clock className="h-3 w-3" />
+                <span>{ts('recentSearches')}</span>
+              </div>
+              <button
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  clearHistory();
+                }}
+                aria-label={ts('clearAll')}
+              >
+                {ts('clearAll')}
+              </button>
+            </div>
+
+            {/* History items */}
+            <ul className="py-1 max-h-[300px] overflow-y-auto">
+              {visibleHistory.map((term) => (
+                <li key={term}>
+                  <button
+                    className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-accent group"
+                    onClick={() => handleSelectHistoryItem(term)}
+                  >
+                    <Clock className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    <span className="flex-1 truncate text-sm">{term}</span>
+                    <button
+                      className="shrink-0 rounded p-0.5 opacity-0 group-hover:opacity-100 hover:bg-muted transition-all"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeSearch(term);
+                      }}
+                      aria-label={ts('deleteSearchTerm', { term })}
+                    >
+                      <X className="h-3.5 w-3.5 text-muted-foreground" />
+                    </button>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
       {/* Recently Listened */}

@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { ChevronDown, List, Volume2, VolumeX, AlignLeft } from 'lucide-react';
+import { ChevronDown, List, Volume2, VolumeX, AlignLeft, Heart } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { useTranslations } from 'next-intl';
 import { useAudioPlayerStore, formatTime, formatDuration } from '../stores/audio-player-store';
@@ -20,6 +20,7 @@ import { ChapterList } from './chapter-list';
 import { WhispersyncToBook } from './whispersync-banner';
 import { DanmakuOverlay } from './danmaku-overlay';
 import { SyncedReaderView } from './synced-reader-view';
+import { FloatingHearts } from './floating-hearts';
 
 interface AudioPlayerProps {
   isOpen: boolean;
@@ -56,6 +57,12 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
   const t = useTranslations('audiobooks');
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const [activeTab, setActiveTab] = useState('player');
+  const [heartTriggered, setHeartTriggered] = useState(false);
+  const heartButtonRef = useRef<HTMLButtonElement>(null);
+
+  const handleHeartClick = useCallback(() => {
+    setHeartTriggered(true);
+  }, []);
   const { book, hasBook, getBookChapterId } = useWhispersyncFromAudiobook(audiobook);
   const { data: danmakuData } = useDanmaku(audiobook?.id, currentChapter?.number);
   const sendDanmaku = useSendDanmaku();
@@ -221,6 +228,25 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                       {formatTime(totalProgress)} / {formatDuration(audiobook.totalDuration)}
                       {' '}({Math.round(totalProgressPercent)}% {t('complete')})
                     </p>
+                  </div>
+
+                  {/* Heart / Like Button */}
+                  <div className="mt-4 flex justify-center">
+                    <Button
+                      ref={heartButtonRef}
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleHeartClick}
+                      aria-label="Like this audiobook"
+                      className="h-10 w-10 text-muted-foreground hover:text-rose-500 transition-colors"
+                    >
+                      <Heart className="h-5 w-5" />
+                    </Button>
+                    <FloatingHearts
+                      triggered={heartTriggered}
+                      originRef={heartButtonRef}
+                      onAnimationEnd={() => setHeartTriggered(false)}
+                    />
                   </div>
 
                   {/* Whispersync Banner */}
