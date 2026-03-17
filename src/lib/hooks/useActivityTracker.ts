@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { updateActivity } from '../api/client';
+import { log } from '@/lib/logger';
 
 /**
  * Hook for tracking user activity and updating lastActiveAt
@@ -33,7 +34,7 @@ export function useActivityTracker() {
         lastUpdateRef.current = now;
       } catch (error) {
         // Silent fail
-        console.debug('Activity update failed:', error);
+        log.app.debug('Activity update failed', error);
       }
     };
 

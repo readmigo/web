@@ -10,6 +10,7 @@ import {
   Languages,
 } from 'lucide-react';
 import { useReaderStore } from '../stores/reader-store';
+import { log } from '@/lib/logger';
 import type { SelectedText, Highlight } from '../types';
 import { NoteInputDialog } from './note-input-dialog';
 import { TranslationSheet } from './translation-sheet';
@@ -86,7 +87,7 @@ export function SelectionPopup({
     try {
       await navigator.clipboard.writeText(text);
     } catch (error) {
-      console.error('Failed to copy:', error);
+      log.reader.error('Failed to copy', error);
     }
     setSelectedText(null);
   }, [selection.text, setSelectedText]);
@@ -154,7 +155,7 @@ export function SelectionPopup({
         setSelectedText(null);
         return;
       } catch (error) {
-        console.error('Failed to share:', error);
+        log.reader.error('Failed to share', error);
       }
     }
 
@@ -163,7 +164,7 @@ export function SelectionPopup({
         await navigator.clipboard.writeText(shareText);
         setSelectedText(null);
       } catch (error) {
-        console.error('Failed to copy text:', error);
+        log.reader.error('Failed to copy text', error);
       }
     }
   }, [selection.text, setSelectedText]);

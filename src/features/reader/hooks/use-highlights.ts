@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api/client';
+import { log } from '@/lib/logger';
 import type { Highlight, Bookmark } from '../types';
 
 // API Response types
@@ -318,7 +319,7 @@ export async function processOfflineQueue(): Promise<void> {
       }
       removeFromOfflineQueue(operation.id);
     } catch (error) {
-      console.error('Failed to process offline operation:', error);
+      log.reader.error('Failed to process offline operation', error);
       // Keep in queue for retry
     }
   }

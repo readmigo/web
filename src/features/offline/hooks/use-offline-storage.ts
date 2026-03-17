@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { log } from '@/lib/logger';
 
 export interface StorageInfo {
   used: number;
@@ -140,7 +141,7 @@ export function useOfflineStorage() {
         isOnline: navigator.onLine,
       });
     } catch (error) {
-      console.error('Failed to get storage info:', error);
+      log.offline.error('Failed to get storage info', error);
       setState((prev) => ({ ...prev, isLoading: false }));
     }
   }, [getCacheInfo, calculateLocalStorageSize]);
@@ -153,7 +154,7 @@ export function useOfflineStorage() {
       await caches.delete(cacheName);
       await refreshStorageInfo();
     } catch (error) {
-      console.error(`Failed to clear cache ${cacheName}:`, error);
+      log.offline.error(`Failed to clear cache ${cacheName}`, error);
     }
   }, [refreshStorageInfo]);
 
@@ -166,7 +167,7 @@ export function useOfflineStorage() {
       await Promise.all(cacheNames.map((name) => caches.delete(name)));
       await refreshStorageInfo();
     } catch (error) {
-      console.error('Failed to clear all caches:', error);
+      log.offline.error('Failed to clear all caches', error);
     }
   }, [refreshStorageInfo]);
 

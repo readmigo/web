@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { apiClient } from '@/lib/api/client';
+import { log } from '@/lib/logger';
 
 export interface SearchMatch {
   position: number;
@@ -97,7 +98,7 @@ export function useBookSearch({
         setCurrentPage(response.page);
         setTotalPages(response.totalPages);
       } catch (err) {
-        console.error('Search failed:', err);
+        log.search.error('Search failed', err);
         setError('Search failed. Please try again.');
         setResults([]);
       } finally {
@@ -129,7 +130,7 @@ export function useBookSearch({
       setResults((prev) => [...prev, ...response.results]);
       setCurrentPage(response.page);
     } catch (err) {
-      console.error('Load more failed:', err);
+      log.search.error('Load more failed', err);
       setError('Failed to load more results.');
     } finally {
       setIsLoading(false);

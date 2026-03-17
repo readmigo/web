@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useAudioPlayerStore } from '../stores/audio-player-store';
+import { log } from '@/lib/logger';
 
 /**
  * Hook to integrate with Media Session API for lock screen controls
@@ -82,7 +83,7 @@ export function useMediaSession() {
       try {
         navigator.mediaSession.setActionHandler(action, handler);
       } catch {
-        console.warn(`Media session action "${action}" not supported`);
+        log.audiobook.warn(`Media session action "${action}" not supported`);
       }
     }
 

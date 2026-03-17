@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
+import { log } from '@/lib/logger';
 import type { ShareCardTheme, ShareCardContent } from './types';
 import { SHARE_CARD_THEMES } from './types';
 
@@ -171,7 +172,7 @@ export function useShareCard({ content }: UseShareCardOptions): UseShareCardRetu
       a.download = 'readmigo-quote.png';
       a.click();
     } catch (err) {
-      console.error('Failed to save image:', err);
+      log.share.error('Failed to save image', err);
     } finally {
       setIsSaving(false);
     }
@@ -183,7 +184,7 @@ export function useShareCard({ content }: UseShareCardOptions): UseShareCardRetu
       await navigator.share({ text: buildShareText() });
     } catch (err) {
       if (err instanceof Error && err.name !== 'AbortError') {
-        console.error('Share failed:', err);
+        log.share.error('Share failed', err);
       }
     }
   }, [canShare, buildShareText]);

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { ReaderSettings, ReaderPosition, Highlight, Bookmark, SelectedText } from '../types';
 import { apiClient } from '@/lib/api/client';
+import { log } from '@/lib/logger';
 import { addToOfflineQueue } from '../hooks/use-highlights';
 import { buildParagraphKey } from '../utils/translation-hash';
 import { trackEvent } from '@/lib/analytics';
@@ -347,7 +348,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
             }));
           })
           .catch((error) => {
-            console.error('Failed to sync bookmark to backend:', error);
+            log.reader.error('Failed to sync bookmark to backend', error);
             // Add to offline queue for retry
             addToOfflineQueue({
               type: 'create_bookmark',
@@ -368,7 +369,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
 
         // Sync to backend
         apiClient.delete(`/reading/bookmarks/${id}`).catch((error) => {
-          console.error('Failed to delete bookmark from backend:', error);
+          log.reader.error('Failed to delete bookmark from backend', error);
           // Add to offline queue for retry
           addToOfflineQueue({
             type: 'delete_bookmark',
@@ -425,7 +426,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
             }));
           })
           .catch((error) => {
-            console.error('Failed to sync highlight to backend:', error);
+            log.reader.error('Failed to sync highlight to backend', error);
             // Add to offline queue for retry
             addToOfflineQueue({
               type: 'create_highlight',
@@ -450,7 +451,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
 
         // Sync to backend
         apiClient.delete(`/reading/highlights/${id}`).catch((error) => {
-          console.error('Failed to delete highlight from backend:', error);
+          log.reader.error('Failed to delete highlight from backend', error);
           // Add to offline queue for retry
           addToOfflineQueue({
             type: 'delete_highlight',
@@ -469,7 +470,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
 
         // Sync to backend
         apiClient.patch(`/reading/highlights/${id}`, { note }).catch((error) => {
-          console.error('Failed to update highlight note:', error);
+          log.reader.error('Failed to update highlight note', error);
           // Add to offline queue for retry
           addToOfflineQueue({
             type: 'update_highlight',
@@ -488,7 +489,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
 
         // Sync to backend
         apiClient.patch(`/reading/highlights/${id}`, { color }).catch((error) => {
-          console.error('Failed to update highlight color:', error);
+          log.reader.error('Failed to update highlight color', error);
           // Add to offline queue for retry
           addToOfflineQueue({
             type: 'update_highlight',
@@ -507,7 +508,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
 
         // Sync to backend
         apiClient.patch(`/reading/highlights/${id}`, { style }).catch((error) => {
-          console.error('Failed to update highlight style:', error);
+          log.reader.error('Failed to update highlight style', error);
           addToOfflineQueue({
             type: 'update_highlight',
             data: { highlightId: id, bookId, style },
@@ -544,7 +545,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
             charLength: data.charLength,
           })
           .catch((error) => {
-            console.error('Failed to update highlight position:', error);
+            log.reader.error('Failed to update highlight position', error);
             addToOfflineQueue({
               type: 'update_highlight',
               data: { highlightId: id, bookId, ...data },
@@ -695,7 +696,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
               removePendingSession(sessionId);
             })
             .catch((error) => {
-              console.error('Failed to submit reading session:', error);
+              log.reader.error('Failed to submit reading session', error);
               // Session stays in localStorage for retry on next flush
             });
         }
@@ -711,7 +712,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
               readingTime: sessionDuration,
             })
             .catch((error) => {
-              console.error('Failed to sync reading progress:', error);
+              log.reader.error('Failed to sync reading progress', error);
             });
         }
       },
@@ -788,7 +789,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
                 removePendingSession(sessionId);
               })
               .catch((error) => {
-                console.error('Failed to submit reading session on switch:', error);
+                log.reader.error('Failed to submit reading session on switch', error);
                 // Session stays in localStorage for retry
               });
           }
@@ -930,7 +931,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
             };
           });
         } catch (error) {
-          console.error('Failed to sync highlights from backend:', error);
+          log.reader.error('Failed to sync highlights from backend', error);
           set({ isSyncing: false });
         }
       },
@@ -991,7 +992,7 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
             };
           });
         } catch (error) {
-          console.error('Failed to sync bookmarks from backend:', error);
+          log.reader.error('Failed to sync bookmarks from backend', error);
           set({ isSyncing: false });
         }
       },

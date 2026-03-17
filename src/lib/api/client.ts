@@ -4,6 +4,8 @@
  * No tokens are stored or accessible in client-side JavaScript.
  */
 
+import { log } from '@/lib/logger';
+
 interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | undefined>;
   skipAuth?: boolean;
@@ -147,6 +149,6 @@ export async function updateActivity(): Promise<void> {
     await apiClient.post('/users/me/activity', undefined, { noRedirectOn401: true });
   } catch (error) {
     // Silent fail - activity updates should not disrupt user experience
-    console.debug('Failed to update activity:', error);
+    log.api.debug('Failed to update activity', error);
   }
 }

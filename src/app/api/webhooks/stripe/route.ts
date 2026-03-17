@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createHmac, timingSafeEqual } from 'crypto';
+import { log } from '@/lib/logger';
 
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 const WEBHOOK_INTERNAL_SECRET = process.env.WEBHOOK_INTERNAL_SECRET;
@@ -58,7 +59,7 @@ function verifyStripeSignature(rawBody: string, signatureHeader: string, secret:
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   if (!STRIPE_WEBHOOK_SECRET) {
-    console.error('[stripe-webhook] STRIPE_WEBHOOK_SECRET is not configured');
+    log.stripe.error('STRIPE_WEBHOOK_SECRET is not configured');
     return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
   }
 
@@ -71,7 +72,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   const isValid = verifyStripeSignature(rawBody, signatureHeader, STRIPE_WEBHOOK_SECRET);
   if (!isValid) {
-    console.warn('[stripe-webhook] Invalid signature — possible spoofed request');
+    log.stripe.warn('Invalid signature — possible spoofed request');
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
   }
 
@@ -111,12 +112,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     if (!backendRes.ok) {
       const errorText = await backendRes.text().catch(() => '');
-      console.error('[stripe-webhook] Backend forwarding failed:', backendRes.status, errorText);
+      log.stripe.error('Backend forwarding failed', { status: backendRes.status, errorText });
       // Return 200 to Stripe so it does not retry — the backend error is logged separately
       return NextResponse.json({ received: true, forwarded: false });
     }
   } catch (err) {
-    console.error('[stripe-webhook] Failed to forward event to backend:', err);
+    log.stripe.error('Failed to forward event to backend', err);
     return NextResponse.json({ received: true, forwarded: false });
   }
 

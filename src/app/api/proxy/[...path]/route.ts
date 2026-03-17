@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { rateLimit } from '@/lib/rate-limit';
 import { validateProxyPath } from '@/lib/validation';
+import { log } from '@/lib/logger';
 
 const API_BASE_URL = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
 const API_BASE_URL_CN = process.env.API_URL_CN || 'https://api.readmigo.cn/api/v1';
@@ -120,7 +121,7 @@ async function proxyRequest(req: NextRequest) {
 
     return proxyResponse;
   } catch (error) {
-    console.error('Proxy request failed:', error);
+    log.api.error('Proxy request failed', error);
     return NextResponse.json(
       { error: 'Proxy request failed' },
       { status: 502 }

@@ -1,4 +1,5 @@
 import NextAuth from 'next-auth';
+import { log } from '@/lib/logger';
 import Apple from 'next-auth/providers/apple';
 import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
@@ -55,13 +56,13 @@ async function refreshBackendToken(refreshToken: string): Promise<{
     });
 
     if (!response.ok) {
-      console.error(`Token refresh failed: ${response.status}`);
+      log.auth.error('Token refresh failed', { status: response.status });
       return null;
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Token refresh error:', error);
+    log.auth.error('Token refresh error', error);
     return null;
   }
 }
@@ -91,13 +92,13 @@ async function authenticateWithBackend(
     });
 
     if (!response.ok) {
-      console.error(`Backend auth failed: ${response.status}`);
+      log.auth.error('Backend auth failed', { status: response.status });
       return null;
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Backend authentication error:', error);
+    log.auth.error('Backend authentication error', error);
     return null;
   }
 }

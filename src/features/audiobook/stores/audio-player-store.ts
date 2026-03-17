@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { getAudioManager } from '../lib/audio-manager';
 import { apiClient } from '@/lib/api/client';
+import { log } from '@/lib/logger';
 import { trackEvent } from '@/lib/analytics';
 import {
   savePendingSession,
@@ -424,7 +425,7 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
               playbackSpeed,
             });
           } catch (error) {
-            console.error('Failed to sync audiobook progress:', error);
+            log.audiobook.error('Failed to sync audiobook progress', error);
           }
         },
 
@@ -475,7 +476,7 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
             await apiClient.post('/reading/audiobook-sessions', payload);
             removePendingSession(sessionId);
           } catch (error) {
-            console.error('Failed to submit audiobook session:', error);
+            log.audiobook.error('Failed to submit audiobook session', error);
             // Session stays in localStorage for retry on next flush
           }
         },

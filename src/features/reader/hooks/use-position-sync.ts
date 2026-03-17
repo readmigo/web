@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback } from 'react';
 import { apiClient } from '@/lib/api/client';
+import { log } from '@/lib/logger';
 import { useReaderStore } from '../stores/reader-store';
 
 const DEBOUNCE_MS = 3000; // Aligned with iOS 3-second debounce
@@ -33,7 +34,7 @@ export function usePositionSync(bookId: string) {
       });
     } catch (err) {
       // Silently fail — will retry on next position change
-      console.debug('Position sync failed:', err);
+      log.reader.debug('Position sync failed', err);
     }
   }, [bookId, position]);
 

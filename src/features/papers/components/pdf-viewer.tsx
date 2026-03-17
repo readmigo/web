@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { log } from '@/lib/logger';
 
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -45,7 +46,7 @@ export function PdfViewer({
   );
 
   const handleDocumentLoadError = useCallback((err: Error) => {
-    console.error('PDF load error:', err);
+    log.pdf.error('PDF load error', err);
     setIsLoading(false);
     setError(t('pdfLoadError'));
   }, []);

@@ -1,4 +1,5 @@
 import type { PlaybackSpeed } from '../types';
+import { log } from '@/lib/logger';
 
 type AudioEventCallback = () => void;
 type TimeUpdateCallback = (currentTime: number, duration: number) => void;
@@ -119,7 +120,7 @@ export class AudioManager {
     try {
       await this.audio.play();
     } catch (error) {
-      console.error('Failed to play audio:', error);
+      log.audiobook.error('Failed to play audio', error);
       throw error;
     }
   }
