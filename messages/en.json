@@ -76,7 +76,11 @@
     "noDefinitionFound": "No definition found",
     "addToVocabulary": "Add to Vocabulary",
     "alreadyInVocabulary": "In Vocabulary",
-    "close": "Close"
+    "close": "Close",
+    "voiceSelector": "Select voice",
+    "selectVoice": "Select Voice",
+    "previewVoice": "Preview {name}",
+    "stopPreview": "Stop preview"
   },
   "category": {
     "backToBookstore": "Back to Bookstore",
@@ -213,6 +217,8 @@
     "autoPageTurn": "Auto Page Turn",
     "autoScroll": "Auto Scroll",
     "readingMode": "Reading Mode",
+    "readingModePaginated": "Paginated",
+    "readingModeScrolling": "Scrolling",
     "theme": "Theme",
     "bright": "Light",
     "dimmed": "Dark",
@@ -287,7 +293,14 @@
     "signUpKakao": "Sign up with Kakao",
     "loginRequired": "Login Required",
     "loginPromptDesc": "Sign in to use this feature and enjoy the full reading experience.",
-    "continueBrowsing": "Continue Browsing"
+    "continueBrowsing": "Continue Browsing",
+    "forgotPasswordTitle": "Forgot Password",
+    "forgotPasswordDesc": "Enter your email address and we will send you a reset link.",
+    "sendResetEmail": "Send Reset Email",
+    "sendingEmail": "Sending...",
+    "resetEmailSent": "Check your email",
+    "resetEmailSentDesc": "If an account exists for that email, a password reset link has been sent.",
+    "backToLogin": "Back to Login"
   },
   "footer": {
     "privacyPolicy": "Privacy Policy",
@@ -393,6 +406,13 @@
       "unlimitedAudio": "Unlimited Audio",
       "stats": "Detailed Stats",
       "templates": "Premium Templates"
+    },
+    "expires": "Expires",
+    "gracePeriod": {
+      "title": "Payment method needs updating",
+      "description": "Your subscription is in a grace period. Please update your payment method to keep your Pro access.",
+      "descriptionWithDays": "Your subscription expires in {days} day(s). Please update your payment method to keep your Pro access.",
+      "fixPayment": "Fix Payment"
     }
   },
   "onboarding": {
@@ -547,6 +567,7 @@
   "book": {
     "progressRead": "{progress}% read",
     "startReading": "Start Reading",
+    "continueReading": "Continue Reading",
     "audiobookVersion": "Audiobook",
     "narrator": "Narrator: {name}",
     "authorSection": "Author",

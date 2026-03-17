@@ -205,6 +205,8 @@
     "autoPageTurn": "自動ページめくり",
     "autoScroll": "自動スクロール",
     "readingMode": "読書モード",
+    "readingModePaginated": "ページめくり",
+    "readingModeScrolling": "スクロール",
     "theme": "テーマ",
     "bright": "ライト",
     "dimmed": "ダーク",
@@ -279,7 +281,14 @@
     "signUpKakao": "Kakao で登録",
     "loginRequired": "ログインが必要です",
     "loginPromptDesc": "サインインしてこの機能を使用し、読書体験をフルに楽しみましょう。",
-    "continueBrowsing": "閲覧を続ける"
+    "continueBrowsing": "閲覧を続ける",
+    "forgotPasswordTitle": "パスワードをお忘れですか",
+    "forgotPasswordDesc": "メールアドレスを入力してください。リセットリンクをお送りします。",
+    "sendResetEmail": "リセットメールを送信",
+    "sendingEmail": "送信中...",
+    "resetEmailSent": "メールをご確認ください",
+    "resetEmailSentDesc": "そのメールアドレスでアカウントが存在する場合、パスワードリセットのリンクを送信しました。",
+    "backToLogin": "ログインに戻る"
   },
   "footer": {
     "privacyPolicy": "プライバシーポリシー",
@@ -539,6 +548,7 @@
   "book": {
     "progressRead": "{progress}% 読了",
     "startReading": "読書を始める",
+    "continueReading": "読書を続ける",
     "audiobookVersion": "オーディオブック",
     "narrator": "ナレーター: {name}",
     "authorSection": "著者",

@@ -205,6 +205,8 @@
     "autoPageTurn": "Pasar página automáticamente",
     "autoScroll": "Desplazamiento automático",
     "readingMode": "Modo de lectura",
+    "readingModePaginated": "Paginado",
+    "readingModeScrolling": "Desplazamiento",
     "theme": "Tema",
     "bright": "Claro",
     "dimmed": "Oscuro",
@@ -279,7 +281,14 @@
     "signUpKakao": "Registrarse con Kakao",
     "loginRequired": "Inicio de sesión requerido",
     "loginPromptDesc": "Inicia sesión para usar esta función y disfrutar de la experiencia completa de lectura.",
-    "continueBrowsing": "Continuar explorando"
+    "continueBrowsing": "Continuar explorando",
+    "forgotPasswordTitle": "Olvidé mi contraseña",
+    "forgotPasswordDesc": "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+    "sendResetEmail": "Enviar correo de restablecimiento",
+    "sendingEmail": "Enviando...",
+    "resetEmailSent": "Revisa tu correo",
+    "resetEmailSentDesc": "Si existe una cuenta con ese correo, se ha enviado un enlace para restablecer la contraseña.",
+    "backToLogin": "Volver al inicio de sesión"
   },
   "footer": {
     "privacyPolicy": "Política de privacidad",
@@ -539,6 +548,7 @@
   "book": {
     "progressRead": "{progress}% leído",
     "startReading": "Empezar a leer",
+    "continueReading": "Continuar leyendo",
     "audiobookVersion": "Audiolibro",
     "narrator": "Narrador: {name}",
     "authorSection": "Autor",

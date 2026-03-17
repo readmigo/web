@@ -205,6 +205,8 @@
     "autoPageTurn": "自動翻頁",
     "autoScroll": "自動捲動",
     "readingMode": "朗讀模式",
+    "readingModePaginated": "分頁",
+    "readingModeScrolling": "捲動",
     "theme": "主題",
     "bright": "亮色",
     "dimmed": "暗色",
@@ -279,7 +281,14 @@
     "signUpKakao": "使用 Kakao 註冊",
     "loginRequired": "需要登入",
     "loginPromptDesc": "登入後即可使用此功能，享受完整的閱讀體驗。",
-    "continueBrowsing": "繼續瀏覽"
+    "continueBrowsing": "繼續瀏覽",
+    "forgotPasswordTitle": "忘記密碼",
+    "forgotPasswordDesc": "輸入您的電子郵件地址，我們將發送重設連結。",
+    "sendResetEmail": "發送重設郵件",
+    "sendingEmail": "發送中...",
+    "resetEmailSent": "請查收郵件",
+    "resetEmailSentDesc": "如果該郵箱已註冊，重設連結已發送至您的郵箱。",
+    "backToLogin": "返回登入"
   },
   "footer": {
     "privacyPolicy": "隱私政策",
@@ -539,6 +548,7 @@
   "book": {
     "progressRead": "{progress}% 已讀",
     "startReading": "開始閱讀",
+    "continueReading": "繼續閱讀",
     "audiobookVersion": "有聲版",
     "narrator": "朗讀: {name}",
     "authorSection": "作者",

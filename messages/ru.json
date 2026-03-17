@@ -205,6 +205,8 @@
     "autoPageTurn": "Автоперелистывание",
     "autoScroll": "Автопрокрутка",
     "readingMode": "Режим чтения",
+    "readingModePaginated": "Постраничный",
+    "readingModeScrolling": "Прокрутка",
     "theme": "Тема",
     "bright": "Светлый",
     "dimmed": "Тёмный",
@@ -279,7 +281,14 @@
     "signUpKakao": "Зарегистрироваться через Kakao",
     "loginRequired": "Требуется авторизация",
     "loginPromptDesc": "Войдите, чтобы использовать эту функцию и наслаждаться полным опытом чтения.",
-    "continueBrowsing": "Продолжить просмотр"
+    "continueBrowsing": "Продолжить просмотр",
+    "forgotPasswordTitle": "Забыли пароль",
+    "forgotPasswordDesc": "Введите адрес электронной почты, и мы вышлем вам ссылку для сброса пароля.",
+    "sendResetEmail": "Отправить письмо для сброса",
+    "sendingEmail": "Отправка...",
+    "resetEmailSent": "Проверьте почту",
+    "resetEmailSentDesc": "Если аккаунт с таким адресом существует, ссылка для сброса пароля отправлена.",
+    "backToLogin": "Вернуться к входу"
   },
   "footer": {
     "privacyPolicy": "Политика конфиденциальности",
@@ -539,6 +548,7 @@
   "book": {
     "progressRead": "Прочитано {progress}%",
     "startReading": "Начать чтение",
+    "continueReading": "Продолжить чтение",
     "audiobookVersion": "Аудиокнига",
     "narrator": "Рассказчик: {name}",
     "authorSection": "Автор",

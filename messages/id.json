@@ -205,6 +205,8 @@
     "autoPageTurn": "Balik Halaman Otomatis",
     "autoScroll": "Gulir Otomatis",
     "readingMode": "Mode Membaca",
+    "readingModePaginated": "Halaman",
+    "readingModeScrolling": "Gulir",
     "theme": "Tema",
     "bright": "Terang",
     "dimmed": "Gelap",
@@ -279,7 +281,14 @@
     "signUpKakao": "Daftar dengan Kakao",
     "loginRequired": "Login Diperlukan",
     "loginPromptDesc": "Masuk untuk menggunakan fitur ini dan menikmati pengalaman membaca penuh.",
-    "continueBrowsing": "Lanjutkan Menjelajahi"
+    "continueBrowsing": "Lanjutkan Menjelajahi",
+    "forgotPasswordTitle": "Lupa Kata Sandi",
+    "forgotPasswordDesc": "Masukkan alamat email Anda dan kami akan mengirimkan tautan untuk mengatur ulang kata sandi.",
+    "sendResetEmail": "Kirim Email Reset",
+    "sendingEmail": "Mengirim...",
+    "resetEmailSent": "Periksa email Anda",
+    "resetEmailSentDesc": "Jika akun dengan email tersebut ada, tautan pengaturan ulang kata sandi telah dikirimkan.",
+    "backToLogin": "Kembali ke Login"
   },
   "footer": {
     "privacyPolicy": "Kebijakan Privasi",
@@ -539,6 +548,7 @@
   "book": {
     "progressRead": "{progress}% dibaca",
     "startReading": "Mulai Membaca",
+    "continueReading": "Lanjutkan Membaca",
     "audiobookVersion": "Buku Audio",
     "narrator": "Narator: {name}",
     "authorSection": "Penulis",

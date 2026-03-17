@@ -205,6 +205,8 @@
     "autoPageTurn": "قلب الصفحة تلقائيًا",
     "autoScroll": "التمرير التلقائي",
     "readingMode": "وضع القراءة",
+    "readingModePaginated": "بالصفحات",
+    "readingModeScrolling": "تمرير",
     "theme": "السمة",
     "bright": "فاتح",
     "dimmed": "داكن",
@@ -279,7 +281,14 @@
     "signUpKakao": "إنشاء حساب بـ Kakao",
     "loginRequired": "تسجيل الدخول مطلوب",
     "loginPromptDesc": "سجّل دخولك لاستخدام هذه الميزة والاستمتاع بتجربة القراءة الكاملة.",
-    "continueBrowsing": "مواصلة التصفّح"
+    "continueBrowsing": "مواصلة التصفّح",
+    "forgotPasswordTitle": "نسيت كلمة المرور",
+    "forgotPasswordDesc": "أدخل عنوان بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور.",
+    "sendResetEmail": "إرسال رابط الاستعادة",
+    "sendingEmail": "جاري الإرسال...",
+    "resetEmailSent": "تحقق من بريدك الإلكتروني",
+    "resetEmailSentDesc": "إذا كان هناك حساب مرتبط بهذا البريد، فقد تم إرسال رابط إعادة تعيين كلمة المرور.",
+    "backToLogin": "العودة إلى تسجيل الدخول"
   },
   "footer": {
     "privacyPolicy": "سياسة الخصوصية",
@@ -539,6 +548,7 @@
   "book": {
     "progressRead": "تمت قراءة {progress}%",
     "startReading": "بدء القراءة",
+    "continueReading": "مواصلة القراءة",
     "audiobookVersion": "كتاب صوتي",
     "narrator": "الراوي: {name}",
     "authorSection": "المؤلف",

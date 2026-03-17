@@ -213,6 +213,8 @@
     "autoPageTurn": "自动翻页",
     "autoScroll": "自动滚动",
     "readingMode": "朗读模式",
+    "readingModePaginated": "分页",
+    "readingModeScrolling": "滚动",
     "theme": "主题",
     "bright": "亮色",
     "dimmed": "暗色",
@@ -287,7 +289,14 @@
     "signUpKakao": "使用 Kakao 注册",
     "loginRequired": "需要登录",
     "loginPromptDesc": "登录后即可使用此功能，享受完整的阅读体验。",
-    "continueBrowsing": "继续浏览"
+    "continueBrowsing": "继续浏览",
+    "forgotPasswordTitle": "忘记密码",
+    "forgotPasswordDesc": "输入您的邮箱地址，我们将发送重置链接。",
+    "sendResetEmail": "发送重置邮件",
+    "sendingEmail": "发送中...",
+    "resetEmailSent": "请查收邮件",
+    "resetEmailSentDesc": "如果该邮箱已注册，重置链接已发送至您的邮箱。",
+    "backToLogin": "返回登录"
   },
   "footer": {
     "privacyPolicy": "隐私政策",
@@ -393,6 +402,13 @@
       "unlimitedAudio": "无限音频",
       "stats": "详细统计",
       "templates": "高级模板"
+    },
+    "expires": "到期",
+    "gracePeriod": {
+      "title": "支付方式需要更新",
+      "description": "您的订阅正处于宽限期，请及时更新支付方式以保留 Pro 权益。",
+      "descriptionWithDays": "您的订阅将在 {days} 天后到期，请及时更新支付方式以保留 Pro 权益。",
+      "fixPayment": "修复支付"
     }
   },
   "onboarding": {
@@ -547,6 +563,7 @@
   "book": {
     "progressRead": "{progress}% 已读",
     "startReading": "开始阅读",
+    "continueReading": "继续阅读",
     "audiobookVersion": "有声版",
     "narrator": "朗读: {name}",
     "authorSection": "作者",
