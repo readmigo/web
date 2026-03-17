@@ -1,5 +1,6 @@
 export { AudioPlayer } from './audio-player';
 export { MiniPlayer } from './mini-player';
+export { FloatingMiniPlayer } from './floating-mini-player';
 export { PlayerControls } from './player-controls';
 export { ProgressSlider } from './progress-slider';
 export { SpeedSelector } from './speed-selector';

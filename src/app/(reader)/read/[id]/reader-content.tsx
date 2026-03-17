@@ -18,6 +18,7 @@ import { useTranslations } from 'next-intl';
 import { useReaderStore } from '@/features/reader/stores/reader-store';
 import { useBookDetail } from '@/features/library/hooks/use-books';
 import { useTTS } from '@/features/reader/hooks/use-tts';
+import { useTTSHighlight } from '@/features/reader/hooks/use-tts-highlight';
 import { processOfflineQueue } from '@/features/reader/hooks/use-highlights';
 import {
   useKeyboardShortcuts,
@@ -484,6 +485,9 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
       setContentElement(readerRef.current.getContentElement() ?? null);
     }
   }, [isReady, position?.chapterIndex]);
+
+  // A12: TTS sentence/paragraph highlight
+  useTTSHighlight(contentElement, tts.progress);
 
 
   // Loading state

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Search, Headphones, ChevronRight, Clock, X } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import {
   useRecentlyListened,
   useAudiobookLanguages,
@@ -188,6 +188,30 @@ function RecentlyListenedSection() {
 
 // ============ Language Filter Pills ============
 
+/**
+ * B9: Resolve a BCP-47 language code to a localised display name.
+ * Falls back to the raw code if Intl.DisplayNames is not available or returns
+ * undefined for the given code.
+ */
+function useLanguageDisplayName(locale: string) {
+  return useMemo(() => {
+    let displayNames: Intl.DisplayNames | null = null;
+    try {
+      displayNames = new Intl.DisplayNames([locale], { type: 'language' });
+    } catch {
+      // Intl.DisplayNames not supported — fall back to raw codes
+    }
+    return (code: string): string => {
+      if (!displayNames) return code;
+      try {
+        return displayNames.of(code) ?? code;
+      } catch {
+        return code;
+      }
+    };
+  }, [locale]);
+}
+
 function LanguageFilter({
   selectedLanguage,
   onSelect,
@@ -196,6 +220,8 @@ function LanguageFilter({
   onSelect: (lang: string | undefined) => void;
 }) {
   const t = useTranslations('audiobooks');
+  const locale = useLocale();
+  const getDisplayName = useLanguageDisplayName(locale);
   const { data: languages, isLoading } = useAudiobookLanguages();
 
   if (isLoading) {
@@ -234,7 +260,7 @@ function LanguageFilter({
               : 'bg-secondary text-secondary-foreground'
           }`}
         >
-          {lang}
+          {getDisplayName(lang)}
         </button>
       ))}
     </div>

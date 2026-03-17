@@ -98,22 +98,69 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
             <Tabs value={activeTab} onValueChange={setActiveTab} className="flex h-full flex-col">
               <TabsContent value="player" className="flex-1 overflow-auto">
                 <div className="flex flex-col items-center px-6 py-8">
-                  {/* Cover Art + Danmaku */}
-                  <div className="relative aspect-square w-full max-w-[280px] overflow-hidden rounded-xl shadow-lg">
-                    {audiobook.coverUrl ? (
-                      <Image
-                        src={audiobook.coverUrl}
-                        alt={audiobook.title}
-                        fill
-                        className="object-cover"
+                  {/* Cover Art + Danmaku — B8: vinyl rotation */}
+                  {/*
+                    The cover is clipped to a circle and rotates while playing.
+                    A radial-gradient overlay simulates vinyl grooves.
+                    animation-play-state is toggled via inline style so the disc
+                    pauses exactly at its current angle when playback stops.
+                  */}
+                  <div className="relative aspect-square w-full max-w-[280px]">
+                    {/* Outer vinyl ring (slightly larger than cover) */}
+                    <div className="absolute inset-0 rounded-full bg-neutral-900 shadow-2xl" />
+
+                    {/* Spinning disc */}
+                    <div
+                      className="absolute inset-0 rounded-full overflow-hidden"
+                      style={{
+                        animation: 'rm-vinyl-spin 22s linear infinite',
+                        animationPlayState: isPlaying ? 'running' : 'paused',
+                      }}
+                    >
+                      {audiobook.coverUrl ? (
+                        <Image
+                          src={audiobook.coverUrl}
+                          alt={audiobook.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-muted">
+                          <span className="text-6xl font-bold text-muted-foreground">
+                            {audiobook.title.charAt(0)}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Vinyl groove overlay — concentric rings */}
+                      <div
+                        className="absolute inset-0 rounded-full pointer-events-none"
+                        style={{
+                          background:
+                            'repeating-radial-gradient(' +
+                            'circle at 50% 50%,' +
+                            'transparent 0px,' +
+                            'transparent 6px,' +
+                            'rgba(0,0,0,0.12) 7px,' +
+                            'transparent 8px' +
+                            ')',
+                        }}
                       />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-muted">
-                        <span className="text-6xl font-bold text-muted-foreground">
-                          {audiobook.title.charAt(0)}
-                        </span>
-                      </div>
-                    )}
+
+                      {/* Centre label circle */}
+                      <div className="absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-800/80 ring-2 ring-neutral-700/60" />
+                      {/* Centre spindle dot */}
+                      <div className="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-400" />
+                    </div>
+
+                    {/* Keyframe style — injected inline once */}
+                    <style>{`
+                      @keyframes rm-vinyl-spin {
+                        from { transform: rotate(0deg); }
+                        to   { transform: rotate(360deg); }
+                      }
+                    `}</style>
+
                     {danmakuData && (
                       <DanmakuOverlay
                         items={danmakuData.items}
