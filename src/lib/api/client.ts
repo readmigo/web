@@ -69,9 +69,10 @@ class ApiClient {
       credentials: 'same-origin',
     });
 
-    // Handle 401 — redirect to login (unless caller opted out)
+    // Handle 401 — redirect to login (unless caller opted out or reading-related path)
     if (response.status === 401) {
-      if (!noRedirectOn401 && typeof window !== 'undefined') {
+      const isReadingPath = endpoint.startsWith('/reading/') || endpoint.startsWith('/books/');
+      if (!noRedirectOn401 && !isReadingPath && typeof window !== 'undefined') {
         window.location.href = '/login';
       }
       throw new ApiError(401, 'Unauthorized');
