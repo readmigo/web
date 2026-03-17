@@ -2,7 +2,7 @@
 
 import { BarChart3 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useReadingStats, useOverviewStats, useReadingTrend, useReadingProgress } from '../hooks/use-reading-stats';
+import { useReadingStats, useOverviewStats, useReadingProgress } from '../hooks/use-reading-stats';
 import { useFeatureGate } from '@/features/subscription/hooks/use-feature-gate';
 import { PaywallView } from '@/features/subscription/components/paywall-view';
 import { TodayCard } from './today-card';
@@ -34,7 +34,6 @@ export function ReadingStatsDashboard() {
   const { showPaywall, dismissPaywall, requireFeature, isPro } = useFeatureGate();
   const { data, isLoading, error } = useReadingStats();
   const { data: overview } = useOverviewStats();
-  const { data: trend } = useReadingTrend(30);
   const { data: progress } = useReadingProgress();
 
   if (!isPro) {
@@ -78,7 +77,7 @@ export function ReadingStatsDashboard() {
       {overview && <OverviewCards data={overview} />}
       <TodayCard data={data.today} />
       {data.weekly.days.length > 0 && <WeeklyChart data={data.weekly} />}
-      {trend && <ReadingTrendCard data={trend} />}
+      <ReadingTrendCard />
       <StreakCard data={data.monthly} />
       <TypeBreakdown data={data.monthly} />
       {progress && <CurrentlyReading books={progress.currentlyReading} />}

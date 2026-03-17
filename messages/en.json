@@ -889,5 +889,12 @@
     "statusPaused": "Paused",
     "statusCompleted": "Downloaded",
     "statusFailed": "Failed"
+  },
+  "shareCard": {
+    "title": "Share Quote",
+    "theme": "Theme",
+    "copyText": "Copy Text",
+    "saveImage": "Save Image",
+    "share": "Share"
   }
 }

@@ -22,6 +22,7 @@ export interface SubscriptionPlan {
   savings?: string;
   hasTrial: boolean;
   trialDays?: number;
+  isBestValue?: boolean;
 }
 
 export type GatedFeature =
