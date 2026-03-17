@@ -21,7 +21,7 @@ export function Footer() {
         </div>
         <div className="flex items-center gap-4">
           <a
-            href="https://readmigo.app/privacy"
+            href="https://readmigo.app/privacy?utm_source=web_app&utm_medium=referral&utm_campaign=footer_link"
             target="_blank"
             rel="noopener noreferrer"
             className="transition-colors hover:text-foreground"
@@ -29,7 +29,7 @@ export function Footer() {
             {t('privacyPolicy')}
           </a>
           <a
-            href="https://readmigo.app/terms"
+            href="https://readmigo.app/terms?utm_source=web_app&utm_medium=referral&utm_campaign=footer_link"
             target="_blank"
             rel="noopener noreferrer"
             className="transition-colors hover:text-foreground"
@@ -37,7 +37,7 @@ export function Footer() {
             {t('termsOfService')}
           </a>
           <a
-            href="https://readmigo.app"
+            href="https://readmigo.app?utm_source=web_app&utm_medium=referral&utm_campaign=footer_link"
             target="_blank"
             rel="noopener noreferrer"
             className="transition-colors hover:text-foreground"

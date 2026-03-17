@@ -67,7 +67,7 @@ export function AboutView() {
       {/* More */}
       <div className="rounded-xl border divide-y">
         <a
-          href="https://readmigo.app/privacy"
+          href="https://readmigo.app/privacy?utm_source=web_app&utm_medium=app_link&utm_campaign=legal"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-3 px-4 py-3 hover:bg-muted/50 transition-colors"
@@ -76,7 +76,7 @@ export function AboutView() {
           <span className="text-sm">{t('privacyPolicy')}</span>
         </a>
         <a
-          href="https://readmigo.app/terms"
+          href="https://readmigo.app/terms?utm_source=web_app&utm_medium=app_link&utm_campaign=legal"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-3 px-4 py-3 hover:bg-muted/50 transition-colors"

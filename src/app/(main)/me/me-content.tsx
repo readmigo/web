@@ -519,19 +519,19 @@ export function MeContent() {
           icon={Shield}
           iconColor="#22C55E"
           title={t('privacyPolicy')}
-          onClick={() => window.open('https://readmigo.app/privacy', '_blank')}
+          onClick={() => window.open('https://readmigo.app/privacy?utm_source=web_app&utm_medium=app_link&utm_campaign=legal', '_blank')}
         />
         <MenuRow
           icon={FileText}
           iconColor="#A855F7"
           title={t('termsOfService')}
-          onClick={() => window.open('https://readmigo.app/terms', '_blank')}
+          onClick={() => window.open('https://readmigo.app/terms?utm_source=web_app&utm_medium=app_link&utm_campaign=legal', '_blank')}
         />
         <MenuRow
           icon={CheckCircle}
           iconColor="#3B82F6"
           title={t('userAgreement')}
-          onClick={() => window.open('https://readmigo.app/terms', '_blank')}
+          onClick={() => window.open('https://readmigo.app/terms?utm_source=web_app&utm_medium=app_link&utm_campaign=legal', '_blank')}
         />
       </MenuSection>
 

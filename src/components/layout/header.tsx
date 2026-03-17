@@ -69,7 +69,7 @@ export function Header() {
         {/* Download App Button */}
         <div className="ml-auto">
           <a
-            href="https://readmigo.app"
+            href="https://readmigo.app?utm_source=web_app&utm_medium=referral&utm_campaign=header_link"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
