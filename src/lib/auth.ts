@@ -13,6 +13,7 @@ declare module 'next-auth' {
       email?: string | null;
       name?: string | null;
       image?: string | null;
+      isNewUser?: boolean;
     };
   }
 
@@ -21,12 +22,14 @@ declare module 'next-auth' {
     refreshToken?: string;
     accessTokenExpiresAt?: number;
     backendUserId?: string;
+    isNewUser?: boolean;
   }
 }
 
 interface BackendAuthResponse {
   accessToken: string;
   refreshToken: string;
+  isNewUser?: boolean;
   user: {
     id: string;
     email?: string;
@@ -255,6 +258,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               token.backendUserId = backendAuth.user.id;
               token.name = backendAuth.user.nickname || token.name;
               token.picture = backendAuth.user.avatarUrl || token.picture;
+              token.isNewUser = backendAuth.isNewUser;
             }
           }
         }
@@ -265,6 +269,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.accessToken = u.accessToken as string | undefined;
           token.refreshToken = u.refreshToken as string | undefined;
           token.accessTokenExpiresAt = Date.now() + DEFAULT_TOKEN_LIFETIME_MS;
+          token.isNewUser = u.isNewUser as boolean | undefined;
         }
 
         return token;
@@ -295,6 +300,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }) {
       if (session.user) {
         session.user.id = (token.backendUserId as string) || (token.sub as string);
+        session.user.isNewUser = token.isNewUser;
       }
       // Tokens are kept server-side only (in the JWT cookie managed by NextAuth).
       // They are NOT exposed to the client session for security.
