@@ -7,7 +7,8 @@ import { BookOpen, ChevronRight, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useUserLibrary, useContinueReading } from '@/features/library/hooks/use-user-library';
+import { useUserLibrary } from '@/features/library/hooks/use-user-library';
+import { useMergedReadingProgress } from '@/features/library/hooks/use-merged-reading-progress';
 import { useBrowsingHistory } from '@/features/library/hooks/use-browsing-history';
 import type { UserBook } from '@/features/library/types';
 import { useTranslations } from 'next-intl';
@@ -149,7 +150,7 @@ function EmptyState() {
 // ─── Continue Reading Section ───────────────────────────────────────────────
 function ContinueReadingSection() {
   const t = useTranslations('library');
-  const { data: readingBooks, isLoading } = useContinueReading();
+  const { data: readingBooks, isLoading } = useMergedReadingProgress();
 
   if (isLoading) {
     return (
@@ -252,7 +253,7 @@ export function LibraryContent() {
 
   const { history } = useBrowsingHistory();
   const { data: userBooks, isLoading: isLibraryLoading } = useUserLibrary();
-  const { data: readingBooks, isLoading: isReadingLoading } = useContinueReading();
+  const { data: readingBooks, isLoading: isReadingLoading } = useMergedReadingProgress();
 
   // Show loading state while initial data loads (only for auth users)
   const isInitialLoading = isAuthenticated && (isLibraryLoading || isReadingLoading);
