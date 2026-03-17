@@ -41,14 +41,15 @@ test.describe('Reader Settings Panel', () => {
     });
 
     test('line height default shows 1.6', async ({ readerPage }) => {
-      const value = await readerPage.getSettingValue('行距');
+      const value = await readerPage.getSettingValue('行间距');
       expect(value).toBe('1.6');
     });
 
-    test('font family switches to 无衬线', async ({ readerPage }) => {
-      await readerPage.clickOption('字体', '无衬线');
-      const selected = await readerPage.isOptionSelected('字体', '无衬线');
-      expect(selected).toBe(true);
+    test('font family switches to Inter', async ({ readerPage }) => {
+      // Font buttons have accessible name like "The quick brown fox Inter"
+      const interBtn = readerPage.settingsPanel.locator('button[aria-pressed]').filter({ hasText: 'Inter' });
+      await interBtn.click();
+      await expect(interBtn).toHaveAttribute('aria-pressed', 'true');
     });
 
     test('theme switches to 暗色', async ({ readerPage }) => {
@@ -177,7 +178,6 @@ test.describe('Reader Settings Panel', () => {
     test('reset restores all settings to defaults', async ({ readerPage }) => {
       // Change multiple settings
       await readerPage.clickFontSizeButton('increase');
-      await readerPage.clickOption('字体', '无衬线');
       await readerPage.clickOption('边距', '宽');
       await readerPage.clickOption('文本对齐', '左对齐');
 
@@ -188,14 +188,15 @@ test.describe('Reader Settings Panel', () => {
       const fontSize = await readerPage.getSettingValue('字体大小');
       expect(fontSize).toBe('26px');
 
-      const fontSelected = await readerPage.isOptionSelected('字体', '衬线');
-      expect(fontSelected).toBe(true);
-
       const marginSelected = await readerPage.isOptionSelected('边距', '中');
       expect(marginSelected).toBe(true);
 
       const alignSelected = await readerPage.isOptionSelected('文本对齐', '两端');
       expect(alignSelected).toBe(true);
+
+      // Verify default font (Georgia) is selected
+      const georgiaBtn = readerPage.settingsPanel.locator('button[aria-pressed]').filter({ hasText: 'Georgia' });
+      await expect(georgiaBtn).toHaveAttribute('aria-pressed', 'true');
     });
   });
 });

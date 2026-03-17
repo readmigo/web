@@ -7,6 +7,8 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:3001',
     headless: true,
+    viewport: { width: 1440, height: 900 },
+    locale: 'zh-CN',
   },
   webServer: {
     command: 'pnpm dev',

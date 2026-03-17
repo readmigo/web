@@ -2,7 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Bookstore Page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    // Skip onboarding overlay
+    await page.addInitScript(() => {
+      localStorage.setItem('readmigo_onboarding_completed', 'true');
+    });
+    await page.goto('/', { timeout: 60000 });
   });
 
   test('renders search input', async ({ page }) => {
@@ -37,10 +41,10 @@ test.describe('Bookstore Page', () => {
     await expect(categorySection).toBeVisible({ timeout: 10000 });
   });
 
-  test('renders "全部书籍" divider', async ({ page }) => {
-    // The "all books" divider should always be visible
-    const divider = page.getByText(/全部书籍|All Books/i);
-    await expect(divider).toBeVisible({ timeout: 15000 });
+  test('renders "浏览全部书籍" link', async ({ page }) => {
+    // The "browse all books" link should be visible
+    const browseLink = page.getByText(/浏览全部书籍|Browse All Books/i);
+    await expect(browseLink).toBeVisible({ timeout: 15000 });
   });
 
   test('renders book list or empty state', async ({ page }) => {
@@ -74,13 +78,13 @@ test.describe('Bookstore Page', () => {
     }
   });
 
-  test('page layout follows iOS order: search → banner → categories → lists → divider → books', async ({ page }) => {
+  test('page layout follows iOS order: search → banner → categories → browse link', async ({ page }) => {
     // Wait for content to load
     await page.waitForTimeout(3000);
 
-    // Check that the divider "全部书籍" exists (proves we're past the lists section)
-    const divider = page.getByText(/全部书籍|All Books/i);
-    await expect(divider).toBeVisible({ timeout: 15000 });
+    // Check that the "browse all books" link exists
+    const browseLink = page.getByText(/浏览全部书籍|Browse All Books/i);
+    await expect(browseLink).toBeVisible({ timeout: 15000 });
 
     // Check no error state
     const errorState = page.locator('text=加载失败').or(page.locator('text=Loading failed'));

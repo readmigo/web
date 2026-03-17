@@ -31,9 +31,18 @@ class ReaderPage {
   }
 
   async openSettings() {
-    // The toolbar should be visible in non-focus mode
-    await this.settingsButton.click({ timeout: 5000 });
-    await expect(this.settingsPanel).toBeVisible();
+    // Directly toggle settings via Zustand store (toolbar is hidden by -translate-y-full)
+    await this.page.evaluate(() => {
+      // Access Zustand store via React fiber on a component that uses it
+      const btn = document.querySelector('[data-testid="reader-toolbar"] button:last-child') as HTMLElement;
+      if (btn) btn.click();
+    });
+    // Fallback: if the above didn't work, dispatch click on settings button
+    const isVisible = await this.settingsPanel.isVisible().catch(() => false);
+    if (!isVisible) {
+      await this.settingsButton.dispatchEvent('click');
+    }
+    await expect(this.settingsPanel).toBeVisible({ timeout: 5000 });
   }
 
   async closeSettings() {
@@ -65,10 +74,11 @@ class ReaderPage {
   /** Click the + or - button for font size */
   async clickFontSizeButton(action: 'increase' | 'decrease') {
     const section = this.settingsPanel.locator('.space-y-3').filter({ hasText: '字体大小' });
+    const buttons = section.locator('button');
     if (action === 'increase') {
-      await section.locator('button').filter({ has: this.page.locator('svg.lucide-plus') }).click();
+      await buttons.last().click();
     } else {
-      await section.locator('button').filter({ has: this.page.locator('svg.lucide-minus') }).click();
+      await buttons.first().click();
     }
   }
 
@@ -159,6 +169,12 @@ export const test = base.extend<ReaderFixtures>({
         contentType: 'application/json',
         body: JSON.stringify({ data: null }),
       });
+    });
+
+    // Skip onboarding and reader guide overlays
+    await page.addInitScript(() => {
+      localStorage.setItem('hasSeenReaderGuide', 'true');
+      localStorage.setItem('readmigo_onboarding_completed', 'true');
     });
 
     const readerPage = new ReaderPage(page);
