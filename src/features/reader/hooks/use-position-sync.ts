@@ -12,13 +12,13 @@ const DEBOUNCE_MS = 3000; // Aligned with iOS 3-second debounce
  * Syncs position to backend every 3 seconds (matching iOS behavior).
  * iOS uses: PATCH /reading/progress/{bookId}
  */
-export function usePositionSync(bookId: string) {
+export function usePositionSync(bookId: string, enabled = true) {
   const position = useReaderStore((s) => s.position);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSyncedRef = useRef<string>('');
 
   const syncPosition = useCallback(async () => {
-    if (!position || !bookId) return;
+    if (!enabled || !position || !bookId) return;
 
     const key = `${position.chapterIndex}:${position.page}:${position.percentage}`;
     if (key === lastSyncedRef.current) return;
@@ -36,10 +36,10 @@ export function usePositionSync(bookId: string) {
       // Silently fail — will retry on next position change
       log.reader.debug('Position sync failed', err);
     }
-  }, [bookId, position]);
+  }, [enabled, bookId, position]);
 
   useEffect(() => {
-    if (!position || !bookId) return;
+    if (!enabled || !position || !bookId) return;
 
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(syncPosition, DEBOUNCE_MS);

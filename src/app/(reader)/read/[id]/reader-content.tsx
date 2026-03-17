@@ -38,8 +38,11 @@ interface ReaderContentProps {
 }
 
 export function ReaderContent({ bookId }: ReaderContentProps) {
-  // Debounced position sync (3s, matching iOS)
-  usePositionSync(bookId);
+  const { data: session } = useSession();
+  const isGuest = !session?.user;
+
+  // Debounced position sync (3s, matching iOS; skip for guests)
+  usePositionSync(bookId, !isGuest);
   const readerRef = useRef<ChapterReaderHandle>(null);
   const [isReady, setIsReady] = useState(false);
   const [showTTSPanel, setShowTTSPanel] = useState(false);
@@ -89,8 +92,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   // Audio limit dialog state
   const [showAudioLimitDialog, setShowAudioLimitDialog] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
-  const { data: session } = useSession();
-  const isGuest = !session?.user;
 
   const handleTTSLimitReached = useCallback(() => {
     tts.pause();
@@ -279,32 +280,27 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     shortcuts,
   });
 
-  // Sync highlights and bookmarks from backend when book loads
+  // Sync highlights and bookmarks from backend when book loads (auth required)
   useEffect(() => {
-    if (bookId) {
-      // Sync from backend
+    if (bookId && !isGuest) {
       syncHighlightsFromBackend(bookId);
       syncBookmarksFromBackend(bookId);
-
-      // Process any pending offline operations
       processOfflineQueue();
     }
-  }, [bookId, syncHighlightsFromBackend, syncBookmarksFromBackend]);
+  }, [bookId, isGuest, syncHighlightsFromBackend, syncBookmarksFromBackend]);
 
-  // Start reading session when component mounts
+  // Start reading session when component mounts (auth required)
   useEffect(() => {
-    if (bookId && isReady) {
-      // Get last position or current position percentage
+    if (bookId && isReady && !isGuest) {
       const lastPos = getLastPosition(bookId);
       const startPercentage = lastPos?.percentage || position?.percentage || 0;
       startReadingSession(bookId, startPercentage);
     }
 
-    // End reading session when component unmounts
     return () => {
-      endReadingSession();
+      if (!isGuest) endReadingSession();
     };
-  }, [bookId, isReady, startReadingSession, endReadingSession, getLastPosition]);
+  }, [bookId, isReady, isGuest, startReadingSession, endReadingSession, getLastPosition]);
 
   // Show guide for first-time readers
   useEffect(() => {
@@ -315,46 +311,49 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     }
   }, [isReady]);
 
-  // Update reading activity periodically (every 30 seconds)
+  // Update reading activity periodically (every 30 seconds, auth required)
   useEffect(() => {
-    if (!isReady) return;
+    if (!isReady || isGuest) return;
 
     const interval = setInterval(() => {
       updateReadingActivity();
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [isReady, updateReadingActivity]);
+  }, [isReady, isGuest, updateReadingActivity]);
 
-  // Handle page visibility change to save progress
+  // Handle page visibility change to save progress (auth required)
   useEffect(() => {
+    if (isGuest) return;
+
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
-        // User switched tabs or minimized - save progress
         endReadingSession();
       } else if (document.visibilityState === 'visible' && bookId) {
-        // User came back - start new session
         startReadingSession(bookId, position?.percentage || 0);
       }
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [bookId, position?.percentage, startReadingSession, endReadingSession]);
+  }, [bookId, isGuest, position?.percentage, startReadingSession, endReadingSession]);
 
-  // Process offline queue when coming back online
+  // Process offline queue when coming back online (auth required)
   useEffect(() => {
+    if (isGuest) return;
+
     const handleOnline = () => {
       processOfflineQueue();
     };
 
     window.addEventListener('online', handleOnline);
     return () => window.removeEventListener('online', handleOnline);
-  }, []);
+  }, [isGuest]);
 
-  // Flush any pending sessions saved from previous visits on mount,
-  // and again whenever network connectivity is restored
+  // Flush any pending sessions saved from previous visits on mount (auth required)
   useEffect(() => {
+    if (isGuest) return;
+
     flushPendingSessions();
 
     const handleOnlineFlush = () => {
@@ -363,7 +362,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
 
     window.addEventListener('online', handleOnlineFlush);
     return () => window.removeEventListener('online', handleOnlineFlush);
-  }, [flushPendingSessions]);
+  }, [isGuest, flushPendingSessions]);
 
   // Save session to localStorage on page close / unload for crash recovery
   // sendBeacon cannot carry auth headers, so we rely on localStorage + flush-on-mount
