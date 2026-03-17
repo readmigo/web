@@ -15,6 +15,7 @@ import { useReaderStore } from '../stores/reader-store';
 import type { TocItem, SelectedText, BilingualChapter } from '../types';
 import type { Chapter } from '@/features/library/types';
 import { apiClient } from '@/lib/api/client';
+import { log } from '@/lib/logger';
 import { normalizeParagraphText, hashText } from '../utils/translation-hash';
 import { sanitizeHtml } from '@/lib/sanitize';
 import { getPositionFromSelection } from '../utils/highlight-dom';
@@ -70,7 +71,7 @@ function mapSettings(
     'Noto Serif SC': '"Noto Serif SC", Georgia, serif',
     'LXGW WenKai': '"LXGW WenKai", Georgia, serif',
   };
-  const resolvedTheme = resolveTheme(s.appearanceMode, DEFAULT_THEME_MAPPING, systemIsDark);
+  const resolvedTheme = resolveTheme(s.appearanceMode ?? 'auto', DEFAULT_THEME_MAPPING, systemIsDark) ?? 'light';
   return {
     fontSize: s.fontSize,
     fontFamily: fontMap[s.fontFamily] ?? 'Georgia, serif',
@@ -241,7 +242,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
         bilingualCacheRef.current.set(chapterOrder, map);
         return map;
       } catch (err) {
-        console.error('Failed to fetch bilingual chapter:', err);
+        log.reader.error('Failed to fetch bilingual chapter', err);
         return null;
       }
     }, []);
@@ -267,7 +268,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
             translationActionsRef.current.markParagraphTranslated(book, chapterOrder, textHash, translation);
           }
         } catch (err) {
-          console.error('Failed to translate paragraph:', err);
+          log.reader.error('Failed to translate paragraph', err);
         } finally {
           pendingTranslationRef.current.delete(key);
         }
@@ -609,7 +610,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
         setIsLoading(false);
         setError(null);
       } catch (err) {
-        console.error('Failed to load chapter:', err);
+        log.reader.error('Failed to load chapter', err);
         setError(t('chapterLoadError'));
         setIsLoading(false);
       } finally {
