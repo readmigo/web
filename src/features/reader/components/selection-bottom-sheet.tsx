@@ -20,6 +20,46 @@ const HIGHLIGHT_COLORS: { name: Highlight['color']; class: string }[] = [
   { name: 'orange', class: 'bg-orange-300' },
 ];
 
+const HIGHLIGHT_STYLES: { name: Highlight['style']; label: string }[] = [
+  { name: 'background', label: 'Background' },
+  { name: 'underline', label: 'Underline' },
+  { name: 'wavy', label: 'Wavy' },
+  { name: 'bold_line', label: 'Bold Line' },
+];
+
+function StyleIcon({ style, active }: { style: Highlight['style']; active: boolean }) {
+  const color = active ? 'currentColor' : '#9ca3af';
+  if (style === 'background') {
+    return (
+      <svg width="28" height="20" viewBox="0 0 28 20" fill="none">
+        <rect x="2" y="4" width="24" height="12" rx="2" fill={color} />
+      </svg>
+    );
+  }
+  if (style === 'underline') {
+    return (
+      <svg width="28" height="20" viewBox="0 0 28 20" fill="none">
+        <text x="4" y="14" fontFamily="serif" fontSize="13" fill={color}>Aa</text>
+        <line x1="2" y1="18" x2="26" y2="18" stroke={color} strokeWidth="1.5" />
+      </svg>
+    );
+  }
+  if (style === 'wavy') {
+    return (
+      <svg width="28" height="20" viewBox="0 0 28 20" fill="none">
+        <text x="4" y="14" fontFamily="serif" fontSize="13" fill={color}>Aa</text>
+        <path d="M2 18 Q5.5 15.5 9 18 Q12.5 20.5 16 18 Q19.5 15.5 23 18 Q24.5 19 26 18" stroke={color} strokeWidth="1.5" fill="none" />
+      </svg>
+    );
+  }
+  return (
+    <svg width="28" height="20" viewBox="0 0 28 20" fill="none">
+      <text x="4" y="14" fontFamily="serif" fontSize="13" fill={color}>Aa</text>
+      <line x1="2" y1="18" x2="26" y2="18" stroke={color} strokeWidth="3" />
+    </svg>
+  );
+}
+
 interface SelectionBottomSheetProps {
   selection: SelectedText;
   bookId: string;
@@ -33,6 +73,7 @@ export function SelectionBottomSheet({ selection, bookId, bookTitle, authorName,
   const { addHighlight, setSelectedText } = useReaderStore();
   const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [showShareCard, setShowShareCard] = useState(false);
+  const [selectedStyle, setSelectedStyle] = useState<Highlight['style']>('background');
 
   const dismiss = useCallback(() => {
     setSelectedText(null);
@@ -45,7 +86,7 @@ export function SelectionBottomSheet({ selection, bookId, bookTitle, authorName,
       cfiRange: selection.cfiRange || '',
       selectedText: selection.text,
       color,
-      style: 'background',
+      style: selectedStyle,
       chapterId: selection.chapterId,
       paragraphIndex: selection.paragraphIndex,
       charOffset: selection.charOffset,
@@ -54,7 +95,7 @@ export function SelectionBottomSheet({ selection, bookId, bookTitle, authorName,
       endOffset: selection.endOffset,
     });
     dismiss();
-  }, [addHighlight, bookId, selection, dismiss]);
+  }, [addHighlight, bookId, selection, selectedStyle, dismiss]);
 
   const handleSaveNote = useCallback((note: string) => {
     addHighlight({
@@ -62,7 +103,7 @@ export function SelectionBottomSheet({ selection, bookId, bookTitle, authorName,
       cfiRange: selection.cfiRange || '',
       selectedText: selection.text,
       color: 'yellow',
-      style: 'background',
+      style: selectedStyle,
       note,
       chapterId: selection.chapterId,
       paragraphIndex: selection.paragraphIndex,
@@ -72,7 +113,7 @@ export function SelectionBottomSheet({ selection, bookId, bookTitle, authorName,
       endOffset: selection.endOffset,
     });
     dismiss();
-  }, [addHighlight, bookId, selection, dismiss]);
+  }, [addHighlight, bookId, selection, selectedStyle, dismiss]);
 
   const handleCopy = useCallback(async () => {
     await navigator.clipboard.writeText(selection.text.trim()).catch(() => {});
@@ -98,7 +139,7 @@ export function SelectionBottomSheet({ selection, bookId, bookTitle, authorName,
           </div>
 
           {/* Highlight color row */}
-          <div className="mb-4 flex items-center gap-3">
+          <div className="mb-3 flex items-center gap-3">
             <span className="text-sm text-muted-foreground shrink-0">{t('highlight')}</span>
             <div className="flex flex-1 items-center gap-2">
               {HIGHLIGHT_COLORS.map((c) => (
@@ -121,6 +162,29 @@ export function SelectionBottomSheet({ selection, bookId, bookTitle, authorName,
             >
               + {t('addNote')}
             </Button>
+          </div>
+
+          {/* Highlight style row */}
+          <div className="mb-4 flex items-center gap-3">
+            <span className="text-sm text-muted-foreground shrink-0">Style</span>
+            <div className="flex items-center gap-1">
+              {HIGHLIGHT_STYLES.map((s) => (
+                <button
+                  key={s.name}
+                  aria-label={`highlight-style-${s.name}`}
+                  aria-pressed={selectedStyle === s.name}
+                  onClick={() => setSelectedStyle(s.name)}
+                  className={cn(
+                    'flex h-9 w-9 items-center justify-center rounded-md border transition-colors',
+                    selectedStyle === s.name
+                      ? 'border-foreground bg-accent text-foreground'
+                      : 'border-transparent text-muted-foreground hover:bg-muted'
+                  )}
+                >
+                  <StyleIcon style={s.name} active={selectedStyle === s.name} />
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Action row */}
