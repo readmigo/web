@@ -76,7 +76,11 @@
     "noDefinitionFound": "未找到釋義",
     "addToVocabulary": "加入詞彙",
     "alreadyInVocabulary": "已在詞彙庫中",
-    "close": "關閉"
+    "close": "關閉",
+    "voiceSelector": "選擇聲音",
+    "selectVoice": "選擇聲音",
+    "previewVoice": "預覽 {name}",
+    "stopPreview": "停止預覽"
   },
   "category": {
     "backToBookstore": "返回書城",

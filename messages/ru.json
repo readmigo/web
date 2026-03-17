@@ -76,7 +76,11 @@
     "noDefinitionFound": "Определение не найдено",
     "addToVocabulary": "Добавить в словарь",
     "alreadyInVocabulary": "В словаре",
-    "close": "Закрыть"
+    "close": "Закрыть",
+    "voiceSelector": "Выбрать голос",
+    "selectVoice": "Выбрать голос",
+    "previewVoice": "Прослушать {name}",
+    "stopPreview": "Остановить прослушивание"
   },
   "category": {
     "backToBookstore": "Вернуться в книжный магазин",

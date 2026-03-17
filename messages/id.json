@@ -76,7 +76,11 @@
     "noDefinitionFound": "Tidak ada definisi ditemukan",
     "addToVocabulary": "Tambah ke Kosakata",
     "alreadyInVocabulary": "Ada di Kosakata",
-    "close": "Tutup"
+    "close": "Tutup",
+    "voiceSelector": "Pilih suara",
+    "selectVoice": "Pilih Suara",
+    "previewVoice": "Pratinjau {name}",
+    "stopPreview": "Hentikan pratinjau"
   },
   "category": {
     "backToBookstore": "Kembali ke Toko Buku",

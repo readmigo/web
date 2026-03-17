@@ -76,7 +76,11 @@
     "noDefinitionFound": "Nenhuma definição encontrada",
     "addToVocabulary": "Adicionar ao vocabulário",
     "alreadyInVocabulary": "No vocabulário",
-    "close": "Fechar"
+    "close": "Fechar",
+    "voiceSelector": "Selecionar voz",
+    "selectVoice": "Selecionar voz",
+    "previewVoice": "Pré-visualizar {name}",
+    "stopPreview": "Parar pré-visualização"
   },
   "category": {
     "backToBookstore": "Voltar para a livraria",

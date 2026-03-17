@@ -76,7 +76,11 @@
     "noDefinitionFound": "未找到释义",
     "addToVocabulary": "添加到词汇",
     "alreadyInVocabulary": "已在词汇库中",
-    "close": "关闭"
+    "close": "关闭",
+    "voiceSelector": "选择声音",
+    "selectVoice": "选择声音",
+    "previewVoice": "预览 {name}",
+    "stopPreview": "停止预览"
   },
   "category": {
     "backToBookstore": "返回书城",

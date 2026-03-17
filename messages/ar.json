@@ -76,7 +76,11 @@
     "noDefinitionFound": "لم يتم العثور على تعريف",
     "addToVocabulary": "إضافة إلى المفردات",
     "alreadyInVocabulary": "في المفردات",
-    "close": "إغلاق"
+    "close": "إغلاق",
+    "voiceSelector": "اختيار الصوت",
+    "selectVoice": "اختيار الصوت",
+    "previewVoice": "معاينة {name}",
+    "stopPreview": "إيقاف المعاينة"
   },
   "category": {
     "backToBookstore": "العودة إلى المكتبة",

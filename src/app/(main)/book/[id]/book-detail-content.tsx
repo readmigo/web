@@ -23,6 +23,7 @@ import { useBookDetail } from '@/features/library/hooks/use-books';
 import { useAudiobookByBookId } from '@/features/audiobook/hooks/use-audiobooks';
 import { useReadingGuide, useBookContext } from '@/features/library/hooks/use-book-extras';
 import { useFavoriteBookIds, useToggleFavorite } from '@/features/library/hooks/use-favorites';
+import { useUserLibrary } from '@/features/library/hooks/use-user-library';
 import { DownloadBookButton } from '@/features/offline/components/download-book-button';
 import { ReadingGuideSection } from '@/features/library/components/reading-guide-section';
 import { BookContextSection } from '@/features/library/components/book-context-section';
@@ -61,6 +62,9 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
   const { favoriteIds, isAuthenticated } = useFavoriteBookIds();
   const { toggleFavorite, isLoading: isFavoriteLoading } = useToggleFavorite();
   const isFavorited = favoriteIds.has(bookId);
+  const { data: userBooks } = useUserLibrary();
+  const userBook = userBooks?.find((ub) => ub.bookId === bookId);
+  const readingProgress = userBook && userBook.progress > 0 ? Math.round(userBook.progress * 100) : null;
 
   if (isLoading) {
     return <BookDetailSkeleton />;
@@ -182,7 +186,9 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
               style={{ backgroundImage: 'var(--brand-gradient)' }}
             >
               <BookOpen className="h-5 w-5" />
-              {t('startReading')}
+              {readingProgress !== null
+                ? `${t('continueReading')} (${readingProgress}%)`
+                : t('startReading')}
             </Link>
           </Button>
           {isAuthenticated && (
