@@ -112,7 +112,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
     }
 
     return (
-      <div className="relative h-full">
+      <div className="relative h-full overflow-hidden">
         {isLoading && (
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/80">
             <div className="flex flex-col items-center gap-4">
@@ -123,7 +123,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
         )}
         <div
           ref={containerRef}
-          className="relative h-full"
+          className="relative h-full overflow-hidden"
           style={{ backgroundColor: themeColors.background }}
         />
         {/* Click areas for navigation */}
