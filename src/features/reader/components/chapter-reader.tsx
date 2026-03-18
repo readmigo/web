@@ -123,7 +123,7 @@ export const ChapterReader = forwardRef<ChapterReaderHandle, ChapterReaderProps>
         )}
         <div
           ref={containerRef}
-          className="h-full"
+          className="relative h-full"
           style={{ backgroundColor: themeColors.background }}
         />
         {/* Click areas for navigation */}

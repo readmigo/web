@@ -23,10 +23,9 @@ export class ChapterRenderer {
 
     this.viewport = document.createElement('div');
     this.viewport.className = 'reader-engine-viewport';
-    this.viewport.style.width = '100%';
-    this.viewport.style.height = '100%';
+    this.viewport.style.position = 'absolute';
+    this.viewport.style.inset = '0';
     this.viewport.style.overflow = 'hidden';
-    this.viewport.style.position = 'relative';
 
     this.content = document.createElement('div');
     this.content.className = 'reader-engine-content';
