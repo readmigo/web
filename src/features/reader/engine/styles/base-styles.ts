@@ -51,9 +51,11 @@ a {
 
 img {
   max-width: 100%;
+  max-height: 100%;
   height: auto;
   display: block;
   margin: 1em auto;
+  object-fit: contain;
 }
 
 blockquote {

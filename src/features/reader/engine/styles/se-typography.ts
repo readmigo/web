@@ -52,6 +52,20 @@ p span.i6 { padding-left: 7em; text-indent: -1em; }
   break-inside: avoid; column-break-inside: avoid;
 }
 
+/* Cover image — fit within viewport without cropping */
+img.x-ebookmaker-cover,
+img[class*="cover"],
+img[alt*="cover" i] {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  margin: 0 auto;
+  display: block;
+  column-span: all;
+}
+
 /* Hide Project Gutenberg boilerplate */
 .pg-boilerplate, .pg-footer, .pgheader { display: none; }
 `;
