@@ -25,9 +25,6 @@ export interface ReaderSettings {
   textIndent: number;
   fontWeight: 'light' | 'regular' | 'medium' | 'semibold' | 'bold';
   appearanceMode: 'light' | 'dark' | 'auto';
-  readingMode: 'paginated' | 'scrolling';
-  autoPageEnabled: boolean;
-  autoPageInterval: number;
 }
 
 export interface ReaderPosition {

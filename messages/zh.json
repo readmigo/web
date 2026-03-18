@@ -255,8 +255,6 @@
     "autoPageTurn": "自动翻页",
     "autoScroll": "自动滚动",
     "readingMode": "朗读模式",
-    "readingModePaginated": "分页",
-    "readingModeScrolling": "滚动",
     "theme": "主题",
     "bright": "亮色",
     "dimmed": "暗色",

@@ -2,15 +2,11 @@
 
 import { useEffect, useRef, useState, useCallback, forwardRef, useImperativeHandle } from 'react';
 import { useTranslations } from 'next-intl';
-import {
-  ChapterRenderer,
-  Paginator,
-  THEMES,
-  watchSystemAppearance,
-  resolveTheme,
-  DEFAULT_THEME_MAPPING,
-} from '@readmigo/reader-engine';
-import type { ReaderSettings as EngineSettings } from '@readmigo/reader-engine';
+import { ChapterRenderer } from '../engine/chapter-renderer';
+import { Paginator } from '../engine/paginator';
+import { THEMES, DEFAULT_THEME_MAPPING } from '../engine/types';
+import type { ReaderSettings as EngineSettings } from '../engine/types';
+import { watchSystemAppearance, resolveTheme } from '../engine/appearance';
 import { useReaderStore } from '../stores/reader-store';
 import type { TocItem, SelectedText, BilingualChapter } from '../types';
 import type { Chapter } from '@/features/library/types';
@@ -82,15 +78,10 @@ function mapSettings(
     textAlign: s.textAlign,
     hyphenation: s.hyphenation,
     theme: resolvedTheme,
-    readingMode: s.readingMode === 'scrolling' ? 'scroll' : 'paginated',
     margin: marginMap[s.marginSize] || 40,
     columnCount: s.columnCount,
     textIndent: s.textIndent,
     fontWeight: s.fontWeight,
-    pageTransition: 'slide',
-    transitionDuration: 300,
-    swipeEnabled: true,
-    autoPageInterval: s.autoPageEnabled ? s.autoPageInterval * 1000 : null,
   };
 }
 

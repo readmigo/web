@@ -178,9 +178,6 @@ const defaultSettings: ReaderSettings = {
   textIndent: 0,
   fontWeight: 'regular',
   appearanceMode: 'auto',
-  readingMode: 'paginated',
-  autoPageEnabled: false,
-  autoPageInterval: 10,
 };
 
 const MAX_TRANSLATIONS_PER_BOOK = 1000;

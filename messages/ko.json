@@ -228,8 +228,6 @@
     "autoPageTurn": "자동 페이지 넘기기",
     "autoScroll": "자동 스크롤",
     "readingMode": "독서 모드",
-    "readingModePaginated": "페이지",
-    "readingModeScrolling": "스크롤",
     "theme": "테마",
     "bright": "라이트",
     "dimmed": "다크",
