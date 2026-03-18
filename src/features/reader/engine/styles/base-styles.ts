@@ -23,7 +23,7 @@ export function generateBaseCSS(settings: ReaderSettings): string {
   --re-paragraph-spacing: ${settings.paragraphSpacing}px;
 }
 
-body, .reader-engine-content {
+.reader-engine-content {
   margin: 0;
   padding: ${settings.margin}px;
   background-color: ${theme.background};

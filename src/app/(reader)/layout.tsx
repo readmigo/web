@@ -4,8 +4,11 @@ export default function ReaderLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="h-screen w-screen overflow-hidden">
-      {children}
-    </div>
+    <>
+      <style>{`html, body { overflow: hidden !important; height: 100vh !important; }`}</style>
+      <div className="h-screen w-screen overflow-hidden">
+        {children}
+      </div>
+    </>
   );
 }
