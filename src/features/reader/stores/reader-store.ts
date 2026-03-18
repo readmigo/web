@@ -164,7 +164,7 @@ interface ReaderActions {
 }
 
 const defaultSettings: ReaderSettings = {
-  fontSize: 26,
+  fontSize: 20,
   fontFamily: 'Georgia',
   lineHeight: 1.6,
   theme: 'light',
