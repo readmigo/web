@@ -492,13 +492,11 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   const chapters = book?.chapters || [];
 
   return (
-    <div className="flex h-full flex-col overflow-hidden">
-      {/* Toolbar */}
+    <div className="relative flex h-full flex-col overflow-hidden">
+      {/* Toolbar - floating overlay */}
       <ReaderToolbar
         bookTitle={bookTitle}
         bookId={bookId}
-        onPrev={handlePrev}
-        onNext={handleNext}
         showControls={showControls}
         onNavigateToBookmark={(cfi) => {
           const match = cfi.match(/ch:(\d+)/);
@@ -510,9 +508,9 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         }}
       />
 
-      {/* Reader */}
+      {/* Reader - full height */}
       <div
-        className="relative flex-1"
+        className="relative flex-1 flex flex-col"
         onClick={(e) => {
           const rect = e.currentTarget.getBoundingClientRect();
           const x = e.clientX - rect.left;
@@ -523,16 +521,23 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           }
         }}
       >
-        <ChapterReader
-          ref={readerRef}
-          bookId={bookId}
-          chapters={chapters}
-          onReady={handleReaderReady}
-          onTextSelect={handleTextSelect}
-          onTocLoaded={setTocItems}
-          onParagraphClick={handleParagraphClick}
-          onImageClick={handleImageClick}
-        />
+        {/* Chapter title header */}
+        <div className="px-4 py-1.5 text-center">
+          <span className="text-xs text-muted-foreground truncate">
+            {position && chapters[position.chapterIndex]?.title}
+          </span>
+        </div>
+        <div className="relative flex-1 min-h-0">
+          <ChapterReader
+            ref={readerRef}
+            bookId={bookId}
+            chapters={chapters}
+            onReady={handleReaderReady}
+            onTextSelect={handleTextSelect}
+            onTocLoaded={setTocItems}
+            onParagraphClick={handleParagraphClick}
+            onImageClick={handleImageClick}
+          />
 
         {/* Highlight overlay with drag handles */}
         <HighlightOverlay
@@ -562,6 +567,14 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           bookId={bookId}
           onClose={() => setTranslationText(null)}
         />
+        </div>
+
+        {/* Page footer */}
+        <div className="px-4 py-1.5 text-center">
+          <span className="text-xs text-muted-foreground">
+            {Math.round((position?.percentage || 0) * 100)}%
+          </span>
+        </div>
       </div>
 
       {/* Side Panels */}
