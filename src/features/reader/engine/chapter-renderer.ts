@@ -3,6 +3,8 @@ import type { ReaderSettings } from './types';
 import { generateBaseCSS } from './styles/base-styles';
 import { generateSETypography } from './styles/se-typography';
 
+const RENDERER_VERSION = 'v2-2026-03-19';
+
 export class ChapterRenderer {
   private root: HTMLElement;
   private settings: ReaderSettings;
@@ -16,6 +18,10 @@ export class ChapterRenderer {
   }
 
   render(html: string): void {
+    console.log(`[ChapterRenderer ${RENDERER_VERSION}] render`, {
+      htmlLength: html.length,
+      rootSize: `${this.root.clientWidth}x${this.root.clientHeight}`,
+    });
     this.clear();
 
     this.styleEl = document.createElement('style');

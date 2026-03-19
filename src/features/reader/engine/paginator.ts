@@ -12,6 +12,9 @@ export interface PaginatorOptions {
   gap: number;
 }
 
+/** Build version marker for debugging */
+const PAGINATOR_VERSION = 'v2-2026-03-19';
+
 /**
  * CSS-column paginator that translates a content element horizontally
  * within a fixed-width container to simulate page turns.
@@ -29,6 +32,11 @@ export class Paginator {
     private readonly options: PaginatorOptions,
   ) {
     this.pageWidth = container.clientWidth;
+    console.log(`[Paginator ${PAGINATOR_VERSION}] init`, {
+      containerWidth: container.clientWidth,
+      containerHeight: container.clientHeight,
+      contentOverflow: getComputedStyle(content).overflow,
+    });
     this.recalculate();
   }
 
@@ -40,11 +48,20 @@ export class Paginator {
     void this.content.offsetWidth; // force reflow
     const totalWidth = this.content.scrollWidth;
     this.content.style.removeProperty('overflow');
+    const overflowAfter = getComputedStyle(this.content).overflow;
     this._totalPages = Math.max(
       1,
       Math.ceil(totalWidth / this.pageWidth),
     );
     this._currentPage = clamp(this._currentPage, 0, this._totalPages - 1);
+    console.log(`[Paginator ${PAGINATOR_VERSION}] recalculate`, {
+      pageWidth: this.pageWidth,
+      scrollWidth: totalWidth,
+      totalPages: this._totalPages,
+      currentPage: this._currentPage,
+      contentHeight: this.content.clientHeight,
+      overflowAfter,
+    });
   }
 
   get currentPage(): number {
@@ -71,6 +88,13 @@ export class Paginator {
   goToPage(page: number): void {
     const target = clamp(page, 0, this._totalPages - 1);
     if (target === this._currentPage) return;
+    const translateX = target * this.pageWidth;
+    console.log(`[Paginator ${PAGINATOR_VERSION}] goToPage`, {
+      from: this._currentPage,
+      to: target,
+      totalPages: this._totalPages,
+      translateX,
+    });
     this._currentPage = target;
     this.applyTransform();
     this.onPageChange?.(this.getState());
@@ -78,14 +102,20 @@ export class Paginator {
 
   /** Advance to the next page. Returns false if already at the last page. */
   nextPage(): boolean {
-    if (this.isLastPage) return false;
+    if (this.isLastPage) {
+      console.log(`[Paginator ${PAGINATOR_VERSION}] nextPage: already at last page (${this._currentPage}/${this._totalPages})`);
+      return false;
+    }
     this.goToPage(this._currentPage + 1);
     return true;
   }
 
   /** Go back to the previous page. Returns false if already at the first page. */
   prevPage(): boolean {
-    if (this.isFirstPage) return false;
+    if (this.isFirstPage) {
+      console.log(`[Paginator ${PAGINATOR_VERSION}] prevPage: already at first page`);
+      return false;
+    }
     this.goToPage(this._currentPage - 1);
     return true;
   }
