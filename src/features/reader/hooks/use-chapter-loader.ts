@@ -145,6 +145,7 @@ export function useChapterLoader(
     setPosition({
       chapterIndex: chapterIdx,
       page,
+      totalPages,
       percentage: Math.min(1, overallProgress),
     });
   }, [chapters.length, setPosition]);

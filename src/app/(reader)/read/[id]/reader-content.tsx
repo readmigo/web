@@ -498,14 +498,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         bookTitle={bookTitle}
         bookId={bookId}
         showControls={showControls}
-        onNavigateToBookmark={(cfi) => {
-          const match = cfi.match(/ch:(\d+)/);
-          if (match) {
-            const chapterIndex = parseInt(match[1]);
-            const chapter = chapters[chapterIndex];
-            if (chapter) readerRef.current?.goTo(chapter.id);
-          }
-        }}
       />
 
       {/* Reader - full height */}
@@ -572,7 +564,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         {/* Page footer */}
         <div className="px-4 py-1.5 text-center">
           <span className="text-xs text-muted-foreground">
-            {Math.round((position?.percentage || 0) * 100)}%
+            {(position?.page ?? 0) + 1} / {position?.totalPages ?? 1}
           </span>
         </div>
       </div>

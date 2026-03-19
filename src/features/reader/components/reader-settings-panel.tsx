@@ -269,6 +269,26 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
       </div>
 
       <div className="flex-1 overflow-y-auto space-y-6 p-4">
+        {/* Column Count */}
+        <div className="space-y-3">
+          <span className="text-sm font-medium">{t('columnCount')}</span>
+          <div className="flex gap-2">
+            {([1, 2, 3] as const).map((col) => (
+              <Button
+                key={col}
+                variant={settings.columnCount === col ? 'secondary' : 'outline'}
+                size="sm"
+                onClick={() => updateSettings({ columnCount: col })}
+                className="flex-1"
+              >
+                {t('columnLabel', { count: col })}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        <Separator />
+
         {/* Font Size */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -468,26 +488,6 @@ export function ReaderSettingsPanel({ onClose }: ReaderSettingsPanelProps) {
                 className="flex-1 px-1 text-xs"
               >
                 {w.label}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        <Separator />
-
-        {/* Column Count */}
-        <div className="space-y-3">
-          <span className="text-sm font-medium">{t('columnCount')}</span>
-          <div className="flex gap-2">
-            {([1, 2, 3] as const).map((col) => (
-              <Button
-                key={col}
-                variant={settings.columnCount === col ? 'secondary' : 'outline'}
-                size="sm"
-                onClick={() => updateSettings({ columnCount: col })}
-                className="flex-1"
-              >
-                {t('columnLabel', { count: col })}
               </Button>
             ))}
           </div>

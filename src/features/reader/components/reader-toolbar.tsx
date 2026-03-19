@@ -9,24 +9,23 @@ import {
   BarChart3,
   Headphones,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useReaderStore } from '../stores/reader-store';
 import { useWhispersyncFromBook } from '@/features/audiobook/hooks/use-whispersync';
-import { BookmarkSidebar } from './bookmark-sidebar';
 
 interface ReaderToolbarProps {
   bookTitle: string;
   bookId: string;
-  onNavigateToBookmark?: (cfi: string) => void;
   showControls?: boolean;
 }
 
 export function ReaderToolbar({
   bookTitle,
   bookId,
-  onNavigateToBookmark,
   showControls,
 }: ReaderToolbarProps) {
+  const router = useRouter();
   const {
     toggleToc,
     toggleSettings,
@@ -48,10 +47,8 @@ export function ReaderToolbar({
     >
       {/* Left section */}
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" asChild>
-          <Link href={`/book/${bookId}`}>
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
+        <Button variant="ghost" size="icon" onClick={() => router.back()}>
+          <ArrowLeft className="h-5 w-5" />
         </Button>
         <span className="max-w-[200px] truncate font-medium">{bookTitle}</span>
       </div>
@@ -61,8 +58,7 @@ export function ReaderToolbar({
         <Button variant="ghost" size="icon" onClick={toggleToc}>
           <List className="h-5 w-5" />
         </Button>
-        <BookmarkSidebar bookId={bookId} onNavigateToBookmark={onNavigateToBookmark} />
-        {hasAudiobook && audiobook && (
+{hasAudiobook && audiobook && (
           <Button variant="ghost" size="icon" asChild title="Audiobook">
             <Link href={`/audiobooks/${audiobook.id}`}>
               <Headphones className="h-5 w-5 text-primary" />

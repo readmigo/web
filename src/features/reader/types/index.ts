@@ -30,6 +30,7 @@ export interface ReaderSettings {
 export interface ReaderPosition {
   chapterIndex: number;
   page: number;
+  totalPages: number;
   percentage: number;
 }
 
