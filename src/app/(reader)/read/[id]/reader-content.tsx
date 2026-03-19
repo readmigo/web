@@ -7,7 +7,6 @@ import { ReaderSettingsPanel } from '@/features/reader/components/reader-setting
 import { TocPanel } from '@/features/reader/components/toc-panel';
 import { SelectionBottomSheet } from '@/features/reader/components/selection-bottom-sheet';
 import { HighlightOverlay } from '@/features/reader/components/highlight-overlay';
-import { TranslationSheet } from '@/features/reader/components/translation-sheet';
 import { ReadingStatsOverlay } from '@/features/reader/components/reading-stats-overlay';
 import { ReaderGuideOverlay } from '@/features/reader/components/reader-guide-overlay';
 import { ImageViewer } from '@/features/reader/components/image-viewer';
@@ -83,7 +82,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   const [showGuide, setShowGuide] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
-  const [translationText, setTranslationText] = useState<string | null>(null);
   const [imageViewerState, setImageViewerState] = useState<{ images: string[]; index: number } | null>(null);
   const [contentElement, setContentElement] = useState<HTMLElement | null>(null);
   // Audio limit dialog state
@@ -415,9 +413,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     readerRef.current?.goTo(href);
   }, []);
 
-  const handleParagraphClick = useCallback((text: string) => {
-    setTranslationText(text);
-  }, []);
 
   const handleImageClick = useCallback((images: string[], index: number) => {
     setImageViewerState({ images, index });
@@ -527,7 +522,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
             onReady={handleReaderReady}
             onTextSelect={handleTextSelect}
             onTocLoaded={setTocItems}
-            onParagraphClick={handleParagraphClick}
             onImageClick={handleImageClick}
           />
 
@@ -552,13 +546,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
           />
         )}
 
-        {/* Paragraph Translation Sheet */}
-        <TranslationSheet
-          open={!!translationText}
-          originalText={translationText || ''}
-          bookId={bookId}
-          onClose={() => setTranslationText(null)}
-        />
         </div>
 
         {/* Page footer */}
