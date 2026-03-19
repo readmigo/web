@@ -390,12 +390,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
 
-  // Cleanup auto-hide timer on unmount
-  useEffect(() => {
-    return () => {
-      if (autoHideTimerRef.current) clearTimeout(autoHideTimerRef.current);
-    };
-  }, []);
 
   const handleReaderReady = useCallback(() => {
     setIsReady(true);
