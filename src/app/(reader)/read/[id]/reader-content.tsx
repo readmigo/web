@@ -101,6 +101,14 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     onPauseTTS: () => tts.pause(),
   });
 
+  const toggleControls = useCallback(() => {
+    setShowControls((prev) => !prev);
+  }, []);
+
+  const hideControls = useCallback(() => {
+    setShowControls(false);
+  }, []);
+
   // Navigation handlers
   const handlePrev = useCallback(() => {
     readerRef.current?.goPrev();
@@ -111,14 +119,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     readerRef.current?.goNext();
     hideControls();
   }, [hideControls]);
-
-  const toggleControls = useCallback(() => {
-    setShowControls((prev) => !prev);
-  }, []);
-
-  const hideControls = useCallback(() => {
-    setShowControls(false);
-  }, []);
 
   // TTS handlers
   const handleStartTTS = useCallback(() => {

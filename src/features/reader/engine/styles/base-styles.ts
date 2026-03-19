@@ -117,7 +117,6 @@ figcaption {
   column-gap: ${settings.columnCount === 1 ? 0 : settings.margin * 2}px;
   column-fill: auto;
   height: 100%;
-  overflow: hidden;
   box-sizing: border-box;
 }`;
 

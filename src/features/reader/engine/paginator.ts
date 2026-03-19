@@ -35,9 +35,14 @@ export class Paginator {
   /** Recalculate page dimensions after a layout change. */
   recalculate(): void {
     this.pageWidth = this.container.clientWidth;
+    // Temporarily force overflow:hidden so scrollWidth includes all column extent
+    this.content.style.setProperty('overflow', 'hidden');
+    void this.content.offsetWidth; // force reflow
+    const totalWidth = this.content.scrollWidth;
+    this.content.style.removeProperty('overflow');
     this._totalPages = Math.max(
       1,
-      Math.round(this.content.scrollWidth / this.pageWidth),
+      Math.ceil(totalWidth / this.pageWidth),
     );
     this._currentPage = clamp(this._currentPage, 0, this._totalPages - 1);
   }
