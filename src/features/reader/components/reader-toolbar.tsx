@@ -11,30 +11,20 @@ import {
   ChevronLeft,
   ChevronRight,
   BarChart3,
-  Volume2,
   Headphones,
-  GitBranch,
-  Columns2,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useReaderStore } from '../stores/reader-store';
 import { useWhispersyncFromBook } from '@/features/audiobook/hooks/use-whispersync';
-import { HighlightSidebar } from './highlight-sidebar';
 import { BookmarkSidebar } from './bookmark-sidebar';
-import { SearchPanel } from './search-panel';
 
 interface ReaderToolbarProps {
   bookTitle: string;
   bookId: string;
   onPrev?: () => void;
   onNext?: () => void;
-  onNavigateToHighlight?: (cfi: string) => void;
   onNavigateToBookmark?: (cfi: string) => void;
-  onNavigateToChapter?: (chapterId: string, position?: number) => void;
-  onToggleTTS?: () => void;
-  isTTSActive?: boolean;
   showControls?: boolean;
-  onToggleTimeline?: () => void;
 }
 
 export function ReaderToolbar({
@@ -42,13 +32,8 @@ export function ReaderToolbar({
   bookId,
   onPrev,
   onNext,
-  onNavigateToHighlight,
   onNavigateToBookmark,
-  onNavigateToChapter,
-  onToggleTTS,
-  isTTSActive,
   showControls,
-  onToggleTimeline,
 }: ReaderToolbarProps) {
   const t = useTranslations('reader');
   const {
@@ -60,9 +45,8 @@ export function ReaderToolbar({
     toggleReadingStats,
   } = useReaderStore();
 
-  const cycleColumnCount = () => {
-    const next = (settings.columnCount % 3) + 1 as 1 | 2 | 3;
-    updateSettings({ columnCount: next });
+  const setColumnCount = (count: 1 | 2 | 3) => {
+    updateSettings({ columnCount: count });
   };
 
   const { audiobook, hasAudiobook } = useWhispersyncFromBook(bookId);
@@ -110,18 +94,10 @@ export function ReaderToolbar({
 
       {/* Right section */}
       <div className="flex items-center gap-1">
-        <SearchPanel
-          bookId={bookId}
-          onNavigateToChapter={onNavigateToChapter}
-        />
         <Button variant="ghost" size="icon" onClick={toggleToc}>
           <List className="h-5 w-5" />
         </Button>
         <BookmarkSidebar bookId={bookId} onNavigateToBookmark={onNavigateToBookmark} />
-        <HighlightSidebar
-          bookId={bookId}
-          onNavigateToHighlight={onNavigateToHighlight}
-        />
         {hasAudiobook && audiobook && (
           <Button variant="ghost" size="icon" asChild title="Audiobook">
             <Link href={`/audiobooks/${audiobook.id}`}>
@@ -129,33 +105,22 @@ export function ReaderToolbar({
             </Link>
           </Button>
         )}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onToggleTTS}
-          className={isTTSActive ? 'text-primary' : ''}
-          title="Text-to-Speech"
-        >
-          <Volume2 className="h-5 w-5" />
-        </Button>
         <Button variant="ghost" size="icon" onClick={toggleReadingStats} className="md:hidden">
           <BarChart3 className="h-5 w-5" />
         </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={cycleColumnCount}
-          title={t('columnCount')}
-          className="relative"
-        >
-          <Columns2 className="h-5 w-5" />
-          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
-            {settings.columnCount}
-          </span>
-        </Button>
-        <Button variant="ghost" size="icon" onClick={onToggleTimeline} title={t('timelineTitle')}>
-          <GitBranch className="h-5 w-5" />
-        </Button>
+        <div className="flex items-center gap-0.5" title={t('columnCount')}>
+          {([1, 2, 3] as const).map((count) => (
+            <Button
+              key={count}
+              variant={settings.columnCount === count ? 'secondary' : 'ghost'}
+              size="icon"
+              className="h-8 w-8 text-xs font-medium"
+              onClick={() => setColumnCount(count)}
+            >
+              {count}
+            </Button>
+          ))}
+        </div>
         <Button variant="ghost" size="icon" onClick={toggleSettings}>
           <Settings className="h-5 w-5" />
         </Button>

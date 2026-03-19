@@ -499,10 +499,7 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
         bookId={bookId}
         onPrev={handlePrev}
         onNext={handleNext}
-        onToggleTTS={handleStartTTS}
-        isTTSActive={tts.ttsState === 'playing' || tts.ttsState === 'paused' || tts.ttsState === 'loading'}
         showControls={showControls}
-        onToggleTimeline={() => setShowTimeline((v) => !v)}
         onNavigateToBookmark={(cfi) => {
           const match = cfi.match(/ch:(\d+)/);
           if (match) {
