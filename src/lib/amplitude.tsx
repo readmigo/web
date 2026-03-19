@@ -3,7 +3,7 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import { useEffect } from 'react';
 
-const AMPLITUDE_KEY = process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY;
+const AMPLITUDE_KEY = process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY?.trim();
 
 export function initAmplitude() {
   if (typeof window === 'undefined' || !AMPLITUDE_KEY) return;
