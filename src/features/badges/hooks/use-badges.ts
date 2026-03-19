@@ -27,3 +27,22 @@ export function useBadgeProgress() {
     staleTime: 5 * 60 * 1000,
   });
 }
+
+export function useBadge(id: string) {
+  return useQuery({
+    queryKey: ['badges', id],
+    queryFn: () => apiClient.get<Badge>(`/badges/${id}`) as Promise<Badge>,
+    enabled: !!id,
+    staleTime: 30 * 60 * 1000,
+  });
+}
+
+export function useBadgeProgressById(id: string) {
+  return useQuery({
+    queryKey: ['badges', id, 'progress'],
+    queryFn: () =>
+      apiClient.get<BadgeProgress>(`/badges/${id}/progress`) as Promise<BadgeProgress>,
+    enabled: !!id,
+    staleTime: 5 * 60 * 1000,
+  });
+}

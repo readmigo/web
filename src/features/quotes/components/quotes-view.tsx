@@ -2,10 +2,12 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Loader2, Search } from 'lucide-react';
+import { Loader2, Search, Heart } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { DailyQuote } from './daily-quote';
 import { QuoteCard } from './quote-card';
 import { useTrendingQuotes, useQuoteTags, useInfiniteQuotes } from '../hooks/use-quotes';
@@ -13,6 +15,10 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 export function QuotesView() {
   const t = useTranslations('quotes');
+  const searchParams = useSearchParams();
+  const authorId = searchParams.get('authorId') ?? undefined;
+  const bookId = searchParams.get('bookId') ?? undefined;
+
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -36,6 +42,8 @@ export function QuotesView() {
   } = useInfiniteQuotes({
     tag: selectedTag || undefined,
     search: debouncedSearch || undefined,
+    authorId,
+    bookId,
   });
 
   const quotes = data?.pages.flatMap((p) => p.data) || [];
@@ -60,11 +68,25 @@ export function QuotesView() {
 
   return (
     <div className="space-y-6">
-      {/* Daily Quote */}
-      <DailyQuote />
+      {/* My Favorites entry — only shown on the main quotes page */}
+      {!authorId && !bookId && (
+        <Link
+          href="/quotes/favorites"
+          className="flex items-center justify-between rounded-xl border bg-card px-4 py-3 hover:bg-muted/50 transition-colors"
+        >
+          <span className="flex items-center gap-2 text-sm font-medium">
+            <Heart className="h-4 w-4 text-red-500 fill-red-500" />
+            {t('favorites')}
+          </span>
+          <span className="text-xs text-muted-foreground">{t('viewAll')}</span>
+        </Link>
+      )}
 
-      {/* Trending */}
-      {!trendingLoading && trending && trending.length > 0 && (
+      {/* Daily Quote */}
+      {!authorId && !bookId && <DailyQuote />}
+
+      {/* Trending — hidden when filtering by author or book */}
+      {!authorId && !bookId && !trendingLoading && trending && trending.length > 0 && (
         <div>
           <h3 className="mb-3 text-sm font-semibold">{t('trending')}</h3>
           <ScrollArea className="w-full">

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -15,7 +16,7 @@ import {
   Code, TrendingUp, Users, Palette, Sun, Star, Globe, ChevronRight, ListMusic, LayoutGrid,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import type { Category } from '@/features/library/types';
+import type { Category, BookList } from '@/features/library/types';
 import { useSearch } from '@/features/search/hooks/use-search';
 import { useSearchHistory } from '@/features/search/hooks/use-search-history';
 import { useSearchSuggestions } from '@/features/search/hooks/use-search-suggestions';
@@ -25,8 +26,10 @@ import { useBookLists } from '@/features/library/hooks/use-book-lists';
 import { HeroBanner } from '@/features/library/components/hero-banner';
 import { BookListSection, BookListSectionSkeleton } from '@/features/library/components/book-list-section';
 import { ContinueReadingCard } from '@/features/library/components/continue-reading-card';
+import { PromoBanner } from '@/features/library/components/promo-banner';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
+
 const SLUG_ICON_MAP: Record<string, LucideIcon> = {
   fiction: BookOpen,
   classics: Library,
@@ -59,10 +62,39 @@ function getCategoryIcon(category: Category): LucideIcon {
   return SLUG_ICON_MAP[category.slug] ?? ICON_URL_MAP[category.iconUrl ?? ''] ?? Folder;
 }
 
+// E10: Seeded Fisher-Yates shuffle — deterministic for a given numeric seed
+function seededShuffle<T>(arr: T[], seed: number): T[] {
+  const result = [...arr];
+  let s = seed;
+  for (let i = result.length - 1; i > 0; i--) {
+    // LCG-based pseudo-random in [0, i]
+    s = (s * 1664525 + 1013904223) & 0xffffffff;
+    const j = Math.abs(s) % (i + 1);
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+const SESSION_SEED_KEY = 'bookListSeed';
+
+function getSessionSeed(): number {
+  if (typeof window === 'undefined') return 0;
+  const stored = sessionStorage.getItem(SESSION_SEED_KEY);
+  if (stored) return parseInt(stored, 10);
+  const seed = Date.now();
+  sessionStorage.setItem(SESSION_SEED_KEY, String(seed));
+  return seed;
+}
+
+// E8: Pull-to-refresh distance threshold in px
+const PULL_THRESHOLD = 60;
+
 export function BookstoreContent() {
   const router = useRouter();
   const t = useTranslations('discover');
   const tc = useTranslations('common');
+  const queryClient = useQueryClient();
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -70,6 +102,11 @@ export function BookstoreContent() {
   const [debouncedDropdownQuery, setDebouncedDropdownQuery] = useState('');
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // E8: Pull-to-refresh state
+  const [pullY, setPullY] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const touchStartYRef = useRef<number | null>(null);
 
   // Debounce search query for book list filtering
   useEffect(() => {
@@ -108,8 +145,12 @@ export function BookstoreContent() {
   const activeBookLists = (bookListsData || []).filter(
     (list) => list.bookCount > 0
   );
-  const allBookLists = activeBookLists;
   const featuredBookLists = activeBookLists.filter((list) => list.type !== 'RANKING');
+
+  // E10: Shuffle book lists with a session-stable seed
+  const allBookLists: BookList[] = activeBookLists.length > 0
+    ? seededShuffle(activeBookLists, getSessionSeed())
+    : activeBookLists;
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -171,8 +212,73 @@ export function BookstoreContent() {
     };
   }, [handleObserver]);
 
+  // E8: Pull-to-refresh touch handlers (touch-device only, guards scrollY > 0)
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (window.scrollY > 0) return;
+    touchStartYRef.current = e.touches[0].clientY;
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (touchStartYRef.current === null || isRefreshing) return;
+    const delta = e.touches[0].clientY - touchStartYRef.current;
+    if (delta > 0) {
+      // Apply rubber-band resistance
+      const clamped = Math.min(delta * 0.4, PULL_THRESHOLD * 1.5);
+      setPullY(clamped);
+    }
+  }, [isRefreshing]);
+
+  const handleTouchEnd = useCallback(async () => {
+    if (touchStartYRef.current === null) return;
+    touchStartYRef.current = null;
+
+    if (pullY >= PULL_THRESHOLD && !isRefreshing) {
+      setIsRefreshing(true);
+      setPullY(0);
+      await queryClient.invalidateQueries();
+      setIsRefreshing(false);
+    } else {
+      setPullY(0);
+    }
+  }, [pullY, isRefreshing, queryClient]);
+
+  const isPulling = pullY > 0;
+  const pullProgress = Math.min(pullY / PULL_THRESHOLD, 1);
+
   return (
-    <div className="space-y-6">
+    <div
+      className="space-y-6"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* E8: Pull-to-refresh indicator */}
+      {(isPulling || isRefreshing) && (
+        <div
+          className="flex items-center justify-center overflow-hidden transition-all duration-150"
+          style={{ height: isRefreshing ? 48 : Math.max(pullY, 0) }}
+          aria-live="polite"
+          aria-label={isRefreshing ? t('refreshing') : t('pullToRefresh')}
+        >
+          <div className="flex flex-col items-center gap-1">
+            <RefreshCw
+              className={cn(
+                'h-5 w-5 text-primary transition-transform duration-150',
+                isRefreshing && 'animate-spin'
+              )}
+              style={
+                !isRefreshing
+                  ? { transform: `rotate(${pullProgress * 360}deg)` }
+                  : undefined
+              }
+            />
+            <span className="text-xs text-muted-foreground">
+              {isRefreshing ? t('refreshing') : t('pullToRefresh')}
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Search */}
       <div className="relative" ref={searchContainerRef}>
         <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
@@ -229,6 +335,9 @@ export function BookstoreContent() {
         </div>
       ) : (
       <>
+      {/* E11: Free book promo banner */}
+      <PromoBanner />
+
       {/* Hero Banner */}
       <HeroBanner bookLists={featuredBookLists} isLoading={bookListsLoading} />
 
@@ -275,7 +384,7 @@ export function BookstoreContent() {
         )}
       </div>
 
-      {/* All Book Lists with iOS-style backgrounds */}
+      {/* All Book Lists with iOS-style backgrounds (E10: seeded-shuffled order) */}
       {bookListsLoading ? (
         <div className="space-y-8">
           {Array.from({ length: 3 }).map((_, i) => (

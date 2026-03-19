@@ -28,7 +28,21 @@ export function useQuoteTags() {
   });
 }
 
-export function useInfiniteQuotes(params?: { tag?: string; search?: string }) {
+export function useQuote(id: string) {
+  return useQuery({
+    queryKey: ['quotes', id],
+    queryFn: () => apiClient.get<Quote>(`/quotes/${id}`) as Promise<Quote>,
+    enabled: !!id,
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useInfiniteQuotes(params?: {
+  tag?: string;
+  search?: string;
+  authorId?: string;
+  bookId?: string;
+}) {
   return useInfiniteQuery({
     queryKey: ['quotes', 'list', params],
     queryFn: async ({ pageParam = 1 }) => {
@@ -37,8 +51,23 @@ export function useInfiniteQuotes(params?: { tag?: string; search?: string }) {
       searchParams.set('limit', '20');
       if (params?.tag) searchParams.set('tag', params.tag);
       if (params?.search) searchParams.set('search', params.search);
+      if (params?.authorId) searchParams.set('authorId', params.authorId);
+      if (params?.bookId) searchParams.set('bookId', params.bookId);
       return apiClient.get<QuotesResponse>(`/quotes?${searchParams}`) as Promise<QuotesResponse>;
     },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.hasMore ? lastPage.page + 1 : undefined,
+  });
+}
+
+export function useFavoriteQuotes() {
+  return useInfiniteQuery({
+    queryKey: ['quotes', 'favorites'],
+    queryFn: async ({ pageParam = 1 }) =>
+      apiClient.get<QuotesResponse>(
+        `/quotes/favorites?page=${pageParam}&limit=20`,
+      ) as Promise<QuotesResponse>,
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.hasMore ? lastPage.page + 1 : undefined,

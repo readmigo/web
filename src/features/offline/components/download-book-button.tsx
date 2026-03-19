@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
-import { Download, CheckCircle2, Pause, Play, Loader2, Trash2 } from 'lucide-react';
+import { Download, CheckCircle2, Pause, Play, Loader2, Trash2, Wifi } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,6 +26,18 @@ interface DownloadBookButtonProps {
   book: BookDetail;
 }
 
+const SKIP_CELLULAR_KEY = 'skipCellularWarning';
+
+// E9: Detect whether the current connection is cellular
+function isCellularConnection(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  // @ts-expect-error navigator.connection is not yet in TS lib types
+  const conn = navigator.connection ?? navigator.mozConnection ?? navigator.webkitConnection;
+  if (!conn) return false;
+  const type: string = conn.effectiveType ?? conn.type ?? '';
+  return ['cellular', '4g', '3g', '2g', 'slow-2g'].includes(type.toLowerCase());
+}
+
 export function DownloadBookButton({ book }: DownloadBookButtonProps) {
   const t = useTranslations('offline');
   const { requireFeature, showPaywall, dismissPaywall, isPro } = useFeatureGate();
@@ -40,6 +53,10 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
 
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // E9: Cellular warning dialog state
+  const [showCellularWarning, setShowCellularWarning] = useState(false);
+  const [doNotAskAgain, setDoNotAskAgain] = useState(false);
+
   useEffect(() => {
     if (!isInitialized) initialize();
   }, [isInitialized, initialize]);
@@ -50,9 +67,28 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
     ? (downloaded.downloadedChapters / downloaded.totalChapters) * 100
     : 0;
 
-  const handleDownload = () => {
+  const triggerDownload = () => {
     if (!requireFeature('offlineDownload', 'download-book')) return;
     downloadBook(book);
+  };
+
+  // E9: Intercept download when on cellular and user hasn't opted out
+  const handleDownload = () => {
+    const skipped = localStorage.getItem(SKIP_CELLULAR_KEY) === '1';
+    if (!skipped && isCellularConnection()) {
+      setDoNotAskAgain(false);
+      setShowCellularWarning(true);
+      return;
+    }
+    triggerDownload();
+  };
+
+  const handleCellularConfirm = () => {
+    if (doNotAskAgain) {
+      localStorage.setItem(SKIP_CELLULAR_KEY, '1');
+    }
+    setShowCellularWarning(false);
+    triggerDownload();
   };
 
   const handleDelete = async () => {
@@ -65,14 +101,55 @@ export function DownloadBookButton({ book }: DownloadBookButtonProps) {
     return <PaywallView trigger="downloadRequired" onDismiss={dismissPaywall} />;
   }
 
-  // Not downloaded — show download button
+  // Not downloaded — show download button + E9 cellular warning dialog
   if (status === 'not_downloaded') {
     return (
-      <Button variant="outline" className="w-full h-12 rounded-xl" onClick={handleDownload}>
-        <Download className="mr-2 h-4 w-4" />
-        {t('downloadForOffline')}
-        {!isPro && <span className="ml-2 text-xs opacity-70">Pro</span>}
-      </Button>
+      <>
+        <Button variant="outline" className="w-full h-12 rounded-xl" onClick={handleDownload}>
+          <Download className="mr-2 h-4 w-4" />
+          {t('downloadForOffline')}
+          {!isPro && <span className="ml-2 text-xs opacity-70">Pro</span>}
+        </Button>
+
+        {/* E9: Cellular network confirmation dialog */}
+        <AlertDialog open={showCellularWarning} onOpenChange={setShowCellularWarning}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className="flex items-center gap-2">
+                <Wifi className="h-5 w-5 text-orange-500" />
+                {t('cellularWarning')}
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                {t('cellularWarningDesc')}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+
+            {/* "Do not ask again" checkbox */}
+            <div className="flex items-center gap-2 py-1">
+              <Checkbox
+                id="doNotAskAgain"
+                checked={doNotAskAgain}
+                onCheckedChange={(checked) => setDoNotAskAgain(checked === true)}
+              />
+              <label
+                htmlFor="doNotAskAgain"
+                className="text-sm text-muted-foreground cursor-pointer select-none"
+              >
+                {t('doNotAskAgain')}
+              </label>
+            </div>
+
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setShowCellularWarning(false)}>
+                {t('cancel')}
+              </AlertDialogCancel>
+              <AlertDialogAction onClick={handleCellularConfirm}>
+                {t('continueDownload')}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
     );
   }
 

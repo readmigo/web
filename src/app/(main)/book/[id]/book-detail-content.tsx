@@ -327,6 +327,17 @@ export function BookDetailContent({ bookId }: BookDetailContentProps) {
         )}
         {bookContext && <BookContextSection context={bookContext} />}
 
+        {/* Quotes from this book */}
+        <div className="rounded-xl bg-card p-4 shadow-sm">
+          <Link
+            href={`/quotes?bookId=${book.id}`}
+            className="flex items-center justify-between"
+          >
+            <h2 className="text-lg font-semibold">{t('bookQuotes')}</h2>
+            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+          </Link>
+        </div>
+
         {/* Chapters Section */}
         {book.chapters.length > 0 && (
           <div className="rounded-xl bg-card p-4 shadow-sm">

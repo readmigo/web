@@ -1,6 +1,6 @@
 {
   "name": "@readmigo/web",
-  "version": "1.0.0",
+  "version": "7.6.5",
   "private": true,
   "packageManager": "pnpm@9.14.2",
   "engines": {
