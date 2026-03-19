@@ -62,7 +62,16 @@ export class AudioManager {
     });
 
     this.audio.addEventListener('error', () => {
-      const error = new Error(this.audio?.error?.message || 'Audio playback error');
+      const errorCode = this.audio?.error?.code;
+      const errorMessage = this.audio?.error?.message || 'Audio playback error';
+      log.audiobook.error('[AudioManager] Playback error event', {
+        src: this.audio?.src,
+        errorCode,
+        errorMessage,
+        networkState: this.audio?.networkState,
+        readyState: this.audio?.readyState,
+      });
+      const error = new Error(errorMessage);
       this.events.error?.(error);
     });
   }
@@ -93,16 +102,28 @@ export class AudioManager {
         return;
       }
 
+      log.audiobook.info('[AudioManager] Loading audio', { src });
+
       const handleCanPlay = () => {
         this.audio?.removeEventListener('canplay', handleCanPlay);
         this.audio?.removeEventListener('error', handleError);
+        log.audiobook.info('[AudioManager] Audio canplay', { src });
         resolve();
       };
 
       const handleError = () => {
         this.audio?.removeEventListener('canplay', handleCanPlay);
         this.audio?.removeEventListener('error', handleError);
-        reject(new Error(this.audio?.error?.message || 'Failed to load audio'));
+        const errorCode = this.audio?.error?.code;
+        const errorMessage = this.audio?.error?.message || 'Failed to load audio';
+        log.audiobook.error('[AudioManager] Audio load error', {
+          src,
+          errorCode,
+          errorMessage,
+          networkState: this.audio?.networkState,
+          readyState: this.audio?.readyState,
+        });
+        reject(new Error(errorMessage));
       };
 
       this.audio.addEventListener('canplay', handleCanPlay);

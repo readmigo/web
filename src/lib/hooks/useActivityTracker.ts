@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useSession } from 'next-auth/react';
 import { updateActivity } from '../api/client';
 import { log } from '@/lib/logger';
 
@@ -12,12 +13,16 @@ import { log } from '@/lib/logger';
  * - Updates activity when page becomes visible (tab switch)
  * - Updates activity every 5 minutes while page is active
  * - Uses local debouncing to prevent excessive API calls
+ * - Skips all requests when user is not logged in
  */
 export function useActivityTracker() {
+  const { data: session } = useSession();
+  const isAuthenticated = !!session?.user;
   const lastUpdateRef = useRef<number>(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    if (!isAuthenticated) return;
     const MINIMUM_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
     const performUpdate = async () => {
@@ -64,5 +69,5 @@ export function useActivityTracker() {
         clearInterval(intervalRef.current);
       }
     };
-  }, []);
+  }, [isAuthenticated]);
 }

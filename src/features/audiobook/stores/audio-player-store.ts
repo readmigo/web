@@ -319,6 +319,16 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
           const { playbackSpeed } = get();
           const chapter = audiobook.chapters[startChapter] || audiobook.chapters[0];
 
+          log.audiobook.info('[PlayerStore] loadAudiobook', {
+            audiobookId: audiobook.id,
+            title: audiobook.title,
+            startChapter,
+            startPosition,
+            chapterTitle: chapter?.title,
+            audioUrl: chapter?.audioUrl,
+            totalChapters: audiobook.chapters.length,
+          });
+
           set({
             audiobook,
             currentChapter: chapter,
@@ -338,8 +348,16 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
             if (startPosition > 0) {
               audioManager.seek(startPosition);
             }
+            log.audiobook.info('[PlayerStore] loadAudiobook success', {
+              audiobookId: audiobook.id,
+            });
             set({ isLoading: false });
           } catch (error) {
+            log.audiobook.error('[PlayerStore] loadAudiobook failed', {
+              audiobookId: audiobook.id,
+              audioUrl: chapter?.audioUrl,
+              error: (error as Error).message,
+            });
             set({ error: (error as Error).message, isLoading: false });
           }
         },

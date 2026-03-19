@@ -1,6 +1,7 @@
 'use client';
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import { apiClient } from '@/lib/api/client';
 import type {
   Audiobook,
@@ -57,8 +58,12 @@ export function useAudiobookLanguages() {
 
 /**
  * Fetch user's recently listened audiobooks
+ * Skips request when user is not logged in
  */
 export function useRecentlyListened(limit = 10) {
+  const { data: session } = useSession();
+  const isAuthenticated = !!session?.user;
+
   return useQuery({
     queryKey: ['audiobooks', 'recently-listened', limit],
     queryFn: async () => {
@@ -68,6 +73,7 @@ export function useRecentlyListened(limit = 10) {
       );
       return response.data || [];
     },
+    enabled: isAuthenticated,
     staleTime: 60 * 1000, // 1 minute
   });
 }
