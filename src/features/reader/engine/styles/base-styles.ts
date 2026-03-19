@@ -113,8 +113,8 @@ figcaption {
 }
 
 .reader-engine-content {
-  column-count: ${settings.columnCount};
-  column-gap: ${settings.columnCount === 1 ? 0 : settings.margin * 2}px;
+  ${settings.columnCount === 1 ? 'column-width: 100vw;' : `column-count: ${settings.columnCount};`}
+  column-gap: ${settings.margin * 2}px;
   column-fill: auto;
   height: 100%;
   box-sizing: border-box;
