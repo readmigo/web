@@ -18,8 +18,7 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
-  useAudiobook,
-  useAudiobookProgress,
+  useAudiobookWithProgress,
   useStartAudiobook,
 } from '@/features/audiobook/hooks/use-audiobooks';
 import { useAudioPlayerStore, formatDuration } from '@/features/audiobook/stores/audio-player-store';
@@ -34,8 +33,8 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
   const t = useTranslations('audiobooks');
   const [showAllChapters, setShowAllChapters] = useState(false);
 
-  const { data: audiobook, isLoading, error } = useAudiobook(audiobookId);
-  const { data: progress } = useAudiobookProgress(audiobookId);
+  const { data: audiobook, isLoading, error } = useAudiobookWithProgress(audiobookId);
+  const progress = audiobook?.progress;
   const { mutate: startAudiobook } = useStartAudiobook();
   const { loadAudiobook, play, audiobook: currentAudiobook } = useAudioPlayerStore();
   const { book, hasBook, getBookChapterId } = useWhispersyncFromAudiobook(audiobook ?? null);

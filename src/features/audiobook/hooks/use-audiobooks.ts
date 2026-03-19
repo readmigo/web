@@ -90,17 +90,27 @@ export function useAudiobook(audiobookId: string | undefined) {
 
 /**
  * Fetch audiobook with user's progress
+ * Falls back to audiobook-only data if user is not authenticated
  */
 export function useAudiobookWithProgress(audiobookId: string | undefined) {
   return useQuery({
     queryKey: ['audiobook', audiobookId, 'with-progress'],
     queryFn: async () => {
       if (!audiobookId) return null;
-      const response = await apiClient.get<{ data: AudiobookWithProgress }>(
-        `/audiobooks/${audiobookId}/with-progress`,
-        { noRedirectOn401: true }
-      );
-      return response.data;
+      try {
+        const response = await apiClient.get<{ data: AudiobookWithProgress }>(
+          `/audiobooks/${audiobookId}/with-progress`,
+          { noRedirectOn401: true }
+        );
+        return response.data;
+      } catch {
+        // Fallback: fetch audiobook without progress (works for unauthenticated users)
+        const response = await apiClient.get<{ data: Audiobook }>(
+          `/audiobooks/${audiobookId}`,
+          { noRedirectOn401: true }
+        );
+        return response.data as AudiobookWithProgress;
+      }
     },
     enabled: !!audiobookId,
     staleTime: 60 * 1000,
