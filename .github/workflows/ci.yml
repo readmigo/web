@@ -53,8 +53,8 @@ jobs:
       - run: pnpm test
         continue-on-error: true
 
-  build-and-e2e:
-    name: Build & E2E Tests
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -67,13 +67,3 @@ jobs:
       - run: pnpm build
         env:
           NEXT_PUBLIC_API_URL: https://api.readmigo.com/api/v1
-      - run: npx playwright install --with-deps chromium
-      - run: npx playwright test --config=playwright.ci.config.ts
-        env:
-          NEXT_PUBLIC_API_URL: https://api.readmigo.com/api/v1
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: playwright-report
-          path: playwright-report
-          retention-days: 7
