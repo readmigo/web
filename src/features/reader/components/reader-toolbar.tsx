@@ -14,6 +14,7 @@ import {
   Volume2,
   Headphones,
   GitBranch,
+  Columns2,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useReaderStore } from '../stores/reader-store';
@@ -52,10 +53,17 @@ export function ReaderToolbar({
   const t = useTranslations('reader');
   const {
     position,
+    settings,
+    updateSettings,
     toggleToc,
     toggleSettings,
     toggleReadingStats,
   } = useReaderStore();
+
+  const cycleColumnCount = () => {
+    const next = (settings.columnCount % 3) + 1 as 1 | 2 | 3;
+    updateSettings({ columnCount: next });
+  };
 
   const { audiobook, hasAudiobook } = useWhispersyncFromBook(bookId);
 
@@ -132,6 +140,18 @@ export function ReaderToolbar({
         </Button>
         <Button variant="ghost" size="icon" onClick={toggleReadingStats} className="md:hidden">
           <BarChart3 className="h-5 w-5" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={cycleColumnCount}
+          title={t('columnCount')}
+          className="relative"
+        >
+          <Columns2 className="h-5 w-5" />
+          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+            {settings.columnCount}
+          </span>
         </Button>
         <Button variant="ghost" size="icon" onClick={onToggleTimeline} title={t('timelineTitle')}>
           <GitBranch className="h-5 w-5" />

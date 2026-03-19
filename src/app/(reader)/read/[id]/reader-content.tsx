@@ -86,9 +86,6 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
   const [translationText, setTranslationText] = useState<string | null>(null);
   const [imageViewerState, setImageViewerState] = useState<{ images: string[]; index: number } | null>(null);
   const [contentElement, setContentElement] = useState<HTMLElement | null>(null);
-  const showControlsRef = useRef(false);
-  const autoHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   // Audio limit dialog state
   const [showAudioLimitDialog, setShowAudioLimitDialog] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
@@ -104,27 +101,23 @@ export function ReaderContent({ bookId }: ReaderContentProps) {
     onPauseTTS: () => tts.pause(),
   });
 
-  // Keep ref in sync with state
-  useEffect(() => {
-    showControlsRef.current = showControls;
-  }, [showControls]);
-
   // Navigation handlers
   const handlePrev = useCallback(() => {
     readerRef.current?.goPrev();
-  }, []);
+    hideControls();
+  }, [hideControls]);
 
   const handleNext = useCallback(() => {
     readerRef.current?.goNext();
-  }, []);
+    hideControls();
+  }, [hideControls]);
 
   const toggleControls = useCallback(() => {
-    const willShow = !showControlsRef.current;
-    setShowControls(willShow);
-    if (autoHideTimerRef.current) clearTimeout(autoHideTimerRef.current);
-    if (willShow) {
-      autoHideTimerRef.current = setTimeout(() => setShowControls(false), 3000);
-    }
+    setShowControls((prev) => !prev);
+  }, []);
+
+  const hideControls = useCallback(() => {
+    setShowControls(false);
   }, []);
 
   // TTS handlers
