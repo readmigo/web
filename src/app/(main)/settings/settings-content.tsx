@@ -110,6 +110,7 @@ export function SettingsContent() {
               ['ar', t('arabic')],
               ['id', t('indonesian')],
               ['ru', t('russian')],
+              ['tr', t('turkish')],
             ] as [string, string][]).map(([locale, label]) => (
               <Button
                 key={locale}

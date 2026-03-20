@@ -2,7 +2,7 @@ import { getRequestConfig } from 'next-intl/server';
 import { cookies, headers } from 'next/headers';
 
 export const supportedLocales = [
-  'zh', 'zh-Hant', 'en', 'es', 'fr', 'pt', 'ja', 'ko', 'ar', 'id', 'ru'
+  'zh', 'zh-Hant', 'en', 'es', 'fr', 'pt', 'ja', 'ko', 'ar', 'id', 'ru', 'tr'
 ] as const;
 export type Locale = (typeof supportedLocales)[number];
 export const defaultLocale: Locale = 'zh';
@@ -25,6 +25,7 @@ function parseAcceptLanguage(header: string): Locale {
     if (lang.startsWith('ar')) return 'ar';
     if (lang.startsWith('id')) return 'id';
     if (lang.startsWith('ru')) return 'ru';
+    if (lang.startsWith('tr')) return 'tr';
   }
   return defaultLocale;
 }
