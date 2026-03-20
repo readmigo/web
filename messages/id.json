@@ -38,7 +38,8 @@
       "freeBadge": "Gratis",
       "cta": "Baca Sekarang",
       "dismiss": "Tutup"
-    }
+    },
+    "browseAll": "Lihat Semua Buku"
   },
   "audiobooks": {
     "recentlyListened": "Baru Didengarkan",
@@ -87,7 +88,9 @@
     "voiceSelector": "Pilih suara",
     "selectVoice": "Pilih Suara",
     "previewVoice": "Pratinjau {name}",
-    "stopPreview": "Hentikan pratinjau"
+    "stopPreview": "Hentikan pratinjau",
+    "lyricsTab": "Lirik",
+    "loadingLyrics": "Memuat teks..."
   },
   "category": {
     "backToBookstore": "Kembali ke Toko Buku",
@@ -107,7 +110,18 @@
     "emptyTitle": "Perpustakaan Anda kosong",
     "emptySubtitle": "Jelajahi toko buku untuk menemukan buku bagus",
     "goToBookstore": "Jelajahi Toko Buku",
-    "remove": "Hapus"
+    "remove": "Hapus",
+    "guestPromptTitle": "Masuk untuk melihat perpustakaan Anda",
+    "guestPromptSubtitle": "Lacak kemajuan membaca, favorit, dan lainnya",
+    "loginToView": "Masuk",
+    "edit": "Edit",
+    "done": "Selesai",
+    "deleteSelected": "Hapus yang Dipilih",
+    "confirmDeleteTitle": "Hapus buku?",
+    "confirmDeleteDesc": "Ini akan menghapus {count} buku dari favorit Anda.",
+    "cancel": "Batal",
+    "confirm": "Konfirmasi",
+    "browseAll": "Lihat Semua Buku"
   },
   "me": {
     "user": "Pengguna",
@@ -142,7 +156,12 @@
       "confirm": "Konfirmasi",
       "zoom": "Zoom"
     },
-    "subscriptionPro": "Anggota Pro"
+    "subscriptionPro": "Anggota Pro",
+    "followingAuthors": "Penulis yang Diikuti",
+    "signOutConfirmTitle": "Keluar?",
+    "signOutConfirmDesc": "Anda akan keluar dari akun Anda.",
+    "signOutConfirm": "Keluar",
+    "signOutCancel": "Batal"
   },
   "settings": {
     "appearance": "Tampilan",
@@ -194,6 +213,15 @@
     "simplifiedChinese": "简体中文",
     "english": "English",
     "traditionalChinese": "繁體中文",
+    "spanish": "Español",
+    "french": "Français",
+    "portuguese": "Português",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "arabic": "العربية",
+    "indonesian": "Bahasa Indonesia",
+    "russian": "Русский",
+    "turkish": "Türkçe",
     "account": "Akun",
     "accountDesc": "Kelola akun Anda",
     "email": "Email",
@@ -591,6 +619,67 @@
       "description": "Langganan Anda sedang dalam masa tenggang. Perbarui metode pembayaran untuk mempertahankan akses Pro.",
       "descriptionWithDays": "Langganan Anda berakhir dalam {days} hari. Perbarui metode pembayaran untuk mempertahankan akses Pro.",
       "fixPayment": "Perbaiki pembayaran"
+    },
+    "audioLimit": {
+      "title": "Batas audio harian tercapai",
+      "descGuest": "Masuk untuk mendapatkan 30 menit audio gratis per hari",
+      "descFree": "Upgrade ke Pro untuk mendengarkan tanpa batas",
+      "used": "{used} / {limit} menit digunakan",
+      "perDay": "per hari",
+      "loginCta": "Masuk",
+      "upgradeCta": "Upgrade ke Pro",
+      "cancel": "Mungkin Nanti",
+      "dismiss": "Tutup"
+    },
+    "page": {
+      "metaTitle": "Langganan",
+      "metaDescription": "Kelola paket langganan dan penagihan Readmigo Anda",
+      "heading": "Langganan",
+      "subheading": "Kelola paket dan detail penagihan Anda",
+      "backToSettings": "Kembali ke Pengaturan",
+      "currentPlan": "Paket Saat Ini",
+      "currentPlanDesc": "Langganan aktif dan detail perpanjangan Anda",
+      "planLabel": "Paket",
+      "premiumTier": "Tingkat premium",
+      "renewsOn": "Diperbarui pada",
+      "expiresOn": "Kedaluwarsa pada",
+      "autoRenewOn": "Perpanjangan otomatis aktif",
+      "autoRenewOff": "Perpanjangan otomatis nonaktif",
+      "statusExpired": "Langganan Anda telah kedaluwarsa",
+      "statusCancelled": "Langganan dibatalkan — akses berlanjut hingga kedaluwarsa",
+      "manageSubscription": "Kelola Langganan",
+      "upgradeToPro": "Upgrade ke Pro",
+      "audioUsageTitle": "Penggunaan Audio Harian",
+      "audioUsageDesc": "Pengguna gratis mendapatkan 30 menit audio per hari",
+      "dailyUsage": "Penggunaan hari ini",
+      "minutes": "mnt",
+      "audioLimitReached": "Batas harian tercapai. Reset tengah malam.",
+      "audioResetNote": "Penggunaan direset setiap hari tengah malam (waktu lokal)",
+      "proFeaturesTitle": "Fitur Pro",
+      "proFeaturesDesc": "Semua yang disertakan dengan Readmigo Pro",
+      "featureDataSync": "Sinkronisasi Lintas Perangkat",
+      "featureCloudBackup": "Cadangan Cloud",
+      "featureUnlimitedAudio": "Audio Tak Terbatas",
+      "featureStats": "Statistik Membaca Terperinci",
+      "featureTemplates": "Template Premium",
+      "featureBookAccess": "Perpustakaan Buku Lengkap",
+      "featureOfflineReading": "Membaca Offline",
+      "unlockAllFeatures": "Buka Semua Fitur Pro",
+      "manageTitle": "Kelola Penagihan",
+      "manageDesc": "Perbarui metode pembayaran, lihat tagihan, atau batalkan",
+      "stripePortal": "Buka Portal Penagihan",
+      "faqTitle": "Pertanyaan yang Sering Diajukan",
+      "faq1Q": "Bagaimana cara membatalkan langganan?",
+      "faq1A": "Anda dapat membatalkan kapan saja dari portal penagihan atau dengan mengetuk \"Batalkan langganan\" di atas. Akses berlanjut hingga akhir periode penagihan.",
+      "faq2Q": "Bisakah saya beralih antar paket?",
+      "faq2A": "Ya. Buka portal penagihan untuk meningkatkan atau menurunkan paket. Perubahan berlaku di awal siklus penagihan berikutnya.",
+      "faq3Q": "Apakah saya akan ditagih segera saat upgrade?",
+      "faq3A": "Saat upgrade, Anda ditagih jumlah prorata untuk sisa periode saat ini. Penurunan berlaku saat perpanjangan.",
+      "faq4Q": "Bagaimana cara mendapatkan pengembalian dana?",
+      "faq4A": "Kelayakan pengembalian dana tergantung pada wilayah dan metode pembayaran Anda. Hubungi tim dukungan kami dalam 7 hari setelah pembelian.",
+      "contactTitle": "Butuh Bantuan?",
+      "contactDesc": "Tim dukungan kami biasanya merespons dalam 24 jam",
+      "contactButton": "Hubungi Dukungan"
     }
   },
   "onboarding": {
@@ -707,7 +796,58 @@
     "privacyPolicy": "Kebijakan Privasi",
     "termsOfService": "Syarat Layanan",
     "copyright": "© 2025 Readmigo. Semua hak dilindungi.",
-    "madeWith": "Dibuat dengan ❤️"
+    "madeWith": "Dibuat dengan ❤️",
+    "changelog": {
+      "title": "Yang Baru",
+      "items": {
+        "v280_new1": "Laporan membaca tahunan dengan wawasan yang dipersonalisasi",
+        "v280_new2": "Agora komunitas — bagikan pemikiran membaca Anda",
+        "v280_imp1": "Pemuatan bab lebih cepat dengan cache yang ditingkatkan",
+        "v280_fix1": "Diperbaiki: pemilih suara TTS tidak menyimpan preferensi",
+        "v270_new1": "Membaca offline — unduh buku untuk dibaca tanpa Wi-Fi",
+        "v270_imp1": "Halaman Saya yang didesain ulang dengan tata letak lebih bersih",
+        "v270_imp2": "Navigasi bab buku audio yang lebih baik",
+        "v270_fix1": "Memperbaiki masalah sinkronisasi progres saat menyambung kembali",
+        "v260_new1": "Mode mengikuti lirik buku audio",
+        "v260_new2": "Timer tidur dengan opsi akhir bab",
+        "v260_fix1": "Memperbaiki penghapusan bookmark dalam mode halaman",
+        "v260_fix2": "Mengatasi loop login saat token kedaluwarsa",
+        "v250_new1": "Ulasan kosakata dengan pengulangan berjarak",
+        "v250_imp1": "Transisi dan animasi pembaca yang lebih mulus",
+        "v250_fix1": "Diperbaiki: warna sorotan tidak tersimpan",
+        "v240_new1": "Halaman manajemen langganan",
+        "v240_new2": "Dukungan notifikasi push",
+        "v240_imp1": "Hasil pencarian yang ditingkatkan dengan kartu penulis",
+        "v230_new1": "Halaman detail penulis dengan biografi dan karya",
+        "v230_imp1": "Pemuatan daftar buku lebih cepat dengan pagination",
+        "v230_fix1": "Memperbaiki reset posisi audio setelah ke latar belakang",
+        "v220_new1": "Dukungan mode gelap untuk pembaca",
+        "v220_imp1": "Kustomisasi font dan tata letak yang ditingkatkan",
+        "v220_fix1": "Memperbaiki posisi gulir daftar isi",
+        "v220_fix2": "Mengatasi kegagalan unggah avatar di beberapa browser",
+        "v210_new1": "Feed kutipan — temukan dan simpan kutipan buku",
+        "v210_new2": "Dasbor statistik membaca",
+        "v210_imp1": "Waktu peluncuran aplikasi berkurang 40%"
+      }
+    },
+    "licenses": {
+      "label": "Lisensi Sumber Terbuka",
+      "title": "Lisensi Sumber Terbuka",
+      "desc": "Readmigo dibangun di atas proyek-proyek sumber terbuka yang hebat."
+    },
+    "acknowledgments": {
+      "title": "Ucapan Terima Kasih",
+      "teamTitle": "Tim",
+      "team": "Dibuat dengan penuh perhatian oleh tim Readmigo — berdedikasi untuk membantu pembaca di seluruh dunia menikmati sastra Inggris.",
+      "contentTitle": "Sumber Konten",
+      "content1": "Project Gutenberg — lebih dari 70.000 ebook domain publik gratis",
+      "content2": "LibriVox — buku audio domain publik gratis yang dibacakan oleh sukarelawan",
+      "content3": "Standard Ebooks — edisi domain publik yang diformat dengan cermat",
+      "specialTitle": "Terima Kasih Khusus",
+      "special1": "Pengguna beta awal kami atas masukan berharga dan kesabaran mereka",
+      "special2": "Komunitas sumber terbuka atas alat yang menggerakkan aplikasi ini",
+      "special3": "Setiap pembaca yang memilih Readmigo sebagai teman membaca mereka"
+    }
   },
   "notifications": {
     "empty": "Tidak ada notifikasi",
@@ -808,7 +948,15 @@
   },
   "author": {
     "follow": "Ikuti",
-    "following": "Mengikuti",
+    "following": {
+      "title": "Penulis yang Diikuti",
+      "count": "{count} penulis",
+      "bookCount": "{count} buku",
+      "unfollow": "Berhenti Mengikuti",
+      "emptyTitle": "Belum ada yang diikuti",
+      "emptyDesc": "Ikuti penulis untuk melihat mereka di sini",
+      "exploreAuthors": "Jelajahi Penulis"
+    },
     "works": "Karya",
     "quotes": "Kutipan",
     "followers": "Pengikut",
@@ -866,7 +1014,9 @@
     "eventCategoryCultural": "Budaya",
     "eventCategoryPolitical": "Politik",
     "eventCategoryScientific": "Ilmiah",
-    "browseAllAuthorQuotes": "Lihat semua kutipan penulis ini"
+    "browseAllAuthorQuotes": "Lihat semua kutipan penulis ini",
+    "followingLabel": "Diikuti",
+    "unfollow": "Berhenti Mengikuti"
   },
   "wordLookup": {
     "noDefinition": "Tidak ada definisi ditemukan",
@@ -1047,7 +1197,10 @@
     "bookstoreDesc": "Temukan buku baru",
     "settings": "Pengaturan",
     "settingsDesc": "Kelola pengaturan aplikasi",
-    "viewMore": "Lihat lebih"
+    "viewMore": "Lihat lebih",
+    "suggestions": "Saran",
+    "popularSearches": "Pencarian Populer",
+    "trendingSearches": "Trending"
   },
   "offline": {
     "downloadForOffline": "Unduh untuk Offline",
@@ -1102,7 +1255,12 @@
     "cellularWarning": "Menggunakan Data Seluler",
     "cellularWarningDesc": "Mengunduh melalui data seluler dapat dikenakan biaya. Lanjutkan?",
     "doNotAskAgain": "Jangan tanya lagi",
-    "continueDownload": "Lanjutkan"
+    "continueDownload": "Lanjutkan",
+    "downloadQuality": "Kualitas Unduhan",
+    "downloadQualityDesc": "Kualitas lebih rendah menggunakan lebih sedikit ruang penyimpanan",
+    "qualityLow": "Rendah",
+    "qualityMedium": "Sedang",
+    "qualityHigh": "Tinggi"
   },
   "shareCard": {
     "title": "Bagikan Kutipan",

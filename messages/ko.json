@@ -38,7 +38,8 @@
       "freeBadge": "무료",
       "cta": "지금 읽기",
       "dismiss": "닫기"
-    }
+    },
+    "browseAll": "모든 책 보기"
   },
   "audiobooks": {
     "recentlyListened": "최근 들은",
@@ -87,7 +88,9 @@
     "voiceSelector": "목소리 선택",
     "selectVoice": "목소리 선택",
     "previewVoice": "{name} 미리 듣기",
-    "stopPreview": "미리 듣기 중지"
+    "stopPreview": "미리 듣기 중지",
+    "lyricsTab": "가사",
+    "loadingLyrics": "텍스트 불러오는 중..."
   },
   "category": {
     "backToBookstore": "서점으로 돌아가기",
@@ -107,7 +110,18 @@
     "emptyTitle": "서재가 비어 있습니다",
     "emptySubtitle": "서점을 탐색하여 훌륭한 책을 찾아보세요",
     "goToBookstore": "서점 둘러보기",
-    "remove": "삭제"
+    "remove": "삭제",
+    "guestPromptTitle": "라이브러리를 보려면 로그인하세요",
+    "guestPromptSubtitle": "독서 진행 상황, 즐겨찾기 등을 관리하세요",
+    "loginToView": "로그인",
+    "edit": "편집",
+    "done": "완료",
+    "deleteSelected": "선택 항목 삭제",
+    "confirmDeleteTitle": "책을 삭제하시겠습니까?",
+    "confirmDeleteDesc": "즐겨찾기에서 {count}권을 삭제합니다.",
+    "cancel": "취소",
+    "confirm": "확인",
+    "browseAll": "모든 책 보기"
   },
   "me": {
     "user": "사용자",
@@ -142,7 +156,12 @@
       "confirm": "확인",
       "zoom": "확대/축소"
     },
-    "subscriptionPro": "Pro 멤버"
+    "subscriptionPro": "Pro 멤버",
+    "followingAuthors": "팔로우 중인 작가",
+    "signOutConfirmTitle": "로그아웃하시겠습니까?",
+    "signOutConfirmDesc": "계정에서 로그아웃됩니다.",
+    "signOutConfirm": "로그아웃",
+    "signOutCancel": "취소"
   },
   "settings": {
     "appearance": "외관",
@@ -194,6 +213,15 @@
     "simplifiedChinese": "简体中文",
     "english": "English",
     "traditionalChinese": "繁體中文",
+    "spanish": "Español",
+    "french": "Français",
+    "portuguese": "Português",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "arabic": "العربية",
+    "indonesian": "Bahasa Indonesia",
+    "russian": "Русский",
+    "turkish": "Türkçe",
     "account": "계정",
     "accountDesc": "계정 관리",
     "email": "이메일",
@@ -591,6 +619,67 @@
       "description": "구독이 유예 기간 중입니다. Pro 이용을 유지하려면 결제 수단을 업데이트해 주세요.",
       "descriptionWithDays": "구독이 {days}일 후 만료됩니다. Pro 이용을 유지하려면 결제 수단을 업데이트해 주세요.",
       "fixPayment": "결제 수정"
+    },
+    "audioLimit": {
+      "title": "일일 청취 한도 도달",
+      "descGuest": "로그인하여 하루 30분 무료 오디오 이용",
+      "descFree": "Pro로 업그레이드하여 무제한 청취",
+      "used": "{used} / {limit}분 사용됨",
+      "perDay": "하루당",
+      "loginCta": "로그인",
+      "upgradeCta": "Pro로 업그레이드",
+      "cancel": "나중에",
+      "dismiss": "닫기"
+    },
+    "page": {
+      "metaTitle": "구독",
+      "metaDescription": "Readmigo 구독 플랜 및 결제 관리",
+      "heading": "구독",
+      "subheading": "플랜 및 결제 세부 정보 관리",
+      "backToSettings": "설정으로 돌아가기",
+      "currentPlan": "현재 플랜",
+      "currentPlanDesc": "활성 구독 및 갱신 세부 정보",
+      "planLabel": "플랜",
+      "premiumTier": "프리미엄 등급",
+      "renewsOn": "갱신일",
+      "expiresOn": "만료일",
+      "autoRenewOn": "자동 갱신 켜짐",
+      "autoRenewOff": "자동 갱신 꺼짐",
+      "statusExpired": "구독이 만료되었습니다",
+      "statusCancelled": "구독 취소됨 — 만료일까지 이용 가능",
+      "manageSubscription": "구독 관리",
+      "upgradeToPro": "Pro로 업그레이드",
+      "audioUsageTitle": "일일 오디오 사용량",
+      "audioUsageDesc": "무료 사용자는 하루 30분 오디오 이용 가능",
+      "dailyUsage": "오늘 사용량",
+      "minutes": "분",
+      "audioLimitReached": "일일 한도 도달. 자정에 초기화됩니다.",
+      "audioResetNote": "사용량은 매일 자정(현지 시간)에 초기화됩니다",
+      "proFeaturesTitle": "Pro 기능",
+      "proFeaturesDesc": "Readmigo Pro에 포함된 모든 기능",
+      "featureDataSync": "기기 간 동기화",
+      "featureCloudBackup": "클라우드 백업",
+      "featureUnlimitedAudio": "무제한 오디오",
+      "featureStats": "상세 독서 통계",
+      "featureTemplates": "프리미엄 템플릿",
+      "featureBookAccess": "전체 도서 라이브러리",
+      "featureOfflineReading": "오프라인 독서",
+      "unlockAllFeatures": "모든 Pro 기능 잠금 해제",
+      "manageTitle": "결제 관리",
+      "manageDesc": "결제 방법 업데이트, 청구서 확인 또는 취소",
+      "stripePortal": "결제 포털 열기",
+      "faqTitle": "자주 묻는 질문",
+      "faq1Q": "구독을 어떻게 취소하나요?",
+      "faq1A": "결제 포털에서 언제든지 취소하거나 위의 \"구독 취소\"를 탭하세요. 청구 기간이 끝날 때까지 이용 가능합니다.",
+      "faq2Q": "플랜을 변경할 수 있나요?",
+      "faq2A": "예. 결제 포털을 열어 플랜을 업그레이드하거나 다운그레이드하세요. 변경 사항은 다음 청구 주기 시작 시 적용됩니다.",
+      "faq3Q": "업그레이드 시 즉시 청구되나요?",
+      "faq3A": "업그레이드 시 현재 청구 기간의 남은 기간에 대한 일할 계산 금액이 청구됩니다. 다운그레이드는 갱신 시 적용됩니다.",
+      "faq4Q": "환불을 받으려면 어떻게 하나요?",
+      "faq4A": "환불 자격은 지역 및 결제 방법에 따라 다릅니다. 구매 후 7일 이내에 지원팀에 문의하세요.",
+      "contactTitle": "도움이 필요하신가요?",
+      "contactDesc": "고객 지원팀은 보통 24시간 이내에 응답합니다",
+      "contactButton": "지원 문의"
     }
   },
   "onboarding": {
@@ -707,7 +796,58 @@
     "privacyPolicy": "개인정보 처리방침",
     "termsOfService": "서비스 이용약관",
     "copyright": "© 2025 Readmigo. All rights reserved.",
-    "madeWith": "Made with ❤️"
+    "madeWith": "Made with ❤️",
+    "changelog": {
+      "title": "새로운 기능",
+      "items": {
+        "v280_new1": "개인화된 인사이트가 포함된 연간 독서 보고서",
+        "v280_new2": "커뮤니티 아고라 — 독서 감상을 다른 사람들과 공유",
+        "v280_imp1": "개선된 캐싱으로 챕터 로딩 속도 향상",
+        "v280_fix1": "수정: TTS 음성 선택기가 환경설정을 저장하지 않는 문제",
+        "v270_new1": "오프라인 독서 — Wi-Fi 없이 읽기 위한 도서 다운로드",
+        "v270_imp1": "더 깔끔한 레이아웃으로 '나' 페이지 재설계",
+        "v270_imp2": "오디오북 챕터 탐색 개선",
+        "v270_fix1": "재연결 시 진행 동기화 문제 수정",
+        "v260_new1": "오디오북 가사 따라가기 모드",
+        "v260_new2": "챕터 종료 옵션이 있는 수면 타이머",
+        "v260_fix1": "페이지 모드에서 북마크 삭제 수정",
+        "v260_fix2": "토큰 만료 시 로그인 루프 해결",
+        "v250_new1": "간격 반복법을 활용한 어휘 복습",
+        "v250_imp1": "리더의 전환 및 애니메이션을 더 부드럽게",
+        "v250_fix1": "수정: 하이라이트 색상이 유지되지 않는 문제",
+        "v240_new1": "구독 관리 페이지",
+        "v240_new2": "푸시 알림 지원",
+        "v240_imp1": "작가 카드가 포함된 검색 결과 개선",
+        "v230_new1": "약력 및 작품이 포함된 작가 상세 페이지",
+        "v230_imp1": "페이지네이션으로 도서 목록 로딩 속도 향상",
+        "v230_fix1": "백그라운드 전환 후 오디오 위치 초기화 수정",
+        "v220_new1": "리더의 다크 모드 지원",
+        "v220_imp1": "향상된 글꼴 및 레이아웃 맞춤 설정",
+        "v220_fix1": "목차 스크롤 위치 수정",
+        "v220_fix2": "일부 브라우저에서 아바타 업로드 실패 해결",
+        "v210_new1": "인용구 피드 — 책 인용구를 발견하고 저장",
+        "v210_new2": "독서 통계 대시보드",
+        "v210_imp1": "앱 시작 시간 40% 단축"
+      }
+    },
+    "licenses": {
+      "label": "오픈 소스 라이선스",
+      "title": "오픈 소스 라이선스",
+      "desc": "Readmigo는 훌륭한 오픈 소스 프로젝트 위에 구축되었습니다."
+    },
+    "acknowledgments": {
+      "title": "감사의 말",
+      "teamTitle": "팀",
+      "team": "Readmigo 팀이 정성스럽게 만들었습니다 — 전 세계 독자들이 영어 문학을 즐길 수 있도록 헌신합니다.",
+      "contentTitle": "콘텐츠 출처",
+      "content1": "Project Gutenberg — 7만 개 이상의 무료 퍼블릭 도메인 전자책",
+      "content2": "LibriVox — 자원봉사자가 읽어주는 무료 퍼블릭 도메인 오디오북",
+      "content3": "Standard Ebooks — 세심하게 서식이 정리된 퍼블릭 도메인 판",
+      "specialTitle": "특별 감사",
+      "special1": "소중한 피드백과 인내심을 보여준 초기 베타 사용자분들께",
+      "special2": "이 앱을 구동하는 도구를 제공한 오픈 소스 커뮤니티에",
+      "special3": "Readmigo를 독서 동반자로 선택해주신 모든 독자분께"
+    }
   },
   "notifications": {
     "empty": "알림이 없습니다",
@@ -808,7 +948,15 @@
   },
   "author": {
     "follow": "팔로우",
-    "following": "팔로잉",
+    "following": {
+      "title": "팔로우 중인 작가",
+      "count": "{count}명의 작가",
+      "bookCount": "{count}권",
+      "unfollow": "언팔로우",
+      "emptyTitle": "팔로우 없음",
+      "emptyDesc": "작가를 팔로우하면 여기에 표시됩니다",
+      "exploreAuthors": "작가 탐색"
+    },
     "works": "작품",
     "quotes": "명언",
     "followers": "팔로워",
@@ -866,7 +1014,9 @@
     "eventCategoryCultural": "문화",
     "eventCategoryPolitical": "정치",
     "eventCategoryScientific": "과학",
-    "browseAllAuthorQuotes": "이 작가의 모든 명언 보기"
+    "browseAllAuthorQuotes": "이 작가의 모든 명언 보기",
+    "followingLabel": "팔로우 중",
+    "unfollow": "언팔로우"
   },
   "wordLookup": {
     "noDefinition": "정의를 찾을 수 없습니다",
@@ -1047,7 +1197,10 @@
     "bookstoreDesc": "새 책 발견",
     "settings": "설정",
     "settingsDesc": "앱 설정 관리",
-    "viewMore": "더 보기"
+    "viewMore": "더 보기",
+    "suggestions": "제안",
+    "popularSearches": "인기 검색",
+    "trendingSearches": "트렌드"
   },
   "offline": {
     "downloadForOffline": "오프라인용 다운로드",
@@ -1102,7 +1255,12 @@
     "cellularWarning": "모바일 데이터 사용",
     "cellularWarningDesc": "모바일 데이터로 다운로드하면 요금이 발생할 수 있습니다. 계속하시겠습니까?",
     "doNotAskAgain": "다시 묻지 않기",
-    "continueDownload": "계속"
+    "continueDownload": "계속",
+    "downloadQuality": "다운로드 품질",
+    "downloadQualityDesc": "낮은 품질은 저장 공간을 덜 사용합니다",
+    "qualityLow": "낮음",
+    "qualityMedium": "보통",
+    "qualityHigh": "높음"
   },
   "shareCard": {
     "title": "인용구 공유",

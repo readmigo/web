@@ -38,7 +38,8 @@
       "freeBadge": "免費",
       "cta": "立即閱讀",
       "dismiss": "關閉"
-    }
+    },
+    "browseAll": "瀏覽全部書籍"
   },
   "audiobooks": {
     "recentlyListened": "最近收聽",
@@ -87,7 +88,9 @@
     "voiceSelector": "選擇聲音",
     "selectVoice": "選擇聲音",
     "previewVoice": "預覽 {name}",
-    "stopPreview": "停止預覽"
+    "stopPreview": "停止預覽",
+    "lyricsTab": "歌詞",
+    "loadingLyrics": "正在載入文字..."
   },
   "category": {
     "backToBookstore": "返回書城",
@@ -107,7 +110,18 @@
     "emptyTitle": "您的書架還是空的",
     "emptySubtitle": "去書城發現更多好書吧",
     "goToBookstore": "去書城看看",
-    "remove": "移除"
+    "remove": "移除",
+    "guestPromptTitle": "登入以查看您的書架",
+    "guestPromptSubtitle": "追蹤閱讀進度、收藏等更多內容",
+    "loginToView": "登入",
+    "edit": "編輯",
+    "done": "完成",
+    "deleteSelected": "刪除選取",
+    "confirmDeleteTitle": "移除書籍？",
+    "confirmDeleteDesc": "將從您的收藏中移除 {count} 本書。",
+    "cancel": "取消",
+    "confirm": "確認",
+    "browseAll": "瀏覽全部書籍"
   },
   "me": {
     "user": "用戶",
@@ -142,7 +156,12 @@
       "confirm": "確認",
       "zoom": "縮放"
     },
-    "subscriptionPro": "Pro 會員"
+    "subscriptionPro": "Pro 會員",
+    "followingAuthors": "追蹤的作者",
+    "signOutConfirmTitle": "登出？",
+    "signOutConfirmDesc": "您將登出目前的帳號。",
+    "signOutConfirm": "登出",
+    "signOutCancel": "取消"
   },
   "settings": {
     "appearance": "外觀",
@@ -194,6 +213,15 @@
     "simplifiedChinese": "簡體中文",
     "english": "English",
     "traditionalChinese": "繁體中文",
+    "spanish": "Español",
+    "french": "Français",
+    "portuguese": "Português",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "arabic": "العربية",
+    "indonesian": "Bahasa Indonesia",
+    "russian": "Русский",
+    "turkish": "Türkçe",
     "account": "帳戶",
     "accountDesc": "管理你的帳戶資訊",
     "email": "用戶電子郵件",
@@ -501,7 +529,11 @@
     "subscribe": "立即訂閱",
     "startTrial": "開始 7 天免費試用",
     "processing": "處理中...",
-    "restore": "恢復購買",
+    "restore": {
+      "success": "購買已成功恢復。",
+      "error": "無法恢復購買。",
+      "contactSupport": "聯絡客服"
+    },
     "terms": "服務條款",
     "privacy": "隱私政策",
     "plans": {
@@ -556,6 +588,98 @@
       "description": "您的訂閱正處於寬限期，請及時更新支付方式以保留 Pro 權益。",
       "descriptionWithDays": "您的訂閱將在 {days} 天後到期，請及時更新支付方式以保留 Pro 權益。",
       "fixPayment": "修復支付"
+    },
+    "close": "關閉",
+    "selectPlan": "選擇方案",
+    "checkoutError": "無法開始結帳，請重試。",
+    "cancelSubscription": "取消訂閱",
+    "cancelDialog": {
+      "step1Title": "確定要取消嗎？",
+      "loseAccess": "您將失去以下 Pro 功能：",
+      "keepPro": "保留 Pro",
+      "continueCancelling": "繼續取消",
+      "step2Title": "為何取消？",
+      "step2Desc": "您的意見有助於我們改進，請選擇原因。",
+      "confirm": "確認取消",
+      "cancelling": "取消中...",
+      "back": "返回",
+      "error": "發生錯誤，請重試。",
+      "features": {
+        "dataSync": "跨裝置同步",
+        "cloudBackup": "雲端備份",
+        "unlimitedAudio": "無限音頻",
+        "stats": "詳細統計",
+        "templates": "高級模板"
+      },
+      "reasons": {
+        "too_expensive": "太貴了",
+        "not_enough_content": "內容不夠",
+        "found_alternative": "找到了更好的替代品",
+        "technical_issues": "技術問題",
+        "not_using_enough": "使用頻率不夠",
+        "other": "其他原因"
+      }
+    },
+    "audioLimit": {
+      "title": "已達每日收聽上限",
+      "descGuest": "登入即可每天享有 30 分鐘免費音頻",
+      "descFree": "升級至 Pro 享無限每日收聽",
+      "used": "{used} / {limit} 分鐘已使用",
+      "perDay": "每天",
+      "loginCta": "登入",
+      "upgradeCta": "升級至 Pro",
+      "cancel": "稍後再說",
+      "dismiss": "關閉"
+    },
+    "page": {
+      "metaTitle": "訂閱",
+      "metaDescription": "管理您的 Readmigo 訂閱方案與付款",
+      "heading": "訂閱",
+      "subheading": "管理您的方案與付款資訊",
+      "backToSettings": "返回設定",
+      "currentPlan": "目前方案",
+      "currentPlanDesc": "您的有效訂閱和續訂詳情",
+      "planLabel": "方案",
+      "premiumTier": "高級方案",
+      "renewsOn": "續訂日",
+      "expiresOn": "到期日",
+      "autoRenewOn": "自動續訂已啟用",
+      "autoRenewOff": "自動續訂已停用",
+      "statusExpired": "您的訂閱已過期",
+      "statusCancelled": "訂閱已取消 — 存取權持續至到期",
+      "manageSubscription": "管理訂閱",
+      "upgradeToPro": "升級至 Pro",
+      "audioUsageTitle": "每日音頻使用量",
+      "audioUsageDesc": "免費用戶每天可享 30 分鐘音頻",
+      "dailyUsage": "今日用量",
+      "minutes": "分鐘",
+      "audioLimitReached": "已達每日上限。凌晨重置。",
+      "audioResetNote": "使用量每天凌晨（當地時間）重置",
+      "proFeaturesTitle": "Pro 功能",
+      "proFeaturesDesc": "Readmigo Pro 的完整功能",
+      "featureDataSync": "跨裝置同步",
+      "featureCloudBackup": "雲端備份",
+      "featureUnlimitedAudio": "無限音頻",
+      "featureStats": "詳細閱讀統計",
+      "featureTemplates": "高級模板",
+      "featureBookAccess": "完整書庫",
+      "featureOfflineReading": "離線閱讀",
+      "unlockAllFeatures": "解鎖所有 Pro 功能",
+      "manageTitle": "管理付款",
+      "manageDesc": "更新付款方式、查看帳單或取消",
+      "stripePortal": "開啟付款入口",
+      "faqTitle": "常見問題",
+      "faq1Q": "如何取消訂閱？",
+      "faq1A": "您可隨時透過付款入口或點擊上方「取消訂閱」取消。存取權持續至帳單期結束。",
+      "faq2Q": "可以更換方案嗎？",
+      "faq2A": "可以。開啟付款入口進行升級或降級。變更將於下一個帳單週期開始時生效。",
+      "faq3Q": "升級時會立即收費嗎？",
+      "faq3A": "升級時將按目前帳單期剩餘天數比例收費。降級於續訂時生效。",
+      "faq4Q": "如何申請退款？",
+      "faq4A": "退款資格取決於您的地區和付款方式。請在購買後 7 天內聯絡客服。",
+      "contactTitle": "需要協助？",
+      "contactDesc": "我們的支援團隊通常在 24 小時內回覆",
+      "contactButton": "聯絡客服"
     }
   },
   "onboarding": {
@@ -672,7 +796,58 @@
     "privacyPolicy": "隱私政策",
     "termsOfService": "服務條款",
     "copyright": "© 2025 Readmigo. All rights reserved.",
-    "madeWith": "Made with ❤️"
+    "madeWith": "Made with ❤️",
+    "changelog": {
+      "title": "最新消息",
+      "items": {
+        "v280_new1": "個人化年度閱讀報告",
+        "v280_new2": "社群廣場 — 與其他人分享閱讀心得",
+        "v280_imp1": "改善快取，章節載入更快",
+        "v280_fix1": "修正：TTS 聲音選擇器未儲存偏好設定",
+        "v270_new1": "離線閱讀 — 下載書籍，無需 Wi-Fi 即可閱讀",
+        "v270_imp1": "重新設計「我的」頁面，介面更清爽",
+        "v270_imp2": "改善有聲書章節導航",
+        "v270_fix1": "修正重新連線時進度同步問題",
+        "v260_new1": "有聲書歌詞跟讀模式",
+        "v260_new2": "睡眠計時器新增章節結束選項",
+        "v260_fix1": "修正分頁模式下刪除書籤問題",
+        "v260_fix2": "解決 Token 到期後登入循環問題",
+        "v250_new1": "間隔重複法單字複習",
+        "v250_imp1": "閱讀器過場動畫更順暢",
+        "v250_fix1": "修正：螢光筆顏色無法保留",
+        "v240_new1": "訂閱管理頁面",
+        "v240_new2": "推送通知支援",
+        "v240_imp1": "搜尋結果改善，新增作者卡片",
+        "v230_new1": "作者詳情頁，含簡介與作品",
+        "v230_imp1": "書單載入更快，加入分頁",
+        "v230_fix1": "修正背景後音頻位置重置",
+        "v220_new1": "閱讀器支援深色模式",
+        "v220_imp1": "字型與版面自訂功能增強",
+        "v220_fix1": "修正目錄捲動位置",
+        "v220_fix2": "解決部分瀏覽器頭像上傳失敗",
+        "v210_new1": "佳句動態 — 發現並收藏書中名句",
+        "v210_new2": "閱讀統計儀表板",
+        "v210_imp1": "App 啟動速度提升 40%"
+      }
+    },
+    "licenses": {
+      "label": "開源授權",
+      "title": "開源授權",
+      "desc": "Readmigo 建立在優秀的開源專案之上。"
+    },
+    "acknowledgments": {
+      "title": "致謝",
+      "teamTitle": "團隊",
+      "team": "由 Readmigo 團隊用心打造 — 致力於幫助全球讀者享受英語文學。",
+      "contentTitle": "內容來源",
+      "content1": "Project Gutenberg — 超過 70,000 本免費公共領域電子書",
+      "content2": "LibriVox — 由志願者朗讀的免費公共領域有聲書",
+      "content3": "Standard Ebooks — 精心排版的公共領域版本",
+      "specialTitle": "特別感謝",
+      "special1": "我們早期的測試用戶，感謝他們寶貴的反饋和耐心",
+      "special2": "開源社群提供的工具讓這款 App 得以運作",
+      "special3": "每一位選擇 Readmigo 作為閱讀夥伴的讀者"
+    }
   },
   "notifications": {
     "empty": "暫無通知",
@@ -773,7 +948,15 @@
   },
   "author": {
     "follow": "關注",
-    "following": "已關注",
+    "following": {
+      "title": "追蹤的作者",
+      "count": "{count} 位作者",
+      "bookCount": "{count} 本書",
+      "unfollow": "取消追蹤",
+      "emptyTitle": "尚未追蹤任何人",
+      "emptyDesc": "追蹤作者後將顯示於此",
+      "exploreAuthors": "探索作者"
+    },
     "works": "作品",
     "quotes": "名言",
     "followers": "關注",
@@ -831,7 +1014,9 @@
     "eventCategoryCultural": "文化",
     "eventCategoryPolitical": "政治",
     "eventCategoryScientific": "科學",
-    "browseAllAuthorQuotes": "瀏覽該作者的所有名言"
+    "browseAllAuthorQuotes": "瀏覽該作者的所有名言",
+    "followingLabel": "已追蹤",
+    "unfollow": "取消追蹤"
   },
   "wordLookup": {
     "noDefinition": "暫無釋義",
@@ -1012,7 +1197,10 @@
     "bookstoreDesc": "探索新書籍",
     "settings": "設定",
     "settingsDesc": "管理應用設定",
-    "viewMore": "查看更多"
+    "viewMore": "查看更多",
+    "suggestions": "建議",
+    "popularSearches": "熱門搜尋",
+    "trendingSearches": "趨勢"
   },
   "offline": {
     "downloadForOffline": "下載離線閱讀",
@@ -1067,7 +1255,12 @@
     "cellularWarning": "使用行動數據",
     "cellularWarningDesc": "使用行動數據下載可能產生費用，是否繼續？",
     "doNotAskAgain": "不再提示",
-    "continueDownload": "繼續"
+    "continueDownload": "繼續",
+    "downloadQuality": "下載品質",
+    "downloadQualityDesc": "較低品質佔用較少儲存空間",
+    "qualityLow": "低",
+    "qualityMedium": "中",
+    "qualityHigh": "高"
   },
   "shareCard": {
     "title": "分享卡片",

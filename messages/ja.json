@@ -38,7 +38,8 @@
       "freeBadge": "無料",
       "cta": "今すぐ読む",
       "dismiss": "閉じる"
-    }
+    },
+    "browseAll": "すべての本を見る"
   },
   "audiobooks": {
     "recentlyListened": "最近聴いた",
@@ -87,7 +88,9 @@
     "voiceSelector": "声を選択",
     "selectVoice": "声を選択",
     "previewVoice": "{name} をプレビュー",
-    "stopPreview": "プレビューを停止"
+    "stopPreview": "プレビューを停止",
+    "lyricsTab": "歌詞",
+    "loadingLyrics": "テキストを読み込み中..."
   },
   "category": {
     "backToBookstore": "書店に戻る",
@@ -107,7 +110,18 @@
     "emptyTitle": "本棚が空です",
     "emptySubtitle": "書店を探索して素晴らしい書籍を見つけよう",
     "goToBookstore": "書店を見る",
-    "remove": "削除"
+    "remove": "削除",
+    "guestPromptTitle": "ライブラリを見るにはサインインしてください",
+    "guestPromptSubtitle": "読書の進捗、お気に入りなどを管理できます",
+    "loginToView": "サインイン",
+    "edit": "編集",
+    "done": "完了",
+    "deleteSelected": "選択した項目を削除",
+    "confirmDeleteTitle": "本を削除しますか？",
+    "confirmDeleteDesc": "{count}冊をお気に入りから削除します。",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "browseAll": "すべての本を見る"
   },
   "me": {
     "user": "ユーザー",
@@ -142,7 +156,12 @@
       "confirm": "確認",
       "zoom": "ズーム"
     },
-    "subscriptionPro": "Proメンバー"
+    "subscriptionPro": "Proメンバー",
+    "followingAuthors": "フォロー中の著者",
+    "signOutConfirmTitle": "サインアウトしますか？",
+    "signOutConfirmDesc": "アカウントからサインアウトします。",
+    "signOutConfirm": "サインアウト",
+    "signOutCancel": "キャンセル"
   },
   "settings": {
     "appearance": "外観",
@@ -194,6 +213,15 @@
     "simplifiedChinese": "简体中文",
     "english": "English",
     "traditionalChinese": "繁體中文",
+    "spanish": "Español",
+    "french": "Français",
+    "portuguese": "Português",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "arabic": "العربية",
+    "indonesian": "Bahasa Indonesia",
+    "russian": "Русский",
+    "turkish": "Türkçe",
     "account": "アカウント",
     "accountDesc": "アカウントを管理",
     "email": "メールアドレス",
@@ -591,6 +619,67 @@
       "description": "サブスクリプションは猶予期間中です。Pro アクセスを維持するには、お支払い方法を更新してください。",
       "descriptionWithDays": "サブスクリプションはあと {days} 日で終了します。Pro アクセスを維持するには、お支払い方法を更新してください。",
       "fixPayment": "支払いを修正"
+    },
+    "audioLimit": {
+      "title": "1日の視聴上限に達しました",
+      "descGuest": "サインインして毎日30分の無料音声を取得",
+      "descFree": "Proにアップグレードして無制限に聴きましょう",
+      "used": "{used} / {limit}分使用済み",
+      "perDay": "1日あたり",
+      "loginCta": "サインイン",
+      "upgradeCta": "Proにアップグレード",
+      "cancel": "後で",
+      "dismiss": "閉じる"
+    },
+    "page": {
+      "metaTitle": "サブスクリプション",
+      "metaDescription": "Readmigoのサブスクリプションプランと請求を管理",
+      "heading": "サブスクリプション",
+      "subheading": "プランと請求情報を管理",
+      "backToSettings": "設定に戻る",
+      "currentPlan": "現在のプラン",
+      "currentPlanDesc": "有効なサブスクリプションと更新の詳細",
+      "planLabel": "プラン",
+      "premiumTier": "プレミアムティア",
+      "renewsOn": "更新日",
+      "expiresOn": "有効期限",
+      "autoRenewOn": "自動更新オン",
+      "autoRenewOff": "自動更新オフ",
+      "statusExpired": "サブスクリプションの有効期限が切れています",
+      "statusCancelled": "サブスクリプションをキャンセル済 — 有効期限まで利用可能",
+      "manageSubscription": "サブスクリプション管理",
+      "upgradeToPro": "Proにアップグレード",
+      "audioUsageTitle": "1日の音声使用状況",
+      "audioUsageDesc": "無料ユーザーは1日30分の音声が利用できます",
+      "dailyUsage": "本日の使用量",
+      "minutes": "分",
+      "audioLimitReached": "1日の上限に達しました。深夜にリセットされます。",
+      "audioResetNote": "使用量は毎日深夜（現地時間）にリセットされます",
+      "proFeaturesTitle": "Pro機能",
+      "proFeaturesDesc": "Readmigo Proに含まれるすべての機能",
+      "featureDataSync": "デバイス間同期",
+      "featureCloudBackup": "クラウドバックアップ",
+      "featureUnlimitedAudio": "無制限音声",
+      "featureStats": "詳細な読書統計",
+      "featureTemplates": "プレミアムテンプレート",
+      "featureBookAccess": "完全な書籍ライブラリ",
+      "featureOfflineReading": "オフライン読書",
+      "unlockAllFeatures": "すべてのPro機能を解放",
+      "manageTitle": "請求管理",
+      "manageDesc": "支払い方法の更新、請求書の確認、またはキャンセル",
+      "stripePortal": "請求ポータルを開く",
+      "faqTitle": "よくある質問",
+      "faq1Q": "サブスクリプションをキャンセルするには？",
+      "faq1A": "請求ポータルから、または上の「サブスクリプションをキャンセル」からいつでもキャンセルできます。請求期間終了まで引き続きご利用いただけます。",
+      "faq2Q": "プランを変更できますか？",
+      "faq2A": "はい。請求ポータルを開いてプランのアップグレードまたはダウングレードができます。変更は次の請求サイクルの開始時に有効になります。",
+      "faq3Q": "アップグレード時にすぐに請求されますか？",
+      "faq3A": "アップグレード時には、現在の請求期間の残りに対する日割り料金が請求されます。ダウングレードは更新時に有効になります。",
+      "faq4Q": "返金を受けるには？",
+      "faq4A": "返金の可否は地域と支払い方法によります。購入後7日以内にサポートチームにご連絡ください。",
+      "contactTitle": "お困りですか？",
+      "contactDesc": "サポートチームは通常24時間以内に返答します",
+      "contactButton": "サポートに連絡"
     }
   },
   "onboarding": {
@@ -707,7 +796,58 @@
     "privacyPolicy": "プライバシーポリシー",
     "termsOfService": "利用規約",
     "copyright": "© 2025 Readmigo. All rights reserved.",
-    "madeWith": "Made with ❤️"
+    "madeWith": "Made with ❤️",
+    "changelog": {
+      "title": "新着情報",
+      "items": {
+        "v280_new1": "パーソナライズされたインサイト付き年間読書レポート",
+        "v280_new2": "コミュニティアゴラ — 読書の感想を共有しよう",
+        "v280_imp1": "キャッシュ改善により章の読み込みが高速化",
+        "v280_fix1": "修正: TTS音声セレクターが設定を保存しなかった問題",
+        "v270_new1": "オフライン読書 — Wi-Fiなしで読むために本をダウンロード",
+        "v270_imp1": "よりすっきりしたレイアウトで「マイ」ページをリデザイン",
+        "v270_imp2": "オーディオブックの章ナビゲーションを改善",
+        "v270_fix1": "再接続時の進捗同期の問題を修正",
+        "v260_new1": "オーディオブックの歌詞追従モード",
+        "v260_new2": "章末オプション付きスリープタイマー",
+        "v260_fix1": "ページングモードでのブックマーク削除を修正",
+        "v260_fix2": "トークン期限切れ時のログインループを解決",
+        "v250_new1": "間隔反復法によるボキャブラリーレビュー",
+        "v250_imp1": "リーダーの画面遷移とアニメーションをよりスムーズに",
+        "v250_fix1": "修正: ハイライトカラーが保持されなかった問題",
+        "v240_new1": "サブスクリプション管理ページ",
+        "v240_new2": "プッシュ通知のサポート",
+        "v240_imp1": "著者カード付き検索結果を改善",
+        "v230_new1": "略歴と作品付きの著者詳細ページ",
+        "v230_imp1": "ページネーション付き書籍リストの読み込みを高速化",
+        "v230_fix1": "バックグラウンド移行後の音声位置リセットを修正",
+        "v220_new1": "リーダーのダークモードサポート",
+        "v220_imp1": "フォントとレイアウトのカスタマイズを強化",
+        "v220_fix1": "目次のスクロール位置を修正",
+        "v220_fix2": "一部ブラウザでのアバターアップロード失敗を解決",
+        "v210_new1": "名言フィード — 本の名言を発見して保存",
+        "v210_new2": "読書統計ダッシュボード",
+        "v210_imp1": "アプリ起動時間を40%短縮"
+      }
+    },
+    "licenses": {
+      "label": "オープンソースライセンス",
+      "title": "オープンソースライセンス",
+      "desc": "Readmigoは優れたオープンソースプロジェクトの上に構築されています。"
+    },
+    "acknowledgments": {
+      "title": "謝辞",
+      "teamTitle": "チーム",
+      "team": "Readmigoチームが丁寧に作成 — 世界中の読者が英語文学を楽しめるよう支援します。",
+      "contentTitle": "コンテンツソース",
+      "content1": "Project Gutenberg — 70,000冊以上の無料パブリックドメイン電子書籍",
+      "content2": "LibriVox — ボランティアが読む無料パブリックドメインオーディオブック",
+      "content3": "Standard Ebooks — 丁寧にフォーマットされたパブリックドメイン版",
+      "specialTitle": "特別な感謝",
+      "special1": "貴重なフィードバックと忍耐をくれた初期ベータユーザーの皆さんへ",
+      "special2": "このアプリを支えるツールを提供してくれたオープンソースコミュニティへ",
+      "special3": "Readmigoを読書の友に選んでくれたすべての読者へ"
+    }
   },
   "notifications": {
     "empty": "通知はありません",
@@ -808,7 +948,15 @@
   },
   "author": {
     "follow": "フォロー",
-    "following": "フォロー中",
+    "following": {
+      "title": "フォロー中の著者",
+      "count": "{count}人の著者",
+      "bookCount": "{count}冊",
+      "unfollow": "フォロー解除",
+      "emptyTitle": "まだフォローしていません",
+      "emptyDesc": "著者をフォローするとここに表示されます",
+      "exploreAuthors": "著者を探す"
+    },
     "works": "作品",
     "quotes": "名言",
     "followers": "フォロワー",
@@ -866,7 +1014,9 @@
     "eventCategoryCultural": "文化",
     "eventCategoryPolitical": "政治",
     "eventCategoryScientific": "科学",
-    "browseAllAuthorQuotes": "この著者のすべての名言を見る"
+    "browseAllAuthorQuotes": "この著者のすべての名言を見る",
+    "followingLabel": "フォロー中",
+    "unfollow": "フォロー解除"
   },
   "wordLookup": {
     "noDefinition": "定義が見つかりません",
@@ -1047,7 +1197,10 @@
     "bookstoreDesc": "新しい書籍を発見",
     "settings": "設定",
     "settingsDesc": "アプリの設定を管理",
-    "viewMore": "もっと見る"
+    "viewMore": "もっと見る",
+    "suggestions": "候補",
+    "popularSearches": "人気の検索",
+    "trendingSearches": "トレンド"
   },
   "offline": {
     "downloadForOffline": "オフライン用にダウンロード",
@@ -1102,7 +1255,12 @@
     "cellularWarning": "モバイルデータを使用",
     "cellularWarningDesc": "モバイルデータでダウンロードすると料金が発生する場合があります。続けますか？",
     "doNotAskAgain": "今後確認しない",
-    "continueDownload": "続ける"
+    "continueDownload": "続ける",
+    "downloadQuality": "ダウンロード品質",
+    "downloadQualityDesc": "低品質はストレージ使用量が少ない",
+    "qualityLow": "低",
+    "qualityMedium": "中",
+    "qualityHigh": "高"
   },
   "shareCard": {
     "title": "引用をシェア",

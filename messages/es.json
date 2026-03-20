@@ -38,7 +38,8 @@
       "freeBadge": "Gratis",
       "cta": "Leer ahora",
       "dismiss": "Cerrar"
-    }
+    },
+    "browseAll": "Ver todos los libros"
   },
   "audiobooks": {
     "recentlyListened": "Escuchados recientemente",
@@ -87,7 +88,9 @@
     "voiceSelector": "Seleccionar voz",
     "selectVoice": "Seleccionar voz",
     "previewVoice": "Vista previa de {name}",
-    "stopPreview": "Detener vista previa"
+    "stopPreview": "Detener vista previa",
+    "lyricsTab": "Letra",
+    "loadingLyrics": "Cargando texto..."
   },
   "category": {
     "backToBookstore": "Volver a la librería",
@@ -107,7 +110,18 @@
     "emptyTitle": "Tu biblioteca está vacía",
     "emptySubtitle": "Explora la librería para encontrar libros increíbles",
     "goToBookstore": "Ir a la librería",
-    "remove": "Eliminar"
+    "remove": "Eliminar",
+    "guestPromptTitle": "Inicia sesión para ver tu biblioteca",
+    "guestPromptSubtitle": "Rastrea tu progreso de lectura, favoritos y más",
+    "loginToView": "Iniciar sesión",
+    "edit": "Editar",
+    "done": "Listo",
+    "deleteSelected": "Eliminar seleccionados",
+    "confirmDeleteTitle": "¿Eliminar libros?",
+    "confirmDeleteDesc": "Esto eliminará {count} libro(s) de tus favoritos.",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "browseAll": "Ver todos los libros"
   },
   "me": {
     "user": "Usuario",
@@ -142,7 +156,12 @@
       "confirm": "Confirmar",
       "zoom": "Zoom"
     },
-    "subscriptionPro": "Miembro Pro"
+    "subscriptionPro": "Miembro Pro",
+    "followingAuthors": "Autores seguidos",
+    "signOutConfirmTitle": "¿Cerrar sesión?",
+    "signOutConfirmDesc": "Cerrarás sesión en tu cuenta.",
+    "signOutConfirm": "Cerrar sesión",
+    "signOutCancel": "Cancelar"
   },
   "settings": {
     "appearance": "Apariencia",
@@ -194,6 +213,15 @@
     "simplifiedChinese": "简体中文",
     "english": "English",
     "traditionalChinese": "繁體中文",
+    "spanish": "Español",
+    "french": "Français",
+    "portuguese": "Português",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "arabic": "العربية",
+    "indonesian": "Bahasa Indonesia",
+    "russian": "Русский",
+    "turkish": "Türkçe",
     "account": "Cuenta",
     "accountDesc": "Gestiona tu cuenta",
     "email": "Correo electrónico",
@@ -591,6 +619,67 @@
       "description": "Tu suscripción está en período de gracia. Actualiza tu método de pago para mantener el acceso Pro.",
       "descriptionWithDays": "Tu suscripción expira en {days} día(s). Actualiza tu método de pago para mantener el acceso Pro.",
       "fixPayment": "Arreglar pago"
+    },
+    "audioLimit": {
+      "title": "Límite de audio diario alcanzado",
+      "descGuest": "Inicia sesión para obtener 30 minutos de audio gratuito al día",
+      "descFree": "Actualiza a Pro para escuchar sin límite",
+      "used": "{used} / {limit} min usados",
+      "perDay": "por día",
+      "loginCta": "Iniciar sesión",
+      "upgradeCta": "Actualizar a Pro",
+      "cancel": "Quizás después",
+      "dismiss": "Cerrar"
+    },
+    "page": {
+      "metaTitle": "Suscripción",
+      "metaDescription": "Gestiona tu plan de suscripción y facturación de Readmigo",
+      "heading": "Suscripción",
+      "subheading": "Gestiona tu plan y datos de facturación",
+      "backToSettings": "Volver a ajustes",
+      "currentPlan": "Plan actual",
+      "currentPlanDesc": "Tu suscripción activa y detalles de renovación",
+      "planLabel": "Plan",
+      "premiumTier": "Nivel premium",
+      "renewsOn": "Se renueva el",
+      "expiresOn": "Expira el",
+      "autoRenewOn": "Renovación automática activada",
+      "autoRenewOff": "Renovación automática desactivada",
+      "statusExpired": "Tu suscripción ha expirado",
+      "statusCancelled": "Suscripción cancelada — el acceso continúa hasta la expiración",
+      "manageSubscription": "Gestionar suscripción",
+      "upgradeToPro": "Actualizar a Pro",
+      "audioUsageTitle": "Uso diario de audio",
+      "audioUsageDesc": "Los usuarios gratuitos tienen 30 minutos de audio por día",
+      "dailyUsage": "Uso de hoy",
+      "minutes": "min",
+      "audioLimitReached": "Límite diario alcanzado. Se restablece a medianoche.",
+      "audioResetNote": "El uso se restablece cada día a medianoche (hora local)",
+      "proFeaturesTitle": "Funciones Pro",
+      "proFeaturesDesc": "Todo lo incluido en Readmigo Pro",
+      "featureDataSync": "Sincronización entre dispositivos",
+      "featureCloudBackup": "Copia de seguridad en la nube",
+      "featureUnlimitedAudio": "Audio ilimitado",
+      "featureStats": "Estadísticas de lectura detalladas",
+      "featureTemplates": "Plantillas premium",
+      "featureBookAccess": "Biblioteca completa",
+      "featureOfflineReading": "Lectura sin conexión",
+      "unlockAllFeatures": "Desbloquear todas las funciones Pro",
+      "manageTitle": "Gestionar facturación",
+      "manageDesc": "Actualizar método de pago, ver facturas o cancelar",
+      "stripePortal": "Abrir portal de facturación",
+      "faqTitle": "Preguntas frecuentes",
+      "faq1Q": "¿Cómo cancelo mi suscripción?",
+      "faq1A": "Puedes cancelar en cualquier momento desde el portal de facturación o tocando \"Cancelar suscripción\" arriba. El acceso continúa hasta el final de tu período de facturación.",
+      "faq2Q": "¿Puedo cambiar de plan?",
+      "faq2A": "Sí. Abre el portal de facturación para mejorar o reducir tu plan. Los cambios se aplican al inicio de tu próximo ciclo.",
+      "faq3Q": "¿Se me cobrará inmediatamente al actualizar?",
+      "faq3A": "Al actualizar, se te cobra un importe prorrateado por el resto de tu período actual. Las reducciones entran en vigor en la renovación.",
+      "faq4Q": "¿Cómo obtengo un reembolso?",
+      "faq4A": "El derecho a reembolso depende de tu región y método de pago. Contacta con el soporte en los 7 días siguientes a la compra.",
+      "contactTitle": "¿Necesitas ayuda?",
+      "contactDesc": "Nuestro equipo de soporte suele responder en 24 horas",
+      "contactButton": "Contactar con soporte"
     }
   },
   "onboarding": {
@@ -707,7 +796,58 @@
     "privacyPolicy": "Política de privacidad",
     "termsOfService": "Términos de servicio",
     "copyright": "© 2025 Readmigo. Todos los derechos reservados.",
-    "madeWith": "Hecho con ❤️"
+    "madeWith": "Hecho con ❤️",
+    "changelog": {
+      "title": "Novedades",
+      "items": {
+        "v280_new1": "Informe anual de lectura con estadísticas personalizadas",
+        "v280_new2": "Agora comunitario — comparte tus pensamientos de lectura",
+        "v280_imp1": "Carga de capítulos más rápida con caché mejorado",
+        "v280_fix1": "Corregido: el selector de voz TTS no guardaba preferencias",
+        "v270_new1": "Lectura sin conexión — descarga libros para leer sin Wi-Fi",
+        "v270_imp1": "Página \"Yo\" rediseñada con diseño más limpio",
+        "v270_imp2": "Mejor navegación por capítulos de audiolibros",
+        "v270_fix1": "Corregidos problemas de sincronización de progreso al reconectarse",
+        "v260_new1": "Modo karaoke de audiolibros",
+        "v260_new2": "Temporizador de sueño con opción al final del capítulo",
+        "v260_fix1": "Corregida la eliminación de marcadores en modo paginado",
+        "v260_fix2": "Resuelto el bucle de inicio de sesión al expirar el token",
+        "v250_new1": "Repaso de vocabulario con repetición espaciada",
+        "v250_imp1": "Transiciones y animaciones más suaves en el lector",
+        "v250_fix1": "Corregido: los colores de resaltado no persistían",
+        "v240_new1": "Página de gestión de suscripciones",
+        "v240_new2": "Soporte de notificaciones push",
+        "v240_imp1": "Resultados de búsqueda mejorados con tarjetas de autor",
+        "v230_new1": "Páginas de autor con biografía y obras",
+        "v230_imp1": "Carga de listas de libros más rápida con paginación",
+        "v230_fix1": "Corregido el reinicio de posición de audio al minimizar",
+        "v220_new1": "Soporte de modo oscuro en el lector",
+        "v220_imp1": "Personalización mejorada de fuente y diseño",
+        "v220_fix1": "Corregida la posición de desplazamiento del índice",
+        "v220_fix2": "Resueltos fallos de carga de avatar en algunos navegadores",
+        "v210_new1": "Feed de citas — descubre y guarda citas de libros",
+        "v210_new2": "Panel de estadísticas de lectura",
+        "v210_imp1": "Tiempo de inicio de la app reducido un 40%"
+      }
+    },
+    "licenses": {
+      "label": "Licencias de código abierto",
+      "title": "Licencias de código abierto",
+      "desc": "Readmigo está construido sobre grandes proyectos de código abierto."
+    },
+    "acknowledgments": {
+      "title": "Agradecimientos",
+      "teamTitle": "Equipo",
+      "team": "Construido con cuidado por el equipo de Readmigo — dedicado a ayudar a los lectores del mundo a disfrutar de la literatura en inglés.",
+      "contentTitle": "Fuentes de contenido",
+      "content1": "Project Gutenberg — más de 70.000 ebooks gratuitos de dominio público",
+      "content2": "LibriVox — audiolibros gratuitos de dominio público leídos por voluntarios",
+      "content3": "Standard Ebooks — ediciones cuidadosamente formateadas de dominio público",
+      "specialTitle": "Agradecimientos especiales",
+      "special1": "A nuestros primeros usuarios beta por sus valiosos comentarios y paciencia",
+      "special2": "A la comunidad de código abierto por las herramientas que impulsan esta app",
+      "special3": "A cada lector que eligió Readmigo como su compañero de lectura"
+    }
   },
   "notifications": {
     "empty": "Sin notificaciones",
@@ -808,7 +948,15 @@
   },
   "author": {
     "follow": "Seguir",
-    "following": "Siguiendo",
+    "following": {
+      "title": "Autores seguidos",
+      "count": "{count} autores",
+      "bookCount": "{count} libros",
+      "unfollow": "Dejar de seguir",
+      "emptyTitle": "Sin seguidos aún",
+      "emptyDesc": "Sigue autores para verlos aquí",
+      "exploreAuthors": "Explorar autores"
+    },
     "works": "Obras",
     "quotes": "Citas",
     "followers": "Seguidores",
@@ -866,7 +1014,9 @@
     "eventCategoryCultural": "Cultural",
     "eventCategoryPolitical": "Político",
     "eventCategoryScientific": "Científico",
-    "browseAllAuthorQuotes": "Ver todas las citas de este autor"
+    "browseAllAuthorQuotes": "Ver todas las citas de este autor",
+    "followingLabel": "Siguiendo",
+    "unfollow": "Dejar de seguir"
   },
   "wordLookup": {
     "noDefinition": "No se encontró definición",
@@ -1047,7 +1197,10 @@
     "bookstoreDesc": "Descubrir nuevos libros",
     "settings": "Configuración",
     "settingsDesc": "Gestionar configuración de la app",
-    "viewMore": "Ver más"
+    "viewMore": "Ver más",
+    "suggestions": "Sugerencias",
+    "popularSearches": "Búsquedas populares",
+    "trendingSearches": "Tendencias"
   },
   "offline": {
     "downloadForOffline": "Descargar sin conexión",
@@ -1102,7 +1255,12 @@
     "cellularWarning": "Usando datos móviles",
     "cellularWarningDesc": "Descargar con datos móviles puede generar cargos. ¿Deseas continuar?",
     "doNotAskAgain": "No volver a preguntar",
-    "continueDownload": "Continuar"
+    "continueDownload": "Continuar",
+    "downloadQuality": "Calidad de descarga",
+    "downloadQualityDesc": "La calidad más baja usa menos espacio de almacenamiento",
+    "qualityLow": "Baja",
+    "qualityMedium": "Media",
+    "qualityHigh": "Alta"
   },
   "shareCard": {
     "title": "Compartir cita",
