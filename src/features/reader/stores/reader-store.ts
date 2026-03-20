@@ -387,8 +387,12 @@ export const useReaderStore = create<ReaderState & ReaderActions>()(
 
         trackEvent(highlight.note ? 'annotation_created' : 'highlight_created', {
           book_id: highlight.userBookId,
+          chapter_id: highlight.chapterId,
           color: highlight.color,
+          style: highlight.style,
           text_length: highlight.selectedText.length,
+          has_note: !!highlight.note,
+          platform: 'Web',
         });
 
         // Optimistic update - add to local state immediately
