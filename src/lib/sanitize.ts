@@ -1,3 +1,5 @@
+'use client';
+
 import DOMPurify, { type Config } from 'isomorphic-dompurify';
 
 const SANITIZE_CONFIG: Config = {
