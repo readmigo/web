@@ -112,18 +112,50 @@ export class AudioManager {
     }
   }
 
+  // Track current blob URL for cleanup
+  private currentBlobUrl: string | null = null;
+
+  private revokeBlobUrl(): void {
+    if (this.currentBlobUrl) {
+      URL.revokeObjectURL(this.currentBlobUrl);
+      this.currentBlobUrl = null;
+    }
+  }
+
   /**
-   * Load an audio source
+   * Load an audio source.
+   * Cross-origin URLs are fetched as Blob to bypass Service Worker interception.
    */
-  load(src: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (!this.audio) {
-        reject(new Error('Audio not supported'));
-        return;
+  async load(src: string): Promise<void> {
+    if (!this.audio) {
+      throw new Error('Audio not supported');
+    }
+
+    log.audiobook.info('[AudioManager] Loading audio', { src });
+    this.revokeBlobUrl();
+
+    // For cross-origin URLs (CDN), fetch as blob to bypass SW
+    let audioSrc = src;
+    if (src.startsWith('http') && !src.startsWith(location.origin)) {
+      try {
+        log.audiobook.debug('[AudioManager] Fetching as blob to bypass SW', { src });
+        const response = await fetch(src, { mode: 'cors' });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} ${response.statusText}`);
+        }
+        const blob = await response.blob();
+        audioSrc = URL.createObjectURL(blob);
+        this.currentBlobUrl = audioSrc;
+      } catch (error) {
+        log.audiobook.error('[AudioManager] Blob fetch failed', {
+          src,
+          error: (error as Error).message,
+        });
+        throw error;
       }
+    }
 
-      log.audiobook.info('[AudioManager] Loading audio', { src });
-
+    return new Promise((resolve, reject) => {
       const handleCanPlay = () => {
         this.audio?.removeEventListener('canplay', handleCanPlay);
         this.audio?.removeEventListener('error', handleError);
@@ -146,10 +178,10 @@ export class AudioManager {
         reject(new Error(errorMessage));
       };
 
-      this.audio.addEventListener('canplay', handleCanPlay);
-      this.audio.addEventListener('error', handleError);
-      this.audio.src = src;
-      this.audio.load();
+      this.audio!.addEventListener('canplay', handleCanPlay);
+      this.audio!.addEventListener('error', handleError);
+      this.audio!.src = audioSrc;
+      this.audio!.load();
     });
   }
 
@@ -467,6 +499,7 @@ export class AudioManager {
   destroy(): void {
     this.stopTimeUpdateInterval();
     this.clearParagraphState();
+    this.revokeBlobUrl();
     if (this.audio) {
       this.audio.pause();
       this.audio.src = '';
