@@ -360,6 +360,11 @@
     "emailInvalid": "请输入有效的邮箱地址",
     "passwordTooShort": "密码至少需要 8 个字符",
     "signingIn": "登录中...",
+    "signInPhone": "手机号登录",
+    "moreOptions": "更多登录方式",
+    "startReading": "开始阅读",
+    "byUsing": "使用 Readmigo 即表示你同意",
+    "andThe": "和",
     "loginFeatures": {
       "library": {
         "title": "登录后查看书库",

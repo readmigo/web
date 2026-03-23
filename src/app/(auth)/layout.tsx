@@ -13,22 +13,25 @@ export default async function AuthLayout({
       <main className="flex flex-1 items-center justify-center p-4">
         {children}
       </main>
-      <footer className="flex items-center justify-center gap-4 py-4 text-sm text-white/60">
-        <Link
-          href="https://readmigo.app/terms?utm_source=web_app&utm_medium=referral&utm_campaign=auth_footer"
-          target="_blank"
-          className="hover:text-white/80 transition-colors"
-        >
-          {t('termsOfService')}
-        </Link>
-        <span>·</span>
-        <Link
-          href="https://readmigo.app/privacy?utm_source=web_app&utm_medium=referral&utm_campaign=auth_footer"
-          target="_blank"
-          className="hover:text-white/80 transition-colors"
-        >
-          {t('privacyPolicy')}
-        </Link>
+      <footer className="flex flex-col items-center gap-1 px-6 py-4 text-center text-xs text-white/50">
+        <p>
+          {t('byUsing')}{' '}
+          <Link
+            href="https://readmigo.app/terms?utm_source=web_app&utm_medium=referral&utm_campaign=auth_footer"
+            target="_blank"
+            className="text-white/70 underline underline-offset-2 hover:text-white/90 transition-colors"
+          >
+            {t('termsOfService')}
+          </Link>
+          {' '}{t('andThe')}{' '}
+          <Link
+            href="https://readmigo.app/privacy?utm_source=web_app&utm_medium=referral&utm_campaign=auth_footer"
+            target="_blank"
+            className="text-white/70 underline underline-offset-2 hover:text-white/90 transition-colors"
+          >
+            {t('privacyPolicy')}
+          </Link>
+        </p>
       </footer>
     </div>
   );

@@ -360,6 +360,11 @@
     "emailInvalid": "Please enter a valid email address",
     "passwordTooShort": "Password must be at least 8 characters",
     "signingIn": "Signing in...",
+    "signInPhone": "Sign in with Phone",
+    "moreOptions": "More sign-in options",
+    "startReading": "Start Reading",
+    "byUsing": "By using Readmigo, you agree to our",
+    "andThe": "and",
     "loginFeatures": {
       "library": {
         "title": "Sign In to View Library",
