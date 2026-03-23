@@ -128,16 +128,31 @@ export function useAudiobookWithProgress(audiobookId: string | undefined) {
         });
         try {
           log.audiobook.debug('[detail] trying fallback /audiobooks/{id}', { audiobookId });
-          const response = await apiClient.get<{ data: Audiobook }>(
+          const response = await apiClient.get<{ data?: Audiobook } & Partial<Audiobook>>(
             `/audiobooks/${audiobookId}`,
             { noRedirectOn401: true }
           );
+          log.audiobook.debug('[detail] fallback raw response keys', {
+            audiobookId,
+            keys: Object.keys(response),
+            hasDataField: 'data' in response && !!response.data,
+            hasIdField: 'id' in response && !!response.id,
+          });
+          // Support both { data: Audiobook } and direct Audiobook response
+          const audiobook = response.data ?? (response.id ? response as unknown as Audiobook : null);
           log.audiobook.info('[detail] fallback succeeded', {
             audiobookId,
-            hasData: !!response.data,
-            title: response.data?.title,
+            hasData: !!audiobook,
+            title: audiobook?.title,
           });
-          return response.data as AudiobookWithProgress;
+          if (!audiobook) {
+            log.audiobook.error('[detail] fallback response has no audiobook data', {
+              audiobookId,
+              responseSnippet: JSON.stringify(response).slice(0, 300),
+            });
+            throw new Error('Audiobook not found in response');
+          }
+          return audiobook as AudiobookWithProgress;
         } catch (fallbackError) {
           log.audiobook.error('[detail] fallback also failed', {
             audiobookId,
