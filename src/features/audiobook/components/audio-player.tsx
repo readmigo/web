@@ -1,23 +1,20 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { ChevronDown, List, AlignLeft, Heart, Timer, Gauge } from 'lucide-react';
+import { ChevronDown, List, AlignLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useAudioPlayerStore, formatTime, formatDuration } from '../stores/audio-player-store';
-import { useWhispersyncFromAudiobook } from '../hooks/use-whispersync';
+import { useAudioPlayerStore } from '../stores/audio-player-store';
 import { useDanmaku, useSendDanmaku } from '../hooks/use-danmaku';
 import { PlayerControls } from './player-controls';
 import { ProgressSlider } from './progress-slider';
 import { SpeedSelector } from './speed-selector';
 import { SleepTimer } from './sleep-timer';
 import { ChapterList } from './chapter-list';
-import { WhispersyncToBook } from './whispersync-banner';
 import { DanmakuOverlay } from './danmaku-overlay';
 import { SyncedReaderView } from './synced-reader-view';
-import { FloatingHearts } from './floating-hearts';
 import { SubtitleLine } from './subtitle-line';
 
 interface AudioPlayerProps {
@@ -51,24 +48,10 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
   const t = useTranslations('audiobooks');
   const [showChapters, setShowChapters] = useState(false);
   const [showLyrics, setShowLyrics] = useState(false);
-  const [heartTriggered, setHeartTriggered] = useState(false);
-  const heartButtonRef = useRef<HTMLButtonElement>(null);
-
-  const handleHeartClick = useCallback(() => {
-    setHeartTriggered(true);
-  }, []);
-  const { book, hasBook, getBookChapterId } = useWhispersyncFromAudiobook(audiobook);
   const { data: danmakuData } = useDanmaku(audiobook?.id, currentChapter?.number);
   const sendDanmaku = useSendDanmaku();
 
   if (!audiobook) return null;
-
-  // Calculate total progress across all chapters
-  const totalDurationBefore = audiobook.chapters
-    .slice(0, chapterIndex)
-    .reduce((sum, ch) => sum + ch.duration, 0);
-  const totalProgress = totalDurationBefore + currentTime;
-  const totalProgressPercent = (totalProgress / audiobook.totalDuration) * 100;
 
   return (
     <>
@@ -239,35 +222,6 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                   </Button>
                 </div>
 
-                {/* Heart / Like */}
-                <div className="mt-3 flex justify-center">
-                  <Button
-                    ref={heartButtonRef}
-                    variant="ghost"
-                    size="icon"
-                    onClick={handleHeartClick}
-                    aria-label="Like this audiobook"
-                    className="h-10 w-10 text-muted-foreground hover:text-rose-500 transition-colors"
-                  >
-                    <Heart className="h-5 w-5" />
-                  </Button>
-                  <FloatingHearts
-                    triggered={heartTriggered}
-                    originRef={heartButtonRef}
-                    onAnimationEnd={() => setHeartTriggered(false)}
-                  />
-                </div>
-
-                {/* Whispersync Banner */}
-                {hasBook && book && (
-                  <div className="mt-3 w-full max-w-[320px]">
-                    <WhispersyncToBook
-                      book={book}
-                      currentAudioChapterIndex={chapterIndex}
-                      bookChapterId={getBookChapterId(chapterIndex)}
-                    />
-                  </div>
-                )}
               </div>
             </div>
           </div>
