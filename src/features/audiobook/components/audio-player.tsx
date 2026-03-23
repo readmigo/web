@@ -107,33 +107,15 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                     pauses exactly at its current angle when playback stops.
                   */}
                   <div className="relative aspect-square w-full max-w-[280px]">
-                    {/* Outer vinyl ring (slightly larger than cover) */}
-                    <div className="absolute inset-0 rounded-full bg-neutral-900 shadow-2xl" />
-
-                    {/* Spinning disc */}
+                    {/* Spinning vinyl disc */}
                     <div
-                      className="absolute inset-0 rounded-full overflow-hidden"
+                      className="absolute inset-0 rounded-full bg-neutral-900 shadow-2xl overflow-hidden"
                       style={{
                         animation: 'rm-vinyl-spin 22s linear infinite',
                         animationPlayState: isPlaying ? 'running' : 'paused',
                       }}
                     >
-                      {audiobook.coverUrl ? (
-                        <Image
-                          src={audiobook.coverUrl}
-                          alt={audiobook.title}
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-muted">
-                          <span className="text-6xl font-bold text-muted-foreground">
-                            {audiobook.title.charAt(0)}
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Vinyl groove overlay — concentric rings */}
+                      {/* Vinyl groove overlay — concentric rings on black disc */}
                       <div
                         className="absolute inset-0 rounded-full pointer-events-none"
                         style={{
@@ -141,17 +123,33 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                             'repeating-radial-gradient(' +
                             'circle at 50% 50%,' +
                             'transparent 0px,' +
-                            'transparent 6px,' +
-                            'rgba(0,0,0,0.12) 7px,' +
-                            'transparent 8px' +
+                            'transparent 4px,' +
+                            'rgba(255,255,255,0.05) 5px,' +
+                            'transparent 6px' +
                             ')',
                         }}
                       />
 
-                      {/* Centre label circle */}
-                      <div className="absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-800/80 ring-2 ring-neutral-700/60" />
+                      {/* Centre cover art — 40% of disc, circular */}
+                      <div className="absolute left-1/2 top-1/2 h-[40%] w-[40%] -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden ring-2 ring-neutral-700/40">
+                        {audiobook.coverUrl ? (
+                          <Image
+                            src={audiobook.coverUrl}
+                            alt={audiobook.title}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center bg-neutral-800">
+                            <span className="text-3xl font-bold text-neutral-400">
+                              {audiobook.title.charAt(0)}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
                       {/* Centre spindle dot */}
-                      <div className="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-400" />
+                      <div className="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-400 shadow-sm" />
                     </div>
 
                     {/* Keyframe style — injected inline once */}
