@@ -3,10 +3,8 @@
 import { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { ChevronDown, List, Volume2, VolumeX, AlignLeft, Heart, Type } from 'lucide-react';
-import { Slider } from '@/components/ui/slider';
+import { ChevronDown, List, AlignLeft, Heart, Timer, Gauge } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useAudioPlayerStore, formatTime, formatDuration } from '../stores/audio-player-store';
 import { useWhispersyncFromAudiobook } from '../hooks/use-whispersync';
@@ -15,7 +13,6 @@ import { PlayerControls } from './player-controls';
 import { ProgressSlider } from './progress-slider';
 import { SpeedSelector } from './speed-selector';
 import { SleepTimer } from './sleep-timer';
-import { VoiceSelector } from './voice-selector';
 import { ChapterList } from './chapter-list';
 import { WhispersyncToBook } from './whispersync-banner';
 import { DanmakuOverlay } from './danmaku-overlay';
@@ -38,10 +35,8 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
     currentTime,
     duration,
     playbackSpeed,
-    volume,
     sleepTimer,
     sleepTimerEndTime,
-    selectedVoiceId,
     togglePlay,
     seek,
     seekForward,
@@ -50,14 +45,12 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
     previousChapter,
     goToChapter,
     setPlaybackSpeed,
-    setVolume,
     setSleepTimer,
-    setSelectedVoice,
   } = useAudioPlayerStore();
 
   const t = useTranslations('audiobooks');
-  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
-  const [activeTab, setActiveTab] = useState('player');
+  const [showChapters, setShowChapters] = useState(false);
+  const [showLyrics, setShowLyrics] = useState(false);
   const [heartTriggered, setHeartTriggered] = useState(false);
   const heartButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -78,285 +71,254 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
   const totalProgressPercent = (totalProgress / audiobook.totalDuration) * 100;
 
   return (
-    <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="bottom" className="h-[100dvh] p-0">
-        <div className="flex h-full flex-col">
-          {/* Header */}
-          <SheetHeader className="flex-shrink-0 border-b px-4 py-3">
-            <div className="flex items-center justify-between">
-              <Button variant="ghost" size="icon" onClick={onClose}>
-                <ChevronDown className="h-5 w-5" />
-              </Button>
-              <SheetTitle className="flex-1 text-center text-sm font-medium">
-                {t('nowPlaying')}
-              </SheetTitle>
-              <div className="w-10" /> {/* Spacer for centering */}
-            </div>
-          </SheetHeader>
+    <>
+      <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
+        <SheetContent side="bottom" className="h-[100dvh] p-0">
+          <div className="flex h-full flex-col">
+            {/* Header */}
+            <SheetHeader className="flex-shrink-0 border-b px-4 py-3">
+              <div className="flex items-center justify-between">
+                <Button variant="ghost" size="icon" onClick={onClose}>
+                  <ChevronDown className="h-5 w-5" />
+                </Button>
+                <SheetTitle className="flex-1 text-center text-sm font-medium">
+                  {t('nowPlaying')}
+                </SheetTitle>
+                <div className="w-10" />
+              </div>
+            </SheetHeader>
 
-          {/* Main Content */}
-          <div className="flex-1 overflow-hidden">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex h-full flex-col">
-              <TabsContent value="player" className="flex-1 overflow-auto">
-                <div className="flex flex-col items-center px-6 py-8">
-                  {/* Cover Art + Danmaku — B8: vinyl rotation */}
-                  {/*
-                    The cover is clipped to a circle and rotates while playing.
-                    A radial-gradient overlay simulates vinyl grooves.
-                    animation-play-state is toggled via inline style so the disc
-                    pauses exactly at its current angle when playback stops.
-                  */}
-                  <div className="relative aspect-square w-full max-w-[280px]">
-                    {/* Spinning vinyl disc */}
-                    <div
-                      className="absolute inset-0 rounded-full bg-neutral-900 shadow-2xl overflow-hidden"
-                      style={{
-                        animation: 'rm-vinyl-spin 22s linear infinite',
-                        animationPlayState: isPlaying ? 'running' : 'paused',
-                      }}
-                    >
-                      {/* Vinyl groove overlay — concentric rings on black disc */}
-                      <div
-                        className="absolute inset-0 rounded-full pointer-events-none"
-                        style={{
-                          background:
-                            'repeating-radial-gradient(' +
-                            'circle at 50% 50%,' +
-                            'transparent 0px,' +
-                            'transparent 4px,' +
-                            'rgba(255,255,255,0.05) 5px,' +
-                            'transparent 6px' +
-                            ')',
-                        }}
-                      />
-
-                      {/* Centre cover art — 40% of disc, circular */}
-                      <div className="absolute left-1/2 top-1/2 h-[40%] w-[40%] -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden ring-2 ring-neutral-700/40">
-                        {audiobook.coverUrl ? (
-                          <Image
-                            src={audiobook.coverUrl}
-                            alt={audiobook.title}
-                            fill
-                            className="object-cover"
-                          />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center bg-neutral-800">
-                            <span className="text-3xl font-bold text-neutral-400">
-                              {audiobook.title.charAt(0)}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Centre spindle dot */}
-                      <div className="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-400 shadow-sm" />
-                    </div>
-
-                    {/* Keyframe style — injected inline once */}
-                    <style>{`
-                      @keyframes rm-vinyl-spin {
-                        from { transform: rotate(0deg); }
-                        to   { transform: rotate(360deg); }
-                      }
-                    `}</style>
-
-                    {danmakuData && (
-                      <DanmakuOverlay
-                        items={danmakuData.items}
-                        onSend={(content) => {
-                          if (audiobook && currentChapter) {
-                            sendDanmaku.mutate({
-                              audiobookId: audiobook.id,
-                              chapterNumber: currentChapter.number,
-                              content,
-                            });
-                          }
-                        }}
-                        isSending={sendDanmaku.isPending}
-                      />
-                    )}
-                  </div>
-
-                  {/* Title & Author */}
-                  <div className="mt-6 text-center">
-                    <h2 className="text-xl font-bold">{audiobook.title}</h2>
-                    <p className="text-muted-foreground">{audiobook.author}</p>
-                    {audiobook.narrator && (
-                      <p className="text-sm text-muted-foreground">
-                        {t('narratedBy', { name: audiobook.narrator })}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Current Chapter */}
-                  <div className="mt-4 flex flex-col items-center gap-1">
-                    <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                      {currentChapter?.title || t('chapterNumber', { number: currentChapter?.number ?? 0 })}
-                    </span>
-                    <p className="text-xs text-muted-foreground">
-                      {t('chapterOf', { current: chapterIndex + 1, total: audiobook.chapters.length })}
-                    </p>
-                  </div>
-
-                  {/* Subtitle Line — tap to switch to lyrics tab */}
+            {/* Player Content */}
+            <div className="flex-1 overflow-auto">
+              <div className="flex flex-col items-center px-6 py-6">
+                {/* Vinyl Record */}
+                <div className="relative aspect-square w-full max-w-[280px]">
                   <div
-                    className="mt-4 w-full max-w-[320px] cursor-pointer"
-                    onClick={() => setActiveTab('lyrics')}
+                    className="absolute inset-0 rounded-full bg-neutral-900 shadow-2xl overflow-hidden"
+                    style={{
+                      animation: 'rm-vinyl-spin 22s linear infinite',
+                      animationPlayState: isPlaying ? 'running' : 'paused',
+                    }}
                   >
-                    <SubtitleLine
-                      audiobookId={audiobook.id}
-                      chapterIndex={chapterIndex}
-                      currentTime={currentTime}
+                    <div
+                      className="absolute inset-0 rounded-full pointer-events-none"
+                      style={{
+                        background:
+                          'repeating-radial-gradient(' +
+                          'circle at 50% 50%,' +
+                          'transparent 0px,' +
+                          'transparent 4px,' +
+                          'rgba(255,255,255,0.05) 5px,' +
+                          'transparent 6px' +
+                          ')',
+                      }}
                     />
-                  </div>
-
-                  {/* Progress Slider */}
-                  <div className="mt-6 w-full max-w-[320px]">
-                    <ProgressSlider
-                      currentTime={currentTime}
-                      duration={duration}
-                      onSeek={seek}
-                    />
-                  </div>
-
-                  {/* Player Controls */}
-                  <div className="mt-6">
-                    <PlayerControls
-                      isPlaying={isPlaying}
-                      isLoading={isLoading}
-                      onPlayPause={togglePlay}
-                      onPrevious={previousChapter}
-                      onNext={nextChapter}
-                      onSeekBackward={() => seekBackward(15)}
-                      onSeekForward={() => seekForward(30)}
-                      size="lg"
-                    />
-                  </div>
-
-                  {/* Secondary Controls - aligned to iOS order: Speed / Timer / Voice / Volume */}
-                  <div className="mt-6 flex items-center gap-4">
-                    <SpeedSelector
-                      speed={playbackSpeed}
-                      onSpeedChange={setPlaybackSpeed}
-                    />
-
-                    <SleepTimer
-                      activeTimer={sleepTimer}
-                      endTime={sleepTimerEndTime}
-                      onSetTimer={setSleepTimer}
-                    />
-
-                    {audiobook.availableVoices && audiobook.availableVoices.length > 1 && (
-                      <VoiceSelector
-                        voices={audiobook.availableVoices}
-                        selectedVoiceId={selectedVoiceId}
-                        onVoiceSelect={setSelectedVoice}
-                      />
-                    )}
-
-                    <div className="relative ml-auto">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setShowVolumeSlider(!showVolumeSlider)}
-                      >
-                        {volume === 0 ? (
-                          <VolumeX className="h-5 w-5" />
-                        ) : (
-                          <Volume2 className="h-5 w-5" />
-                        )}
-                      </Button>
-                      {showVolumeSlider && (
-                        <div className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 rounded-lg border bg-popover p-3 shadow-lg">
-                          <Slider
-                            orientation="vertical"
-                            value={[volume * 100]}
-                            onValueChange={(v) => setVolume(v[0] / 100)}
-                            max={100}
-                            className="h-24"
-                          />
+                    <div className="absolute left-1/2 top-1/2 h-[40%] w-[40%] -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden ring-2 ring-neutral-700/40">
+                      {audiobook.coverUrl ? (
+                        <Image
+                          src={audiobook.coverUrl}
+                          alt={audiobook.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-neutral-800">
+                          <span className="text-3xl font-bold text-neutral-400">
+                            {audiobook.title.charAt(0)}
+                          </span>
                         </div>
                       )}
                     </div>
+                    <div className="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-400 shadow-sm" />
                   </div>
-
-                  {/* Total Progress */}
-                  <div className="mt-6 text-center">
-                    <p className="text-xs text-muted-foreground">
-                      {formatTime(totalProgress)} / {formatDuration(audiobook.totalDuration)}
-                      {' '}({Math.round(totalProgressPercent)}% {t('complete')})
-                    </p>
-                  </div>
-
-                  {/* Heart / Like Button */}
-                  <div className="mt-4 flex justify-center">
-                    <Button
-                      ref={heartButtonRef}
-                      variant="ghost"
-                      size="icon"
-                      onClick={handleHeartClick}
-                      aria-label="Like this audiobook"
-                      className="h-10 w-10 text-muted-foreground hover:text-rose-500 transition-colors"
-                    >
-                      <Heart className="h-5 w-5" />
-                    </Button>
-                    <FloatingHearts
-                      triggered={heartTriggered}
-                      originRef={heartButtonRef}
-                      onAnimationEnd={() => setHeartTriggered(false)}
+                  <style>{`
+                    @keyframes rm-vinyl-spin {
+                      from { transform: rotate(0deg); }
+                      to   { transform: rotate(360deg); }
+                    }
+                  `}</style>
+                  {danmakuData && (
+                    <DanmakuOverlay
+                      items={danmakuData.items}
+                      onSend={(content) => {
+                        if (audiobook && currentChapter) {
+                          sendDanmaku.mutate({
+                            audiobookId: audiobook.id,
+                            chapterNumber: currentChapter.number,
+                            content,
+                          });
+                        }
+                      }}
+                      isSending={sendDanmaku.isPending}
                     />
-                  </div>
-
-                  {/* Whispersync Banner */}
-                  {hasBook && book && (
-                    <div className="mt-4 w-full max-w-[320px]">
-                      <WhispersyncToBook
-                        book={book}
-                        currentAudioChapterIndex={chapterIndex}
-                        bookChapterId={getBookChapterId(chapterIndex)}
-                      />
-                    </div>
                   )}
                 </div>
-              </TabsContent>
 
-              <TabsContent value="chapters" className="flex-1 overflow-hidden">
-                <ChapterList
-                  chapters={audiobook.chapters}
-                  currentChapterIndex={chapterIndex}
-                  isPlaying={isPlaying}
-                  onChapterSelect={goToChapter}
-                />
-              </TabsContent>
+                {/* Title & Author */}
+                <div className="mt-5 text-center">
+                  <h2 className="text-xl font-bold">{audiobook.title}</h2>
+                  <p className="text-muted-foreground">{audiobook.author}</p>
+                </div>
 
-              <TabsContent value="lyrics" className="flex-1 overflow-hidden">
-                <SyncedReaderView
-                  audiobookId={audiobook.id}
-                  chapterIndex={chapterIndex}
-                  currentTime={currentTime}
-                  isActive={activeTab === 'lyrics'}
-                  onSeek={seek}
-                />
-              </TabsContent>
+                {/* Current Chapter */}
+                <div className="mt-3 flex flex-col items-center gap-1">
+                  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                    {currentChapter?.title || t('chapterNumber', { number: currentChapter?.number ?? 0 })}
+                  </span>
+                  <p className="text-xs text-muted-foreground">
+                    {t('chapterOf', { current: chapterIndex + 1, total: audiobook.chapters.length })}
+                  </p>
+                </div>
 
-              {/* Tab Navigation */}
-              <TabsList className="flex-shrink-0 w-full justify-center rounded-none border-t">
-                <TabsTrigger value="player" className="flex-1">
-                  {t('player')}
-                </TabsTrigger>
-                <TabsTrigger value="chapters" className="flex-1">
-                  <List className="mr-2 h-4 w-4" />
-                  {t('chaptersTab')}
-                </TabsTrigger>
-                <TabsTrigger value="lyrics" className="flex-1">
-                  <AlignLeft className="mr-2 h-4 w-4" />
-                  {t('lyricsTab')}
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
+                {/* Subtitle Line — tap to open lyrics */}
+                <div
+                  className="mt-3 w-full max-w-[320px] cursor-pointer"
+                  onClick={() => setShowLyrics(true)}
+                >
+                  <SubtitleLine
+                    audiobookId={audiobook.id}
+                    chapterIndex={chapterIndex}
+                    currentTime={currentTime}
+                  />
+                </div>
+
+                {/* Progress Slider */}
+                <div className="mt-4 w-full max-w-[320px]">
+                  <ProgressSlider
+                    currentTime={currentTime}
+                    duration={duration}
+                    onSeek={seek}
+                  />
+                </div>
+
+                {/* Player Controls */}
+                <div className="mt-4">
+                  <PlayerControls
+                    isPlaying={isPlaying}
+                    isLoading={isLoading}
+                    onPlayPause={togglePlay}
+                    onPrevious={previousChapter}
+                    onNext={nextChapter}
+                    onSeekBackward={() => seekBackward(15)}
+                    onSeekForward={() => seekForward(30)}
+                    size="lg"
+                  />
+                </div>
+
+                {/* Secondary Controls: 章节 / 倍速 / 定时 / 原文 */}
+                <div className="mt-5 flex w-full max-w-[320px] items-center justify-between">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex flex-col items-center gap-0.5 h-auto py-2 px-3"
+                    onClick={() => setShowChapters(true)}
+                  >
+                    <List className="h-5 w-5" />
+                    <span className="text-[10px]">{t('chaptersTab')}</span>
+                  </Button>
+
+                  <SpeedSelector
+                    speed={playbackSpeed}
+                    onSpeedChange={setPlaybackSpeed}
+                  />
+
+                  <SleepTimer
+                    activeTimer={sleepTimer}
+                    endTime={sleepTimerEndTime}
+                    onSetTimer={setSleepTimer}
+                  />
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex flex-col items-center gap-0.5 h-auto py-2 px-3"
+                    onClick={() => setShowLyrics(true)}
+                  >
+                    <AlignLeft className="h-5 w-5" />
+                    <span className="text-[10px]">{t('lyricsTab')}</span>
+                  </Button>
+                </div>
+
+                {/* Total Progress */}
+                <div className="mt-4 text-center">
+                  <p className="text-xs text-muted-foreground">
+                    {formatTime(totalProgress)} / {formatDuration(audiobook.totalDuration)}
+                    {' '}({Math.round(totalProgressPercent)}% {t('complete')})
+                  </p>
+                </div>
+
+                {/* Heart / Like */}
+                <div className="mt-3 flex justify-center">
+                  <Button
+                    ref={heartButtonRef}
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleHeartClick}
+                    aria-label="Like this audiobook"
+                    className="h-10 w-10 text-muted-foreground hover:text-rose-500 transition-colors"
+                  >
+                    <Heart className="h-5 w-5" />
+                  </Button>
+                  <FloatingHearts
+                    triggered={heartTriggered}
+                    originRef={heartButtonRef}
+                    onAnimationEnd={() => setHeartTriggered(false)}
+                  />
+                </div>
+
+                {/* Whispersync Banner */}
+                {hasBook && book && (
+                  <div className="mt-3 w-full max-w-[320px]">
+                    <WhispersyncToBook
+                      book={book}
+                      currentAudioChapterIndex={chapterIndex}
+                      bookChapterId={getBookChapterId(chapterIndex)}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      </SheetContent>
-    </Sheet>
+        </SheetContent>
+      </Sheet>
+
+      {/* Chapter List Sheet */}
+      <Sheet open={showChapters} onOpenChange={setShowChapters}>
+        <SheetContent side="bottom" className="h-[80dvh] p-0">
+          <SheetHeader className="border-b px-4 py-3">
+            <SheetTitle className="text-center text-sm font-medium">
+              {t('chaptersTab')}
+            </SheetTitle>
+          </SheetHeader>
+          <ChapterList
+            chapters={audiobook.chapters}
+            currentChapterIndex={chapterIndex}
+            isPlaying={isPlaying}
+            onChapterSelect={(index) => {
+              goToChapter(index);
+              setShowChapters(false);
+            }}
+          />
+        </SheetContent>
+      </Sheet>
+
+      {/* Lyrics / Synced Reader Sheet */}
+      <Sheet open={showLyrics} onOpenChange={setShowLyrics}>
+        <SheetContent side="bottom" className="h-[80dvh] p-0">
+          <SheetHeader className="border-b px-4 py-3">
+            <SheetTitle className="text-center text-sm font-medium">
+              {t('lyricsTab')}
+            </SheetTitle>
+          </SheetHeader>
+          <SyncedReaderView
+            audiobookId={audiobook.id}
+            chapterIndex={chapterIndex}
+            currentTime={currentTime}
+            isActive={showLyrics}
+            onSeek={seek}
+          />
+        </SheetContent>
+      </Sheet>
+    </>
   );
 }
