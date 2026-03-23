@@ -239,14 +239,6 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                   </Button>
                 </div>
 
-                {/* Total Progress */}
-                <div className="mt-4 text-center">
-                  <p className="text-xs text-muted-foreground">
-                    {formatTime(totalProgress)} / {formatDuration(audiobook.totalDuration)}
-                    {' '}({Math.round(totalProgressPercent)}% {t('complete')})
-                  </p>
-                </div>
-
                 {/* Heart / Like */}
                 <div className="mt-3 flex justify-center">
                   <Button
