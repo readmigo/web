@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { ChevronDown, List, Volume2, VolumeX, AlignLeft, Heart } from 'lucide-react';
+import { ChevronDown, List, Volume2, VolumeX, AlignLeft, Heart, Type } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { useTranslations } from 'next-intl';
 import { useAudioPlayerStore, formatTime, formatDuration } from '../stores/audio-player-store';
@@ -21,6 +21,7 @@ import { WhispersyncToBook } from './whispersync-banner';
 import { DanmakuOverlay } from './danmaku-overlay';
 import { SyncedReaderView } from './synced-reader-view';
 import { FloatingHearts } from './floating-hearts';
+import { SubtitleLine } from './subtitle-line';
 
 interface AudioPlayerProps {
   isOpen: boolean;
@@ -78,7 +79,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="bottom" className="h-[85vh] p-0">
+      <SheetContent side="bottom" className="h-[100dvh] p-0">
         <div className="flex h-full flex-col">
           {/* Header */}
           <SheetHeader className="flex-shrink-0 border-b px-4 py-3">
@@ -197,6 +198,18 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                     <p className="text-xs text-muted-foreground">
                       {t('chapterOf', { current: chapterIndex + 1, total: audiobook.chapters.length })}
                     </p>
+                  </div>
+
+                  {/* Subtitle Line — tap to switch to lyrics tab */}
+                  <div
+                    className="mt-4 w-full max-w-[320px] cursor-pointer"
+                    onClick={() => setActiveTab('lyrics')}
+                  >
+                    <SubtitleLine
+                      audiobookId={audiobook.id}
+                      chapterIndex={chapterIndex}
+                      currentTime={currentTime}
+                    />
                   </div>
 
                   {/* Progress Slider */}

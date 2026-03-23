@@ -125,6 +125,7 @@ export interface AudioPlayerState {
   // UI state
   isMinimized: boolean;
   isVisible: boolean;
+  shouldOpenFullPlayer: boolean;
 
   // Sleep timer
   sleepTimer: SleepTimerOption | null;
@@ -171,6 +172,7 @@ export interface AudioPlayerActions {
   // UI
   minimize: () => void;
   maximize: () => void;
+  clearShouldOpenFullPlayer: () => void;
   hide: () => void;
   show: () => void;
 

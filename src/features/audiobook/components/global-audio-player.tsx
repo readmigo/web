@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { MiniPlayer } from './mini-player';
 import { AudioPlayer } from './audio-player';
 import { useMediaSession } from '../hooks/use-media-session';
+import { useAudioPlayerStore } from '../stores/audio-player-store';
 import { useAudioUsageTracker } from '@/features/subscription/hooks/use-audio-usage-tracker';
 import { AudioLimitDialog } from '@/features/subscription/components/audio-limit-dialog';
 import { PaywallView } from '@/features/subscription/components/paywall-view';
@@ -22,6 +23,17 @@ export function GlobalAudioPlayer() {
 
   const { data: session } = useSession();
   const isGuest = !session?.user;
+
+  const shouldOpenFullPlayer = useAudioPlayerStore((s) => s.shouldOpenFullPlayer);
+  const clearShouldOpenFullPlayer = useAudioPlayerStore((s) => s.clearShouldOpenFullPlayer);
+
+  // Auto-open full player when requested (e.g., from detail page "Start Listening")
+  useEffect(() => {
+    if (shouldOpenFullPlayer) {
+      setIsPlayerOpen(true);
+      clearShouldOpenFullPlayer();
+    }
+  }, [shouldOpenFullPlayer, clearShouldOpenFullPlayer]);
 
   // Initialize Media Session API
   useMediaSession();

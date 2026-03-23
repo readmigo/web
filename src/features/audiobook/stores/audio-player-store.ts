@@ -142,6 +142,7 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
         selectedVoiceId: null,
         isMinimized: false,
         isVisible: false,
+        shouldOpenFullPlayer: false,
         sleepTimer: null,
         sleepTimerEndTime: null,
         sessionStartTime: null,
@@ -419,6 +420,7 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
               : chapter.duration,
             isVisible: true,
             isMinimized: false,
+            shouldOpenFullPlayer: true,
             error: null,
             isLoading: true,
           });
@@ -522,6 +524,7 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
         minimize: () => set({ isMinimized: true }),
         maximize: () => set({ isMinimized: false }),
         hide: () => set({ isVisible: false }),
+        clearShouldOpenFullPlayer: () => set({ shouldOpenFullPlayer: false }),
         show: () => set({ isVisible: true }),
 
         // Progress sync
