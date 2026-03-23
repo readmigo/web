@@ -35,6 +35,8 @@ export class AudioManager {
   constructor() {
     if (typeof window !== 'undefined') {
       this.audio = new Audio();
+      // Enable cross-origin audio loading (CDN URLs)
+      this.audio.crossOrigin = 'anonymous';
       this.setupEventListeners();
     }
   }
