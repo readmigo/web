@@ -1,4 +1,4 @@
-import type { PlaybackSpeed } from '../types';
+import type { PlaybackSpeed, AudiobookParagraph } from '../types';
 import { log } from '@/lib/logger';
 
 type AudioEventCallback = () => void;
@@ -17,12 +17,20 @@ interface AudioManagerEvents {
 }
 
 /**
- * Audio Manager - Handles HTML5 Audio playback
+ * Audio Manager - Handles HTML5 Audio playback with paragraph-based sequential playback
  */
 export class AudioManager {
   private audio: HTMLAudioElement | null = null;
   private events: Partial<AudioManagerEvents> = {};
   private timeUpdateInterval: ReturnType<typeof setInterval> | null = null;
+
+  // Paragraph-based playback state
+  private paragraphs: AudiobookParagraph[] = [];
+  private currentParagraphIndex = 0;
+  private paragraphMode = false;
+  private paragraphTimeOffset = 0; // accumulated duration of previous paragraphs
+  private totalParagraphDuration = 0;
+  private prefetchedUrls = new Set<string>();
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -45,6 +53,10 @@ export class AudioManager {
     });
 
     this.audio.addEventListener('ended', () => {
+      if (this.paragraphMode) {
+        this.advanceParagraph();
+        return;
+      }
       this.events.ended?.();
       this.stopTimeUpdateInterval();
     });
@@ -80,7 +92,13 @@ export class AudioManager {
     this.stopTimeUpdateInterval();
     this.timeUpdateInterval = setInterval(() => {
       if (this.audio) {
-        this.events.timeupdate?.(this.audio.currentTime, this.audio.duration || 0);
+        if (this.paragraphMode) {
+          // Report chapter-level time = offset of previous paragraphs + current paragraph time
+          const chapterTime = this.paragraphTimeOffset + (this.audio.currentTime || 0);
+          this.events.timeupdate?.(chapterTime, this.totalParagraphDuration);
+        } else {
+          this.events.timeupdate?.(this.audio.currentTime, this.audio.duration || 0);
+        }
       }
     }, 250); // Update every 250ms
   }
@@ -259,10 +277,194 @@ export class AudioManager {
   }
 
   /**
+   * Load a chapter as a paragraph sequence (for TTS-generated audiobooks)
+   * Plays paragraphs sequentially, prefetches next 3
+   */
+  async loadParagraphSequence(
+    paragraphs: AudiobookParagraph[],
+    seekTo = 0,
+    playbackSpeed: PlaybackSpeed = 1.0,
+  ): Promise<void> {
+    // Filter out paragraphs with no audio
+    const playable = paragraphs.filter((p) => p.audioUrl && p.audioUrl.length > 0);
+    if (playable.length === 0) {
+      throw new Error('No playable paragraphs in chapter');
+    }
+
+    this.paragraphs = playable;
+    this.paragraphMode = true;
+    this.totalParagraphDuration = playable.reduce((sum, p) => sum + p.duration, 0);
+    this.prefetchedUrls.clear();
+
+    // Find starting paragraph based on seek position
+    let startIndex = 0;
+    let seekOffset = 0;
+    if (seekTo > 0) {
+      let accumulated = 0;
+      for (let i = 0; i < playable.length; i++) {
+        if (accumulated + playable[i].duration > seekTo) {
+          startIndex = i;
+          seekOffset = seekTo - accumulated;
+          break;
+        }
+        accumulated += playable[i].duration;
+        if (i === playable.length - 1) {
+          startIndex = i;
+          seekOffset = 0;
+        }
+      }
+    }
+
+    // Calculate time offset for paragraphs before startIndex
+    this.paragraphTimeOffset = 0;
+    for (let i = 0; i < startIndex; i++) {
+      this.paragraphTimeOffset += playable[i].duration;
+    }
+    this.currentParagraphIndex = startIndex;
+
+    log.audiobook.info('[AudioManager] Loading paragraph sequence', {
+      total: playable.length,
+      startIndex,
+      seekOffset,
+      totalDuration: this.totalParagraphDuration,
+    });
+
+    await this.loadParagraph(startIndex);
+    if (this.audio) {
+      this.audio.playbackRate = playbackSpeed;
+      if (seekOffset > 0) {
+        this.audio.currentTime = seekOffset;
+      }
+    }
+
+    this.prefetchNextParagraphs(startIndex);
+  }
+
+  private async loadParagraph(index: number): Promise<void> {
+    const para = this.paragraphs[index];
+    if (!para?.audioUrl) {
+      log.audiobook.warn('[AudioManager] Skipping paragraph with no URL', { index });
+      // Skip to next
+      if (index + 1 < this.paragraphs.length) {
+        this.currentParagraphIndex = index + 1;
+        this.paragraphTimeOffset += para?.duration || 0;
+        return this.loadParagraph(index + 1);
+      }
+      // No more paragraphs — chapter ended
+      this.clearParagraphState();
+      this.events.ended?.();
+      return;
+    }
+
+    log.audiobook.debug('[AudioManager] Loading paragraph', {
+      index,
+      url: para.audioUrl.split('/').slice(-2).join('/'),
+    });
+
+    await this.load(para.audioUrl);
+  }
+
+  private async advanceParagraph(): Promise<void> {
+    // Update time offset with finished paragraph's duration
+    const finishedPara = this.paragraphs[this.currentParagraphIndex];
+    if (finishedPara) {
+      this.paragraphTimeOffset += finishedPara.duration;
+    }
+
+    const nextIndex = this.currentParagraphIndex + 1;
+    if (nextIndex >= this.paragraphs.length) {
+      log.audiobook.info('[AudioManager] Paragraph chapter complete', {
+        total: this.paragraphs.length,
+      });
+      this.clearParagraphState();
+      this.events.ended?.();
+      this.stopTimeUpdateInterval();
+      return;
+    }
+
+    this.currentParagraphIndex = nextIndex;
+
+    try {
+      await this.loadParagraph(nextIndex);
+      if (this.audio) {
+        await this.audio.play();
+      }
+      this.prefetchNextParagraphs(nextIndex);
+    } catch (error) {
+      log.audiobook.error('[AudioManager] Failed to advance paragraph', {
+        index: nextIndex,
+        error: (error as Error).message,
+      });
+      // Try skipping to next paragraph
+      if (nextIndex + 1 < this.paragraphs.length) {
+        this.advanceParagraph();
+      } else {
+        this.clearParagraphState();
+        this.events.ended?.();
+      }
+    }
+  }
+
+  private prefetchNextParagraphs(fromIndex: number): void {
+    const end = Math.min(fromIndex + 4, this.paragraphs.length);
+    for (let i = fromIndex + 1; i < end; i++) {
+      const url = this.paragraphs[i]?.audioUrl;
+      if (url && !this.prefetchedUrls.has(url)) {
+        this.prefetchedUrls.add(url);
+        // Use link preload for browser-level prefetch
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.as = 'audio';
+        link.href = url;
+        document.head.appendChild(link);
+      }
+    }
+  }
+
+  private clearParagraphState(): void {
+    this.paragraphs = [];
+    this.currentParagraphIndex = 0;
+    this.paragraphMode = false;
+    this.paragraphTimeOffset = 0;
+    this.totalParagraphDuration = 0;
+    this.prefetchedUrls.clear();
+  }
+
+  /** Whether currently in paragraph-based playback mode */
+  isParagraphMode(): boolean {
+    return this.paragraphMode;
+  }
+
+  /**
+   * Seek to a chapter-level time in paragraph mode
+   */
+  async seekParagraph(chapterTime: number): Promise<void> {
+    if (!this.paragraphMode || this.paragraphs.length === 0) return;
+
+    let accumulated = 0;
+    for (let i = 0; i < this.paragraphs.length; i++) {
+      if (accumulated + this.paragraphs[i].duration > chapterTime) {
+        const wasPlaying = this.isPlaying();
+        this.currentParagraphIndex = i;
+        this.paragraphTimeOffset = accumulated;
+        await this.loadParagraph(i);
+        if (this.audio) {
+          this.audio.currentTime = chapterTime - accumulated;
+          if (wasPlaying) await this.audio.play();
+        }
+        this.prefetchNextParagraphs(i);
+        return;
+      }
+      accumulated += this.paragraphs[i].duration;
+    }
+  }
+
+  /**
    * Cleanup
    */
   destroy(): void {
     this.stopTimeUpdateInterval();
+    this.clearParagraphState();
     if (this.audio) {
       this.audio.pause();
       this.audio.src = '';

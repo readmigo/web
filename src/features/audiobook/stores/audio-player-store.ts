@@ -171,7 +171,11 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
 
         seek: (time: number) => {
           const audioManager = getAudioManager();
-          audioManager.seek(time);
+          if (audioManager.isParagraphMode()) {
+            audioManager.seekParagraph(time);
+          } else {
+            audioManager.seek(time);
+          }
           set({ currentTime: time });
         },
 
@@ -206,17 +210,25 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
           }
 
           const nextChapter = audiobook.chapters[nextIndex];
+          const isParagraphMode = !nextChapter.audioUrl && nextChapter.paragraphs && nextChapter.paragraphs.length > 0;
           set({
             chapterIndex: nextIndex,
             currentChapter: nextChapter,
             currentTime: 0,
+            duration: isParagraphMode
+              ? nextChapter.paragraphs!.reduce((sum, p) => sum + p.duration, 0)
+              : nextChapter.duration,
             isLoading: true,
           });
 
           const audioManager = getAudioManager();
           try {
-            await audioManager.load(nextChapter.audioUrl);
-            audioManager.setPlaybackSpeed(playbackSpeed);
+            if (isParagraphMode) {
+              await audioManager.loadParagraphSequence(nextChapter.paragraphs!, 0, playbackSpeed);
+            } else {
+              await audioManager.load(nextChapter.audioUrl);
+              audioManager.setPlaybackSpeed(playbackSpeed);
+            }
             await audioManager.play();
           } catch (error) {
             set({ error: (error as Error).message, isLoading: false });
@@ -229,7 +241,12 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
 
           // If we're more than 3 seconds into the chapter, restart current chapter
           if (currentTime > 3) {
-            get().seek(0);
+            const audioManager = getAudioManager();
+            if (audioManager.isParagraphMode()) {
+              await audioManager.seekParagraph(0);
+            } else {
+              get().seek(0);
+            }
             return;
           }
 
@@ -237,17 +254,25 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
           if (prevIndex < 0) return;
 
           const prevChapter = audiobook.chapters[prevIndex];
+          const isParagraphMode = !prevChapter.audioUrl && prevChapter.paragraphs && prevChapter.paragraphs.length > 0;
           set({
             chapterIndex: prevIndex,
             currentChapter: prevChapter,
             currentTime: 0,
+            duration: isParagraphMode
+              ? prevChapter.paragraphs!.reduce((sum, p) => sum + p.duration, 0)
+              : prevChapter.duration,
             isLoading: true,
           });
 
           const audioManager = getAudioManager();
           try {
-            await audioManager.load(prevChapter.audioUrl);
-            audioManager.setPlaybackSpeed(playbackSpeed);
+            if (isParagraphMode) {
+              await audioManager.loadParagraphSequence(prevChapter.paragraphs!, 0, playbackSpeed);
+            } else {
+              await audioManager.load(prevChapter.audioUrl);
+              audioManager.setPlaybackSpeed(playbackSpeed);
+            }
             await audioManager.play();
           } catch (error) {
             set({ error: (error as Error).message, isLoading: false });
@@ -259,17 +284,25 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
           if (!audiobook || index < 0 || index >= audiobook.chapters.length) return;
 
           const chapter = audiobook.chapters[index];
+          const isParagraphMode = !chapter.audioUrl && chapter.paragraphs && chapter.paragraphs.length > 0;
           set({
             chapterIndex: index,
             currentChapter: chapter,
             currentTime: 0,
+            duration: isParagraphMode
+              ? chapter.paragraphs!.reduce((sum, p) => sum + p.duration, 0)
+              : chapter.duration,
             isLoading: true,
           });
 
           const audioManager = getAudioManager();
           try {
-            await audioManager.load(chapter.audioUrl);
-            audioManager.setPlaybackSpeed(playbackSpeed);
+            if (isParagraphMode) {
+              await audioManager.loadParagraphSequence(chapter.paragraphs!, 0, playbackSpeed);
+            } else {
+              await audioManager.load(chapter.audioUrl);
+              audioManager.setPlaybackSpeed(playbackSpeed);
+            }
             if (isPlaying) {
               await audioManager.play();
             }
@@ -318,6 +351,7 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
         ) => {
           const { playbackSpeed } = get();
           const chapter = audiobook.chapters[startChapter] || audiobook.chapters[0];
+          const isParagraphMode = !chapter.audioUrl && chapter.paragraphs && chapter.paragraphs.length > 0;
 
           log.audiobook.info('[PlayerStore] loadAudiobook', {
             audiobookId: audiobook.id,
@@ -326,6 +360,8 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
             startPosition,
             chapterTitle: chapter?.title,
             audioUrl: chapter?.audioUrl,
+            paragraphCount: chapter?.paragraphs?.length ?? 0,
+            isParagraphMode,
             totalChapters: audiobook.chapters.length,
           });
 
@@ -334,7 +370,9 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
             currentChapter: chapter,
             chapterIndex: startChapter,
             currentTime: startPosition,
-            duration: chapter.duration,
+            duration: isParagraphMode
+              ? chapter.paragraphs!.reduce((sum, p) => sum + p.duration, 0)
+              : chapter.duration,
             isVisible: true,
             isMinimized: false,
             error: null,
@@ -343,19 +381,25 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
 
           const audioManager = getAudioManager();
           try {
-            await audioManager.load(chapter.audioUrl);
-            audioManager.setPlaybackSpeed(playbackSpeed);
-            if (startPosition > 0) {
-              audioManager.seek(startPosition);
+            if (isParagraphMode) {
+              await audioManager.loadParagraphSequence(chapter.paragraphs!, startPosition, playbackSpeed);
+            } else {
+              await audioManager.load(chapter.audioUrl);
+              audioManager.setPlaybackSpeed(playbackSpeed);
+              if (startPosition > 0) {
+                audioManager.seek(startPosition);
+              }
             }
             log.audiobook.info('[PlayerStore] loadAudiobook success', {
               audiobookId: audiobook.id,
+              isParagraphMode,
             });
             set({ isLoading: false });
           } catch (error) {
             log.audiobook.error('[PlayerStore] loadAudiobook failed', {
               audiobookId: audiobook.id,
               audioUrl: chapter?.audioUrl,
+              isParagraphMode,
               error: (error as Error).message,
             });
             set({ error: (error as Error).message, isLoading: false });
@@ -382,12 +426,17 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
           }
 
           const updatedAudiobook: Audiobook = { ...audiobook, chapters };
+          const isParagraphMode = !chapter.audioUrl && chapter.paragraphs && chapter.paragraphs.length > 0;
           set({ audiobook: updatedAudiobook, currentChapter: chapter });
 
           const audioManager = getAudioManager();
           try {
-            await audioManager.load(chapter.audioUrl);
-            audioManager.setPlaybackSpeed(playbackSpeed);
+            if (isParagraphMode) {
+              await audioManager.loadParagraphSequence(chapter.paragraphs!, 0, playbackSpeed);
+            } else {
+              await audioManager.load(chapter.audioUrl);
+              audioManager.setPlaybackSpeed(playbackSpeed);
+            }
             if (isPlaying) {
               await audioManager.play();
             }
@@ -441,9 +490,11 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
               chapterIndex,
               positionSeconds: Math.floor(currentTime),
               playbackSpeed,
-            });
+            }, { noRedirectOn401: true });
           } catch (error) {
-            log.audiobook.error('Failed to sync audiobook progress', error);
+            log.audiobook.debug('[syncProgress] skipped (guest or error)', {
+              error: (error as Error).message,
+            });
           }
         },
 
@@ -491,10 +542,12 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
           });
 
           try {
-            await apiClient.post('/reading/audiobook-sessions', payload);
+            await apiClient.post('/reading/audiobook-sessions', payload, { noRedirectOn401: true });
             removePendingSession(sessionId);
           } catch (error) {
-            log.audiobook.error('Failed to submit audiobook session', error);
+            log.audiobook.debug('[submitSession] skipped (guest or error)', {
+              error: (error as Error).message,
+            });
             // Session stays in localStorage for retry on next flush
           }
         },

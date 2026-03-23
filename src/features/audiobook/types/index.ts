@@ -25,6 +25,14 @@ export const SLEEP_TIMER_OPTIONS: { label: string; value: SleepTimerOption }[] =
   { label: 'End of chapter', value: 'end_of_chapter' },
 ];
 
+// Audiobook paragraph (segment-level audio for TTS-generated content)
+export interface AudiobookParagraph {
+  index: number;
+  audioUrl: string;
+  duration: number; // seconds
+  timestampsUrl?: string;
+}
+
 // Audiobook chapter
 export interface AudiobookChapter {
   id: string;
@@ -34,6 +42,7 @@ export interface AudiobookChapter {
   audioUrl: string;
   readerName?: string;
   bookChapterId?: string; // Link to ebook chapter for Whispersync
+  paragraphs?: AudiobookParagraph[]; // Paragraph-level audio (when audioUrl is empty)
 }
 
 // A single available narrator voice for an audiobook
