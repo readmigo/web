@@ -113,7 +113,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                           src={audiobook.coverUrl}
                           alt={audiobook.title}
                           fill
-                          className="object-cover"
+                          className="object-cover object-top"
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center bg-neutral-800">
