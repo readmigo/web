@@ -46,13 +46,17 @@ export function useMediaSession() {
     // Set playback state
     navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
 
-    // Set position state
+    // Set position state (clamp position to valid range to avoid TypeError)
     if (duration > 0) {
-      navigator.mediaSession.setPositionState({
-        duration,
-        playbackRate: 1,
-        position: currentTime,
-      });
+      try {
+        navigator.mediaSession.setPositionState({
+          duration,
+          playbackRate: 1,
+          position: Math.min(Math.max(0, currentTime), duration),
+        });
+      } catch {
+        // Browser may reject if position > duration during chapter transitions
+      }
     }
   }, [audiobook, currentChapter, chapterIndex, isPlaying, currentTime, duration]);
 
