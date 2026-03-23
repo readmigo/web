@@ -117,7 +117,7 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
           </button>
 
           {/* Cover Art */}
-          <div className="relative aspect-square w-[200px] overflow-hidden rounded-xl shadow-lg">
+          <div className="relative aspect-[2/3] w-[180px] overflow-hidden rounded-xl shadow-lg">
             {audiobook.coverUrl ? (
               <Image
                 src={audiobook.coverUrl}
