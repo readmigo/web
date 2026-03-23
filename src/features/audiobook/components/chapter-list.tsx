@@ -22,7 +22,7 @@ export function ChapterList({
 }: ChapterListProps) {
   const t = useTranslations('audiobooks');
   return (
-    <ScrollArea className="h-[300px]">
+    <ScrollArea className="h-[calc(80dvh-60px)]">
       <div className="space-y-1 p-2">
         {chapters.map((chapter, index) => {
           const isCurrent = index === currentChapterIndex;
