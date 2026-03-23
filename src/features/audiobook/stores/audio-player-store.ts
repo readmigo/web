@@ -20,6 +20,21 @@ import type {
 
 interface AudioPlayerStore extends AudioPlayerState, AudioPlayerActions {}
 
+/** Check if a chapter has playable audio (either direct URL or paragraphs) */
+function isPlayableChapter(chapter: AudiobookChapter): boolean {
+  if (chapter.audioUrl) return true;
+  if (chapter.paragraphs && chapter.paragraphs.some((p) => p.audioUrl)) return true;
+  return false;
+}
+
+/** Find the next playable chapter index starting from `fromIndex` */
+function findPlayableChapter(chapters: AudiobookChapter[], fromIndex: number): number {
+  for (let i = fromIndex; i < chapters.length; i++) {
+    if (isPlayableChapter(chapters[i])) return i;
+  }
+  return -1;
+}
+
 function getDeviceId(): string {
   const key = 'readmigo_device_id';
   let deviceId = localStorage.getItem(key);
@@ -194,8 +209,9 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
           const { audiobook, chapterIndex, playbackSpeed } = get();
           if (!audiobook) return;
 
-          const nextIndex = chapterIndex + 1;
-          if (nextIndex >= audiobook.chapters.length) {
+          // Find next playable chapter
+          const nextIndex = findPlayableChapter(audiobook.chapters, chapterIndex + 1);
+          if (nextIndex === -1) {
             // End of audiobook
             set({ isPlaying: false });
             get().syncProgress();
@@ -250,7 +266,14 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
             return;
           }
 
-          const prevIndex = chapterIndex - 1;
+          // Find previous playable chapter
+          let prevIndex = -1;
+          for (let i = chapterIndex - 1; i >= 0; i--) {
+            if (isPlayableChapter(audiobook.chapters[i])) {
+              prevIndex = i;
+              break;
+            }
+          }
           if (prevIndex < 0) return;
 
           const prevChapter = audiobook.chapters[prevIndex];
@@ -350,13 +373,34 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
           startPosition = 0
         ) => {
           const { playbackSpeed } = get();
-          const chapter = audiobook.chapters[startChapter] || audiobook.chapters[0];
+
+          // Skip non-playable chapters (e.g., Cover with no audio)
+          let chapterIdx = startChapter;
+          if (!isPlayableChapter(audiobook.chapters[chapterIdx])) {
+            const playable = findPlayableChapter(audiobook.chapters, chapterIdx);
+            if (playable === -1) {
+              log.audiobook.error('[PlayerStore] No playable chapters found', {
+                audiobookId: audiobook.id,
+              });
+              set({ error: 'No playable chapters', isLoading: false });
+              return;
+            }
+            log.audiobook.info('[PlayerStore] Skipping non-playable chapters', {
+              from: chapterIdx,
+              to: playable,
+              skippedTitle: audiobook.chapters[chapterIdx]?.title,
+            });
+            chapterIdx = playable;
+            startPosition = 0; // Reset position when skipping
+          }
+
+          const chapter = audiobook.chapters[chapterIdx];
           const isParagraphMode = !chapter.audioUrl && chapter.paragraphs && chapter.paragraphs.length > 0;
 
           log.audiobook.info('[PlayerStore] loadAudiobook', {
             audiobookId: audiobook.id,
             title: audiobook.title,
-            startChapter,
+            chapterIndex: chapterIdx,
             startPosition,
             chapterTitle: chapter?.title,
             audioUrl: chapter?.audioUrl,
@@ -368,7 +412,7 @@ export const useAudioPlayerStore = create<AudioPlayerStore>()(
           set({
             audiobook,
             currentChapter: chapter,
-            chapterIndex: startChapter,
+            chapterIndex: chapterIdx,
             currentTime: startPosition,
             duration: isParagraphMode
               ? chapter.paragraphs!.reduce((sum, p) => sum + p.duration, 0)
