@@ -3,7 +3,9 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useTranslations } from 'next-intl';
-import { useChapterTimestamps, type TimestampSegment } from '../hooks/use-chapter-timestamps';
+import { useActiveTimestamps } from '../hooks/use-active-timestamps';
+import { useAudioPlayerStore } from '../stores/audio-player-store';
+import type { TimestampSegment } from '../hooks/use-chapter-timestamps';
 
 function binarySearchSegment(
   segments: TimestampSegment[],
@@ -76,7 +78,8 @@ export function SyncedReaderView({
   onSeek,
 }: SyncedReaderViewProps) {
   const t = useTranslations('audiobooks');
-  const { data: segments, isLoading, isError } = useChapterTimestamps(audiobookId, chapterIndex);
+  const currentChapter = useAudioPlayerStore((s) => s.currentChapter);
+  const { data: segments, isLoading, isError } = useActiveTimestamps(audiobookId, chapterIndex, currentChapter);
 
   const syncState = useRef<SyncState>({ segmentIndex: -1, wordIndex: -1 });
   const segmentRefs = useRef<Map<number, HTMLElement>>(new Map());
@@ -150,7 +153,7 @@ export function SyncedReaderView({
   const currentWordIdx = syncState.current.wordIndex;
 
   return (
-    <ScrollArea className="h-[calc(85vh-200px)]">
+    <ScrollArea className="h-[calc(100dvh-200px)]">
       <div className="space-y-3 p-4">
         {segments.map((seg, segIdx) => {
           const isCurrent = segIdx === currentSegIdx;

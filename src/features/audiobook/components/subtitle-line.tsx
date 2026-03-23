@@ -1,7 +1,8 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useChapterTimestamps } from '../hooks/use-chapter-timestamps';
+import { useActiveTimestamps } from '../hooks/use-active-timestamps';
+import { useAudioPlayerStore } from '../stores/audio-player-store';
 
 interface SubtitleLineProps {
   audiobookId: string;
@@ -15,7 +16,8 @@ interface SubtitleLineProps {
  * Tap to expand to full lyrics view.
  */
 export function SubtitleLine({ audiobookId, chapterIndex, currentTime }: SubtitleLineProps) {
-  const { data: segments } = useChapterTimestamps(audiobookId, chapterIndex);
+  const currentChapter = useAudioPlayerStore((s) => s.currentChapter);
+  const { data: segments } = useActiveTimestamps(audiobookId, chapterIndex, currentChapter);
 
   const currentText = useMemo(() => {
     if (!segments || segments.length === 0) return null;
