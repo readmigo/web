@@ -170,7 +170,7 @@ export function SyncedReaderView({
               }}
               onClick={() => onSeek(seg.startTime)}
               className={[
-                'w-full rounded-lg px-3 py-2 text-left text-sm leading-relaxed transition-colors',
+                'w-full rounded-lg px-3 py-2 text-center text-sm leading-relaxed transition-colors',
                 isCurrent
                   ? 'bg-primary/10 text-foreground'
                   : 'text-muted-foreground hover:bg-muted',
