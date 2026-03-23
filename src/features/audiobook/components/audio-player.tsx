@@ -56,7 +56,7 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
   return (
     <>
       <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-        <SheetContent side="bottom" className="h-[100dvh] p-0">
+        <SheetContent side="bottom" className="h-[100dvh] p-0 [&>button:last-child]:hidden">
           <div className="flex h-full flex-col">
             {/* Header */}
             <SheetHeader className="flex-shrink-0 border-b px-4 py-3">
