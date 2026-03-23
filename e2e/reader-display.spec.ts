@@ -33,7 +33,8 @@ test.describe('Reader Display — SE Typography & Layout', () => {
       const columnCount = await content.evaluate((el) =>
         window.getComputedStyle(el).columnCount
       );
-      expect(columnCount).toBe('1');
+      // When 1 column, browser reports 'auto' (no multi-column layout)
+      expect(['1', 'auto']).toContain(columnCount);
     });
 
     test('switching to 3 columns updates layout', async ({ readerPage }) => {

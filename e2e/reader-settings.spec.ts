@@ -26,18 +26,18 @@ test.describe('Reader Settings Panel', () => {
   });
 
   test.describe('Basic settings', () => {
-    test('font size increases from 26px to 28px when clicking +', async ({ readerPage }) => {
+    test('font size increases from 20px to 22px when clicking +', async ({ readerPage }) => {
       const value = await readerPage.getSettingValue('字体大小');
-      expect(value).toBe('26px');
+      expect(value).toBe('20px');
       await readerPage.clickFontSizeButton('increase');
       const updated = await readerPage.getSettingValue('字体大小');
-      expect(updated).toBe('28px');
+      expect(updated).toBe('22px');
     });
 
-    test('font size decreases from 26px to 24px when clicking -', async ({ readerPage }) => {
+    test('font size decreases from 20px to 18px when clicking -', async ({ readerPage }) => {
       await readerPage.clickFontSizeButton('decrease');
       const updated = await readerPage.getSettingValue('字体大小');
-      expect(updated).toBe('24px');
+      expect(updated).toBe('18px');
     });
 
     test('line height default shows 1.6', async ({ readerPage }) => {
@@ -153,7 +153,7 @@ test.describe('Reader Settings Panel', () => {
     test('font size persists after page reload', async ({ readerPage }) => {
       await readerPage.clickFontSizeButton('increase');
       const updated = await readerPage.getSettingValue('字体大小');
-      expect(updated).toBe('28px');
+      expect(updated).toBe('22px');
 
       // Verify settings are persisted in localStorage (Zustand persist middleware)
       const stored = await readerPage.page.evaluate(() => {
@@ -162,7 +162,7 @@ test.describe('Reader Settings Panel', () => {
         const parsed = JSON.parse(raw);
         return parsed?.state?.settings?.fontSize;
       });
-      expect(stored).toBe(28);
+      expect(stored).toBe(22);
 
       // Reload and verify the settings panel still shows updated value
       await readerPage.page.reload();
@@ -170,7 +170,7 @@ test.describe('Reader Settings Panel', () => {
       await readerPage.openSettings();
 
       const persisted = await readerPage.getSettingValue('字体大小');
-      expect(persisted).toBe('28px');
+      expect(persisted).toBe('22px');
     });
   });
 
@@ -186,7 +186,7 @@ test.describe('Reader Settings Panel', () => {
 
       // Verify all returned to defaults
       const fontSize = await readerPage.getSettingValue('字体大小');
-      expect(fontSize).toBe('26px');
+      expect(fontSize).toBe('20px');
 
       const marginSelected = await readerPage.isOptionSelected('边距', '中');
       expect(marginSelected).toBe(true);
