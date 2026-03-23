@@ -64,10 +64,12 @@ async function proxyRequest(req: NextRequest) {
   }
   const apiBase = getApiBaseUrl(req);
   const targetUrl = `${apiBase}${safePath}${url.search}`;
+  log.api.debug('[proxy] forwarding', { method: req.method, path: safePath, targetUrl });
 
   // Read the JWT from the NextAuth session cookie (server-side only)
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
   const accessToken = token?.accessToken as string | undefined;
+  log.api.debug('[proxy] auth', { hasToken: !!accessToken });
 
   // Build headers — forward relevant ones, add auth
   const headers = new Headers();
@@ -100,8 +102,18 @@ async function proxyRequest(req: NextRequest) {
       body: body || undefined,
     });
 
+    log.api.debug('[proxy] backend response', { path: safePath, status: response.status, ok: response.ok });
+
     // Read the response body
     const responseBody = await response.text();
+
+    if (!response.ok) {
+      log.api.warn('[proxy] backend error', {
+        path: safePath,
+        status: response.status,
+        body: responseBody.slice(0, 500),
+      });
+    }
 
     // Create the proxy response
     const proxyResponse = new NextResponse(responseBody, {
@@ -121,7 +133,11 @@ async function proxyRequest(req: NextRequest) {
 
     return proxyResponse;
   } catch (error) {
-    log.api.error('Proxy request failed', error);
+    log.api.error('[proxy] fetch exception', {
+      path: safePath,
+      targetUrl,
+      error: error instanceof Error ? error.message : String(error),
+    });
     return NextResponse.json(
       { error: 'Proxy request failed' },
       { status: 502 }

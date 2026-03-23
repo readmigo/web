@@ -3,6 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { apiClient } from '@/lib/api/client';
+import { log } from '@/lib/logger';
 import type {
   Audiobook,
   AudiobookListItem,
@@ -102,20 +103,49 @@ export function useAudiobookWithProgress(audiobookId: string | undefined) {
   return useQuery({
     queryKey: ['audiobook', audiobookId, 'with-progress'],
     queryFn: async () => {
-      if (!audiobookId) return null;
+      if (!audiobookId) {
+        log.audiobook.debug('[detail] audiobookId is empty, skip fetch');
+        return null;
+      }
+      log.audiobook.info('[detail] start loading audiobook', { audiobookId });
       try {
+        log.audiobook.debug('[detail] trying /with-progress endpoint', { audiobookId });
         const response = await apiClient.get<{ data: AudiobookWithProgress }>(
           `/audiobooks/${audiobookId}/with-progress`,
           { noRedirectOn401: true }
         );
+        log.audiobook.info('[detail] /with-progress succeeded', {
+          audiobookId,
+          hasData: !!response.data,
+          title: response.data?.title,
+        });
         return response.data;
-      } catch {
-        // Fallback: fetch audiobook without progress (works for unauthenticated users)
-        const response = await apiClient.get<{ data: Audiobook }>(
-          `/audiobooks/${audiobookId}`,
-          { noRedirectOn401: true }
-        );
-        return response.data as AudiobookWithProgress;
+      } catch (primaryError) {
+        log.audiobook.warn('[detail] /with-progress failed, falling back', {
+          audiobookId,
+          error: primaryError instanceof Error ? primaryError.message : String(primaryError),
+          status: (primaryError as { status?: number }).status,
+        });
+        try {
+          log.audiobook.debug('[detail] trying fallback /audiobooks/{id}', { audiobookId });
+          const response = await apiClient.get<{ data: Audiobook }>(
+            `/audiobooks/${audiobookId}`,
+            { noRedirectOn401: true }
+          );
+          log.audiobook.info('[detail] fallback succeeded', {
+            audiobookId,
+            hasData: !!response.data,
+            title: response.data?.title,
+          });
+          return response.data as AudiobookWithProgress;
+        } catch (fallbackError) {
+          log.audiobook.error('[detail] fallback also failed', {
+            audiobookId,
+            error: fallbackError instanceof Error ? fallbackError.message : String(fallbackError),
+            status: (fallbackError as { status?: number }).status,
+          });
+          throw fallbackError;
+        }
       }
     },
     enabled: !!audiobookId,

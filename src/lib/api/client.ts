@@ -61,6 +61,8 @@ class ApiClient {
 
     // Cookies (including the NextAuth session cookie) are sent automatically
     // The proxy route reads the JWT and attaches the Bearer token
+    log.api.debug('[client] request', { method: fetchOptions.method || 'GET', url });
+
     const response = await fetch(url, {
       ...fetchOptions,
       headers: {
@@ -70,6 +72,8 @@ class ApiClient {
       },
       credentials: 'same-origin',
     });
+
+    log.api.debug('[client] response', { url, status: response.status, ok: response.ok });
 
     // Handle 401 — redirect to login (unless caller opted out or reading-related path)
     if (response.status === 401) {
@@ -82,6 +86,7 @@ class ApiClient {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
+      log.api.warn('[client] request failed', { url, status: response.status, statusText: response.statusText, errorData });
       throw new ApiError(response.status, response.statusText, errorData);
     }
 
