@@ -60,12 +60,14 @@ export function AudiobookDetailContent({ audiobookId }: AudiobookDetailContentPr
     const startChapter = progress?.currentChapter ?? 0;
     const startPosition = progress?.currentPosition ?? 0;
 
+    // Fire-and-forget: don't block playback on progress tracking (guest users get 401)
     startAudiobook({ audiobookId: audiobook.id });
     await loadAudiobook(audiobook, startChapter, startPosition);
     await play();
   };
 
   const handlePlayChapter = async (chapterIndex: number) => {
+    // Fire-and-forget: don't block playback on progress tracking
     startAudiobook({
       audiobookId: audiobook.id,
       request: { chapterIndex, positionSeconds: 0 },

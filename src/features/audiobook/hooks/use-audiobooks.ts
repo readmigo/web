@@ -228,13 +228,24 @@ export function useStartAudiobook() {
       audiobookId: string;
       request?: StartAudiobookRequest;
     }) => {
-      const response = await apiClient.post<{ data: AudiobookProgress }>(
-        `/audiobooks/${audiobookId}/start`,
-        request || {}
-      );
-      return response.data;
+      try {
+        const response = await apiClient.post<{ data: AudiobookProgress }>(
+          `/audiobooks/${audiobookId}/start`,
+          request || {},
+          { noRedirectOn401: true }
+        );
+        return response.data;
+      } catch (error) {
+        // Guest users (not logged in) can still play — just skip progress tracking
+        log.audiobook.debug('[start] skipped progress tracking (guest or error)', {
+          audiobookId,
+          error: error instanceof Error ? error.message : String(error),
+        });
+        return null;
+      }
     },
-    onSuccess: (_, variables) => {
+    onSuccess: (data, variables) => {
+      if (!data) return; // Guest user — no progress to invalidate
       queryClient.invalidateQueries({
         queryKey: ['audiobook', variables.audiobookId, 'progress'],
       });
@@ -259,13 +270,24 @@ export function useUpdateAudiobookProgress() {
       audiobookId: string;
       request: UpdateProgressRequest;
     }) => {
-      const response = await apiClient.post<{ data: AudiobookProgress }>(
-        `/audiobooks/${audiobookId}/progress`,
-        request
-      );
-      return response.data;
+      try {
+        const response = await apiClient.post<{ data: AudiobookProgress }>(
+          `/audiobooks/${audiobookId}/progress`,
+          request,
+          { noRedirectOn401: true }
+        );
+        return response.data;
+      } catch (error) {
+        // Guest users — silently skip progress updates
+        log.audiobook.debug('[progress] skipped update (guest or error)', {
+          audiobookId,
+          error: error instanceof Error ? error.message : String(error),
+        });
+        return null;
+      }
     },
-    onSuccess: (_, variables) => {
+    onSuccess: (data, variables) => {
+      if (!data) return;
       queryClient.invalidateQueries({
         queryKey: ['audiobook', variables.audiobookId, 'progress'],
       });
