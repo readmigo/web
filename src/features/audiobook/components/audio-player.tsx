@@ -73,9 +73,9 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
 
             {/* Player Content */}
             <div className="flex-1 overflow-auto">
-              <div className="flex flex-col items-center px-6 pt-2 pb-6">
+              <div className="flex flex-col items-center px-6 pt-6 pb-6">
                 {/* Title & Author — above vinyl like iOS */}
-                <div className="mb-4 text-center">
+                <div className="mb-6 text-center">
                   <h2 className="text-lg font-bold">{audiobook.title}</h2>
                   <p className="text-sm text-muted-foreground">{audiobook.author}</p>
                   {audiobook.narrator && (
