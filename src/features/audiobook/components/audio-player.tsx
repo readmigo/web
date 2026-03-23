@@ -73,9 +73,20 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
 
             {/* Player Content */}
             <div className="flex-1 overflow-auto">
-              <div className="flex flex-col items-center px-6 py-6">
+              <div className="flex flex-col items-center px-6 pt-2 pb-6">
+                {/* Title & Author — above vinyl like iOS */}
+                <div className="mb-4 text-center">
+                  <h2 className="text-lg font-bold">{audiobook.title}</h2>
+                  <p className="text-sm text-muted-foreground">{audiobook.author}</p>
+                  {audiobook.narrator && (
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      {t('narratedBy', { name: audiobook.narrator })}
+                    </p>
+                  )}
+                </div>
+
                 {/* Vinyl Record */}
-                <div className="relative aspect-square w-full max-w-[280px]">
+                <div className="relative aspect-square w-full max-w-[260px]">
                   <div
                     className="absolute inset-0 rounded-full bg-neutral-900 shadow-2xl overflow-hidden"
                     style={{
@@ -135,12 +146,6 @@ export function AudioPlayer({ isOpen, onClose }: AudioPlayerProps) {
                       isSending={sendDanmaku.isPending}
                     />
                   )}
-                </div>
-
-                {/* Title & Author */}
-                <div className="mt-5 text-center">
-                  <h2 className="text-xl font-bold">{audiobook.title}</h2>
-                  <p className="text-muted-foreground">{audiobook.author}</p>
                 </div>
 
                 {/* Current Chapter */}
