@@ -365,6 +365,17 @@
     "startReading": "开始阅读",
     "byUsing": "使用 Readmigo 即表示你同意",
     "andThe": "和",
+    "phoneLabel": "手机号",
+    "phonePlaceholder": "请输入手机号",
+    "sendCode": "发送验证码",
+    "sendingCode": "发送中...",
+    "sendCodeFailed": "发送验证码失败，请重试",
+    "verificationCode": "验证码",
+    "verifyAndSignIn": "验证并登录",
+    "resendCode": "重新发送",
+    "resendCountdown": "{seconds}秒后重发",
+    "invalidCode": "验证码错误",
+    "phoneAuthFailed": "手机号登录失败",
     "loginFeatures": {
       "library": {
         "title": "登录后查看书库",

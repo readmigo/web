@@ -177,6 +177,7 @@ if (process.env.AUTH_KAKAO_CLIENT_ID && process.env.AUTH_KAKAO_CLIENT_SECRET) {
 
 providers.push(
   Credentials({
+    id: 'credentials',
     name: 'credentials',
     credentials: {
       email: { label: 'Email', type: 'email' },
@@ -212,6 +213,52 @@ providers.push(
           refreshToken: data.refreshToken,
         };
       } catch {
+        return null;
+      }
+    },
+  })
+);
+
+// Firebase Phone auth — exchanges Firebase ID token with backend
+providers.push(
+  Credentials({
+    id: 'firebase-phone',
+    name: 'Phone',
+    credentials: {
+      idToken: { label: 'Firebase ID Token', type: 'text' },
+    },
+    async authorize(credentials) {
+      if (!credentials?.idToken) return null;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/auth/firebase-phone`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            idToken: credentials.idToken,
+            platform: 'WEB',
+            appVersion: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
+          }),
+        });
+
+        if (!response.ok) {
+          log.auth.error('Firebase phone auth failed', { status: response.status });
+          return null;
+        }
+
+        const data: BackendAuthResponse = await response.json();
+
+        return {
+          id: data.user.id,
+          email: data.user.email,
+          name: data.user.nickname,
+          image: data.user.avatarUrl,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+          isNewUser: data.isNewUser,
+        };
+      } catch (error) {
+        log.auth.error('Firebase phone auth error', error);
         return null;
       }
     },
@@ -264,7 +311,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           }
         }
 
-        if (account.provider === 'credentials') {
+        if (account.provider === 'credentials' || account.provider === 'firebase-phone') {
           token.backendUserId = user.id;
           const u = user as Record<string, unknown>;
           token.accessToken = u.accessToken as string | undefined;

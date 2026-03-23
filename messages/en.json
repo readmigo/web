@@ -365,6 +365,17 @@
     "startReading": "Start Reading",
     "byUsing": "By using Readmigo, you agree to our",
     "andThe": "and",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "Enter phone number",
+    "sendCode": "Send Code",
+    "sendingCode": "Sending...",
+    "sendCodeFailed": "Failed to send code. Please try again.",
+    "verificationCode": "Verification Code",
+    "verifyAndSignIn": "Verify & Sign In",
+    "resendCode": "Resend Code",
+    "resendCountdown": "Resend in {seconds}s",
+    "invalidCode": "Invalid verification code",
+    "phoneAuthFailed": "Phone authentication failed",
     "loginFeatures": {
       "library": {
         "title": "Sign In to View Library",
