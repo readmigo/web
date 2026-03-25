@@ -37,11 +37,22 @@ function AppleLogo({ className }: { className?: string }) {
   );
 }
 
+// NextAuth error codes → user-friendly i18n keys
+const OAUTH_ERROR_MAP: Record<string, string> = {
+  OAuthSignin: 'oauthErrorSignin',
+  OAuthCallback: 'oauthErrorCallback',
+  OAuthCreateAccount: 'oauthErrorCreateAccount',
+  OAuthAccountNotLinked: 'oauthErrorAccountNotLinked',
+  Configuration: 'oauthErrorConfiguration',
+  Default: 'loginFailed',
+};
+
 interface LoginFormProps {
   callbackUrl?: string;
+  oauthError?: string;
 }
 
-export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
+export function LoginForm({ callbackUrl = '/', oauthError: initialOauthError }: LoginFormProps) {
   const t = useTranslations('auth');
   const router = useRouter();
   const { enterGuestMode } = useGuestMode();
@@ -57,7 +68,12 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [oauthLoading, setOauthLoading] = useState<string | null>(null);
-  const [oauthError, setOauthError] = useState('');
+  const [oauthError, setOauthError] = useState(() => {
+    if (!initialOauthError) return '';
+    log.auth.error('[OAuth] callback error from URL', { error: initialOauthError });
+    const key = OAUTH_ERROR_MAP[initialOauthError] || OAUTH_ERROR_MAP.Default;
+    return t(key);
+  });
 
   useEffect(() => {
     const lang = navigator.language || '';

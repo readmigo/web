@@ -282,6 +282,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       // Initial sign in
       if (account && user) {
+        log.auth.warn('[jwt] initial sign-in callback', {
+          provider: account.provider,
+          hasIdToken: !!account.id_token,
+          hasAccessToken: !!account.access_token,
+          userId: user.id,
+        });
+
         // For OAuth providers, authenticate with backend
         if (
           account.provider === 'apple' ||
@@ -294,12 +301,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               ? account.access_token
               : account.id_token;
           if (oauthToken) {
+            log.auth.warn('[jwt] sending OAuth token to backend', { provider: account.provider });
             const backendAuth = await authenticateWithBackend(
               account.provider as 'apple' | 'google' | 'line' | 'kakao',
               oauthToken
             );
 
             if (backendAuth) {
+              log.auth.warn('[jwt] backend auth success', { provider: account.provider, userId: backendAuth.user.id });
               token.accessToken = backendAuth.accessToken;
               token.refreshToken = backendAuth.refreshToken;
               token.accessTokenExpiresAt = Date.now() + DEFAULT_TOKEN_LIFETIME_MS;
@@ -307,7 +316,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               token.name = backendAuth.user.nickname || token.name;
               token.picture = backendAuth.user.avatarUrl || token.picture;
               token.isNewUser = backendAuth.isNewUser;
+            } else {
+              log.auth.error('[jwt] backend auth failed', { provider: account.provider });
             }
+          } else {
+            log.auth.error('[jwt] no OAuth token received from provider', {
+              provider: account.provider,
+              hasIdToken: !!account.id_token,
+              hasAccessToken: !!account.access_token,
+            });
           }
         }
 
