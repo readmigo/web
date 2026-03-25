@@ -47,6 +47,14 @@ const OAUTH_ERROR_MAP: Record<string, string> = {
   Default: 'loginFailed',
 };
 
+// Provider availability — only show buttons for configured providers
+const ENABLED_PROVIDERS = {
+  apple: !!process.env.NEXT_PUBLIC_AUTH_APPLE_ENABLED,
+  google: !!process.env.NEXT_PUBLIC_AUTH_GOOGLE_ENABLED,
+  line: !!process.env.NEXT_PUBLIC_AUTH_LINE_ENABLED,
+  kakao: !!process.env.NEXT_PUBLIC_AUTH_KAKAO_ENABLED,
+};
+
 interface LoginFormProps {
   callbackUrl?: string;
   oauthError?: string;
@@ -297,7 +305,7 @@ export function LoginForm({ callbackUrl = '/', oauthError: initialOauthError }: 
         )}
 
         {/* LINE Sign In — Japan only */}
-        {userRegion === 'jp' && (
+        {userRegion === 'jp' && ENABLED_PROVIDERS.line && (
           <Button
             className="w-full h-[50px] rounded-[10px] bg-[#06C755] text-white font-medium hover:bg-[#06C755]/90 text-base"
             onClick={() => handleOAuthSignIn('line')}
@@ -313,7 +321,7 @@ export function LoginForm({ callbackUrl = '/', oauthError: initialOauthError }: 
         )}
 
         {/* Kakao Sign In — Korea only */}
-        {userRegion === 'kr' && (
+        {userRegion === 'kr' && ENABLED_PROVIDERS.kakao && (
           <Button
             className="w-full h-[50px] rounded-[10px] bg-[#FEE500] text-[#000000D9] font-medium hover:bg-[#FEE500]/90 text-base"
             onClick={() => handleOAuthSignIn('kakao')}
@@ -329,25 +337,28 @@ export function LoginForm({ callbackUrl = '/', oauthError: initialOauthError }: 
         )}
 
         {/* Apple Sign In */}
-        <Button
-          className="w-full h-[50px] rounded-[10px] bg-white text-black font-medium hover:bg-white/90 text-base"
-          onClick={() => handleOAuthSignIn('apple')}
-          disabled={!!oauthLoading}
-        >
-          {oauthLoading === 'apple' ? (
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-          ) : (
-            <AppleLogo className="mr-2 h-5 w-5" />
-          )}
-          {t('signInApple')}
-        </Button>
+        {ENABLED_PROVIDERS.apple && (
+          <Button
+            className="w-full h-[50px] rounded-[10px] bg-white text-black font-medium hover:bg-white/90 text-base"
+            onClick={() => handleOAuthSignIn('apple')}
+            disabled={!!oauthLoading}
+          >
+            {oauthLoading === 'apple' ? (
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+            ) : (
+              <AppleLogo className="mr-2 h-5 w-5" />
+            )}
+            {t('signInApple')}
+          </Button>
+        )}
 
         {/* Google Sign In */}
-        <Button
-          className="w-full h-[50px] rounded-[10px] bg-white text-black font-medium hover:bg-white/90 text-base"
-          onClick={() => handleOAuthSignIn('google')}
-          disabled={!!oauthLoading}
-        >
+        {ENABLED_PROVIDERS.google && (
+          <Button
+            className="w-full h-[50px] rounded-[10px] bg-white text-black font-medium hover:bg-white/90 text-base"
+            onClick={() => handleOAuthSignIn('google')}
+            disabled={!!oauthLoading}
+          >
           {oauthLoading === 'google' ? (
             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
           ) : (
@@ -360,6 +371,7 @@ export function LoginForm({ callbackUrl = '/', oauthError: initialOauthError }: 
           )}
           {t('signInGoogle')}
         </Button>
+        )}
 
         {/* Guest Mode — prominent button like iOS */}
         <Button
