@@ -329,6 +329,13 @@ export function MeContent() {
   const { isPro } = useSubscription();
   const { data: unreadCount } = useUnreadCount();
 
+  // Debug: log all rendered values to find #185 object
+  if (typeof window !== 'undefined') {
+    console.warn('[MeContent] session.user:', JSON.stringify(session?.user));
+    console.warn('[MeContent] isPro:', isPro, 'unreadCount:', unreadCount);
+    console.warn('[MeContent] history.length:', history.length, 'favoriteIds.size:', favoriteIds.size);
+  }
+
   const hasHistory = history.length > 0;
   const hasFavorites = favoriteIds.size > 0;
   const hasMyContent = isAuthenticated && (hasHistory || hasFavorites);
