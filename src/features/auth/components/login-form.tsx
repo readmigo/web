@@ -100,7 +100,7 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
 
     setIsLoading(true);
     setError('');
-    log.auth.info('Email sign-in initiated');
+    log.auth.warn('[Email] sign-in initiated');
 
     try {
       const result = await signIn('credentials', {
@@ -110,50 +110,36 @@ export function LoginForm({ callbackUrl = '/' }: LoginFormProps) {
         redirect: false,
       });
 
-      log.auth.debug('Email sign-in result', { error: result?.error, hasUrl: !!result?.url });
+      log.auth.warn('[Email] sign-in result', { error: result?.error, hasUrl: !!result?.url });
 
       if (result?.error) {
-        log.auth.warn('Email sign-in failed', { error: result.error });
+        log.auth.error('[Email] sign-in failed', { error: result.error });
         setError(t('invalidCredentials'));
       } else if (result?.url) {
         trackEvent('user_logged_in', { method: 'email', platform: 'web' });
-        log.auth.info('Email sign-in success, redirecting');
+        log.auth.warn('[Email] sign-in success, redirecting');
         window.location.href = result.url;
       }
     } catch (err) {
-      log.auth.error('Email sign-in exception', err);
+      log.auth.error('[Email] sign-in exception', err);
       setError(t('loginFailed'));
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleOAuthSignIn = async (provider: 'apple' | 'google' | 'line' | 'kakao') => {
-    log.auth.info(`OAuth sign-in initiated`, { provider });
+  const handleOAuthSignIn = (provider: 'apple' | 'google' | 'line' | 'kakao') => {
+    log.auth.warn(`[OAuth] sign-in initiated`, { provider });
     setOauthError('');
     setOauthLoading(provider);
 
-    try {
-      const result = await signIn(provider, { callbackUrl, redirect: false });
-      log.auth.debug(`OAuth sign-in result`, { provider, result });
-
-      if (result?.error) {
-        log.auth.error(`OAuth sign-in failed`, { provider, error: result.error });
-        setOauthError(t('loginFailed'));
-      } else if (result?.url) {
-        trackEvent('user_logged_in', { method: provider, platform: 'web' });
-        log.auth.info(`OAuth sign-in success, redirecting`, { provider, url: result.url });
-        window.location.href = result.url;
-      } else {
-        log.auth.warn(`OAuth sign-in returned no url and no error`, { provider, result });
-        setOauthError(t('loginFailed'));
-      }
-    } catch (err) {
-      log.auth.error(`OAuth sign-in exception`, { provider, error: err });
+    // OAuth must do a full-page redirect to the provider's authorization page.
+    // Do NOT use redirect: false — it blocks the redirect flow.
+    signIn(provider, { callbackUrl }).catch((err) => {
+      log.auth.error(`[OAuth] sign-in exception`, { provider, error: err });
       setOauthError(t('loginFailed'));
-    } finally {
       setOauthLoading(null);
-    }
+    });
   };
 
   if (showEmailForm) {
