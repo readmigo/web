@@ -24,6 +24,8 @@ const publicPaths = [
   '/category/',
   '/book-list/',
   '/audiobooks',
+  '/stats',
+  '/community',
   '/me',
   '/login',
   '/register',
