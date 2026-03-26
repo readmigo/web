@@ -355,16 +355,14 @@ export function MeContent() {
   const isAuthenticated = !!session?.user;
   const { history } = useBrowsingHistory();
   const { favoriteIds } = useFavoriteBookIds();
-  const { isPro } = useSubscription();
-  const { data: unreadCount } = useUnreadCount();
+  // DEBUG #185: useSubscription and useUnreadCount REMOVED to test
+  // const { isPro } = useSubscription();
+  // const { data: unreadCount } = useUnreadCount();
 
-  // DEBUG #185: temporarily return minimal JSX to isolate hooks vs render
   void update; void tAvatar; void tl;
   return (
     <div className="p-4">
-      <p className="text-green-500">MeContent hooks OK</p>
-      <p>isPro: {String(isPro)}</p>
-      <p>unreadCount: {String(unreadCount)}</p>
+      <p className="text-green-500">MeContent hooks OK (no subscription hook)</p>
       <p>history: {String(history.length)}</p>
       <p>favorites: {String(favoriteIds.size)}</p>
       <p>auth: {String(isAuthenticated)}</p>
