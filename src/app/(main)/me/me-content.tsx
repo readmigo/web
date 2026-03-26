@@ -332,8 +332,23 @@ export function MeContent() {
   // Debug: log all rendered values to find #185 object
   if (typeof window !== 'undefined') {
     console.warn('[MeContent] session.user:', JSON.stringify(session?.user));
-    console.warn('[MeContent] isPro:', isPro, 'unreadCount:', unreadCount);
-    console.warn('[MeContent] history.length:', history.length, 'favoriteIds.size:', favoriteIds.size);
+    console.warn('[MeContent] isPro:', isPro, typeof isPro);
+    console.warn('[MeContent] unreadCount:', unreadCount, typeof unreadCount);
+    // Check every translation key for object values
+    const tKeys = ['myContent', 'readingData', 'viewStats', 'subscription', 'subscriptionPro', 'subscriptionFree', 'notifications', 'notificationCenter', 'sendMessage', 'community', 'agora', 'followingAuthors', 'other', 'aboutReadmigo', 'privacyPolicy', 'termsOfService', 'userAgreement', 'account', 'signOut', 'user', 'notLoggedIn', 'notLoggedInDesc', 'login'];
+    for (const key of tKeys) {
+      try {
+        const val = t(key);
+        if (typeof val === 'object') console.error('[MeContent] OBJECT translation key:', key, val);
+      } catch { /* skip missing keys */ }
+    }
+    const tlKeys = ['continueReading', 'recentlyBrowsed', 'favorites'];
+    for (const key of tlKeys) {
+      try {
+        const val = tl(key);
+        if (typeof val === 'object') console.error('[MeContent] OBJECT tl key:', key, val);
+      } catch { /* skip missing keys */ }
+    }
   }
 
   const hasHistory = history.length > 0;
