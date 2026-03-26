@@ -24,8 +24,6 @@ const publicPaths = [
   '/category/',
   '/book-list/',
   '/audiobooks',
-  '/stats',
-  '/community',
   '/me',
   '/login',
   '/register',
@@ -89,6 +87,15 @@ export async function middleware(req: NextRequest) {
 
   // For protected routes, check for a valid session
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+
+  console.warn('[middleware] auth check', {
+    pathname,
+    hasToken: !!token,
+    hasSecret: !!process.env.AUTH_SECRET,
+    cookies: Object.fromEntries(
+      [...req.cookies.getAll()].map(c => [c.name, c.value.substring(0, 20) + '...'])
+    ),
+  });
 
   if (!token) {
     // Redirect to login with callback URL
