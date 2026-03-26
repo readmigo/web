@@ -5,8 +5,8 @@ import type { ErrorInfo, ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-// Debug ErrorBoundary to catch #185
-class DebugErrorBoundary extends Component<
+// Debug ErrorBoundary to catch #185 — exported for use in page.tsx
+export class MeErrorBoundary extends Component<
   { children: ReactNode },
   { error: Error | null }
 > {
@@ -440,7 +440,6 @@ export function MeContent() {
   };
 
   return (
-    <DebugErrorBoundary>
     <div className="space-y-6 pb-8">
       {/* hidden file input */}
       <input
@@ -621,6 +620,5 @@ export function MeContent() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-    </DebugErrorBoundary>
   );
 }
