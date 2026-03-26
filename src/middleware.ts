@@ -21,6 +21,10 @@ const protectedPaths = [
   '/settings',
   '/notifications',
   '/messaging',
+  '/stats',
+  '/library',
+  '/quotes/favorites',
+  '/author/following',
 ];
 
 // Static/system paths that should never be intercepted
