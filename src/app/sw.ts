@@ -106,9 +106,12 @@ const serwist = new Serwist({
         ],
       }),
     },
-    // Cache page navigations
+    // Cache page navigations (exclude auth and API proxy routes)
     {
-      matcher: ({ url }) => /^https:\/\/.*\.readmigo\.app\/.*$/i.test(url.href),
+      matcher: ({ url }) =>
+        /^https:\/\/.*\.readmigo\.app\/.*$/i.test(url.href) &&
+        !url.pathname.startsWith('/api/auth/') &&
+        !url.pathname.startsWith('/api/proxy/'),
       handler: new NetworkFirst({
         cacheName: "page-cache",
         networkTimeoutSeconds: 10,
