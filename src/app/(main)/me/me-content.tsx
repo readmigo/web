@@ -358,15 +358,8 @@ export function MeContent() {
   const { isPro } = useSubscription();
   const { data: unreadCount } = useUnreadCount();
 
-  // Debug: dump raw Zustand store state to find #185 culprit
-  if (typeof window !== 'undefined') {
-    try {
-      const raw = localStorage.getItem('readmigo_subscription');
-      console.error('[DEBUG] raw subscription localStorage:', raw);
-    } catch { /* ignore */ }
-    console.error('[DEBUG] session.user:', JSON.stringify(session?.user));
-    console.error('[DEBUG] isPro:', isPro, '| unreadCount:', unreadCount);
-  }
+  // DEBUG #185: temporarily return minimal JSX to isolate if error is in hooks vs JSX
+  return <div className="p-4 text-green-500">MeContent hooks loaded OK. isPro={String(isPro)}, unreadCount={String(unreadCount)}</div>;
 
   const hasHistory = history.length > 0;
   const hasFavorites = favoriteIds.size > 0;
