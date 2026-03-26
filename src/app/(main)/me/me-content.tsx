@@ -1,8 +1,37 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, Component } from 'react';
+import type { ErrorInfo, ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+
+// Debug ErrorBoundary to catch #185
+class DebugErrorBoundary extends Component<
+  { children: ReactNode },
+  { error: Error | null }
+> {
+  state: { error: Error | null } = { error: null };
+
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('[DebugErrorBoundary] error:', error.message);
+    console.error('[DebugErrorBoundary] component stack:', info.componentStack);
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="p-4 text-red-500">
+          <p>Error: {this.state.error.message}</p>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 import { useSession } from 'next-auth/react';
 import { clearUserData } from '@/lib/auth/clear-user-data';
 import Cropper from 'react-easy-crop';
@@ -411,6 +440,7 @@ export function MeContent() {
   };
 
   return (
+    <DebugErrorBoundary>
     <div className="space-y-6 pb-8">
       {/* hidden file input */}
       <input
@@ -591,5 +621,6 @@ export function MeContent() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+    </DebugErrorBoundary>
   );
 }
