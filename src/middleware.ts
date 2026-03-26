@@ -89,16 +89,17 @@ export async function middleware(req: NextRequest) {
   // For protected routes, check for a valid session
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
 
-  console.warn('[middleware] auth check', {
-    pathname,
-    hasToken: !!token,
-    hasSecret: !!process.env.AUTH_SECRET,
-    cookies: Object.fromEntries(
-      [...req.cookies.getAll()].map(c => [c.name, c.value.substring(0, 20) + '...'])
-    ),
-  });
-
   if (!token) {
+    // DEBUG: temporarily show why token is null instead of redirecting
+    const cookieNames = [...req.cookies.getAll()].map(c => c.name).join(', ');
+    const debugInfo = {
+      pathname,
+      hasSecret: !!process.env.AUTH_SECRET,
+      cookieNames,
+      hasSessionToken: req.cookies.has('authjs.session-token') || req.cookies.has('__Secure-authjs.session-token'),
+    };
+    console.warn('[middleware] no token for protected route', debugInfo);
+
     // Redirect to login with callback URL
     const loginUrl = new URL('/login', req.url);
     loginUrl.searchParams.set('callbackUrl', pathname);
