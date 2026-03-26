@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { MeContent, MeErrorBoundary } from './me-content';
+import { MeContent } from './me-content';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('metadata');
@@ -13,9 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function MePage() {
   return (
     <div className="container py-6">
-      <MeErrorBoundary>
-        <MeContent />
-      </MeErrorBoundary>
+      <MeContent />
     </div>
   );
 }

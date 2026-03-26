@@ -11,7 +11,22 @@ function todayISO(): string {
 }
 
 export function useSubscription() {
-  const store = useSubscriptionStore();
+  // Use individual selectors to avoid subscribing to the entire store object.
+  // Subscribing without a selector caused React #185 errors because Zustand's
+  // synchronous re-render during setLoading propagated the full store object
+  // through the React reconciler.
+  const tier = useSubscriptionStore((s) => s.tier);
+  const status = useSubscriptionStore((s) => s.status);
+  const isActive = useSubscriptionStore((s) => s.isActive);
+  const expiresAt = useSubscriptionStore((s) => s.expiresAt);
+  const trialEnd = useSubscriptionStore((s) => s.trialEnd);
+  const willRenew = useSubscriptionStore((s) => s.willRenew);
+  const storeIsLoading = useSubscriptionStore((s) => s.isLoading);
+  const dailyAudioSeconds = useSubscriptionStore((s) => s.dailyAudioSeconds);
+  const dailyAudioDate = useSubscriptionStore((s) => s.dailyAudioDate);
+  const setLoading = useSubscriptionStore((s) => s.setLoading);
+  const setSubscription = useSubscriptionStore((s) => s.setSubscription);
+  const resetDailyAudioUsage = useSubscriptionStore((s) => s.resetDailyAudioUsage);
 
   const { data, isLoading } = useQuery({
     queryKey: ['subscription', 'status'],
@@ -24,40 +39,40 @@ export function useSubscription() {
   });
 
   useEffect(() => {
-    store.setLoading(isLoading);
-  }, [isLoading, store]);
+    setLoading(isLoading);
+  }, [isLoading, setLoading]);
 
   useEffect(() => {
     if (data) {
-      store.setSubscription(data);
+      setSubscription(data);
     }
-  }, [data, store]);
+  }, [data, setSubscription]);
 
-  const isPro = store.tier === 'PRO' || store.tier === 'PREMIUM';
+  const isPro = tier === 'PRO' || tier === 'PREMIUM';
 
   // Auto-reset daily audio counter when the date changes
   useEffect(() => {
-    if (!isPro && store.dailyAudioDate !== todayISO()) {
-      store.resetDailyAudioUsage();
+    if (!isPro && dailyAudioDate !== todayISO()) {
+      resetDailyAudioUsage();
     }
-  }, [isPro, store]);
+  }, [isPro, dailyAudioDate, resetDailyAudioUsage]);
 
   const canUseAudio =
-    isPro || store.dailyAudioSeconds < FREE_DAILY_AUDIO_LIMIT_SECONDS;
+    isPro || dailyAudioSeconds < FREE_DAILY_AUDIO_LIMIT_SECONDS;
 
   return {
-    tier: store.tier,
-    isActive: store.isActive,
+    tier,
+    isActive,
     isPro,
-    status: store.status,
-    expiresAt: store.expiresAt,
-    trialEnd: store.trialEnd,
-    willRenew: store.willRenew,
-    isLoading: store.isLoading,
+    status,
+    expiresAt,
+    trialEnd,
+    willRenew,
+    isLoading: storeIsLoading,
     canUseAudio,
-    dailyAudioSeconds: store.dailyAudioSeconds,
+    dailyAudioSeconds,
     dailyAudioRemainingSeconds: isPro
       ? Infinity
-      : Math.max(0, FREE_DAILY_AUDIO_LIMIT_SECONDS - store.dailyAudioSeconds),
+      : Math.max(0, FREE_DAILY_AUDIO_LIMIT_SECONDS - dailyAudioSeconds),
   };
 }
