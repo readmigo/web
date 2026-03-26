@@ -67,8 +67,14 @@ async function proxyRequest(req: NextRequest) {
   log.api.debug('[proxy] forwarding', { method: req.method, path: safePath, targetUrl });
 
   // Read the JWT from the NextAuth session cookie (server-side only)
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
-  const accessToken = token?.accessToken as string | undefined;
+  // Wrapped in try-catch: a stale/corrupt cookie must not break the entire proxy
+  let accessToken: string | undefined;
+  try {
+    const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+    accessToken = token?.accessToken as string | undefined;
+  } catch {
+    log.api.warn('[proxy] getToken failed (stale cookie?)', { path: safePath });
+  }
   log.api.debug('[proxy] auth', { hasToken: !!accessToken });
 
   // Build headers — forward relevant ones, add auth

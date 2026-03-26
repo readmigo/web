@@ -16,22 +16,11 @@ function detectRegion(req: NextRequest): 'cn' | 'global' {
   return 'global';
 }
 
-// Public routes that don't require authentication
-const publicPaths = [
-  '/book/',
-  '/read/',
-  '/author/',
-  '/category/',
-  '/book-list/',
-  '/audiobooks',
-  '/community',
-  '/me',
-  '/login',
-  '/register',
-  '/forgot-password',
-  '/terms',
-  '/privacy',
-  '/api/auth/',
+// Only these routes truly require a logged-in user (blacklist strategy)
+const protectedPaths = [
+  '/settings',
+  '/notifications',
+  '/messaging',
 ];
 
 // Static/system paths that should never be intercepted
@@ -44,11 +33,8 @@ const systemPaths = [
   '/icons/',
 ];
 
-function isPublicPath(pathname: string): boolean {
-  // Root path is public
-  if (pathname === '/') return true;
-
-  return publicPaths.some((path) => pathname.startsWith(path));
+function isProtectedPath(pathname: string): boolean {
+  return protectedPaths.some((path) => pathname.startsWith(path));
 }
 
 function isSystemPath(pathname: string): boolean {
@@ -77,33 +63,21 @@ export async function middleware(req: NextRequest) {
   const region = detectRegion(req);
   const hasRegionCookie = req.cookies.has(REGION_COOKIE);
 
-  // Allow public paths without authentication
-  if (isPublicPath(pathname)) {
-    const response = NextResponse.next();
-    if (!hasRegionCookie) {
-      response.cookies.set(REGION_COOKIE, region, { path: '/', maxAge: 365 * 24 * 60 * 60, sameSite: 'lax' });
+  // Only check auth for protected routes
+  if (isProtectedPath(pathname)) {
+    let token = null;
+    try {
+      token = await getToken({ req, secret: process.env.AUTH_SECRET });
+    } catch {
+      // Stale/corrupt cookie — treat as unauthenticated
+      console.warn('[middleware] getToken failed (stale cookie?)', { pathname });
     }
-    return response;
-  }
 
-  // For protected routes, check for a valid session
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
-
-  if (!token) {
-    // DEBUG: temporarily show why token is null instead of redirecting
-    const cookieNames = [...req.cookies.getAll()].map(c => c.name).join(', ');
-    const debugInfo = {
-      pathname,
-      hasSecret: !!process.env.AUTH_SECRET,
-      cookieNames,
-      hasSessionToken: req.cookies.has('authjs.session-token') || req.cookies.has('__Secure-authjs.session-token'),
-    };
-    console.warn('[middleware] no token for protected route', debugInfo);
-
-    // Redirect to login with callback URL
-    const loginUrl = new URL('/login', req.url);
-    loginUrl.searchParams.set('callbackUrl', pathname);
-    return NextResponse.redirect(loginUrl);
+    if (!token) {
+      const loginUrl = new URL('/login', req.url);
+      loginUrl.searchParams.set('callbackUrl', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
   const response = NextResponse.next();
