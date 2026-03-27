@@ -72,6 +72,15 @@ async function proxyRequest(req: NextRequest) {
   try {
     const token = await getToken({ req, secret: process.env.AUTH_SECRET });
     accessToken = token?.accessToken as string | undefined;
+    if (!accessToken && token) {
+      log.api.warn('[proxy] JWT exists but accessToken is missing', {
+        path: safePath,
+        hasToken: true,
+        sub: token.sub,
+        backendUserId: token.backendUserId,
+        hasRefreshToken: !!token.refreshToken,
+      });
+    }
   } catch {
     log.api.warn('[proxy] getToken failed (stale cookie?)', { path: safePath });
   }

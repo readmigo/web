@@ -75,11 +75,22 @@ class ApiClient {
 
     log.api.debug('[client] response', { url, status: response.status, ok: response.ok });
 
-    // Handle 401 — redirect to login (unless caller opted out or reading-related path)
+    // Handle 401 — only redirect to login when there is no active session
+    // (avoids kicking authenticated users to login due to a stale backend token)
     if (response.status === 401) {
       const isReadingPath = endpoint.startsWith('/reading/') || endpoint.startsWith('/books/');
       if (!noRedirectOn401 && !isReadingPath && typeof window !== 'undefined') {
-        window.location.href = '/login';
+        try {
+          const sessionRes = await fetch('/api/auth/session');
+          const session = await sessionRes.json();
+          if (!session?.user) {
+            window.location.href = '/login';
+          } else {
+            log.api.warn('[client] 401 but session exists — skipping redirect', { url, userId: session.user.id });
+          }
+        } catch {
+          window.location.href = '/login';
+        }
       }
       throw new ApiError(401, 'Unauthorized');
     }
