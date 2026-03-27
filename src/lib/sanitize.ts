@@ -1,6 +1,6 @@
 'use client';
 
-import DOMPurify, { type Config } from 'isomorphic-dompurify';
+import DOMPurify, { type Config } from 'dompurify';
 
 const SANITIZE_CONFIG: Config = {
   ALLOWED_TAGS: [

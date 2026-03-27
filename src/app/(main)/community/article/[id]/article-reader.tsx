@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import DOMPurify from 'isomorphic-dompurify';
+import DOMPurify from 'dompurify';
 import { useTranslations } from 'next-intl';
 import { ArrowLeft, ExternalLink, Share2, BookOpen } from 'lucide-react';
 import Link from 'next/link';
