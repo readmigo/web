@@ -322,8 +322,16 @@ export function MeContent() {
   const t = useTranslations('me');
   const tAvatar = useTranslations('me.avatar');
   const tl = useTranslations('library');
-  const { data: session, update } = useSession();
+  const { data: session, status, update } = useSession();
   const isAuthenticated = !!session?.user;
+
+  // Debug: log session status on every render
+  console.log('[MeContent][debug]', {
+    status,
+    isAuthenticated,
+    userId: session?.user?.id ?? null,
+    userName: session?.user?.name ?? null,
+  });
   const { history } = useBrowsingHistory();
   const { favoriteIds } = useFavoriteBookIds();
   const { isPro } = useSubscription();

@@ -63,6 +63,17 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Debug: log all non-system requests to /me and auth-related paths
+  if (pathname === '/me' || pathname.startsWith('/login') || pathname.startsWith('/api/auth')) {
+    const cookieNames = Array.from(req.cookies.getAll()).map((c) => c.name);
+    console.log('[middleware][debug]', {
+      pathname,
+      isProtected: isProtectedPath(pathname),
+      cookieNames,
+      hasSessionToken: cookieNames.some((n) => n.includes('session-token')),
+    });
+  }
+
   // Detect region and set cookie if not already set
   const region = detectRegion(req);
   const hasRegionCookie = req.cookies.has(REGION_COOKIE);
@@ -77,7 +88,14 @@ export async function middleware(req: NextRequest) {
       console.warn('[middleware] getToken failed (stale cookie?)', { pathname });
     }
 
+    console.log('[middleware][debug] protected route check', {
+      pathname,
+      hasToken: !!token,
+      tokenSub: token?.sub ?? null,
+    });
+
     if (!token) {
+      console.log('[middleware][debug] REDIRECTING to /login', { from: pathname });
       const loginUrl = new URL('/login', req.url);
       loginUrl.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(loginUrl);

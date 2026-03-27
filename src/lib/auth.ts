@@ -347,6 +347,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         expiresAt &&
         Date.now() + TOKEN_REFRESH_MARGIN_MS >= expiresAt
       ) {
+        log.auth.warn('[jwt][debug] token refresh triggered', {
+          backendUserId: token.backendUserId,
+          expiresAt,
+          now: Date.now(),
+        });
         const refreshed = await refreshBackendToken(token.refreshToken as string);
         if (refreshed) {
           token.accessToken = refreshed.accessToken;
@@ -354,6 +359,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.accessTokenExpiresAt = Date.now() + DEFAULT_TOKEN_LIFETIME_MS;
         } else {
           // Refresh failed — clear tokens so user gets logged out
+          log.auth.error('[jwt][debug] token refresh FAILED — clearing tokens', {
+            backendUserId: token.backendUserId,
+          });
           token.accessToken = undefined;
           token.refreshToken = undefined;
           token.accessTokenExpiresAt = undefined;
@@ -367,6 +375,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = (token.backendUserId as string) || (token.sub as string);
         session.user.isNewUser = token.isNewUser as boolean | undefined;
       }
+      log.auth.warn('[session][debug]', {
+        hasUser: !!session.user,
+        userId: session.user?.id ?? null,
+        hasAccessToken: !!token.accessToken,
+        hasRefreshToken: !!token.refreshToken,
+        backendUserId: token.backendUserId ?? null,
+      });
       // Tokens are kept server-side only (in the JWT cookie managed by NextAuth).
       // They are NOT exposed to the client session for security.
       // The API proxy route (/api/proxy) reads the JWT to attach tokens.
