@@ -63,42 +63,50 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Debug: log all non-system requests to /me and auth-related paths
-  if (pathname === '/me' || pathname.startsWith('/login') || pathname.startsWith('/api/auth')) {
-    const cookieNames = Array.from(req.cookies.getAll()).map((c) => c.name);
-    console.log('[middleware][debug]', {
-      pathname,
-      isProtected: isProtectedPath(pathname),
-      cookieNames,
-      hasSessionToken: cookieNames.some((n) => n.includes('session-token')),
-    });
-  }
-
   // Detect region and set cookie if not already set
   const region = detectRegion(req);
   const hasRegionCookie = req.cookies.has(REGION_COOKIE);
 
   // Only check auth for protected routes
   if (isProtectedPath(pathname)) {
+    const cookieNames = Array.from(req.cookies.getAll()).map((c) => c.name);
+    const hasSessionCookie = cookieNames.some((n) => n.includes('session-token'));
+
+    console.log('[middleware][debug] protected route', {
+      pathname,
+      cookieNames,
+      hasSessionCookie,
+      authSecret: process.env.AUTH_SECRET ? `set(${process.env.AUTH_SECRET.length}chars)` : 'MISSING',
+    });
+
     let token = null;
     try {
       token = await getToken({ req, secret: process.env.AUTH_SECRET });
-    } catch {
-      // Stale/corrupt cookie — treat as unauthenticated
-      console.warn('[middleware] getToken failed (stale cookie?)', { pathname });
+    } catch (err) {
+      console.warn('[middleware] getToken threw', {
+        pathname,
+        error: err instanceof Error ? err.message : String(err),
+      });
     }
 
-    console.log('[middleware][debug] protected route check', {
+    console.log('[middleware][debug] token result', {
       pathname,
       hasToken: !!token,
       tokenSub: token?.sub ?? null,
+      backendUserId: (token as Record<string, unknown>)?.backendUserId ?? null,
     });
 
     if (!token) {
-      console.log('[middleware][debug] REDIRECTING to /login', { from: pathname });
-      const loginUrl = new URL('/login', req.url);
-      loginUrl.searchParams.set('callbackUrl', pathname);
-      return NextResponse.redirect(loginUrl);
+      // Session cookie exists but getToken failed — let the page handle auth
+      // instead of hard-redirecting an authenticated user to login
+      if (hasSessionCookie) {
+        console.warn('[middleware] getToken null but session cookie present — allowing through', { pathname });
+      } else {
+        console.log('[middleware] no session — redirecting to /login', { from: pathname });
+        const loginUrl = new URL('/login', req.url);
+        loginUrl.searchParams.set('callbackUrl', pathname);
+        return NextResponse.redirect(loginUrl);
+      }
     }
   }
 
