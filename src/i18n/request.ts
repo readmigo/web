@@ -2,7 +2,8 @@ import { getRequestConfig } from 'next-intl/server';
 import { cookies, headers } from 'next/headers';
 
 export const supportedLocales = [
-  'zh', 'zh-Hant', 'en', 'es', 'fr', 'pt', 'ja', 'ko', 'ar', 'id', 'ru', 'tr'
+  'zh', 'zh-Hant', 'en', 'es', 'fr', 'pt', 'ja', 'ko', 'ar', 'id', 'ru', 'tr',
+  'hi', 'de', 'vi', 'th', 'it', 'ur', 'fa', 'pl', 'uk', 'nl', 'ms', 'bn', 'fil'
 ] as const;
 export type Locale = (typeof supportedLocales)[number];
 export const defaultLocale: Locale = 'zh';
@@ -26,6 +27,19 @@ function parseAcceptLanguage(header: string): Locale {
     if (lang.startsWith('id')) return 'id';
     if (lang.startsWith('ru')) return 'ru';
     if (lang.startsWith('tr')) return 'tr';
+    if (lang.startsWith('hi')) return 'hi';
+    if (lang.startsWith('de')) return 'de';
+    if (lang.startsWith('vi')) return 'vi';
+    if (lang.startsWith('th')) return 'th';
+    if (lang.startsWith('it')) return 'it';
+    if (lang.startsWith('ur')) return 'ur';
+    if (lang.startsWith('fa')) return 'fa';
+    if (lang.startsWith('pl')) return 'pl';
+    if (lang.startsWith('uk')) return 'uk';
+    if (lang.startsWith('nl')) return 'nl';
+    if (lang.startsWith('ms')) return 'ms';
+    if (lang.startsWith('bn')) return 'bn';
+    if (lang === 'fil' || lang === 'tl') return 'fil';
   }
   return defaultLocale;
 }

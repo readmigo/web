@@ -73,7 +73,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const locale = await getLocale();
-  const dir = locale === 'ar' ? 'rtl' : 'ltr';
+  const dir = ['ar', 'ur', 'fa'].includes(locale) ? 'rtl' : 'ltr';
   const messages = await getMessages();
 
   return (

@@ -111,6 +111,19 @@ export function SettingsContent() {
               ['id', t('indonesian')],
               ['ru', t('russian')],
               ['tr', t('turkish')],
+              ['hi', t('hindi')],
+              ['de', t('german')],
+              ['vi', t('vietnamese')],
+              ['th', t('thai')],
+              ['it', t('italian')],
+              ['ur', t('urdu')],
+              ['fa', t('persian')],
+              ['pl', t('polish')],
+              ['uk', t('ukrainian')],
+              ['nl', t('dutch')],
+              ['ms', t('malay')],
+              ['bn', t('bengali')],
+              ['fil', t('filipino')],
             ] as [string, string][]).map(([locale, label]) => (
               <Button
                 key={locale}
