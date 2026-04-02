@@ -22,7 +22,7 @@ export function TranslationSheet({ open, originalText, bookId, onClose }: Transl
 
   useEffect(() => {
     if (!open || !originalText.trim()) return;
-    trackEvent('ai_translation_viewed', { book_id: bookId });
+    trackEvent('sentence_action_performed', { action: 'translate_viewed', book_id: bookId });
     setTranslation(null);
     setIsLoading(true);
 
