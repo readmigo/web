@@ -1,13 +1,6 @@
 name: Security Audit
 
 on:
-  schedule:
-    - cron: '0 0 * * 1' # Weekly on Monday
-  push:
-    branches: [main]
-    paths:
-      - 'pnpm-lock.yaml'
-      - 'package.json'
   workflow_dispatch:
 
 jobs:
