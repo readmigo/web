@@ -3,7 +3,7 @@ import { cookies, headers } from 'next/headers';
 
 export const supportedLocales = [
   'zh', 'zh-Hant', 'en', 'es', 'fr', 'pt', 'ja', 'ko', 'ar', 'id', 'ru', 'tr',
-  'hi', 'de', 'vi', 'th', 'it', 'ur', 'fa', 'pl', 'uk', 'nl', 'ms', 'bn', 'fil'
+  'hi', 'de', 'vi', 'th', 'it', 'ur', 'fa', 'pl', 'uk', 'nl', 'ms', 'bn', 'fil', 'he'
 ] as const;
 export type Locale = (typeof supportedLocales)[number];
 export const defaultLocale: Locale = 'zh';
