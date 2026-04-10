@@ -385,7 +385,7 @@ export function BookstoreContent() {
       </div>
 
       {/* All Book Lists with iOS-style backgrounds (E10: seeded-shuffled order) */}
-      {bookListsLoading ? (
+      {bookListsLoading && !bookListsData ? (
         <div className="space-y-8">
           {Array.from({ length: 3 }).map((_, i) => (
             <BookListSectionSkeleton key={i} />
@@ -404,7 +404,7 @@ export function BookstoreContent() {
       )}
 
       {/* View All Lists Entry (iOS: MoreListsEntryWrapper) */}
-      {!bookListsLoading && allBookLists.length > 0 && (
+      {!(bookListsLoading && !bookListsData) && allBookLists.length > 0 && (
         <Link
           href="/book-list"
           className="flex items-center justify-center gap-2 rounded-xl bg-secondary/50 px-4 py-3 transition-colors hover:bg-secondary"

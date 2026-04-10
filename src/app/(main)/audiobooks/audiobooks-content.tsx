@@ -96,7 +96,7 @@ function AudiobookThemedSection({ list }: { list: BookList }) {
 function AudiobookThemedSections() {
   const { data: lists, isLoading } = useAudiobookLists();
 
-  if (isLoading) {
+  if (isLoading && !lists) {
     return (
       <div className="space-y-2">
         <div className="flex items-center justify-between">
@@ -133,7 +133,7 @@ function RecentlyListenedSection() {
   const t = useTranslations('audiobooks');
   const { data: recentBooks, isLoading } = useRecentlyListened(10);
 
-  if (isLoading) {
+  if (isLoading && !recentBooks) {
     return (
       <section className="mb-6">
         <h2 className="text-lg font-semibold mb-3">{t('recentlyListened')}</h2>
