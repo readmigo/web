@@ -28,6 +28,10 @@
       "placeholder": "Search books or authors..."
     },
     "allBooks": "All Books",
+    "tabs": {
+      "all": "All Books",
+      "new": "New Books"
+    },
     "emptyTitle": "No books found",
     "exploreMore": "Explore to discover more great books",
     "noMoreBooks": "No more books",

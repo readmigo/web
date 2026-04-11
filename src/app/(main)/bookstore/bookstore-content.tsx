@@ -97,6 +97,7 @@ export function BookstoreContent() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [booksTab, setBooksTab] = useState<'all' | 'new'>('all');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [debouncedDropdownQuery, setDebouncedDropdownQuery] = useState('');
@@ -181,6 +182,7 @@ export function BookstoreContent() {
   } = useInfiniteBooks({
     category: selectedCategory || undefined,
     search: debouncedSearch || undefined,
+    visibility: booksTab === 'new' ? 'WEB_ONLY' : undefined,
   });
 
   // Flatten all pages into a single books array
@@ -425,11 +427,34 @@ export function BookstoreContent() {
         <ChevronRight className="h-4 w-4 text-muted-foreground" />
       </Link>
 
-      {/* "全部书籍" divider */}
-      <div className="flex items-center gap-3">
-        <div className="flex-1 border-t" />
-        <span className="text-sm text-muted-foreground">{t('allBooks')}</span>
-        <div className="flex-1 border-t" />
+      {/* Books tabs: All / New Books (review) */}
+      <div className="flex items-center gap-4 border-b">
+        <button
+          type="button"
+          onClick={() => setBooksTab('all')}
+          className={cn(
+            'relative pb-2 text-sm font-medium transition-colors',
+            booksTab === 'all' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+          )}
+        >
+          {t('tabs.all')}
+          {booksTab === 'all' && (
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+          )}
+        </button>
+        <button
+          type="button"
+          onClick={() => setBooksTab('new')}
+          className={cn(
+            'relative pb-2 text-sm font-medium transition-colors',
+            booksTab === 'new' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+          )}
+        >
+          {t('tabs.new')}
+          {booksTab === 'new' && (
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+          )}
+        </button>
       </div>
 
       {/* Books list (vertical rows) */}

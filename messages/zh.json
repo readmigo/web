@@ -28,6 +28,10 @@
       "placeholder": "搜索书名或作者..."
     },
     "allBooks": "全部书籍",
+    "tabs": {
+      "all": "全部书籍",
+      "new": "新书专区"
+    },
     "emptyTitle": "暂无书籍",
     "exploreMore": "去探索发现更多好书吧",
     "noMoreBooks": "没有更多书籍了",

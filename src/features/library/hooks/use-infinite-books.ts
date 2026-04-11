@@ -10,6 +10,7 @@ interface InfiniteBooksParams {
   difficulty?: number;
   search?: string;
   limit?: number;
+  visibility?: string;
 }
 
 interface DiscoverBookItem {
@@ -52,6 +53,7 @@ export function useInfiniteBooks(params?: InfiniteBooksParams) {
       if (params?.categoryId) queryParams.categoryId = params.categoryId;
       if (params?.difficulty) queryParams.difficulty = String(params.difficulty);
       if (params?.search) queryParams.search = params.search;
+      if (params?.visibility) queryParams.visibility = params.visibility;
       queryParams.page = String(pageParam);
       queryParams.pageSize = String(limit);
 
