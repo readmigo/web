@@ -337,6 +337,39 @@ export function BookstoreContent() {
         </div>
       ) : (
       <>
+      {/* Books tabs: All / New Books (review) — prominent at top */}
+      <div className="flex items-center gap-4 border-b sticky top-0 z-10 bg-background py-2">
+        <button
+          type="button"
+          onClick={() => setBooksTab('all')}
+          className={cn(
+            'relative pb-2 text-sm font-medium transition-colors',
+            booksTab === 'all' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+          )}
+        >
+          {t('tabs.all')}
+          {booksTab === 'all' && (
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+          )}
+        </button>
+        <button
+          type="button"
+          onClick={() => setBooksTab('new')}
+          className={cn(
+            'relative pb-2 text-sm font-medium transition-colors',
+            booksTab === 'new' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+          )}
+        >
+          {t('tabs.new')}
+          {booksTab === 'new' && (
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+          )}
+        </button>
+      </div>
+
+      {/* Hide discovery sections when on New Books tab */}
+      {booksTab === 'all' && (
+      <>
       {/* E11: Free book promo banner */}
       <PromoBanner />
 
@@ -426,36 +459,8 @@ export function BookstoreContent() {
         <span className="text-sm font-medium text-muted-foreground">{t('browseAll')}</span>
         <ChevronRight className="h-4 w-4 text-muted-foreground" />
       </Link>
-
-      {/* Books tabs: All / New Books (review) */}
-      <div className="flex items-center gap-4 border-b">
-        <button
-          type="button"
-          onClick={() => setBooksTab('all')}
-          className={cn(
-            'relative pb-2 text-sm font-medium transition-colors',
-            booksTab === 'all' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
-          )}
-        >
-          {t('tabs.all')}
-          {booksTab === 'all' && (
-            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
-          )}
-        </button>
-        <button
-          type="button"
-          onClick={() => setBooksTab('new')}
-          className={cn(
-            'relative pb-2 text-sm font-medium transition-colors',
-            booksTab === 'new' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
-          )}
-        >
-          {t('tabs.new')}
-          {booksTab === 'new' && (
-            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
-          )}
-        </button>
-      </div>
+      </>
+      )}
 
       {/* Books list (vertical rows) */}
       {isLoading ? (
