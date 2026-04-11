@@ -42,6 +42,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "librivox.org",
       },
+      {
+        protocol: "https",
+        hostname: "gutenberg-api.logan676395.workers.dev",
+      },
+      {
+        protocol: "https",
+        hostname: "gutenberg.readmigo.app",
+      },
     ],
   },
 
