@@ -90,7 +90,10 @@
     "previewVoice": "{name} প্রিভিউ করুন",
     "stopPreview": "প্রিভিউ বন্ধ করুন",
     "lyricsTab": "লিরিক্স",
-    "loadingLyrics": "পাঠ্য লোড হচ্ছে..."
+    "loadingLyrics": "পাঠ্য লোড হচ্ছে...",
+    "tabs": {
+      "featured": "বাছাইকৃত"
+    }
   },
   "category": {
     "backToBookstore": "বইয়ের দোকানে ফিরুন",

@@ -90,7 +90,10 @@
     "previewVoice": "Voorbeluisteren {name}",
     "stopPreview": "Voorbeeld stoppen",
     "lyricsTab": "Tekst",
-    "loadingLyrics": "Tekst laden..."
+    "loadingLyrics": "Tekst laden...",
+    "tabs": {
+      "featured": "Uitgelicht"
+    }
   },
   "category": {
     "backToBookstore": "Terug naar boekwinkel",

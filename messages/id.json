@@ -90,7 +90,10 @@
     "previewVoice": "Pratinjau {name}",
     "stopPreview": "Hentikan pratinjau",
     "lyricsTab": "Lirik",
-    "loadingLyrics": "Memuat teks..."
+    "loadingLyrics": "Memuat teks...",
+    "tabs": {
+      "featured": "Pilihan"
+    }
   },
   "category": {
     "backToBookstore": "Kembali ke Toko Buku",

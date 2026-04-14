@@ -90,7 +90,10 @@
     "previewVoice": "Xem trước {name}",
     "stopPreview": "Dừng xem trước",
     "lyricsTab": "Lời thoại",
-    "loadingLyrics": "Đang tải văn bản..."
+    "loadingLyrics": "Đang tải văn bản...",
+    "tabs": {
+      "featured": "Nổi bật"
+    }
   },
   "category": {
     "backToBookstore": "Quay lại hiệu sách",

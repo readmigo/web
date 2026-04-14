@@ -2,12 +2,13 @@
 
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api/client';
-import type { AudiobooksResponse } from '../types';
+import type { AudiobookSource, AudiobooksResponse } from '../types';
 
 interface InfiniteAudiobooksParams {
   language?: string;
   search?: string;
   limit?: number;
+  source?: AudiobookSource;
 }
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -21,6 +22,7 @@ export function useInfiniteAudiobooks(params?: InfiniteAudiobooksParams) {
       const queryParams: Record<string, string> = {};
       if (params?.language) queryParams.language = params.language;
       if (params?.search) queryParams.search = params.search;
+      if (params?.source) queryParams.source = params.source;
       queryParams.page = String(pageParam);
       queryParams.limit = String(limit);
 

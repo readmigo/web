@@ -90,7 +90,10 @@
     "previewVoice": "{name} önizlemesi",
     "stopPreview": "Önizlemeyi durdur",
     "lyricsTab": "Metin",
-    "loadingLyrics": "Metin yükleniyor..."
+    "loadingLyrics": "Metin yükleniyor...",
+    "tabs": {
+      "featured": "Öne Çıkan"
+    }
   },
   "category": {
     "backToBookstore": "Kitapçıya Dön",

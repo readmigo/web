@@ -90,7 +90,10 @@
     "previewVoice": "I-preview ang {name}",
     "stopPreview": "Ihinto ang preview",
     "lyricsTab": "Mga Lirika",
-    "loadingLyrics": "Naglo-load ng teksto..."
+    "loadingLyrics": "Naglo-load ng teksto...",
+    "tabs": {
+      "featured": "Piling"
+    }
   },
   "category": {
     "backToBookstore": "Bumalik sa Tindahan ng Libro",

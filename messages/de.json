@@ -90,7 +90,10 @@
     "previewVoice": "{name} vorhören",
     "stopPreview": "Vorschau stoppen",
     "lyricsTab": "Text",
-    "loadingLyrics": "Text wird geladen..."
+    "loadingLyrics": "Text wird geladen...",
+    "tabs": {
+      "featured": "Empfohlen"
+    }
   },
   "category": {
     "backToBookstore": "Zurück zur Buchhandlung",

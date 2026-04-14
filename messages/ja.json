@@ -90,7 +90,10 @@
     "previewVoice": "{name} をプレビュー",
     "stopPreview": "プレビューを停止",
     "lyricsTab": "歌詞",
-    "loadingLyrics": "テキストを読み込み中..."
+    "loadingLyrics": "テキストを読み込み中...",
+    "tabs": {
+      "featured": "注目"
+    }
   },
   "category": {
     "backToBookstore": "書店に戻る",

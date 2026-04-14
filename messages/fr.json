@@ -90,7 +90,10 @@
     "previewVoice": "Aperçu de {name}",
     "stopPreview": "Arrêter l'aperçu",
     "lyricsTab": "Paroles",
-    "loadingLyrics": "Chargement du texte..."
+    "loadingLyrics": "Chargement du texte...",
+    "tabs": {
+      "featured": "Sélection"
+    }
   },
   "category": {
     "backToBookstore": "Retour à la librairie",

@@ -90,7 +90,10 @@
     "previewVoice": "Vista previa de {name}",
     "stopPreview": "Detener vista previa",
     "lyricsTab": "Letra",
-    "loadingLyrics": "Cargando texto..."
+    "loadingLyrics": "Cargando texto...",
+    "tabs": {
+      "featured": "Destacados"
+    }
   },
   "category": {
     "backToBookstore": "Volver a la librería",

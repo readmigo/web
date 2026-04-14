@@ -90,7 +90,10 @@
     "previewVoice": "{name} 미리 듣기",
     "stopPreview": "미리 듣기 중지",
     "lyricsTab": "가사",
-    "loadingLyrics": "텍스트 불러오는 중..."
+    "loadingLyrics": "텍스트 불러오는 중...",
+    "tabs": {
+      "featured": "추천"
+    }
   },
   "category": {
     "backToBookstore": "서점으로 돌아가기",

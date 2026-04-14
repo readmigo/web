@@ -12,7 +12,8 @@ import {
   useInfiniteAudiobooks,
 } from '@/features/audiobook/hooks';
 import { formatDuration } from '@/features/audiobook/stores/audio-player-store';
-import type { AudiobookListItem, AudiobookWithProgress } from '@/features/audiobook/types';
+import type { AudiobookListItem, AudiobookSource, AudiobookWithProgress } from '@/features/audiobook/types';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAudiobookLists } from '@/features/library/hooks/use-book-lists';
 import type { BookList, BookListBook } from '@/features/library/types';
 import { useSearchHistory } from '@/features/search/hooks/use-search-history';
@@ -314,9 +315,11 @@ function AudiobookCard({ audiobook }: { audiobook: AudiobookListItem }) {
 function AudiobookGrid({
   language,
   search,
+  source,
 }: {
   language: string | undefined;
   search: string;
+  source?: AudiobookSource;
 }) {
   const t = useTranslations('audiobooks');
   const debouncedSearch = useDebounce(search, 300);
@@ -324,8 +327,9 @@ function AudiobookGrid({
     () => ({
       language,
       search: debouncedSearch || undefined,
+      source,
     }),
-    [language, debouncedSearch]
+    [language, debouncedSearch, source]
   );
 
   const {
@@ -424,6 +428,7 @@ export function AudiobooksContent() {
   const ts = useTranslations('search');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>(undefined);
+  const [activeTab, setActiveTab] = useState<'featured' | 'librivox'>('featured');
   const [showHistory, setShowHistory] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
@@ -533,20 +538,46 @@ export function AudiobooksContent() {
         )}
       </div>
 
-      {/* Recently Listened */}
-      <RecentlyListenedSection />
+      {/* Source Tabs */}
+      <Tabs
+        value={activeTab}
+        onValueChange={(v) => setActiveTab(v as 'featured' | 'librivox')}
+      >
+        <TabsList className="w-full grid grid-cols-2">
+          <TabsTrigger value="featured">{t('tabs.featured')}</TabsTrigger>
+          <TabsTrigger value="librivox">LibriVox</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
-      {/* Audiobook Themed Lists */}
-      <AudiobookThemedSections />
+      {activeTab === 'featured' ? (
+        <>
+          {/* Recently Listened */}
+          <RecentlyListenedSection />
 
-      {/* Language Filter */}
-      <LanguageFilter
-        selectedLanguage={selectedLanguage}
-        onSelect={setSelectedLanguage}
-      />
+          {/* Audiobook Themed Lists */}
+          <AudiobookThemedSections />
 
-      {/* Audiobook Grid */}
-      <AudiobookGrid language={selectedLanguage} search={searchQuery} />
+          {/* Language Filter */}
+          <LanguageFilter
+            selectedLanguage={selectedLanguage}
+            onSelect={setSelectedLanguage}
+          />
+
+          {/* Audiobook Grid (excludes LibriVox) */}
+          <AudiobookGrid
+            language={selectedLanguage}
+            search={searchQuery}
+            source="AI_TTS"
+          />
+        </>
+      ) : (
+        /* LibriVox Grid (English only for now) */
+        <AudiobookGrid
+          language={undefined}
+          search={searchQuery}
+          source="LIBRIVOX"
+        />
+      )}
     </div>
   );
 }

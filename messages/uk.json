@@ -90,7 +90,10 @@
     "previewVoice": "Попередній перегляд {name}",
     "stopPreview": "Зупинити попередній перегляд",
     "lyricsTab": "Текст",
-    "loadingLyrics": "Завантаження тексту..."
+    "loadingLyrics": "Завантаження тексту...",
+    "tabs": {
+      "featured": "Вибране"
+    }
   },
   "category": {
     "backToBookstore": "Назад до книгарні",

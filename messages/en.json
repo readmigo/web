@@ -94,7 +94,10 @@
     "previewVoice": "Preview {name}",
     "stopPreview": "Stop preview",
     "lyricsTab": "Lyrics",
-    "loadingLyrics": "Loading text..."
+    "loadingLyrics": "Loading text...",
+    "tabs": {
+      "featured": "Featured"
+    }
   },
   "category": {
     "backToBookstore": "Back to Bookstore",

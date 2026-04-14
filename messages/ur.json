@@ -90,7 +90,10 @@
     "previewVoice": "{name} کا پیش منظر",
     "stopPreview": "پیش منظر روکیں",
     "lyricsTab": "متن",
-    "loadingLyrics": "متن لوڈ ہو رہا ہے..."
+    "loadingLyrics": "متن لوڈ ہو رہا ہے...",
+    "tabs": {
+      "featured": "منتخب"
+    }
   },
   "category": {
     "backToBookstore": "کتابوں کی دکان پر واپس",

@@ -1,5 +1,5 @@
 // Audiobook source
-export type AudiobookSource = 'LIBRIVOX' | 'INTERNET_ARCHIVE' | 'USER_UPLOAD' | 'PREMIUM';
+export type AudiobookSource = 'AI_TTS' | 'LIBRIVOX';
 
 // Audio quality
 export type AudioQuality = 'LOW' | 'STANDARD' | 'HIGH';
@@ -193,6 +193,7 @@ export interface AudiobooksQueryParams {
   search?: string;
   sortBy?: 'title' | 'author' | 'duration' | 'createdAt';
   sortOrder?: 'asc' | 'desc';
+  source?: AudiobookSource;
 }
 
 export interface AudiobooksResponse {

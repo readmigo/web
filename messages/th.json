@@ -90,7 +90,10 @@
     "previewVoice": "ทดลองเสียง {name}",
     "stopPreview": "หยุดทดลอง",
     "lyricsTab": "เนื้อหา",
-    "loadingLyrics": "กำลังโหลดข้อความ..."
+    "loadingLyrics": "กำลังโหลดข้อความ...",
+    "tabs": {
+      "featured": "แนะนำ"
+    }
   },
   "category": {
     "backToBookstore": "กลับไปร้านหนังสือ",

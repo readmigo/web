@@ -90,7 +90,10 @@
     "previewVoice": "معاينة {name}",
     "stopPreview": "إيقاف المعاينة",
     "lyricsTab": "كلمات",
-    "loadingLyrics": "جار تحميل النص..."
+    "loadingLyrics": "جار تحميل النص...",
+    "tabs": {
+      "featured": "المختارة"
+    }
   },
   "category": {
     "backToBookstore": "العودة إلى المكتبة",

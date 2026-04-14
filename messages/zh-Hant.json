@@ -94,7 +94,10 @@
     "previewVoice": "預覽 {name}",
     "stopPreview": "停止預覽",
     "lyricsTab": "歌詞",
-    "loadingLyrics": "正在載入文字..."
+    "loadingLyrics": "正在載入文字...",
+    "tabs": {
+      "featured": "精選"
+    }
   },
   "category": {
     "backToBookstore": "返回書城",

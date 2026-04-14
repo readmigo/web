@@ -90,7 +90,10 @@
     "previewVoice": "Прослушать {name}",
     "stopPreview": "Остановить прослушивание",
     "lyricsTab": "Текст",
-    "loadingLyrics": "Загрузка текста..."
+    "loadingLyrics": "Загрузка текста...",
+    "tabs": {
+      "featured": "Избранное"
+    }
   },
   "category": {
     "backToBookstore": "Вернуться в книжный магазин",

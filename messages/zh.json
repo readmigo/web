@@ -94,7 +94,10 @@
     "previewVoice": "预览 {name}",
     "stopPreview": "停止预览",
     "lyricsTab": "跟读",
-    "loadingLyrics": "加载文本中..."
+    "loadingLyrics": "加载文本中...",
+    "tabs": {
+      "featured": "精选"
+    }
   },
   "category": {
     "backToBookstore": "返回书城",

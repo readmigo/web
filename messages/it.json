@@ -90,7 +90,10 @@
     "previewVoice": "Anteprima {name}",
     "stopPreview": "Ferma anteprima",
     "lyricsTab": "Testo",
-    "loadingLyrics": "Caricamento testo..."
+    "loadingLyrics": "Caricamento testo...",
+    "tabs": {
+      "featured": "In Evidenza"
+    }
   },
   "category": {
     "backToBookstore": "Torna alla libreria",
