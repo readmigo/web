@@ -111,7 +111,7 @@ const nextConfig: NextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline' blob:; img-src 'self' https: data: blob:; font-src 'self' data:; media-src 'self' blob: https://cdn.readmigo.app https://*.readmigo.cn; connect-src 'self' https://readmigo-api.fly.dev https://api.readmigo.cn https://cdn.readmigo.app https://*.readmigo.cn https://*.vercel-insights.com https://*.sentry.io https://us.i.posthog.com https://*.posthog.com https://*.amplitude.com https://lh3.googleusercontent.com https://gutenberg-api.logan676395.workers.dev https://gutenberg.readmigo.app; frame-src 'self' blob:; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline' blob:; img-src 'self' https: data: blob:; font-src 'self' data:; media-src 'self' blob: https://cdn.readmigo.app https://*.readmigo.cn https://archive.org https://*.archive.org; connect-src 'self' https://readmigo-api.fly.dev https://api.readmigo.cn https://cdn.readmigo.app https://*.readmigo.cn https://*.vercel-insights.com https://*.sentry.io https://us.i.posthog.com https://*.posthog.com https://*.amplitude.com https://lh3.googleusercontent.com https://gutenberg-api.logan676395.workers.dev https://gutenberg.readmigo.app https://archive.org https://*.archive.org; frame-src 'self' blob:; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
           },
           {
             key: "X-Frame-Options",
